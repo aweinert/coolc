@@ -88,7 +88,7 @@ import java_cup.runtime.Symbol;
 %eofval}
 
 /* Do not modify the following two jlex directives */
-%class CoolLexer
+%class Lexer
 %cup
 
 /* Define names for regular expressions here. */
