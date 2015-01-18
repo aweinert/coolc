@@ -9,6 +9,8 @@
 package net.alexweinert.coolc.lexer;
 
 import java_cup.runtime.Symbol;
+import net.alexweinert.coolc.parser.Symbols;
+import net.alexweinert.coolc.program.symboltables.*;
 
 %%
 
@@ -63,7 +65,7 @@ import java_cup.runtime.Symbol;
  *  Ultimately, you should return the EOF symbol, or your lexer won't
  *  work. */
 %eofval{
-    switch(yy_lexical_state) {
+    switch(zzLexicalState) {
     case YYINITIAL:
 		/* nothing special to do in the initial state */
 		break;
@@ -76,15 +78,15 @@ import java_cup.runtime.Symbol;
 		this.commentDepth = 0;
 
 		// Hand the error over to the parser
-		return createStringToken(TokenConstants.ERROR, "EOF in comment");
+		return createStringToken(Symbols.ERROR, "EOF in comment");
 	case STRING:
 		/* end of file terminates a comment, so it does not matter whether we 
 		 * go to YYINITIAL or DISCARDSTRING. Both will eventually return EOF */
 		yybegin(YYINITIAL);
-		return createStringToken(TokenConstants.ERROR, "EOF in string constant");
+		return createStringToken(Symbols.ERROR, "EOF in string constant");
 	}
 
-    return new Symbol(TokenConstants.EOF);
+    return new Symbol(Symbols.EOF);
 %eofval}
 
 /* Do not modify the following two jlex directives */
@@ -149,7 +151,7 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 <YYINITIAL> \*\) {
 	// Since we are in YYINITIAL, we know that we encountered an unmatched comment end
 	AbstractSymbol errorMessage = AbstractTable.stringtable.addString("Unmatched *)");
-	return new Symbol(TokenConstants.ERROR, errorMessage);
+	return new Symbol(Symbols.ERROR, errorMessage);
 }
 
 <YYINITIAL> \(\* { 
@@ -205,7 +207,7 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 }
 <STRING> \000 {
 	yybegin(DISCARDSTRING);
-	return createStringToken(TokenConstants.ERROR, "String contains null character");
+	return createStringToken(Symbols.ERROR, "String contains null character");
 }
 <STRING> \\. { 
 	// matches any other escaped character, which is just lexed as the character
@@ -219,7 +221,7 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 	/* We switch to YYINITIAL instead of DISCARDSTRING since we already found the end of the line.
 	 * DISCARDSTRING would look for the *next* newline */
 	yybegin(YYINITIAL);
-	return createStringToken(TokenConstants.ERROR, "Unterminated string constant");
+	return createStringToken(Symbols.ERROR, "Unterminated string constant");
 }
 <STRING> \" {
 	// Found the end of the literal, tokenize the string if it not too long
@@ -228,9 +230,9 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 	final AbstractSymbol value;
 	final int tokenCategory;
 	if(literal.length() > MAX_STR_CONST) {
-		return createStringToken(TokenConstants.ERROR, "String constant too long");
+		return createStringToken(Symbols.ERROR, "String constant too long");
 	} else {
-		return createStringToken(TokenConstants.STR_CONST, literal);
+		return createStringToken(Symbols.STR_CONST, literal);
 	}
 }
 <STRING> . {
@@ -254,54 +256,54 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 
 
 <YYINITIAL>{INTEGER}  { /* Integers */
-                          return new Symbol(TokenConstants.INT_CONST, AbstractTable.inttable.addString(yytext())); }
+                          return new Symbol(Symbols.INT_CONST, AbstractTable.inttable.addString(yytext())); }
 
-<YYINITIAL>[Cc][Aa][Ss][Ee]	{ return new Symbol(TokenConstants.CASE); }
-<YYINITIAL>[Cc][Ll][Aa][Ss][Ss] { return new Symbol(TokenConstants.CLASS); }
-<YYINITIAL>[Ee][Ll][Ss][Ee]  	{ return new Symbol(TokenConstants.ELSE); }
-<YYINITIAL>[Ee][Ss][Aa][Cc]	{ return new Symbol(TokenConstants.ESAC); }
-<YYINITIAL>f[Aa][Ll][Ss][Ee]	{ return new Symbol(TokenConstants.BOOL_CONST, Boolean.FALSE); }
-<YYINITIAL>[Ff][Ii]             { return new Symbol(TokenConstants.FI); }
-<YYINITIAL>[Ii][Ff]  		{ return new Symbol(TokenConstants.IF); }
-<YYINITIAL>[Ii][Nn]             { return new Symbol(TokenConstants.IN); }
-<YYINITIAL>[Ii][Nn][Hh][Ee][Rr][Ii][Tt][Ss] { return new Symbol(TokenConstants.INHERITS); }
-<YYINITIAL>[Ii][Ss][Vv][Oo][Ii][Dd] { return new Symbol(TokenConstants.ISVOID); }
-<YYINITIAL>[Ll][Ee][Tt]         { return new Symbol(TokenConstants.LET); }
-<YYINITIAL>[Ll][Oo][Oo][Pp]  	{ return new Symbol(TokenConstants.LOOP); }
-<YYINITIAL>[Nn][Ee][Ww]		{ return new Symbol(TokenConstants.NEW); }
-<YYINITIAL>[Nn][Oo][Tt] 	{ return new Symbol(TokenConstants.NOT); }
-<YYINITIAL>[Oo][Ff]		{ return new Symbol(TokenConstants.OF); }
-<YYINITIAL>[Pp][Oo][Oo][Ll]  	{ return new Symbol(TokenConstants.POOL); }
-<YYINITIAL>[Tt][Hh][Ee][Nn]   	{ return new Symbol(TokenConstants.THEN); }
-<YYINITIAL>t[Rr][Uu][Ee]	{ return new Symbol(TokenConstants.BOOL_CONST, Boolean.TRUE); }
-<YYINITIAL>[Ww][Hh][Ii][Ll][Ee] { return new Symbol(TokenConstants.WHILE); }
+<YYINITIAL>[Cc][Aa][Ss][Ee]	{ return new Symbol(Symbols.CASE); }
+<YYINITIAL>[Cc][Ll][Aa][Ss][Ss] { return new Symbol(Symbols.CLASS); }
+<YYINITIAL>[Ee][Ll][Ss][Ee]  	{ return new Symbol(Symbols.ELSE); }
+<YYINITIAL>[Ee][Ss][Aa][Cc]	{ return new Symbol(Symbols.ESAC); }
+<YYINITIAL>f[Aa][Ll][Ss][Ee]	{ return new Symbol(Symbols.BOOL_CONST, Boolean.FALSE); }
+<YYINITIAL>[Ff][Ii]             { return new Symbol(Symbols.FI); }
+<YYINITIAL>[Ii][Ff]  		{ return new Symbol(Symbols.IF); }
+<YYINITIAL>[Ii][Nn]             { return new Symbol(Symbols.IN); }
+<YYINITIAL>[Ii][Nn][Hh][Ee][Rr][Ii][Tt][Ss] { return new Symbol(Symbols.INHERITS); }
+<YYINITIAL>[Ii][Ss][Vv][Oo][Ii][Dd] { return new Symbol(Symbols.ISVOID); }
+<YYINITIAL>[Ll][Ee][Tt]         { return new Symbol(Symbols.LET); }
+<YYINITIAL>[Ll][Oo][Oo][Pp]  	{ return new Symbol(Symbols.LOOP); }
+<YYINITIAL>[Nn][Ee][Ww]		{ return new Symbol(Symbols.NEW); }
+<YYINITIAL>[Nn][Oo][Tt] 	{ return new Symbol(Symbols.NOT); }
+<YYINITIAL>[Oo][Ff]		{ return new Symbol(Symbols.OF); }
+<YYINITIAL>[Pp][Oo][Oo][Ll]  	{ return new Symbol(Symbols.POOL); }
+<YYINITIAL>[Tt][Hh][Ee][Nn]   	{ return new Symbol(Symbols.THEN); }
+<YYINITIAL>t[Rr][Uu][Ee]	{ return new Symbol(Symbols.BOOL_CONST, Boolean.TRUE); }
+<YYINITIAL>[Ww][Hh][Ii][Ll][Ee] { return new Symbol(Symbols.WHILE); }
 
-<YYINITIAL>{OBJECT_ID} { return createStringToken(TokenConstants.OBJECTID, yytext()); }
-<YYINITIAL>{TYPE_ID} { return createStringToken(TokenConstants.TYPEID, yytext()); }
-<YYINITIAL> "*)" { return createStringToken(TokenConstants.ERROR, "Unmatched *)"); }
+<YYINITIAL>{OBJECT_ID} { return createStringToken(Symbols.OBJECTID, yytext()); }
+<YYINITIAL>{TYPE_ID} { return createStringToken(Symbols.TYPEID, yytext()); }
+<YYINITIAL> "*)" { return createStringToken(Symbols.ERROR, "Unmatched *)"); }
 
 
-<YYINITIAL>"=>"			{ return new Symbol(TokenConstants.DARROW); }
-<YYINITIAL>"<="			{ return new Symbol(TokenConstants.LE); }
-<YYINITIAL>"<-"			{ return new Symbol(TokenConstants.ASSIGN); }
-<YYINITIAL>"+"			{ return new Symbol(TokenConstants.PLUS); }
-<YYINITIAL>"/"			{ return new Symbol(TokenConstants.DIV); }
-<YYINITIAL>"-"			{ return new Symbol(TokenConstants.MINUS); }
-<YYINITIAL>"*"			{ return new Symbol(TokenConstants.MULT); }
-<YYINITIAL>"="			{ return new Symbol(TokenConstants.EQ); }
-<YYINITIAL>"<"			{ return new Symbol(TokenConstants.LT); }
-<YYINITIAL>"."			{ return new Symbol(TokenConstants.DOT); }
-<YYINITIAL>"~"			{ return new Symbol(TokenConstants.NEG); }
-<YYINITIAL>","			{ return new Symbol(TokenConstants.COMMA); }
-<YYINITIAL>";"			{ return new Symbol(TokenConstants.SEMI); }
-<YYINITIAL>":"			{ return new Symbol(TokenConstants.COLON); }
-<YYINITIAL>"("			{ return new Symbol(TokenConstants.LPAREN); }
-<YYINITIAL>")"			{ return new Symbol(TokenConstants.RPAREN); }
-<YYINITIAL>"@"			{ return new Symbol(TokenConstants.AT); }
-<YYINITIAL>"}"			{ return new Symbol(TokenConstants.RBRACE); }
-<YYINITIAL>"{"			{ return new Symbol(TokenConstants.LBRACE); }
+<YYINITIAL>"=>"			{ return new Symbol(Symbols.DARROW); }
+<YYINITIAL>"<="			{ return new Symbol(Symbols.LE); }
+<YYINITIAL>"<-"			{ return new Symbol(Symbols.ASSIGN); }
+<YYINITIAL>"+"			{ return new Symbol(Symbols.PLUS); }
+<YYINITIAL>"/"			{ return new Symbol(Symbols.DIV); }
+<YYINITIAL>"-"			{ return new Symbol(Symbols.MINUS); }
+<YYINITIAL>"*"			{ return new Symbol(Symbols.MULT); }
+<YYINITIAL>"="			{ return new Symbol(Symbols.EQ); }
+<YYINITIAL>"<"			{ return new Symbol(Symbols.LT); }
+<YYINITIAL>"."			{ return new Symbol(Symbols.DOT); }
+<YYINITIAL>"~"			{ return new Symbol(Symbols.NEG); }
+<YYINITIAL>","			{ return new Symbol(Symbols.COMMA); }
+<YYINITIAL>";"			{ return new Symbol(Symbols.SEMI); }
+<YYINITIAL>":"			{ return new Symbol(Symbols.COLON); }
+<YYINITIAL>"("			{ return new Symbol(Symbols.LPAREN); }
+<YYINITIAL>")"			{ return new Symbol(Symbols.RPAREN); }
+<YYINITIAL>"@"			{ return new Symbol(Symbols.AT); }
+<YYINITIAL>"}"			{ return new Symbol(Symbols.RBRACE); }
+<YYINITIAL>"{"			{ return new Symbol(Symbols.LBRACE); }
 <YYINITIAL>{NEWLINE} { this.curr_lineno += 1; }
 .	{
 	// If no other rule hit, we apparently encountered an error. Return it to the parser
-	return createStringToken(TokenConstants.ERROR, yytext());
+	return createStringToken(Symbols.ERROR, yytext());
 }
