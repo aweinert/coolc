@@ -1,2 +1,8 @@
+.classpath
+.project
+.settings
 /target
-/src/main/java/net/alexweinert/coolc/lexer/CoolLexer.java
+/src/main/java/net/alexweinert/coolc/lexer/Lexer.java
+/src/main/java/net/alexweinert/coolc/lexer/Lexer.java~
+/src/main/java/net/alexweinert/coolc/parser/Parser.java
+/src/main/java/net/alexweinert/coolc/parser/Symbols.java
