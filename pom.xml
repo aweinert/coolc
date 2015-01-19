@@ -22,48 +22,48 @@
 	</pluginRepositories>
 
 	<build>
-			<plugins>
-				<plugin>
-					<groupId>de.jflex</groupId>
-					<artifactId>jflex-maven-plugin</artifactId>
-					<version>1.6.0</version>
-					<executions>
-						<execution>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>generate</goal>
-							</goals>
-							<configuration>
-								<outputDirectory>src/main/java</outputDirectory>
-								<lexDefinitions>
-									<lexDefinition>src/main/java/net/alexweinert/coolc/lexer/cool.lex</lexDefinition>
-								</lexDefinitions>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>edu.tum.cs</groupId>
-					<artifactId>cup-maven-plugin</artifactId>
-					<version>1.0.0</version>
-					<executions>
-						<execution>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>generate</goal>
-							</goals>
-							<configuration>
-								<cupDefinition>src/main/java/net/alexweinert/coolc/parser/cool.cup</cupDefinition>
-								<packageName>net.alexweinert.coolc.parser</packageName>
-								<className>Parser</className>
-								<outputDirectory>src/main/java/</outputDirectory>
-								<symbolsName>Symbols</symbolsName>
-							</configuration>
-						</execution>
-					</executions>
-					
-				</plugin>
-			</plugins>
+		<plugins>
+			<plugin>
+				<groupId>de.jflex</groupId>
+				<artifactId>jflex-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>src/main/java</outputDirectory>
+							<lexDefinitions>
+								<lexDefinition>src/main/java/net/alexweinert/coolc/lexer/cool.lex</lexDefinition>
+							</lexDefinitions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>edu.tum.cs</groupId>
+				<artifactId>cup-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<cupDefinition>src/main/java/net/alexweinert/coolc/parser/cool.cup</cupDefinition>
+							<packageName>net.alexweinert.coolc.parser</packageName>
+							<className>Parser</className>
+							<outputDirectory>src/main/java/</outputDirectory>
+							<symbolsName>Symbols</symbolsName>
+						</configuration>
+					</execution>
+				</executions>
+
+			</plugin>
+		</plugins>
 	</build>
 
 	<properties>
