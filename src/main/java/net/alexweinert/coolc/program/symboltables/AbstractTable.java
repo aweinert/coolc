@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.program.symboltables;
 
-/*Copyright (c) 2000 The Regents of the University of California. All rights reserved.
+/* Copyright (c) 2000 The Regents of the University of California. All rights reserved.
  * 
  * Permission to use, copy, modify, and distribute this software for any purpose, without fee, and without written
  * agreement is hereby granted, provided that the above copyright notice and the following two paragraphs appear in all
@@ -75,7 +75,7 @@ public abstract class AbstractTable {
     private static int MAXSIZE = 1000000;
 
     /** Vector of table entries */
-    protected Vector tbl = new Vector();
+    protected Vector<AbstractSymbol> tbl = new Vector<>();
 
     /** Creates a new symbol of the appropriate type */
     protected abstract AbstractSymbol getNewSymbol(String s, int len, int index);
@@ -135,7 +135,7 @@ public abstract class AbstractTable {
      * @return an enumeration of symbols
      * @see java.util.Enumeration
      * */
-    public Enumeration getSymbols() {
+    public Enumeration<AbstractSymbol> getSymbols() {
         return tbl.elements();
     }
 
