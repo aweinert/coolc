@@ -30,8 +30,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
-import net.alexweinert.coolc.program.symboltables.AbstractTable;
+import javax.swing.tree.TreeNode;
+
+import net.alexweinert.coolc.program.ast.Class_;
+import net.alexweinert.coolc.program.ast.Classes;
+import net.alexweinert.coolc.program.ast.Features;
+import net.alexweinert.coolc.program.ast.Formals;
+import net.alexweinert.coolc.program.ast.attr;
+import net.alexweinert.coolc.program.ast.class_c;
+import net.alexweinert.coolc.program.ast.formalc;
+import net.alexweinert.coolc.program.ast.method;
+import net.alexweinert.coolc.program.ast.no_expr;
 
 /**
  * This class may be used to contain the semantic information such as the

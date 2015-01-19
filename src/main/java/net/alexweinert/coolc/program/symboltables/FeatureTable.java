@@ -5,7 +5,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.ast.Class_;
+import net.alexweinert.coolc.program.ast.Feature;
+import net.alexweinert.coolc.program.ast.attr;
+import net.alexweinert.coolc.program.ast.class_c;
+import net.alexweinert.coolc.program.ast.formalc;
+import net.alexweinert.coolc.program.ast.method;
 
 public class FeatureTable {
     /**

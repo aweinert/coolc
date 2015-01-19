@@ -1,7 +1,5 @@
 package net.alexweinert.coolc.program.symboltables;
 
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
-import net.alexweinert.coolc.program.symboltables.AbstractTable;
 
 /*Copyright (c) 2000 The Regents of the University of California. All rights reserved.
  * 

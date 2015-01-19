@@ -15,13 +15,9 @@ package net.alexweinert.coolc.program.symboltables;
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
 
-import java.util.Vector;
 import java.util.Enumeration;
+import java.util.Vector;
 
-import net.alexweinert.coolc.program.IdSymbol;
-import net.alexweinert.coolc.program.IdTable;
-import net.alexweinert.coolc.program.IntSymbol;
-import net.alexweinert.coolc.program.IntTable;
 import net.alexweinert.coolc.program.Utilities;
 
 /**

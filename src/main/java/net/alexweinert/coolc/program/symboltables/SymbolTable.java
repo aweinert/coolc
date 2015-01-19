@@ -15,10 +15,9 @@ package net.alexweinert.coolc.program.symboltables;
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
 
-import java.util.Stack;
 import java.util.Hashtable;
+import java.util.Stack;
 
-import net.alexweinert.coolc.program.SymtabExample;
 import net.alexweinert.coolc.program.Utilities;
 
 /**

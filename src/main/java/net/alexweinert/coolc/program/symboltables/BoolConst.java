@@ -17,8 +17,6 @@ package net.alexweinert.coolc.program.symboltables;
 
 import java.io.PrintStream;
 
-import net.alexweinert.coolc.program.CgenSupport;
-
 /**
  * This clas encapsulates all aspects of code generation for boolean constatns. String constants and Int constants are
  * handled by StringTable and IntTable respectively, but since there are only two boolean constants, we handle them

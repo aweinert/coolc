@@ -20,9 +20,6 @@ package net.alexweinert.coolc.program.symboltables;
 
 import java.io.PrintStream;
 
-import net.alexweinert.coolc.program.CgenSupport;
-import net.alexweinert.coolc.program.IntSymbol;
-
 /** String table entry for string constants. */
 public class StringSymbol extends AbstractSymbol {
     /* Creates a new symbol.

@@ -15,9 +15,6 @@ package net.alexweinert.coolc.program.symboltables;
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 
 /** String table entry for identifiers. */
 public class IdSymbol extends AbstractSymbol {

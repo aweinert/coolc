@@ -20,8 +20,6 @@ package net.alexweinert.coolc.program.symboltables;
 
 import java.io.PrintStream;
 
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
-
 /**
  * String table entry for integer constants
  * 
