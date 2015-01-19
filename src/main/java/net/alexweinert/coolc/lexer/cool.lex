@@ -29,7 +29,7 @@ import net.alexweinert.coolc.program.symboltables.*;
     // For line numbers
     private int curr_lineno = 1;
 
-    int get_curr_lineno() {
+    public int get_curr_lineno() {
 		return curr_lineno;
     }
 
@@ -39,7 +39,7 @@ import net.alexweinert.coolc.program.symboltables.*;
 		filename = AbstractTable.stringtable.addString(fname);
     }
 
-    AbstractSymbol curr_filename() {
+    public AbstractSymbol curr_filename() {
 		return filename;
     }
 
