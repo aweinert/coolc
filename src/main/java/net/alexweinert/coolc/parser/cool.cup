@@ -9,6 +9,10 @@
  */
 
 import java_cup.runtime.*;
+import net.alexweinert.coolc.lexer.Lexer;
+import net.alexweinert.coolc.program.symboltables.*;
+import net.alexweinert.coolc.program.ast.*;
+import net.alexweinert.coolc.program.Utilities;
 
 /* Code enclosed in {: :} is copied verbatim to the class containing
 all parser actions.  All the extra variables/functions you want to use
@@ -18,11 +22,11 @@ that was there initially.  */
 action code {: 
 
     int curr_lineno() {
-	return ((CoolTokenLexer)parser.getScanner()).curr_lineno();
+	return ((Lexer)parser.getScanner()).get_curr_lineno();
     }
 
     AbstractSymbol curr_filename() {
-	return ((CoolTokenLexer)parser.getScanner()).curr_filename();
+	return ((Lexer)parser.getScanner()).curr_filename();
     }
 
 :} 
