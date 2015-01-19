@@ -14,6 +14,8 @@ import net.alexweinert.coolc.program.symboltables.*;
 
 %%
 
+%public
+
 /* Code enclosed in %{ %} is copied verbatim to the lexer class definition.
  * All extra variables/methods you want to use in the lexer actions go
  * here.  Don't remove anything that was here initially.  */
