@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.program.symboltables;
 
-/*Copyright (c) 2000 The Regents of the University of California. All rights reserved.
+/* Copyright (c) 2000 The Regents of the University of California. All rights reserved.
  * 
  * Permission to use, copy, modify, and distribute this software for any purpose, without fee, and without written
  * agreement is hereby granted, provided that the above copyright notice and the following two paragraphs appear in all
@@ -16,6 +16,8 @@ package net.alexweinert.coolc.program.symboltables;
  * MODIFICATIONS. */
 
 import java.io.PrintStream;
+
+import net.alexweinert.coolc.unparser.CgenSupport;
 
 /**
  * This clas encapsulates all aspects of code generation for boolean constatns. String constants and Int constants are
