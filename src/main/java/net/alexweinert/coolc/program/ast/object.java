@@ -7,13 +7,12 @@
 // ////////////////////////////////////////////////////////
 
 import java.io.PrintStream;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Vector;
-import java.util.concurrent.LinkedBlockingQueue;
+
+import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.ClassTable;
+import net.alexweinert.coolc.program.symboltables.FeatureTable;
+import net.alexweinert.coolc.program.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'object'.

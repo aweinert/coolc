@@ -1,5 +1,7 @@
 package net.alexweinert.coolc.program.ast;
 
+import java.util.Vector;
+
 /**
  * Defines list phylum Classes
  * <p>

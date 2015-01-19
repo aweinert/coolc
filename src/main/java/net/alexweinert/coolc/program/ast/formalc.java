@@ -1,5 +1,9 @@
 package net.alexweinert.coolc.program.ast;
 
+import java.io.PrintStream;
+
+import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+
 /**
  * Defines AST constructor 'formalc'.
  * <p>

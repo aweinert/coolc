@@ -2,6 +2,10 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 
+import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.ClassTable;
+import net.alexweinert.coolc.program.symboltables.FeatureTable;
+
 /** Defines simple phylum Expression */
 public abstract class Expression extends TreeNode {
     protected Expression(int lineNumber) {

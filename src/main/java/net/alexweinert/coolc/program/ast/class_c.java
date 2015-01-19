@@ -1,5 +1,12 @@
 package net.alexweinert.coolc.program.ast;
 
+import java.io.PrintStream;
+import java.util.Enumeration;
+
+import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.ClassTable;
+import net.alexweinert.coolc.program.symboltables.FeatureTable;
+
 /**
  * Defines AST constructor 'class_c'.
  * <p>

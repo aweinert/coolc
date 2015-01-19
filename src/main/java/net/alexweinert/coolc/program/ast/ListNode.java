@@ -21,8 +21,8 @@ PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
  */
 
 import java.io.PrintStream;
-import java.util.Vector;
 import java.util.Enumeration;
+import java.util.Vector;
 
 import net.alexweinert.coolc.program.Utilities;
 
