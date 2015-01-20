@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -17,7 +18,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class programc extends Program {
+public class ProgramConstructor extends Program {
     protected Classes classes;
 
     /**
@@ -28,13 +29,13 @@ public class programc extends Program {
      * @param a0
      *            initial value for classes
      */
-    public programc(int lineNumber, Classes a1) {
+    public ProgramConstructor(int lineNumber, Classes a1) {
         super(lineNumber);
         classes = a1;
     }
 
     public TreeNode copy() {
-        return new programc(lineNumber, (Classes) classes.copy());
+        return new ProgramConstructor(lineNumber, (Classes) classes.copy());
     }
 
     public void dump(PrintStream out, int n) {
@@ -86,18 +87,18 @@ public class programc extends Program {
     private void checkBasicClasses(ClassTable classTable) {
         for (Class_ currentClass : classTable.getClasses()) {
             AbstractSymbol inheritedBaseClass = null;
-            if (((class_c) currentClass).getParent().equals(TreeConstants.Int)) {
+            if (((ClassConstructor) currentClass).getParent().equals(TreeConstants.Int)) {
                 inheritedBaseClass = TreeConstants.Int;
-            } else if (((class_c) currentClass).getParent().equals(TreeConstants.Bool)) {
+            } else if (((ClassConstructor) currentClass).getParent().equals(TreeConstants.Bool)) {
                 inheritedBaseClass = TreeConstants.Bool;
-            } else if (((class_c) currentClass).getParent().equals(TreeConstants.Str)) {
+            } else if (((ClassConstructor) currentClass).getParent().equals(TreeConstants.Str)) {
                 inheritedBaseClass = TreeConstants.Str;
             }
 
             if (inheritedBaseClass != null) {
                 String errorString = String.format("Class %s cannot inherit class %s", currentClass.getName(),
                         TreeConstants.Int);
-                classTable.semantError((class_c) currentClass).println(errorString);
+                classTable.semantError((ClassConstructor) currentClass).println(errorString);
             }
         }
     }
@@ -112,7 +113,7 @@ public class programc extends Program {
             if (!classTable.classExists(currentClass.getParent())) {
                 String errorString = String.format("Class %s inherits from an undefined class %s",
                         currentClass.getName(), currentClass.getParent());
-                classTable.semantError((class_c) currentClass).println(errorString);
+                classTable.semantError((ClassConstructor) currentClass).println(errorString);
             }
         }
     }
@@ -138,7 +139,7 @@ public class programc extends Program {
                 String errorString = String.format(
                         "Class %s, or an ancestor of %s, is involved in an inheritance cycle.", definedClass.getName(),
                         definedClass.getName());
-                classTable.semantError((class_c) definedClass).println(errorString);
+                classTable.semantError((ClassConstructor) definedClass).println(errorString);
             }
         }
     }
@@ -161,7 +162,7 @@ public class programc extends Program {
             AbstractSymbol currentToCheck = toCheck.poll();
             if (visited.contains(currentToCheck)) {
                 String errorString = String.format("%s is reachable from two parents", currentToCheck);
-                classTable.semantError((class_c) classTable.getClass(currentToCheck)).println(errorString);
+                classTable.semantError((ClassConstructor) classTable.getClass(currentToCheck)).println(errorString);
             } else {
                 visited.add(currentToCheck);
 
@@ -185,7 +186,7 @@ public class programc extends Program {
 
         // Typecheck each class on its own
         for (int i = 0; i < this.classes.getLength(); ++i) {
-            class_c currentClass = (class_c) this.classes.getNth(i);
+            ClassConstructor currentClass = (ClassConstructor) this.classes.getNth(i);
             currentClass.typecheck(classTable, featureTable);
         }
     }
@@ -201,14 +202,15 @@ public class programc extends Program {
             // Check that class Main has method 'main'
             if (!featureTable.getMethodSignatures(TreeConstants.Main).containsKey(TreeConstants.main_meth)) {
                 String errorString = "No 'main' method in class Main";
-                classTable.semantError((class_c) classTable.getClass(TreeConstants.Main)).println(errorString);
+                classTable.semantError((ClassConstructor) classTable.getClass(TreeConstants.Main)).println(errorString);
             } else {
                 FeatureTable.MethodSignature mainSignature = featureTable.getMethodSignatures(TreeConstants.Main).get(
                         TreeConstants.main_meth);
                 // Check that Main.main takes no arguments
                 if (mainSignature.getArgumentTypes().size() != 0) {
                     String errorString = "'main' method in class Main should have no arguments.";
-                    classTable.semantError((class_c) classTable.getClass(TreeConstants.Main)).println(errorString);
+                    classTable.semantError((ClassConstructor) classTable.getClass(TreeConstants.Main)).println(
+                            errorString);
                 }
             }
         }

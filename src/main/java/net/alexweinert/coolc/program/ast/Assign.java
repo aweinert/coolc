@@ -13,7 +13,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class assign extends Expression {
+public class Assign extends Expression {
     protected AbstractSymbol name;
     protected Expression expr;
 
@@ -27,14 +27,14 @@ public class assign extends Expression {
      * @param a1
      *            initial value for expr
      */
-    public assign(int lineNumber, AbstractSymbol a1, Expression a2) {
+    public Assign(int lineNumber, AbstractSymbol a1, Expression a2) {
         super(lineNumber);
         name = a1;
         expr = a2;
     }
 
     public TreeNode copy() {
-        return new assign(lineNumber, copy_AbstractSymbol(name), (Expression) expr.copy());
+        return new Assign(lineNumber, copy_AbstractSymbol(name), (Expression) expr.copy());
     }
 
     public void dump(PrintStream out, int n) {

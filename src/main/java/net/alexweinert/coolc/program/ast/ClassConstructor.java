@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 import java.util.Enumeration;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -12,7 +13,7 @@ import net.alexweinert.coolc.program.symboltables.FeatureTable;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class class_c extends Class_ {
+public class ClassConstructor extends Class_ {
     protected AbstractSymbol name;
     protected AbstractSymbol parent;
     protected Features features;
@@ -32,7 +33,7 @@ public class class_c extends Class_ {
      * @param a3
      *            initial value for filename
      */
-    public class_c(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Features a3, AbstractSymbol a4) {
+    public ClassConstructor(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Features a3, AbstractSymbol a4) {
         super(lineNumber);
         name = a1;
         parent = a2;
@@ -49,7 +50,7 @@ public class class_c extends Class_ {
     }
 
     public TreeNode copy() {
-        return new class_c(lineNumber, copy_AbstractSymbol(name), copy_AbstractSymbol(parent),
+        return new ClassConstructor(lineNumber, copy_AbstractSymbol(name), copy_AbstractSymbol(parent),
                 (Features) features.copy(), copy_AbstractSymbol(filename));
     }
 

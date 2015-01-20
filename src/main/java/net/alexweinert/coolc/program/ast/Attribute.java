@@ -2,6 +2,7 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -12,7 +13,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class attr extends Feature {
+public class Attribute extends Feature {
     protected AbstractSymbol name;
     protected AbstractSymbol type_decl;
     protected Expression init;
@@ -29,7 +30,7 @@ public class attr extends Feature {
      * @param a2
      *            initial value for init
      */
-    public attr(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
+    public Attribute(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
         super(lineNumber);
         name = a1;
         type_decl = a2;
@@ -37,12 +38,13 @@ public class attr extends Feature {
     }
 
     public TreeNode copy() {
-        return new attr(lineNumber, copy_AbstractSymbol(name), copy_AbstractSymbol(type_decl), (Expression) init.copy());
+        return new Attribute(lineNumber, copy_AbstractSymbol(name), copy_AbstractSymbol(type_decl),
+                (Expression) init.copy());
     }
 
     @Override
     public void typecheck(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        if (this.init instanceof no_expr) {
+        if (this.init instanceof NoExpression) {
             // If we have no initializer, we simply believe whatever the declaration tells us
             return;
         } else {

@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 import java.util.Enumeration;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -13,7 +14,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class typcase extends Expression {
+public class Typecase extends Expression {
     protected Expression expr;
     protected Cases cases;
 
@@ -27,14 +28,14 @@ public class typcase extends Expression {
      * @param a1
      *            initial value for cases
      */
-    public typcase(int lineNumber, Expression a1, Cases a2) {
+    public Typecase(int lineNumber, Expression a1, Cases a2) {
         super(lineNumber);
         expr = a1;
         cases = a2;
     }
 
     public TreeNode copy() {
-        return new typcase(lineNumber, (Expression) expr.copy(), (Cases) cases.copy());
+        return new Typecase(lineNumber, (Expression) expr.copy(), (Cases) cases.copy());
     }
 
     public void dump(PrintStream out, int n) {
@@ -60,7 +61,7 @@ public class typcase extends Expression {
 
         AbstractSymbol leastUpperBound = null;
         for (int caseIndex = 0; caseIndex < this.cases.getLength(); ++caseIndex) {
-            branch currentBranch = (branch) this.cases.getNth(caseIndex);
+            Branch currentBranch = (Branch) this.cases.getNth(caseIndex);
 
             // Check that we do not try to bind self
             if (currentBranch.name.equals(TreeConstants.self)) {

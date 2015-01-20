@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 import java.util.Enumeration;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -13,7 +14,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class method extends Feature {
+public class Method extends Feature {
     protected AbstractSymbol name;
     protected Formals formals;
     protected AbstractSymbol return_type;
@@ -33,7 +34,7 @@ public class method extends Feature {
      * @param a3
      *            initial value for expr
      */
-    public method(int lineNumber, AbstractSymbol a1, Formals a2, AbstractSymbol a3, Expression a4) {
+    public Method(int lineNumber, AbstractSymbol a1, Formals a2, AbstractSymbol a3, Expression a4) {
         super(lineNumber);
         name = a1;
         formals = a2;
@@ -42,7 +43,7 @@ public class method extends Feature {
     }
 
     public TreeNode copy() {
-        return new method(lineNumber, copy_AbstractSymbol(name), (Formals) formals.copy(),
+        return new Method(lineNumber, copy_AbstractSymbol(name), (Formals) formals.copy(),
                 copy_AbstractSymbol(return_type), (Expression) expr.copy());
     }
 
@@ -71,7 +72,7 @@ public class method extends Feature {
                 TreeConstants.SELF_TYPE);
 
         for (int formalIndex = 0; formalIndex < this.formals.getLength(); ++formalIndex) {
-            formalc currentFormal = (formalc) this.formals.getNth(formalIndex);
+            FormalConstructor currentFormal = (FormalConstructor) this.formals.getNth(formalIndex);
             extendedFeatureTable = extendedFeatureTable.copyAndExtend(enclosingClass.getName(), currentFormal.name,
                     currentFormal.type_decl);
         }

@@ -2,51 +2,52 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
 
 /**
- * Defines AST constructor 'int_const'.
+ * Defines AST constructor 'bool_const'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class int_const extends Expression {
-    protected AbstractSymbol token;
+public class BoolConst extends Expression {
+    protected Boolean val;
 
     /**
-     * Creates "int_const" AST node.
+     * Creates "bool_const" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
      * @param a0
-     *            initial value for token
+     *            initial value for val
      */
-    public int_const(int lineNumber, AbstractSymbol a1) {
+    public BoolConst(int lineNumber, Boolean a1) {
         super(lineNumber);
-        token = a1;
+        val = a1;
     }
 
     public TreeNode copy() {
-        return new int_const(lineNumber, copy_AbstractSymbol(token));
+        return new BoolConst(lineNumber, copy_Boolean(val));
     }
 
     public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "int_const\n");
-        dump_AbstractSymbol(out, n + 2, token);
+        out.print(Utilities.pad(n) + "bool_const\n");
+        dump_Boolean(out, n + 2, val);
     }
 
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
-        out.println(Utilities.pad(n) + "_int");
-        dump_AbstractSymbol(out, n + 2, token);
+        out.println(Utilities.pad(n) + "_bool");
+        dump_Boolean(out, n + 2, val);
         dump_type(out, n);
     }
 
     @Override
     protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        return TreeConstants.Int;
+        return TreeConstants.Bool;
     }
 
 }

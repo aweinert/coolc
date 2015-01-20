@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 import java.util.Enumeration;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -13,7 +14,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class block extends Expression {
+public class Block extends Expression {
     protected Expressions body;
 
     /**
@@ -24,13 +25,13 @@ public class block extends Expression {
      * @param a0
      *            initial value for body
      */
-    public block(int lineNumber, Expressions a1) {
+    public Block(int lineNumber, Expressions a1) {
         super(lineNumber);
         body = a1;
     }
 
     public TreeNode copy() {
-        return new block(lineNumber, (Expressions) body.copy());
+        return new Block(lineNumber, (Expressions) body.copy());
     }
 
     public void dump(PrintStream out, int n) {

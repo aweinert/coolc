@@ -2,58 +2,58 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
 
 /**
- * Defines AST constructor 'comp'.
+ * Defines AST constructor 'new_'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class comp extends Expression {
-    protected Expression e1;
+public class NewExpression extends Expression {
+    protected AbstractSymbol type_name;
 
     /**
-     * Creates "comp" AST node.
+     * Creates "new_" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
      * @param a0
-     *            initial value for e1
+     *            initial value for type_name
      */
-    public comp(int lineNumber, Expression a1) {
+    public NewExpression(int lineNumber, AbstractSymbol a1) {
         super(lineNumber);
-        e1 = a1;
+        type_name = a1;
     }
 
     public TreeNode copy() {
-        return new comp(lineNumber, (Expression) e1.copy());
+        return new NewExpression(lineNumber, copy_AbstractSymbol(type_name));
     }
 
     public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "comp\n");
-        e1.dump(out, n + 2);
+        out.print(Utilities.pad(n) + "new_\n");
+        dump_AbstractSymbol(out, n + 2, type_name);
     }
 
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
-        out.println(Utilities.pad(n) + "_comp");
-        e1.dump_with_types(out, n + 2);
+        out.println(Utilities.pad(n) + "_new");
+        dump_AbstractSymbol(out, n + 2, type_name);
         dump_type(out, n);
     }
 
     @Override
     protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        AbstractSymbol operandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
-
-        if (!classTable.conformsTo(enclosingClass.getName(), operandType, TreeConstants.Bool)) {
-            String errorString = String.format("Argument of 'not' has type %s instead of Bool.", operandType);
+        if (classTable.classExists(this.type_name)) {
+            return this.type_name;
+        } else {
+            String errorString = String.format("'new' used with undefined class %s.", this.type_name);
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
+            return TreeConstants.Object_;
         }
-
-        return TreeConstants.Bool;
     }
 
 }

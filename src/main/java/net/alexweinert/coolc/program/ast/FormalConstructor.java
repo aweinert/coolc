@@ -2,20 +2,20 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 
 /**
- * Defines AST constructor 'branch'.
+ * Defines AST constructor 'formalc'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class branch extends Case {
+public class FormalConstructor extends Formal {
     protected AbstractSymbol name;
     protected AbstractSymbol type_decl;
-    protected Expression expr;
 
     /**
-     * Creates "branch" AST node.
+     * Creates "formalc" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
@@ -23,34 +23,28 @@ public class branch extends Case {
      *            initial value for name
      * @param a1
      *            initial value for type_decl
-     * @param a2
-     *            initial value for expr
      */
-    public branch(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
+    public FormalConstructor(int lineNumber, AbstractSymbol a1, AbstractSymbol a2) {
         super(lineNumber);
         name = a1;
         type_decl = a2;
-        expr = a3;
     }
 
     public TreeNode copy() {
-        return new branch(lineNumber, copy_AbstractSymbol(name), copy_AbstractSymbol(type_decl),
-                (Expression) expr.copy());
+        return new FormalConstructor(lineNumber, copy_AbstractSymbol(name), copy_AbstractSymbol(type_decl));
     }
 
     public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "branch\n");
+        out.print(Utilities.pad(n) + "formalc\n");
         dump_AbstractSymbol(out, n + 2, name);
         dump_AbstractSymbol(out, n + 2, type_decl);
-        expr.dump(out, n + 2);
     }
 
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
-        out.println(Utilities.pad(n) + "_branch");
+        out.println(Utilities.pad(n) + "_formal");
         dump_AbstractSymbol(out, n + 2, name);
         dump_AbstractSymbol(out, n + 2, type_decl);
-        expr.dump_with_types(out, n + 2);
     }
 
 }

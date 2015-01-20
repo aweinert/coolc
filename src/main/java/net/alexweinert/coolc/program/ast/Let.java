@@ -2,6 +2,7 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -12,7 +13,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class let extends Expression {
+public class Let extends Expression {
     protected AbstractSymbol identifier;
     protected AbstractSymbol type_decl;
     protected Expression init;
@@ -32,7 +33,7 @@ public class let extends Expression {
      * @param a3
      *            initial value for body
      */
-    public let(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3, Expression a4) {
+    public Let(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3, Expression a4) {
         super(lineNumber);
         identifier = a1;
         type_decl = a2;
@@ -41,7 +42,7 @@ public class let extends Expression {
     }
 
     public TreeNode copy() {
-        return new let(lineNumber, copy_AbstractSymbol(identifier), copy_AbstractSymbol(type_decl),
+        return new Let(lineNumber, copy_AbstractSymbol(identifier), copy_AbstractSymbol(type_decl),
                 (Expression) init.copy(), (Expression) body.copy());
     }
 

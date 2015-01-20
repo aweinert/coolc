@@ -2,51 +2,54 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
 
 /**
- * Defines AST constructor 'bool_const'.
+ * Defines AST constructor 'string_const'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class bool_const extends Expression {
-    protected Boolean val;
+public class StringConst extends Expression {
+    protected AbstractSymbol token;
 
     /**
-     * Creates "bool_const" AST node.
+     * Creates "string_const" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
      * @param a0
-     *            initial value for val
+     *            initial value for token
      */
-    public bool_const(int lineNumber, Boolean a1) {
+    public StringConst(int lineNumber, AbstractSymbol a1) {
         super(lineNumber);
-        val = a1;
+        token = a1;
     }
 
     public TreeNode copy() {
-        return new bool_const(lineNumber, copy_Boolean(val));
+        return new StringConst(lineNumber, copy_AbstractSymbol(token));
     }
 
     public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "bool_const\n");
-        dump_Boolean(out, n + 2, val);
+        out.print(Utilities.pad(n) + "string_const\n");
+        dump_AbstractSymbol(out, n + 2, token);
     }
 
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
-        out.println(Utilities.pad(n) + "_bool");
-        dump_Boolean(out, n + 2, val);
+        out.println(Utilities.pad(n) + "_string");
+        out.print(Utilities.pad(n + 2) + "\"");
+        Utilities.printEscapedString(out, token.getString());
+        out.println("\"");
         dump_type(out, n);
     }
 
     @Override
     protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        return TreeConstants.Bool;
+        return TreeConstants.Str;
     }
 
 }
