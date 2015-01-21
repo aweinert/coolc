@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.program.symboltables;
 
-/*Copyright (c) 2000 The Regents of the University of California. All rights reserved.
+/* Copyright (c) 2000 The Regents of the University of California. All rights reserved.
  * 
  * Permission to use, copy, modify, and distribute this software for any purpose, without fee, and without written
  * agreement is hereby granted, provided that the above copyright notice and the following two paragraphs appear in all
@@ -19,6 +19,8 @@ package net.alexweinert.coolc.program.symboltables;
 // for other assignments.
 
 import java.io.PrintStream;
+
+import net.alexweinert.coolc.unparser.CgenSupport;
 
 /** String table entry for string constants. */
 public class StringSymbol extends AbstractSymbol {
