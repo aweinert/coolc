@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 import java.util.Enumeration;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -14,10 +15,10 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class StaticFunctionCall extends Expression {
-    protected Expression expr;
-    protected AbstractSymbol type_name;
-    protected AbstractSymbol name;
-    protected Expressions actual;
+    final protected Expression expr;
+    final protected AbstractSymbol type_name;
+    final protected AbstractSymbol name;
+    final protected Expressions actual;
 
     /**
      * Creates "static_dispatch" AST node.
@@ -41,11 +42,6 @@ public class StaticFunctionCall extends Expression {
         actual = a4;
     }
 
-    public TreeNode copy() {
-        return new StaticFunctionCall(lineNumber, (Expression) expr.copy(), copy_AbstractSymbol(type_name),
-                copy_AbstractSymbol(name), (Expressions) actual.copy());
-    }
-
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "static_dispatch\n");
         expr.dump(out, n + 2);
@@ -61,15 +57,15 @@ public class StaticFunctionCall extends Expression {
         dump_AbstractSymbol(out, n + 2, type_name);
         dump_AbstractSymbol(out, n + 2, name);
         out.println(Utilities.pad(n + 2) + "(");
-        for (Enumeration e = actual.getElements(); e.hasMoreElements();) {
-            ((Expression) e.nextElement()).dump_with_types(out, n + 2);
+        for (final Expression actual : this.actual) {
+            actual.dump_with_types(out, n + 2);
         }
         out.println(Utilities.pad(n + 2) + ")");
         dump_type(out, n);
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
         if (!classTable.conformsTo(enclosingClass.getName(), expressionType, this.type_name)) {
             String errorString = String.format(
@@ -86,22 +82,22 @@ public class StaticFunctionCall extends Expression {
 
         // Check that the number of arguments is the same in the definition and the call
         FeatureTable.MethodSignature targetSignature = featureTable.getMethodSignatures(this.type_name).get(this.name);
-        if (this.actual.getLength() != targetSignature.getArgumentTypes().size()) {
+        if (this.actual.size() != targetSignature.getArgumentTypes().size()) {
             String errorString = String.format("Method %s called with wrong number of arguments.", this.name);
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
             return targetSignature.getReturnType();
         }
 
         // Check that all the actual parameters conform to the formal parameters
-        for (int actualIndex = 0; actualIndex < this.actual.getLength(); ++actualIndex) {
-            AbstractSymbol actualType = ((Expression) this.actual.getNth(actualIndex)).typecheck(enclosingClass,
+        for (int actualIndex = 0; actualIndex < this.actual.size(); ++actualIndex) {
+            AbstractSymbol actualType = ((Expression) this.actual.size(actualIndex)).typecheck(enclosingClass,
                     classTable, featureTable);
             AbstractSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
 
             if (!classTable.conformsTo(enclosingClass.getName(), actualType, formalType)) {
                 Method targetMethodDef = featureTable.findMethodDefinition(classTable.getClass(this.type_name),
                         this.name);
-                AbstractSymbol formalName = ((FormalConstructor) targetMethodDef.formals.getNth(actualIndex)).name;
+                AbstractSymbol formalName = ((Formal) targetMethodDef.formals.size(actualIndex)).name;
                 String errorString = String.format(
                         "In call of method %s, type %s of parameter %s does not conform to declared type %s.",
                         this.name, actualType, formalName, formalType);
