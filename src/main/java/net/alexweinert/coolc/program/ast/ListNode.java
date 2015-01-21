@@ -55,6 +55,10 @@ abstract class ListNode<T extends TreeNode> extends TreeNode implements Iterable
      * */
     public abstract ListNode<T> addElement(T node);
 
+    public int size() {
+        return this.elements.size();
+    }
+
     /**
      * Pretty-prints this list to this output stream.
      * 
