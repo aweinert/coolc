@@ -12,6 +12,7 @@ import java_cup.runtime.*;
 import net.alexweinert.coolc.lexer.Lexer;
 import net.alexweinert.coolc.program.symboltables.*;
 import net.alexweinert.coolc.program.ast.*;
+import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.Utilities;
 
 /* Code enclosed in {: :} is copied verbatim to the class containing
@@ -76,9 +77,9 @@ terminal AbstractSymbol TYPEID, OBJECTID;
  *
  * Hint: You will have to add/modify this list.
  */
-nonterminal programc program;
+nonterminal Program program;
 nonterminal Classes class_list;
-nonterminal class_c class;
+nonterminal Class class;
 nonterminal Features feature_list;
 nonterminal Feature feature;
 nonterminal Expression expr, opt_init, nested_let, let_expression;
@@ -117,7 +118,7 @@ program
 	/* A program is nothing but a list of classes. Errors are handled in the 
 	 * class_list nonterminal */
 	::= class_list:cl
-	    {: RESULT = new programc(curr_lineno(), cl); :}
+	    {: RESULT = new Program(curr_lineno(), cl); :}
 	;
 
 
@@ -127,7 +128,7 @@ class_list
 	    {: RESULT = (new Classes(curr_lineno())); :}
 	/* Append a class to the current list of classes */
 	| class_list:cl class:c SEMI 
-	    {: RESULT = cl.appendElement(c); :}
+	    {: RESULT = cl.add(c); :}
 	/* Error in a class definition, jump over it */
 	| class_list:cl error SEMI
 		{: RESULT = cl; :}
@@ -137,7 +138,7 @@ class_list
 /* Class declarations */
 class
 	::= CLASS TYPEID:n opt_inherits:inherits LBRACE feature_list:def RBRACE
-	    {: RESULT = new class_c(curr_lineno(), n, inherits, def, curr_filename()); :}
+	    {: RESULT = new Class(curr_lineno(), n, inherits, def, curr_filename()); :}
 	;
 
 /* Optional inherits-declaration */
@@ -156,7 +157,7 @@ feature_list
 		{: RESULT = (new Features(curr_lineno())); :}
 	/* Add a new feature to the list */
 	| feature_list:fl feature:f SEMI
-		{: RESULT = fl.appendElement(f); :}
+		{: RESULT = fl.add(f); :}
 	/* If there is an error while parsing a feature, ignore it */
 	| feature_list:fl error SEMI
 		{: RESULT = fl; :}
@@ -166,10 +167,10 @@ feature_list
 feature
 	/* Parse a method */
 	::= OBJECTID:name formals:args COLON TYPEID:return_type LBRACE expr:body RBRACE
-		{: RESULT = new method(curr_lineno(), name, args, return_type, body); :}
+		{: RESULT = new Method(curr_lineno(), name, args, return_type, body); :}
 	/* Parse an attribute, with optional initialization */
 	| OBJECTID:name COLON TYPEID:type opt_init:init
-		{: RESULT = new attr(curr_lineno(), name, type, init); :};
+		{: RESULT = new Attribute(curr_lineno(), name, type, init); :};
 
 /* Optional initialization */
 opt_init
@@ -178,7 +179,7 @@ opt_init
 		{: RESULT = init; :}
 	/* Missing initialization, initialize with no_expr */
 	|
-		{: RESULT = new no_expr(curr_lineno()); :}
+		{: RESULT = new NoExpression(curr_lineno()); :}
 		;
 
 /* The set of all formal parameters of a method */
@@ -188,10 +189,10 @@ formals
 	    {: RESULT = new Formals(curr_lineno()); :}
 	/* List of names */
 	| LPAREN formal:f
-		{: RESULT = (new Formals(curr_lineno())).appendElement(f); :}
+		{: RESULT = (new Formals(curr_lineno())).add(f); :}
 	/* Add a new formal to the list */
 	| formals:fl COMMA formal:f
-		{: RESULT = fl.appendElement(f); :}
+		{: RESULT = fl.add(f); :}
 	/* Finish the list off */
 	| formals:fl RPAREN
 		{: RESULT = fl; :}
@@ -200,69 +201,69 @@ formals
 /* A single formal parameter of a method */
 formal
 	::= OBJECTID:name COLON TYPEID:type
-		{: RESULT = new formalc(curr_lineno(), name, type); :};
+		{: RESULT = new Formal(curr_lineno(), name, type); :};
 
 /* Expressions */
 expr
 	/* Arithmetic expressions */
 	::= expr:e1 PLUS expr:e2
-	    {: RESULT = new plus(curr_lineno(), e1, e2); :}
+	    {: RESULT = new Addition(curr_lineno(), e1, e2); :}
 	| expr:e1 MINUS expr:e2
-	    {: RESULT = new sub(curr_lineno(), e1, e2); :}
+	    {: RESULT = new Subtraction(curr_lineno(), e1, e2); :}
 	| expr:e1 MULT expr:e2
-	    {: RESULT = new mul(curr_lineno(), e1, e2); :}
+	    {: RESULT = new Multiplication(curr_lineno(), e1, e2); :}
 	| expr:e1 DIV expr:e2
-	    {: RESULT = new divide(curr_lineno(), e1, e2); :}
+	    {: RESULT = new Division(curr_lineno(), e1, e2); :}
 	| NEG expr:e
-	    {: RESULT = new neg(curr_lineno(), e); :}
+	    {: RESULT = new ArithmeticNegation(curr_lineno(), e); :}
 	| expr:e1 LT expr:e2
-	    {: RESULT = new lt(curr_lineno(), e1, e2); :}
+	    {: RESULT = new LessThan(curr_lineno(), e1, e2); :}
 	| expr:e1 EQ expr:e2
-	    {: RESULT = new eq(curr_lineno(), e1, e2); :}
+	    {: RESULT = new Equality(curr_lineno(), e1, e2); :}
 	| expr:e1 LE expr:e2
-	    {: RESULT = new leq(curr_lineno(), e1, e2); :}
+	    {: RESULT = new LessThanOrEquals(curr_lineno(), e1, e2); :}
 	| NOT expr:e
-	    {: RESULT = new comp(curr_lineno(), e); :}
+	    {: RESULT = new BooleanNegation(curr_lineno(), e); :}
 	| LPAREN expr:e RPAREN
 	    {: RESULT = e; :}
 
 	/* Statements */
 	| OBJECTID:lhs ASSIGN expr:rhs
-		{: RESULT = new assign(curr_lineno(), lhs, rhs); :}
+		{: RESULT = new Assign(curr_lineno(), lhs, rhs); :}
 	| NEW TYPEID:type
-		{: RESULT = new new_(curr_lineno(), type); :}
+		{: RESULT = new New(curr_lineno(), type); :}
 	| ISVOID expr:expr
-		{: RESULT = new isvoid(curr_lineno(), expr); :}
+		{: RESULT = new IsVoid(curr_lineno(), expr); :}
 
 	/* Control structures */
 	| CASE expr:expr OF cases:cases ESAC
-		{: RESULT = new typcase(curr_lineno(), expr, cases); :}
+		{: RESULT = new Typecase(curr_lineno(), expr, cases); :}
 	| IF expr:cond_expr THEN expr:then_expr ELSE expr:else_expr FI
-		{: RESULT = new cond(curr_lineno(), cond_expr, then_expr, else_expr); :}
+		{: RESULT = new If(curr_lineno(), cond_expr, then_expr, else_expr); :}
 	| WHILE expr:cond LOOP expr:body POOL
-		{: RESULT = new loop(curr_lineno(), cond, body); :}
+		{: RESULT = new Loop(curr_lineno(), cond, body); :}
 	| let_expression:let /* Factor out let expression to give lowest precedence to let-expression */
 		{: RESULT = let; :}
 	| LBRACE block_body:body RBRACE
-		{: RESULT = new block(curr_lineno(), body); :}
+		{: RESULT = new Block(curr_lineno(), body); :}
 
 	/* Method calls */
 	| OBJECTID:n actuals:a /* Call on self */
-	    {: RESULT = new dispatch(curr_lineno(), new object(curr_lineno(), AbstractTable.idtable.addString("self")), n, a); :}
+	    {: RESULT = new FunctionCall(curr_lineno(), new ObjectReference(curr_lineno(), AbstractTable.idtable.addString("self")), n, a); :}
 	| expr:expr DOT OBJECTID:objid actuals:actuals /* Call on variable */
-		{: RESULT = new dispatch(curr_lineno(), expr, objid, actuals); :}
+		{: RESULT = new FunctionCall(curr_lineno(), expr, objid, actuals); :}
 	| expr:expr AT TYPEID:type DOT OBJECTID:objid actuals:actuals /* Call on casted variable */
-		{: RESULT = new static_dispatch(curr_lineno(), expr, type, objid, actuals); :}
+		{: RESULT = new StaticFunctionCall(curr_lineno(), expr, type, objid, actuals); :}
 
 	/* Constants */
 	| INT_CONST:i
-	    {: RESULT = new int_const(curr_lineno(), i); :}
+	    {: RESULT = new IntConst(curr_lineno(), i); :}
 	| STR_CONST:s
-	    {: RESULT = new string_const(curr_lineno(), s); :}
+	    {: RESULT = new StringConst(curr_lineno(), s); :}
 	| BOOL_CONST:b
-	    {: RESULT = new bool_const(curr_lineno(), b); :}
+	    {: RESULT = new BoolConst(curr_lineno(), b); :}
 	| OBJECTID:o
-	    {: RESULT = new object(curr_lineno(), o); :}
+	    {: RESULT = new ObjectReference(curr_lineno(), o); :}
 	;
 
 /* Body of a block of expressions */
@@ -270,7 +271,7 @@ block_body
 	::= /* Base case, create new, empty list */
 		{: RESULT = new Expressions(curr_lineno()); :}
 	| block_body:el expr:e1 SEMI /* Add a new expression to the block */
-		{: RESULT = el.appendElement(e1); :}
+		{: RESULT = el.add(e1); :}
 	| block_body:el error SEMI /* If we have a malformed expression, just skip it */
 		{: RESULT = el; :}
 	;
@@ -284,10 +285,10 @@ let_expression
 nested_let
 	/* Base case, last let-statement in front of the actual body */
 	::= OBJECTID:new_var COLON TYPEID:type opt_init:init IN expr:body
-		{: RESULT = new let(curr_lineno(), new_var, type, init, body); :}
+		{: RESULT = new Let(curr_lineno(), new_var, type, init, body); :}
 	/* Add another let-statement to the nested statements */
 	| OBJECTID:new_var COLON TYPEID:type opt_init:init COMMA nested_let:inner
-		{: RESULT = new let(curr_lineno(), new_var, type, init, inner); :}
+		{: RESULT = new Let(curr_lineno(), new_var, type, init, inner); :}
 	| error IN expr:body /* Error in base case, skip it */
 		{: RESULT = body; :}
 	| error COMMA nested_let:inner /* Error in nested case, skip it */
@@ -298,15 +299,15 @@ nested_let
 cases
 	::= case:new_case /* Base case, create new empty list of branches */
 		{: 	Cases new_cases = new Cases(curr_lineno());
-			RESULT = new_cases.appendElement(new_case); :}
+			RESULT = new_cases.add(new_case); :}
 	| cases:old_cases case:new_case /* Add a new branch to the list */
-		{: 	RESULT = old_cases.appendElement(new_case); :}
+		{: 	RESULT = old_cases.add(new_case); :}
 	;
 
 /* A single branch of a case-statement */
 case
 	::= OBJECTID:objectid COLON TYPEID:type DARROW expr:expr SEMI
-		{: RESULT = new branch(curr_lineno(), objectid, type, expr); :}
+		{: RESULT = new Case(curr_lineno(), objectid, type, expr); :}
 	;
 
 
@@ -324,8 +325,8 @@ actuals
 exp_list
 	/* One expression */
 	::= expr:e
-	    {: RESULT = (new Expressions(curr_lineno())).appendElement(e); :} 
+	    {: RESULT = (new Expressions(curr_lineno())).add(e); :} 
 	/* Several expressions */
 	| exp_list:el COMMA expr:e
-	    {: RESULT = el.appendElement(e); :}
+	    {: RESULT = el.add(e); :}
 	;
