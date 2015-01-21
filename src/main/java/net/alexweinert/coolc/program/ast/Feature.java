@@ -13,6 +13,6 @@ public abstract class Feature extends TreeNode {
 
     public abstract void dump_with_types(PrintStream out, int n);
 
-    public abstract void typecheck(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable);
+    public abstract void typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable);
 
 }
