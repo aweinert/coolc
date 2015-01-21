@@ -24,10 +24,6 @@ public class NoExpression extends Expression {
         super(lineNumber);
     }
 
-    public TreeNode copy() {
-        return new NoExpression(lineNumber);
-    }
-
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "no_expr\n");
     }
@@ -39,7 +35,7 @@ public class NoExpression extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         return TreeConstants.No_type;
     }
 
