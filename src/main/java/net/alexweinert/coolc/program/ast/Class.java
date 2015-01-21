@@ -13,11 +13,11 @@ import net.alexweinert.coolc.program.symboltables.FeatureTable;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class ClassConstructor extends Class_ {
-    protected AbstractSymbol name;
-    protected AbstractSymbol parent;
-    protected Features features;
-    protected AbstractSymbol filename;
+public class Class extends TreeNode {
+    final protected AbstractSymbol name;
+    final protected AbstractSymbol parent;
+    final protected Features features;
+    final protected AbstractSymbol filename;
 
     /**
      * Creates "class_c" AST node.
@@ -33,7 +33,7 @@ public class ClassConstructor extends Class_ {
      * @param a3
      *            initial value for filename
      */
-    public ClassConstructor(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Features a3, AbstractSymbol a4) {
+    public Class(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Features a3, AbstractSymbol a4) {
         super(lineNumber);
         name = a1;
         parent = a2;
@@ -43,15 +43,9 @@ public class ClassConstructor extends Class_ {
 
     public void typecheck(ClassTable classTable, FeatureTable featureTable) {
         // Typecheck each feature on its own
-        for (int featureIndex = 0; featureIndex < this.features.getLength(); ++featureIndex) {
-            Feature currentFeature = (Feature) this.features.getNth(featureIndex);
+        for (final Feature currentFeature : this.features) {
             currentFeature.typecheck(this, classTable, featureTable);
         }
-    }
-
-    public TreeNode copy() {
-        return new ClassConstructor(lineNumber, copy_AbstractSymbol(name), copy_AbstractSymbol(parent),
-                (Features) features.copy(), copy_AbstractSymbol(filename));
     }
 
     public void dump(PrintStream out, int n) {
@@ -70,8 +64,8 @@ public class ClassConstructor extends Class_ {
         out.print(Utilities.pad(n + 2) + "\"");
         Utilities.printEscapedString(out, filename.getString());
         out.println("\"\n" + Utilities.pad(n + 2) + "(");
-        for (Enumeration e = features.getElements(); e.hasMoreElements();) {
-            ((Feature) e.nextElement()).dump_with_types(out, n + 2);
+        for (final Feature currentFeature : this.features) {
+            currentFeature.dump_with_types(out, n + 2);
         }
         out.println(Utilities.pad(n + 2) + ")");
     }
