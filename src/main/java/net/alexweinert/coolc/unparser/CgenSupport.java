@@ -20,7 +20,7 @@ package net.alexweinert.coolc.unparser;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
-import net.alexweinert.coolc.program.symboltables.BoolConst;
+import net.alexweinert.coolc.program.symboltables.BoolSymbol;
 import net.alexweinert.coolc.program.symboltables.IntSymbol;
 import net.alexweinert.coolc.program.symboltables.StringSymbol;
 
@@ -196,7 +196,7 @@ public class CgenSupport {
      * @param s
      *            the output stream
      * */
-    public static void emitLoadBool(String dest_reg, BoolConst b, PrintStream s) {
+    public static void emitLoadBool(String dest_reg, BoolSymbol b, PrintStream s) {
         emitPartialLoadAddress(dest_reg, s);
         b.codeRef(s);
         s.println("");
