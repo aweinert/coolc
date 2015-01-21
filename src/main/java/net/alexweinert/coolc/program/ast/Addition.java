@@ -14,23 +14,23 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Addition extends Expression {
-    protected Expression e1;
-    protected Expression e2;
+    final private Expression e1;
+    final private Expression e2;
 
     /**
      * Creates "plus" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
-     * @param a0
-     *            initial value for e1
      * @param a1
+     *            initial value for e1
+     * @param a2
      *            initial value for e2
      */
     public Addition(int lineNumber, Expression a1, Expression a2) {
         super(lineNumber);
-        e1 = a1;
-        e2 = a2;
+        this.e1 = a1;
+        this.e2 = a2;
     }
 
     public void dump(PrintStream out, int n) {
