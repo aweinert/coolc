@@ -14,7 +14,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class IntConst extends Expression {
-    protected AbstractSymbol token;
+    final protected AbstractSymbol token;
 
     /**
      * Creates "int_const" AST node.
@@ -27,10 +27,6 @@ public class IntConst extends Expression {
     public IntConst(int lineNumber, AbstractSymbol a1) {
         super(lineNumber);
         token = a1;
-    }
-
-    public TreeNode copy() {
-        return new IntConst(lineNumber, copy_AbstractSymbol(token));
     }
 
     public void dump(PrintStream out, int n) {
@@ -46,7 +42,7 @@ public class IntConst extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         return TreeConstants.Int;
     }
 
