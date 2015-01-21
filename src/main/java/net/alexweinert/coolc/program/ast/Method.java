@@ -82,4 +82,12 @@ public class Method extends Feature {
     public AbstractSymbol getName() {
         return this.name;
     }
+
+    public Formals getFormals() {
+        return this.formals;
+    }
+
+    public AbstractSymbol getReturnType() {
+        return this.return_type;
+    }
 }
