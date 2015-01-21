@@ -14,7 +14,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class StringConst extends Expression {
-    protected AbstractSymbol token;
+    final protected AbstractSymbol token;
 
     /**
      * Creates "string_const" AST node.
@@ -27,10 +27,6 @@ public class StringConst extends Expression {
     public StringConst(int lineNumber, AbstractSymbol a1) {
         super(lineNumber);
         token = a1;
-    }
-
-    public TreeNode copy() {
-        return new StringConst(lineNumber, copy_AbstractSymbol(token));
     }
 
     public void dump(PrintStream out, int n) {
@@ -48,7 +44,7 @@ public class StringConst extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         return TreeConstants.Str;
     }
 
