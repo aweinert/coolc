@@ -20,7 +20,7 @@ import java.io.PrintStream;
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 
-abstract class TreeNode {
+public abstract class TreeNode {
     /** line in the source file from which this node came. */
     private final int lineNumber;
 
