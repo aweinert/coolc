@@ -19,6 +19,7 @@ import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
 import net.alexweinert.coolc.program.Utilities;
@@ -27,7 +28,7 @@ abstract class ListNode<T extends TreeNode> extends TreeNode implements Iterable
     /**
      * The actual elements contained in this node
      */
-    protected final Collection<T> elements;
+    protected final List<T> elements;
 
     protected ListNode(int lineNumber, Collection<T> elements) {
         super(lineNumber);
@@ -57,6 +58,10 @@ abstract class ListNode<T extends TreeNode> extends TreeNode implements Iterable
 
     public int size() {
         return this.elements.size();
+    }
+
+    public T get(int index) {
+        return this.elements.get(index);
     }
 
     /**
