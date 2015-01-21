@@ -66,7 +66,7 @@
 							<packageName>net.alexweinert.coolc.parser</packageName>
 							<className>Parser</className>
 							<outputDirectory>src/main/java/</outputDirectory>
-							<symbolsName>Symbols</symbolsName>
+							<symbolsName>Tokens</symbolsName>
 						</configuration>
 					</execution>
 				</executions>
