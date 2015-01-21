@@ -43,4 +43,12 @@ public class Formal extends TreeNode {
         dump_AbstractSymbol(out, n + 2, type_decl);
     }
 
+    public AbstractSymbol getName() {
+        return this.name;
+    }
+
+    public AbstractSymbol getTypeDecl() {
+        return this.type_decl;
+    }
+
 }

@@ -42,7 +42,7 @@ public class BoolConst extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         return TreeConstants.Bool;
     }
 

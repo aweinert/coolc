@@ -42,7 +42,7 @@ public class BooleanNegation extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol operandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
 
         if (!classTable.conformsTo(enclosingClass.getName(), operandType, TreeConstants.Bool)) {

@@ -45,7 +45,7 @@ public class Block extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol blockType = TreeConstants.No_type;
         for (final Expression currentExpression : this.body) {
             blockType = currentExpression.typecheck(enclosingClass, classTable, featureTable);

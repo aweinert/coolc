@@ -48,7 +48,7 @@ public class Assign extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol leftHandType = featureTable.getAttributeTypes(enclosingClass.getName()).get(this.name);
         AbstractSymbol rightHandType = this.expr.typecheck(enclosingClass, classTable, featureTable);
 

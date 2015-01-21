@@ -48,7 +48,7 @@ public class Addition extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol leftHandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
         AbstractSymbol rightHandType = this.e2.typecheck(enclosingClass, classTable, featureTable);
 
