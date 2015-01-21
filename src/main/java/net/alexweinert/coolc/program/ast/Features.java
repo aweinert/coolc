@@ -1,21 +1,14 @@
 package net.alexweinert.coolc.program.ast;
 
-import java.util.Vector;
+import java.util.Collection;
 
 /**
  * Defines list phylum Features
  * <p>
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
-public class Features extends ListNode {
-    public final static Class elementClass = Feature.class;
-
-    /** Returns class of this lists's elements */
-    public Class getElementClass() {
-        return elementClass;
-    }
-
-    protected Features(int lineNumber, Vector elements) {
+public class Features extends ListNode<Feature> {
+    protected Features(int lineNumber, Collection<Feature> elements) {
         super(lineNumber, elements);
     }
 
@@ -24,13 +17,10 @@ public class Features extends ListNode {
         super(lineNumber);
     }
 
-    /** Appends "Feature" element to this list */
-    public Features appendElement(TreeNode elem) {
-        addElement(elem);
-        return this;
-    }
-
-    public TreeNode copy() {
-        return new Features(lineNumber, copyElements());
+    @Override
+    public Features addElement(Feature node) {
+        final Collection<Feature> newElements = this.copyElements();
+        newElements.add(node);
+        return new Features(this.getLineNumber(), newElements);
     }
 }
