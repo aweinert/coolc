@@ -14,7 +14,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class BoolConst extends Expression {
-    protected Boolean val;
+    final protected Boolean val;
 
     /**
      * Creates "bool_const" AST node.
@@ -26,11 +26,7 @@ public class BoolConst extends Expression {
      */
     public BoolConst(int lineNumber, Boolean a1) {
         super(lineNumber);
-        val = a1;
-    }
-
-    public TreeNode copy() {
-        return new BoolConst(lineNumber, copy_Boolean(val));
+        this.val = a1;
     }
 
     public void dump(PrintStream out, int n) {
