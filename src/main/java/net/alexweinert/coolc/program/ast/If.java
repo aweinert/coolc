@@ -14,9 +14,9 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class If extends Expression {
-    protected Expression pred;
-    protected Expression then_exp;
-    protected Expression else_exp;
+    final protected Expression pred;
+    final protected Expression then_exp;
+    final protected Expression else_exp;
 
     /**
      * Creates "cond" AST node.
@@ -37,10 +37,6 @@ public class If extends Expression {
         else_exp = a3;
     }
 
-    public TreeNode copy() {
-        return new If(lineNumber, (Expression) pred.copy(), (Expression) then_exp.copy(), (Expression) else_exp.copy());
-    }
-
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "cond\n");
         pred.dump(out, n + 2);
@@ -58,7 +54,7 @@ public class If extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol conditionType = this.pred.typecheck(enclosingClass, classTable, featureTable);
         AbstractSymbol thenBranchType = this.then_exp.typecheck(enclosingClass, classTable, featureTable);
         AbstractSymbol elseBranchType = this.else_exp.typecheck(enclosingClass, classTable, featureTable);
