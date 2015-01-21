@@ -80,4 +80,8 @@ public class Method extends Feature {
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
         }
     }
+
+    public AbstractSymbol getName() {
+        return this.name;
+    }
 }
