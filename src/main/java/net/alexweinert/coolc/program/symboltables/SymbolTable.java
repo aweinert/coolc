@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.program.symboltables;
 
-/*Copyright (c) 2000 The Regents of the University of California. All rights reserved.
+/* Copyright (c) 2000 The Regents of the University of California. All rights reserved.
  * 
  * Permission to use, copy, modify, and distribute this software for any purpose, without fee, and without written
  * agreement is hereby granted, provided that the above copyright notice and the following two paragraphs appear in all
@@ -48,18 +48,18 @@ import net.alexweinert.coolc.program.Utilities;
  * @see SymtabExample
  * */
 public class SymbolTable {
-    private Stack tbl;
+    private Stack<Hashtable<AbstractSymbol, Object>> tbl;
 
     /** Creates an empty symbol table. */
     public SymbolTable() {
-        tbl = new Stack();
+        tbl = new Stack<>();
     }
 
     /**
      * Enters a new scope. A scope must be entered before anything can be added to the table.
      * */
     public void enterScope() {
-        tbl.push(new Hashtable());
+        tbl.push(new Hashtable<AbstractSymbol, Object>());
     }
 
     /** Exits the most recently entered scope. */
@@ -82,7 +82,7 @@ public class SymbolTable {
         if (tbl.empty()) {
             Utilities.fatalError("addId: can't add a symbol without a scope.");
         }
-        ((Hashtable) tbl.peek()).put(id, info);
+        tbl.peek().put(id, info);
     }
 
     /**
@@ -100,7 +100,7 @@ public class SymbolTable {
         // I break the abstraction here a bit by knowing that stack is
         // really a vector...
         for (int i = tbl.size() - 1; i >= 0; i--) {
-            Object info = ((Hashtable) tbl.elementAt(i)).get(sym);
+            Object info = tbl.elementAt(i).get(sym);
             if (info != null)
                 return info;
         }
@@ -119,7 +119,7 @@ public class SymbolTable {
         if (tbl.empty()) {
             Utilities.fatalError("lookup: no scope in symbol table.");
         }
-        return ((Hashtable) tbl.peek()).get(sym);
+        return tbl.peek().get(sym);
     }
 
     /**
