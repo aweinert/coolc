@@ -2,6 +2,7 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 
+import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -13,7 +14,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class ArithmeticNegation extends Expression {
-    protected Expression e1;
+    final protected Expression e1;
 
     /**
      * Creates "neg" AST node.
@@ -26,10 +27,6 @@ public class ArithmeticNegation extends Expression {
     public ArithmeticNegation(int lineNumber, Expression a1) {
         super(lineNumber);
         e1 = a1;
-    }
-
-    public TreeNode copy() {
-        return new ArithmeticNegation(lineNumber, (Expression) e1.copy());
     }
 
     public void dump(PrintStream out, int n) {
