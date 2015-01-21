@@ -15,10 +15,6 @@ public abstract class Expression extends TreeNode {
 
     final private AbstractSymbol type = null;
 
-    public AbstractSymbol get_type() {
-        return type;
-    }
-
     public abstract void dump_with_types(PrintStream out, int n);
 
     public void dump_type(PrintStream out, int n) {
@@ -31,7 +27,6 @@ public abstract class Expression extends TreeNode {
 
     public AbstractSymbol typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol checkedType = this.inferType(enclosingClass, classTable, featureTable);
-        this.set_type(checkedType);
         return checkedType;
     }
 
