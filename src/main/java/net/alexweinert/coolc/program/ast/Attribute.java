@@ -37,8 +37,12 @@ public class Attribute extends Feature {
         this.init = a3;
     }
 
+    public AbstractSymbol getName() {
+        return this.name;
+    }
+
     @Override
-    public void typecheck(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    public void typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         if (this.init instanceof NoExpression) {
             // If we have no initializer, we simply believe whatever the declaration tells us
             return;
