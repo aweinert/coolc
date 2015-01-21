@@ -15,8 +15,8 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Typecase extends Expression {
-    protected Expression expr;
-    protected Cases cases;
+    final protected Expression expr;
+    final protected Cases cases;
 
     /**
      * Creates "typcase" AST node.
@@ -34,10 +34,6 @@ public class Typecase extends Expression {
         cases = a2;
     }
 
-    public TreeNode copy() {
-        return new Typecase(lineNumber, (Expression) expr.copy(), (Cases) cases.copy());
-    }
-
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "typcase\n");
         expr.dump(out, n + 2);
@@ -48,21 +44,19 @@ public class Typecase extends Expression {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_typcase");
         expr.dump_with_types(out, n + 2);
-        for (Enumeration e = cases.getElements(); e.hasMoreElements();) {
-            ((Case) e.nextElement()).dump_with_types(out, n + 2);
+        for (final Case currentCase : cases) {
+            currentCase.dump_with_types(out, n + 2);
         }
         dump_type(out, n);
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         // We do not need the static type of the expression anywhere, but we need to typecheck it anyways
         AbstractSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
 
         AbstractSymbol leastUpperBound = null;
-        for (int caseIndex = 0; caseIndex < this.cases.getLength(); ++caseIndex) {
-            Branch currentBranch = (Branch) this.cases.getNth(caseIndex);
-
+        for (final Case currentBranch : this.cases) {
             // Check that we do not try to bind self
             if (currentBranch.name.equals(TreeConstants.self)) {
                 String errorString = "'self' bound in 'case'.";
