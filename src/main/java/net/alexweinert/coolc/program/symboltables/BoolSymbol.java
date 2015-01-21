@@ -24,7 +24,7 @@ import net.alexweinert.coolc.unparser.CgenSupport;
  * handled by StringTable and IntTable respectively, but since there are only two boolean constants, we handle them
  * here.
  */
-public class BoolConst {
+public class BoolSymbol {
     private boolean val;
 
     /**
@@ -33,7 +33,7 @@ public class BoolConst {
      * @param val
      *            the value
      * */
-    BoolConst(boolean val) {
+    BoolSymbol(boolean val) {
         this.val = val;
     }
 
@@ -43,12 +43,12 @@ public class BoolConst {
      * @param val
      *            the value
      * */
-    BoolConst(Boolean val) {
+    BoolSymbol(Boolean val) {
         this.val = val.booleanValue();
     }
 
-    final static BoolConst truebool = new BoolConst(true);
-    final static BoolConst falsebool = new BoolConst(false);
+    final static BoolSymbol truebool = new BoolSymbol(true);
+    final static BoolSymbol falsebool = new BoolSymbol(false);
 
     /**
      * Emits a reference to this boolean constant.
