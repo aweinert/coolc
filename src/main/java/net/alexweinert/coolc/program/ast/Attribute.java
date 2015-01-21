@@ -14,9 +14,9 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Attribute extends Feature {
-    protected AbstractSymbol name;
-    protected AbstractSymbol type_decl;
-    protected Expression init;
+    final protected AbstractSymbol name;
+    final protected AbstractSymbol type_decl;
+    final protected Expression init;
 
     /**
      * Creates "attr" AST node.
@@ -32,14 +32,9 @@ public class Attribute extends Feature {
      */
     public Attribute(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
         super(lineNumber);
-        name = a1;
-        type_decl = a2;
-        init = a3;
-    }
-
-    public TreeNode copy() {
-        return new Attribute(lineNumber, copy_AbstractSymbol(name), copy_AbstractSymbol(type_decl),
-                (Expression) init.copy());
+        this.name = a1;
+        this.type_decl = a2;
+        this.init = a3;
     }
 
     @Override
