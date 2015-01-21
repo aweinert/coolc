@@ -11,8 +11,8 @@ import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class FormalConstructor extends Formal {
-    protected AbstractSymbol name;
-    protected AbstractSymbol type_decl;
+    final protected AbstractSymbol name;
+    final protected AbstractSymbol type_decl;
 
     /**
      * Creates "formalc" AST node.
@@ -28,10 +28,6 @@ public class FormalConstructor extends Formal {
         super(lineNumber);
         name = a1;
         type_decl = a2;
-    }
-
-    public TreeNode copy() {
-        return new FormalConstructor(lineNumber, copy_AbstractSymbol(name), copy_AbstractSymbol(type_decl));
     }
 
     public void dump(PrintStream out, int n) {
