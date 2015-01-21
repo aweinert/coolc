@@ -14,8 +14,8 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Loop extends Expression {
-    protected Expression pred;
-    protected Expression body;
+    final protected Expression pred;
+    final protected Expression body;
 
     /**
      * Creates "loop" AST node.
@@ -33,10 +33,6 @@ public class Loop extends Expression {
         body = a2;
     }
 
-    public TreeNode copy() {
-        return new Loop(lineNumber, (Expression) pred.copy(), (Expression) body.copy());
-    }
-
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "loop\n");
         pred.dump(out, n + 2);
@@ -52,7 +48,7 @@ public class Loop extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol conditionType = this.pred.typecheck(enclosingClass, classTable, featureTable);
         // Unused, but needed to annotate the tree with the correct type information
         AbstractSymbol bodyType = this.body.typecheck(enclosingClass, classTable, featureTable);
