@@ -23,7 +23,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class ObjectReference extends Expression {
-    protected AbstractSymbol name;
+    final protected AbstractSymbol name;
 
     /**
      * Creates "object" AST node.
@@ -36,10 +36,6 @@ public class ObjectReference extends Expression {
     public ObjectReference(int lineNumber, AbstractSymbol a1) {
         super(lineNumber);
         name = a1;
-    }
-
-    public TreeNode copy() {
-        return new ObjectReference(lineNumber, copy_AbstractSymbol(name));
     }
 
     public void dump(PrintStream out, int n) {
@@ -55,7 +51,7 @@ public class ObjectReference extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         Map<AbstractSymbol, AbstractSymbol> attributeTypes = featureTable.getAttributeTypes(enclosingClass.getName());
         if (!attributeTypes.containsKey(this.name)) {
             String errorString = String.format("Undeclared identifier %s.", this.name);
