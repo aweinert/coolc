@@ -13,7 +13,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class NewExpression extends Expression {
+public class New extends Expression {
     final protected AbstractSymbol type_name;
 
     /**
@@ -24,7 +24,7 @@ public class NewExpression extends Expression {
      * @param a0
      *            initial value for type_name
      */
-    public NewExpression(int lineNumber, AbstractSymbol a1) {
+    public New(int lineNumber, AbstractSymbol a1) {
         super(lineNumber);
         type_name = a1;
     }
