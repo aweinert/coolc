@@ -14,7 +14,6 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Attribute extends Feature {
-    final protected AbstractSymbol name;
     final protected AbstractSymbol type_decl;
     final protected Expression init;
 
@@ -31,8 +30,7 @@ public class Attribute extends Feature {
      *            initial value for init
      */
     public Attribute(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
-        super(lineNumber);
-        this.name = a1;
+        super(lineNumber, a1);
         this.type_decl = a2;
         this.init = a3;
     }
@@ -75,6 +73,10 @@ public class Attribute extends Feature {
         dump_AbstractSymbol(out, n + 2, name);
         dump_AbstractSymbol(out, n + 2, type_decl);
         init.dump_with_types(out, n + 2);
+    }
+
+    public AbstractSymbol getTypeDecl() {
+        return this.type_decl;
     }
 
 }

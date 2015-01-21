@@ -15,7 +15,6 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Method extends Feature {
-    final protected AbstractSymbol name;
     final protected Formals formals;
     final protected AbstractSymbol return_type;
     final protected Expression expr;
@@ -35,8 +34,7 @@ public class Method extends Feature {
      *            initial value for expr
      */
     public Method(int lineNumber, AbstractSymbol a1, Formals a2, AbstractSymbol a3, Expression a4) {
-        super(lineNumber);
-        name = a1;
+        super(lineNumber, a1);
         formals = a2;
         return_type = a3;
         expr = a4;
