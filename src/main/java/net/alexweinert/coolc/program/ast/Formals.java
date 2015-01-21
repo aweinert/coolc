@@ -18,7 +18,7 @@ public class Formals extends ListNode<Formal> {
     }
 
     @Override
-    public Formals addElement(Formal node) {
+    public Formals add(Formal node) {
         final Collection<Formal> newElements = this.copyElements();
         newElements.add(node);
         return new Formals(this.getLineNumber(), newElements);

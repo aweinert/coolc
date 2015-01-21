@@ -20,7 +20,7 @@ public class Classes extends ListNode<Class> {
     }
 
     @Override
-    public ListNode<Class> addElement(Class node) {
+    public ListNode<Class> add(Class node) {
         final Collection<Class> newElements = this.copyElements();
         newElements.add(node);
         return new Classes(this.getLineNumber(), newElements);

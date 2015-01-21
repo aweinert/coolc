@@ -18,7 +18,7 @@ public class Expressions extends ListNode<Expression> {
     }
 
     @Override
-    public Expressions addElement(Expression node) {
+    public Expressions add(Expression node) {
         final Collection<Expression> newElements = this.copyElements();
         newElements.add(node);
         return new Expressions(this.getLineNumber(), newElements);

@@ -18,7 +18,7 @@ public class Cases extends ListNode<Case> {
     }
 
     @Override
-    public Cases addElement(Case node) {
+    public Cases add(Case node) {
         final Collection<Case> newElements = this.copyElements();
         newElements.add(node);
         return new Cases(this.getLineNumber(), newElements);

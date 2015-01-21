@@ -18,7 +18,7 @@ public class Features extends ListNode<Feature> {
     }
 
     @Override
-    public Features addElement(Feature node) {
+    public Features add(Feature node) {
         final Collection<Feature> newElements = this.copyElements();
         newElements.add(node);
         return new Features(this.getLineNumber(), newElements);
