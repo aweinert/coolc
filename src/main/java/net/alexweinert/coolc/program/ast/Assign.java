@@ -14,8 +14,8 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Assign extends Expression {
-    protected AbstractSymbol name;
-    protected Expression expr;
+    final protected AbstractSymbol name;
+    final protected Expression expr;
 
     /**
      * Creates "assign" AST node.
@@ -29,12 +29,8 @@ public class Assign extends Expression {
      */
     public Assign(int lineNumber, AbstractSymbol a1, Expression a2) {
         super(lineNumber);
-        name = a1;
-        expr = a2;
-    }
-
-    public TreeNode copy() {
-        return new Assign(lineNumber, copy_AbstractSymbol(name), (Expression) expr.copy());
+        this.name = a1;
+        this.expr = a2;
     }
 
     public void dump(PrintStream out, int n) {
