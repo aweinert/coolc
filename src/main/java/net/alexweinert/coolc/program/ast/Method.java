@@ -15,10 +15,10 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Method extends Feature {
-    protected AbstractSymbol name;
-    protected Formals formals;
-    protected AbstractSymbol return_type;
-    protected Expression expr;
+    final protected AbstractSymbol name;
+    final protected Formals formals;
+    final protected AbstractSymbol return_type;
+    final protected Expression expr;
 
     /**
      * Creates "method" AST node.
@@ -42,11 +42,6 @@ public class Method extends Feature {
         expr = a4;
     }
 
-    public TreeNode copy() {
-        return new Method(lineNumber, copy_AbstractSymbol(name), (Formals) formals.copy(),
-                copy_AbstractSymbol(return_type), (Expression) expr.copy());
-    }
-
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "method\n");
         dump_AbstractSymbol(out, n + 2, name);
@@ -59,20 +54,19 @@ public class Method extends Feature {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_method");
         dump_AbstractSymbol(out, n + 2, name);
-        for (Enumeration e = formals.getElements(); e.hasMoreElements();) {
-            ((Formal) e.nextElement()).dump_with_types(out, n + 2);
+        for (final Formal formal : this.formals) {
+            formal.dump_with_types(out, n + 2);
         }
         dump_AbstractSymbol(out, n + 2, return_type);
         expr.dump_with_types(out, n + 2);
     }
 
     @Override
-    public void typecheck(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    public void typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         FeatureTable extendedFeatureTable = featureTable.copyAndExtend(enclosingClass.getName(), TreeConstants.self,
                 TreeConstants.SELF_TYPE);
 
-        for (int formalIndex = 0; formalIndex < this.formals.getLength(); ++formalIndex) {
-            FormalConstructor currentFormal = (FormalConstructor) this.formals.getNth(formalIndex);
+        for (final Formal currentFormal : this.formals) {
             extendedFeatureTable = extendedFeatureTable.copyAndExtend(enclosingClass.getName(), currentFormal.name,
                     currentFormal.type_decl);
         }
