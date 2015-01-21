@@ -14,7 +14,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class NewExpression extends Expression {
-    protected AbstractSymbol type_name;
+    final protected AbstractSymbol type_name;
 
     /**
      * Creates "new_" AST node.
@@ -27,10 +27,6 @@ public class NewExpression extends Expression {
     public NewExpression(int lineNumber, AbstractSymbol a1) {
         super(lineNumber);
         type_name = a1;
-    }
-
-    public TreeNode copy() {
-        return new NewExpression(lineNumber, copy_AbstractSymbol(type_name));
     }
 
     public void dump(PrintStream out, int n) {
@@ -46,7 +42,7 @@ public class NewExpression extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         if (classTable.classExists(this.type_name)) {
             return this.type_name;
         } else {
