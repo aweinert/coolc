@@ -1,21 +1,14 @@
 package net.alexweinert.coolc.program.ast;
 
-import java.util.Vector;
+import java.util.Collection;
 
 /**
  * Defines list phylum Cases
  * <p>
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
-public class Cases extends ListNode {
-    public final static Class elementClass = Case.class;
-
-    /** Returns class of this lists's elements */
-    public Class getElementClass() {
-        return elementClass;
-    }
-
-    protected Cases(int lineNumber, Vector elements) {
+public class Cases extends ListNode<Case> {
+    protected Cases(int lineNumber, Collection<Case> elements) {
         super(lineNumber, elements);
     }
 
@@ -24,13 +17,11 @@ public class Cases extends ListNode {
         super(lineNumber);
     }
 
-    /** Appends "Case" element to this list */
-    public Cases appendElement(TreeNode elem) {
-        addElement(elem);
-        return this;
+    @Override
+    public Cases addElement(Case node) {
+        final Collection<Case> newElements = this.copyElements();
+        newElements.add(node);
+        return new Cases(this.getLineNumber(), newElements);
     }
 
-    public TreeNode copy() {
-        return new Cases(lineNumber, copyElements());
-    }
 }
