@@ -33,10 +33,6 @@ public class Addition extends Expression {
         e2 = a2;
     }
 
-    public TreeNode copy() {
-        return new Addition(lineNumber, (Expression) e1.copy(), (Expression) e2.copy());
-    }
-
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "plus\n");
         e1.dump(out, n + 2);
