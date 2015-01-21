@@ -1,5 +1,6 @@
 package net.alexweinert.coolc.program.ast;
 
+import java.util.Collection;
 import java.util.Vector;
 
 /**
@@ -7,15 +8,9 @@ import java.util.Vector;
  * <p>
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
-public class Classes extends ListNode {
-    public final static Class elementClass = Class_.class;
+public class Classes extends ListNode<Class> {
 
-    /** Returns class of this lists's elements */
-    public Class getElementClass() {
-        return elementClass;
-    }
-
-    protected Classes(int lineNumber, Vector elements) {
+    protected Classes(int lineNumber, Collection<Class> elements) {
         super(lineNumber, elements);
     }
 
@@ -24,13 +19,10 @@ public class Classes extends ListNode {
         super(lineNumber);
     }
 
-    /** Appends "Class_" element to this list */
-    public Classes appendElement(TreeNode elem) {
-        addElement(elem);
-        return this;
-    }
-
-    public TreeNode copy() {
-        return new Classes(lineNumber, copyElements());
+    @Override
+    public ListNode<Class> addElement(Class node) {
+        final Collection<Class> newElements = this.copyElements();
+        newElements.add(node);
+        return new Classes(this.getLineNumber(), newElements);
     }
 }
