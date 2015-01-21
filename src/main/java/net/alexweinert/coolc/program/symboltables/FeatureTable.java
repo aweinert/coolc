@@ -1,16 +1,17 @@
 package net.alexweinert.coolc.program.symboltables;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.program.ast.Class_;
+import net.alexweinert.coolc.program.ast.Attribute;
+import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Feature;
-import net.alexweinert.coolc.program.ast.attr;
-import net.alexweinert.coolc.program.ast.class_c;
-import net.alexweinert.coolc.program.ast.formalc;
-import net.alexweinert.coolc.program.ast.method;
+import net.alexweinert.coolc.program.ast.Formal;
+import net.alexweinert.coolc.program.ast.Method;
 
 public class FeatureTable {
     /**
@@ -79,7 +80,7 @@ public class FeatureTable {
     private Map<AbstractSymbol, Map<AbstractSymbol, AbstractSymbol>> attributeTypes = new HashMap<>();
 
     public FeatureTable(ClassTable classTable) {
-        for (Class_ currentClass : classTable.getClasses()) {
+        for (Class currentClass : classTable.getClasses()) {
             Map<AbstractSymbol, MethodSignature> currentMethodSignatures = new HashMap<>();
             Map<AbstractSymbol, AbstractSymbol> currentAttributeTypes = new HashMap<>();
 
@@ -87,13 +88,12 @@ public class FeatureTable {
             currentAttributeTypes.put(TreeConstants.self, currentClass.getName());
 
             // Walk through all the features and gather their declared types
-            for (int featureIndex = 0; featureIndex < currentClass.getFeatures().getLength(); ++featureIndex) {
-                Feature currentFeature = (Feature) currentClass.getFeatures().getNth(featureIndex);
-                if (currentFeature instanceof attr) {
-                    currentAttributeTypes = addAttributeType(classTable, (class_c) currentClass, currentAttributeTypes,
+            for (final Feature currentFeature : currentClass.getFeatures()) {
+                if (currentFeature instanceof Attribute) {
+                    currentAttributeTypes = addAttributeType(classTable, (Class) currentClass, currentAttributeTypes,
                             currentFeature);
-                } else if (currentFeature instanceof method) {
-                    currentMethodSignatures = addMethodSignature(classTable, (class_c) currentClass,
+                } else if (currentFeature instanceof Method) {
+                    currentMethodSignatures = addMethodSignature(classTable, (Class) currentClass,
                             currentMethodSignatures, currentFeature);
                 }
             }
@@ -102,10 +102,10 @@ public class FeatureTable {
             this.attributeTypes.put(currentClass.getName(), currentAttributeTypes);
         }
 
-        for (Class_ childClass : classTable.getClasses()) {
+        for (Class childClass : classTable.getClasses()) {
             /* Walk through all the parents' features, make sure that the child-definitions fit the parents' definitions
              * and add the unconflicting parents' definitions */
-            for (Class_ parentClass : classTable.getAncestors(childClass)) {
+            for (Class parentClass : classTable.getAncestors(childClass)) {
                 // Add all the parents' attributes to the child
                 for (AbstractSymbol parentAttribute : this.getAttributeTypes(parentClass.getName()).keySet()) {
                     if (parentAttribute.equals(TreeConstants.self)) {
@@ -117,7 +117,7 @@ public class FeatureTable {
                         // Find the actual definition of the attribute in the currentClass
                         String errorString = String.format("Attribute %s has already been defined in parent class %s.",
                                 parentAttribute, childClass.getName(), parentClass.getName());
-                        attr attributeDefinition = findAttributeDefinition(childClass, parentAttribute);
+                        Attribute attributeDefinition = findAttributeDefinition(childClass, parentAttribute);
                         classTable.semantError(childClass.getFilename(), attributeDefinition).println(errorString);
 
                         // If this error happens, we use the type declared in the child class, which has already been
@@ -202,11 +202,10 @@ public class FeatureTable {
      * @return The attr-node that defines the attribute of the given name, if the given class has an attribute of this
      *         name
      */
-    public attr findAttributeDefinition(Class_ currentClass, AbstractSymbol attributeName) {
-        for (int featureIndex = 0; featureIndex < currentClass.getFeatures().getLength(); ++featureIndex) {
-            Feature currentFeature = (Feature) currentClass.getFeatures().getNth(featureIndex);
-            if (currentFeature instanceof attr && ((attr) currentFeature).name.equals(attributeName)) {
-                return (attr) currentFeature;
+    public Attribute findAttributeDefinition(Class currentClass, AbstractSymbol attributeName) {
+        for (final Feature currentFeature : currentClass.getFeatures()) {
+            if (currentFeature instanceof Attribute && ((Attribute) currentFeature).getName().equals(attributeName)) {
+                return (Attribute) currentFeature;
             }
         }
         // Should never get here
@@ -223,11 +222,10 @@ public class FeatureTable {
      * @return The method-node that defines the attribute of the given name, if the given class has an attribute of this
      *         name
      */
-    public method findMethodDefinition(Class_ currentClass, AbstractSymbol methodName) {
-        for (int featureIndex = 0; featureIndex < currentClass.getFeatures().getLength(); ++featureIndex) {
-            Feature currentFeature = (Feature) currentClass.getFeatures().getNth(featureIndex);
-            if (currentFeature instanceof method && ((method) currentFeature).name.equals(methodName)) {
-                return (method) currentFeature;
+    public Method findMethodDefinition(Class currentClass, AbstractSymbol methodName) {
+        for (final Feature currentFeature : currentClass.getFeatures()) {
+            if (currentFeature instanceof Method && ((Method) currentFeature).getName().equals(methodName)) {
+                return (Method) currentFeature;
             }
         }
         // Should never get here
@@ -296,65 +294,66 @@ public class FeatureTable {
     }
 
     /**
-     * If the currentFeature is of type attr, its name and type are recorded for the current class. If it
-     * is multiply defined or if it is the self-attribute, an error message is produced.
+     * If the currentFeature is of type attr, its name and type are recorded for the current class. If it is multiply
+     * defined or if it is the self-attribute, an error message is produced.
+     * 
      * @return The inputmap augmented with the information given by the current feature.
      */
-    private Map<AbstractSymbol, AbstractSymbol> addAttributeType(ClassTable classTable, class_c enclosingClass,
+    private Map<AbstractSymbol, AbstractSymbol> addAttributeType(ClassTable classTable, Class enclosingClass,
             Map<AbstractSymbol, AbstractSymbol> attributeTypes, Feature currentFeature) {
-        attr currentAttribute = (attr) currentFeature;
-        
+        Attribute currentAttribute = (Attribute) currentFeature;
+
         // Check that the new attribute is not self
-        if (currentAttribute.name.equals(TreeConstants.self)) {
+        if (currentAttribute.getName().equals(TreeConstants.self)) {
             String errorString = "'self' cannot be the name of an attribute";
             classTable.semantError(enclosingClass.getFilename(), currentFeature).println(errorString);
-            
-        // Check that the new attribute has not been previously defined
-        } else if (attributeTypes.containsKey(currentAttribute.name)) {
-            String errorString = String.format("Attribute %s is multiply defined in class.", currentAttribute.name);
+
+            // Check that the new attribute has not been previously defined
+        } else if (attributeTypes.containsKey(currentAttribute.getName())) {
+            String errorString = String
+                    .format("Attribute %s is multiply defined in class.", currentAttribute.getName());
             classTable.semantError(enclosingClass.getFilename(), currentFeature).println(errorString);
 
         } else {
-            attributeTypes.put(currentAttribute.name, currentAttribute.type_decl);
+            attributeTypes.put(currentAttribute.getName(), currentAttribute.getTypeDecl());
         }
 
         return attributeTypes;
     }
 
     /**
-     * If the currentFeature is of type method, its name and signature are recorded for the current class. If it
-     * is multiply defined, an error message is produced.
+     * If the currentFeature is of type method, its name and signature are recorded for the current class. If it is
+     * multiply defined, an error message is produced.
+     * 
      * @return The inputmap augmented with the information given by the current feature.
      */
-    private Map<AbstractSymbol, MethodSignature> addMethodSignature(ClassTable classTable, class_c enclosingClass,
+    private Map<AbstractSymbol, MethodSignature> addMethodSignature(ClassTable classTable, Class enclosingClass,
             Map<AbstractSymbol, MethodSignature> methodSignatures, Feature currentFeature) {
-        method currentMethod = (method) currentFeature;
+        Method currentMethod = (Method) currentFeature;
 
-        AbstractSymbol returnType = currentMethod.return_type;
+        AbstractSymbol returnType = currentMethod.getReturnType();
         List<AbstractSymbol> formalTypes = new LinkedList<>();
 
         // Construct the list of formal types
-        for (int formalIndex = 0; formalIndex < currentMethod.formals.getLength(); ++formalIndex) {
-            formalc currentFormal = (formalc) currentMethod.formals.getNth(formalIndex);
-            
+        for (final Formal currentFormal : currentMethod.getFormals()) {
             // Make sure that no formal parameter is named 'self'
-            if (currentFormal.name.equals(TreeConstants.self)) {
+            if (currentFormal.getName().equals(TreeConstants.self)) {
                 String errorString = "'self' cannot be the name of a formal parameter.";
                 classTable.semantError(enclosingClass.getFilename(), currentFormal).println(errorString);
             }
 
-            formalTypes.add(currentFormal.type_decl);
+            formalTypes.add(currentFormal.getTypeDecl());
         }
 
         // Make sure that the method name is unique in the context of the class
-        if (methodSignatures.containsKey(currentMethod.name)) {
-            String errorString = String.format("Method %s is multiply defined.", currentMethod.name);
+        if (methodSignatures.containsKey(currentMethod.getName())) {
+            String errorString = String.format("Method %s is multiply defined.", currentMethod.getName());
             classTable.semantError(enclosingClass.getFilename(), currentMethod).println(errorString);
             return methodSignatures;
         }
 
         MethodSignature signature = new MethodSignature(returnType, formalTypes);
-        methodSignatures.put(currentMethod.name, signature);
+        methodSignatures.put(currentMethod.getName(), signature);
 
         return methodSignatures;
     }
