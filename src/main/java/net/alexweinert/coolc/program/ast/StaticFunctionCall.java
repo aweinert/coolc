@@ -90,14 +90,14 @@ public class StaticFunctionCall extends Expression {
 
         // Check that all the actual parameters conform to the formal parameters
         for (int actualIndex = 0; actualIndex < this.actual.size(); ++actualIndex) {
-            AbstractSymbol actualType = ((Expression) this.actual.size(actualIndex)).typecheck(enclosingClass,
+            AbstractSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass,
                     classTable, featureTable);
             AbstractSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
 
             if (!classTable.conformsTo(enclosingClass.getName(), actualType, formalType)) {
                 Method targetMethodDef = featureTable.findMethodDefinition(classTable.getClass(this.type_name),
                         this.name);
-                AbstractSymbol formalName = ((Formal) targetMethodDef.formals.size(actualIndex)).name;
+                AbstractSymbol formalName = ((Formal) targetMethodDef.formals.get(actualIndex)).name;
                 String errorString = String.format(
                         "In call of method %s, type %s of parameter %s does not conform to declared type %s.",
                         this.name, actualType, formalName, formalType);
