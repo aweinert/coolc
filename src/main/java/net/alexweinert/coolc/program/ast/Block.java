@@ -15,7 +15,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Block extends Expression {
-    protected Expressions body;
+    final protected Expressions body;
 
     /**
      * Creates "block" AST node.
@@ -27,11 +27,7 @@ public class Block extends Expression {
      */
     public Block(int lineNumber, Expressions a1) {
         super(lineNumber);
-        body = a1;
-    }
-
-    public TreeNode copy() {
-        return new Block(lineNumber, (Expressions) body.copy());
+        this.body = a1;
     }
 
     public void dump(PrintStream out, int n) {
@@ -42,8 +38,8 @@ public class Block extends Expression {
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_block");
-        for (Enumeration e = body.getElements(); e.hasMoreElements();) {
-            ((Expression) e.nextElement()).dump_with_types(out, n + 2);
+        for (final Expression e : this.body) {
+            e.dump_with_types(out, n + 2);
         }
         dump_type(out, n);
     }
@@ -51,11 +47,9 @@ public class Block extends Expression {
     @Override
     protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol blockType = TreeConstants.No_type;
-        for (int statementIndex = 0; statementIndex < this.body.getLength(); ++statementIndex) {
-            blockType = ((Expression) this.body.getNth(statementIndex)).typecheck(enclosingClass, classTable,
-                    featureTable);
+        for (final Expression currentExpression : this.body) {
+            blockType = currentExpression.typecheck(enclosingClass, classTable, featureTable);
         }
         return blockType;
     }
-
 }
