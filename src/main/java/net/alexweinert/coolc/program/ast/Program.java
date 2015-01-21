@@ -38,7 +38,7 @@ public class Program extends TreeNode {
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_program");
-        for (Class_ currentClass : this.classes) {
+        for (Class currentClass : this.classes) {
             currentClass.dump_with_types(out, n + 2);
         }
     }
@@ -65,26 +65,26 @@ public class Program extends TreeNode {
     }
 
     private void checkBasicClasses(ClassTable classTable) {
-        for (Class_ currentClass : classTable.getClasses()) {
+        for (Class currentClass : classTable.getClasses()) {
             AbstractSymbol inheritedBaseClass = null;
-            if (((ClassConstructor) currentClass).getParent().equals(TreeConstants.Int)) {
+            if (((Class) currentClass).getParent().equals(TreeConstants.Int)) {
                 inheritedBaseClass = TreeConstants.Int;
-            } else if (((ClassConstructor) currentClass).getParent().equals(TreeConstants.Bool)) {
+            } else if (((Class) currentClass).getParent().equals(TreeConstants.Bool)) {
                 inheritedBaseClass = TreeConstants.Bool;
-            } else if (((ClassConstructor) currentClass).getParent().equals(TreeConstants.Str)) {
+            } else if (((Class) currentClass).getParent().equals(TreeConstants.Str)) {
                 inheritedBaseClass = TreeConstants.Str;
             }
 
             if (inheritedBaseClass != null) {
                 String errorString = String.format("Class %s cannot inherit class %s", currentClass.getName(),
                         TreeConstants.Int);
-                classTable.semantError((ClassConstructor) currentClass).println(errorString);
+                classTable.semantError((Class) currentClass).println(errorString);
             }
         }
     }
 
     private void checkParentExistence(ClassTable classTable) {
-        for (Class_ currentClass : classTable.getClasses()) {
+        for (Class currentClass : classTable.getClasses()) {
             /* Skip the object-class, since this one is allowed to have a non existing parent */
             if (currentClass.getName().equals(TreeConstants.Object_)) {
                 continue;
@@ -93,7 +93,7 @@ public class Program extends TreeNode {
             if (!classTable.classExists(currentClass.getParent())) {
                 String errorString = String.format("Class %s inherits from an undefined class %s",
                         currentClass.getName(), currentClass.getParent());
-                classTable.semantError((ClassConstructor) currentClass).println(errorString);
+                classTable.semantError((Class) currentClass).println(errorString);
             }
         }
     }
@@ -114,12 +114,12 @@ public class Program extends TreeNode {
      */
     private void checkReachability(ClassTable classTable, Collection<AbstractSymbol> reachable) {
         // Check that all defined classes are reachable from Object
-        for (Class_ definedClass : classTable.getClasses()) {
+        for (Class definedClass : classTable.getClasses()) {
             if (!reachable.contains(definedClass.getName())) {
                 String errorString = String.format(
                         "Class %s, or an ancestor of %s, is involved in an inheritance cycle.", definedClass.getName(),
                         definedClass.getName());
-                classTable.semantError((ClassConstructor) definedClass).println(errorString);
+                classTable.semantError((Class) definedClass).println(errorString);
             }
         }
     }
@@ -142,13 +142,13 @@ public class Program extends TreeNode {
             AbstractSymbol currentToCheck = toCheck.poll();
             if (visited.contains(currentToCheck)) {
                 String errorString = String.format("%s is reachable from two parents", currentToCheck);
-                classTable.semantError((ClassConstructor) classTable.getClass(currentToCheck)).println(errorString);
+                classTable.semantError((Class) classTable.getClass(currentToCheck)).println(errorString);
             } else {
                 visited.add(currentToCheck);
 
                 // Add all of currentToCheck's children
                 // TODO Cache the children of all classes for performance reasons
-                for (Class_ potentialChild : classTable.getClasses()) {
+                for (Class potentialChild : classTable.getClasses()) {
                     if (potentialChild.getParent().equals(currentToCheck)) {
                         toCheck.add(potentialChild.getName());
                     }
@@ -165,8 +165,7 @@ public class Program extends TreeNode {
         checkForMainMethod(classTable, featureTable);
 
         // Typecheck each class on its own
-        for (int i = 0; i < this.classes.getLength(); ++i) {
-            ClassConstructor currentClass = (ClassConstructor) this.classes.getNth(i);
+        for (final Class currentClass : this.classes) {
             currentClass.typecheck(classTable, featureTable);
         }
     }
@@ -182,15 +181,14 @@ public class Program extends TreeNode {
             // Check that class Main has method 'main'
             if (!featureTable.getMethodSignatures(TreeConstants.Main).containsKey(TreeConstants.main_meth)) {
                 String errorString = "No 'main' method in class Main";
-                classTable.semantError((ClassConstructor) classTable.getClass(TreeConstants.Main)).println(errorString);
+                classTable.semantError((Class) classTable.getClass(TreeConstants.Main)).println(errorString);
             } else {
                 FeatureTable.MethodSignature mainSignature = featureTable.getMethodSignatures(TreeConstants.Main).get(
                         TreeConstants.main_meth);
                 // Check that Main.main takes no arguments
                 if (mainSignature.getArgumentTypes().size() != 0) {
                     String errorString = "'main' method in class Main should have no arguments.";
-                    classTable.semantError((ClassConstructor) classTable.getClass(TreeConstants.Main)).println(
-                            errorString);
+                    classTable.semantError((Class) classTable.getClass(TreeConstants.Main)).println(errorString);
                 }
             }
         }
