@@ -14,7 +14,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class IsVoid extends Expression {
-    protected Expression e1;
+    final protected Expression e1;
 
     /**
      * Creates "isvoid" AST node.
@@ -27,10 +27,6 @@ public class IsVoid extends Expression {
     public IsVoid(int lineNumber, Expression a1) {
         super(lineNumber);
         e1 = a1;
-    }
-
-    public TreeNode copy() {
-        return new IsVoid(lineNumber, (Expression) e1.copy());
     }
 
     public void dump(PrintStream out, int n) {
@@ -46,7 +42,7 @@ public class IsVoid extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         // We do not use the expression type, but we need to typecheck the expression anyways to annotate the tree
         // correctly
         AbstractSymbol expressionType = this.e1.typecheck(enclosingClass, classTable, featureTable);
