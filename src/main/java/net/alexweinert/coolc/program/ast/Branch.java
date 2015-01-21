@@ -11,9 +11,9 @@ import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Branch extends Case {
-    protected AbstractSymbol name;
-    protected AbstractSymbol type_decl;
-    protected Expression expr;
+    final protected AbstractSymbol name;
+    final protected AbstractSymbol type_decl;
+    final protected Expression expr;
 
     /**
      * Creates "branch" AST node.
@@ -29,14 +29,9 @@ public class Branch extends Case {
      */
     public Branch(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
         super(lineNumber);
-        name = a1;
-        type_decl = a2;
-        expr = a3;
-    }
-
-    public TreeNode copy() {
-        return new Branch(lineNumber, copy_AbstractSymbol(name), copy_AbstractSymbol(type_decl),
-                (Expression) expr.copy());
+        this.name = a1;
+        this.type_decl = a2;
+        this.expr = a3;
     }
 
     public void dump(PrintStream out, int n) {
