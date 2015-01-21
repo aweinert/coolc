@@ -1,21 +1,14 @@
 package net.alexweinert.coolc.program.ast;
 
-import java.util.Vector;
+import java.util.Collection;
 
 /**
  * Defines list phylum Formals
  * <p>
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
-public class Formals extends ListNode {
-    public final static Class elementClass = Formal.class;
-
-    /** Returns class of this lists's elements */
-    public Class getElementClass() {
-        return elementClass;
-    }
-
-    protected Formals(int lineNumber, Vector elements) {
+public class Formals extends ListNode<Formal> {
+    protected Formals(int lineNumber, Collection<Formal> elements) {
         super(lineNumber, elements);
     }
 
@@ -24,13 +17,10 @@ public class Formals extends ListNode {
         super(lineNumber);
     }
 
-    /** Appends "Formal" element to this list */
-    public Formals appendElement(TreeNode elem) {
-        addElement(elem);
-        return this;
-    }
-
-    public TreeNode copy() {
-        return new Formals(lineNumber, copyElements());
+    @Override
+    public Formals addElement(Formal node) {
+        final Collection<Formal> newElements = this.copyElements();
+        newElements.add(node);
+        return new Formals(this.getLineNumber(), newElements);
     }
 }
