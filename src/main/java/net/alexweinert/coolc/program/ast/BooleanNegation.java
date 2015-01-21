@@ -14,7 +14,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class BooleanNegation extends Expression {
-    protected Expression e1;
+    final protected Expression e1;
 
     /**
      * Creates "comp" AST node.
@@ -26,11 +26,7 @@ public class BooleanNegation extends Expression {
      */
     public BooleanNegation(int lineNumber, Expression a1) {
         super(lineNumber);
-        e1 = a1;
-    }
-
-    public TreeNode copy() {
-        return new BooleanNegation(lineNumber, (Expression) e1.copy());
+        this.e1 = a1;
     }
 
     public void dump(PrintStream out, int n) {
