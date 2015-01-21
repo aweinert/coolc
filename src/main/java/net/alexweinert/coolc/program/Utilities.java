@@ -1,4 +1,4 @@
-/*Copyright (c) 2000 The Regents of the University of California. All rights reserved.
+/* Copyright (c) 2000 The Regents of the University of California. All rights reserved.
  * 
  * Permission to use, copy, modify, and distribute this software for any purpose, without fee, and without written
  * agreement is hereby granted, provided that the above copyright notice and the following two paragraphs appear in all
@@ -12,9 +12,11 @@
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON AN "AS IS"
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
+package net.alexweinert.coolc.program;
 
 import java.io.PrintStream;
 
+import net.alexweinert.coolc.parser.Tokens;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.AbstractTable;
 import java_cup.runtime.Symbol;
@@ -101,93 +103,93 @@ public class Utilities {
      * */
     public static String tokenToString(Symbol s) {
         switch (s.sym) {
-        case TokenConstants.CLASS:
+        case Tokens.CLASS:
             return ("CLASS");
-        case TokenConstants.ELSE:
+        case Tokens.ELSE:
             return ("ELSE");
-        case TokenConstants.FI:
+        case Tokens.FI:
             return ("FI");
-        case TokenConstants.IF:
+        case Tokens.IF:
             return ("IF");
-        case TokenConstants.IN:
+        case Tokens.IN:
             return ("IN");
-        case TokenConstants.INHERITS:
+        case Tokens.INHERITS:
             return ("INHERITS");
-        case TokenConstants.LET:
+        case Tokens.LET:
             return ("LET");
-        case TokenConstants.LOOP:
+        case Tokens.LOOP:
             return ("LOOP");
-        case TokenConstants.POOL:
+        case Tokens.POOL:
             return ("POOL");
-        case TokenConstants.THEN:
+        case Tokens.THEN:
             return ("THEN");
-        case TokenConstants.WHILE:
+        case Tokens.WHILE:
             return ("WHILE");
-        case TokenConstants.ASSIGN:
+        case Tokens.ASSIGN:
             return ("ASSIGN");
-        case TokenConstants.CASE:
+        case Tokens.CASE:
             return ("CASE");
-        case TokenConstants.ESAC:
+        case Tokens.ESAC:
             return ("ESAC");
-        case TokenConstants.OF:
+        case Tokens.OF:
             return ("OF");
-        case TokenConstants.DARROW:
+        case Tokens.DARROW:
             return ("DARROW");
-        case TokenConstants.NEW:
+        case Tokens.NEW:
             return ("NEW");
-        case TokenConstants.STR_CONST:
+        case Tokens.STR_CONST:
             return ("STR_CONST");
-        case TokenConstants.INT_CONST:
+        case Tokens.INT_CONST:
             return ("INT_CONST");
-        case TokenConstants.BOOL_CONST:
+        case Tokens.BOOL_CONST:
             return ("BOOL_CONST");
-        case TokenConstants.TYPEID:
+        case Tokens.TYPEID:
             return ("TYPEID");
-        case TokenConstants.OBJECTID:
+        case Tokens.OBJECTID:
             return ("OBJECTID");
-        case TokenConstants.ERROR:
+        case Tokens.ERROR:
             return ("ERROR");
-        case TokenConstants.error:
+        case Tokens.error:
             return ("ERROR");
-        case TokenConstants.LE:
+        case Tokens.LE:
             return ("LE");
-        case TokenConstants.NOT:
+        case Tokens.NOT:
             return ("NOT");
-        case TokenConstants.ISVOID:
+        case Tokens.ISVOID:
             return ("ISVOID");
-        case TokenConstants.PLUS:
+        case Tokens.PLUS:
             return ("'+'");
-        case TokenConstants.DIV:
+        case Tokens.DIV:
             return ("'/'");
-        case TokenConstants.MINUS:
+        case Tokens.MINUS:
             return ("'-'");
-        case TokenConstants.MULT:
+        case Tokens.MULT:
             return ("'*'");
-        case TokenConstants.EQ:
+        case Tokens.EQ:
             return ("'='");
-        case TokenConstants.LT:
+        case Tokens.LT:
             return ("'<'");
-        case TokenConstants.DOT:
+        case Tokens.DOT:
             return ("'.'");
-        case TokenConstants.NEG:
+        case Tokens.NEG:
             return ("'~'");
-        case TokenConstants.COMMA:
+        case Tokens.COMMA:
             return ("','");
-        case TokenConstants.SEMI:
+        case Tokens.SEMI:
             return ("';'");
-        case TokenConstants.COLON:
+        case Tokens.COLON:
             return ("':'");
-        case TokenConstants.LPAREN:
+        case Tokens.LPAREN:
             return ("'('");
-        case TokenConstants.RPAREN:
+        case Tokens.RPAREN:
             return ("')'");
-        case TokenConstants.AT:
+        case Tokens.AT:
             return ("'@'");
-        case TokenConstants.LBRACE:
+        case Tokens.LBRACE:
             return ("'{'");
-        case TokenConstants.RBRACE:
+        case Tokens.RBRACE:
             return ("'}'");
-        case TokenConstants.EOF:
+        case Tokens.EOF:
             return ("EOF");
         default:
             return ("<Invalid Token: " + s.sym + ">");
@@ -206,25 +208,25 @@ public class Utilities {
         String val = null;
 
         switch (s.sym) {
-        case TokenConstants.BOOL_CONST:
+        case Tokens.BOOL_CONST:
             System.err.print(" = " + s.value);
             break;
-        case TokenConstants.INT_CONST:
+        case Tokens.INT_CONST:
             val = ((AbstractSymbol) s.value).getString();
             System.err.print(" = " + val);
             if (checkTables) {
                 AbstractTable.inttable.lookup(val);
             }
             break;
-        case TokenConstants.TYPEID:
-        case TokenConstants.OBJECTID:
+        case Tokens.TYPEID:
+        case Tokens.OBJECTID:
             val = ((AbstractSymbol) s.value).getString();
             System.err.print(" = " + val);
             if (checkTables) {
                 AbstractTable.idtable.lookup(val);
             }
             break;
-        case TokenConstants.STR_CONST:
+        case Tokens.STR_CONST:
             val = ((AbstractSymbol) s.value).getString();
             System.err.print(" = \"");
             printEscapedString(System.err, val);
@@ -233,7 +235,7 @@ public class Utilities {
                 AbstractTable.stringtable.lookup(val);
             }
             break;
-        case TokenConstants.ERROR:
+        case Tokens.ERROR:
             System.err.print(" = \"");
             printEscapedString(System.err, s.value.toString());
             System.err.print("\"");
@@ -256,25 +258,25 @@ public class Utilities {
         String val = null;
 
         switch (s.sym) {
-        case TokenConstants.BOOL_CONST:
+        case Tokens.BOOL_CONST:
             str.print(" " + s.value);
             break;
-        case TokenConstants.INT_CONST:
+        case Tokens.INT_CONST:
             val = ((AbstractSymbol) s.value).getString();
             str.print(" " + val);
             if (checkTables) {
                 AbstractTable.inttable.lookup(val);
             }
             break;
-        case TokenConstants.TYPEID:
-        case TokenConstants.OBJECTID:
+        case Tokens.TYPEID:
+        case Tokens.OBJECTID:
             val = ((AbstractSymbol) s.value).getString();
             str.print(" " + val);
             if (checkTables) {
                 AbstractTable.idtable.lookup(val);
             }
             break;
-        case TokenConstants.STR_CONST:
+        case Tokens.STR_CONST:
             val = ((AbstractSymbol) s.value).getString();
             str.print(" \"");
             printEscapedString(str, val);
@@ -283,7 +285,7 @@ public class Utilities {
                 AbstractTable.stringtable.lookup(val);
             }
             break;
-        case TokenConstants.ERROR:
+        case Tokens.ERROR:
             str.print(" \"");
             printEscapedString(str, s.value.toString());
             str.print("\"");
