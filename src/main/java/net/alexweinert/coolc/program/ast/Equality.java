@@ -14,8 +14,8 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Equality extends Expression {
-    protected Expression e1;
-    protected Expression e2;
+    final protected Expression e1;
+    final protected Expression e2;
 
     /**
      * Creates "eq" AST node.
@@ -33,10 +33,6 @@ public class Equality extends Expression {
         e2 = a2;
     }
 
-    public TreeNode copy() {
-        return new Equality(lineNumber, (Expression) e1.copy(), (Expression) e2.copy());
-    }
-
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "eq\n");
         e1.dump(out, n + 2);
@@ -52,7 +48,7 @@ public class Equality extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol leftHandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
         AbstractSymbol rightHandType = this.e2.typecheck(enclosingClass, classTable, featureTable);
 
