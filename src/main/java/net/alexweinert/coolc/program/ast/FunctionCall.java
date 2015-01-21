@@ -15,9 +15,9 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class FunctionCall extends Expression {
-    protected Expression expr;
-    protected AbstractSymbol name;
-    protected Expressions actual;
+    final protected Expression expr;
+    final protected AbstractSymbol name;
+    final protected Expressions actual;
 
     /**
      * Creates "dispatch" AST node.
@@ -38,11 +38,6 @@ public class FunctionCall extends Expression {
         actual = a3;
     }
 
-    public TreeNode copy() {
-        return new FunctionCall(lineNumber, (Expression) expr.copy(), copy_AbstractSymbol(name),
-                (Expressions) actual.copy());
-    }
-
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "dispatch\n");
         expr.dump(out, n + 2);
@@ -56,15 +51,15 @@ public class FunctionCall extends Expression {
         expr.dump_with_types(out, n + 2);
         dump_AbstractSymbol(out, n + 2, name);
         out.println(Utilities.pad(n + 2) + "(");
-        for (Enumeration e = actual.getElements(); e.hasMoreElements();) {
-            ((Expression) e.nextElement()).dump_with_types(out, n + 2);
+        for (final Expression parameter : this.actual) {
+            parameter.dump_with_types(out, n + 2);
         }
         out.println(Utilities.pad(n + 2) + ")");
         dump_type(out, n);
     }
 
     @Override
-    protected AbstractSymbol inferType(Class_ enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
         final AbstractSymbol dispatchTargetClass;
         if (expressionType.equals(TreeConstants.SELF_TYPE)) {
@@ -83,22 +78,22 @@ public class FunctionCall extends Expression {
                 this.name);
 
         // Check that the number of arguments is the same in the definition and the call
-        if (this.actual.getLength() != targetSignature.getArgumentTypes().size()) {
+        if (this.actual.size() != targetSignature.getArgumentTypes().size()) {
             String errorString = String.format("Method %s called with wrong number of arguments.", this.name);
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
             return targetSignature.getReturnType();
         }
 
         // Check that all the actual parameters conform to the formal parameters
-        for (int actualIndex = 0; actualIndex < this.actual.getLength(); ++actualIndex) {
-            AbstractSymbol actualType = ((Expression) this.actual.getNth(actualIndex)).typecheck(enclosingClass,
+        for (int actualIndex = 0; actualIndex < this.actual.size(); ++actualIndex) {
+            AbstractSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass,
                     classTable, featureTable);
             AbstractSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
 
             if (!classTable.conformsTo(enclosingClass.getName(), actualType, formalType)) {
                 Method targetMethodDef = featureTable.findMethodDefinition(classTable.getClass(dispatchTargetClass),
                         this.name);
-                AbstractSymbol formalName = ((FormalConstructor) targetMethodDef.formals.getNth(actualIndex)).name;
+                AbstractSymbol formalName = ((Formal) targetMethodDef.formals.get(actualIndex)).name;
                 String errorString = String.format(
                         "In call of method %s, type %s of parameter %s does not conform to declared type %s.",
                         this.name, actualType, formalName, formalType);
