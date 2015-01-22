@@ -18,6 +18,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 
 public abstract class TreeNode {
@@ -81,4 +82,6 @@ public abstract class TreeNode {
     protected void dump_line(PrintStream out, int n) {
         out.println(Utilities.pad(n) + "#" + lineNumber);
     }
+
+    public abstract void acceptVisitor(ASTVisitor visitor);
 }

@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 
 /**
@@ -49,6 +50,11 @@ public class Formal extends TreeNode {
 
     public AbstractSymbol getTypeDecl() {
         return this.type_decl;
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitFormal(this);
     }
 
 }

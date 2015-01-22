@@ -1,6 +1,9 @@
 package net.alexweinert.coolc.program.ast;
 
 import java.util.Collection;
+import java.util.Iterator;
+
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 
 /**
  * Defines list phylum Cases
@@ -22,6 +25,19 @@ public class Cases extends ListNode<Case> {
         final Collection<Case> newElements = this.copyElements();
         newElements.add(node);
         return new Cases(this.getLineNumber(), newElements);
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitCasesPreorder(this);
+        final Iterator<Case> iterator = this.iterator();
+        while (iterator.hasNext()) {
+            iterator.next().acceptVisitor(visitor);
+            if (iterator.hasNext()) {
+                visitor.visitCasesInorder(this);
+            }
+        }
+        visitor.visitCasesPostorder(this);
     }
 
 }

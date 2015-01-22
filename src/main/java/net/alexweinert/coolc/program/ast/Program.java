@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -199,6 +200,13 @@ public class Program extends TreeNode {
             System.err.println("Compilation halted due to static semantic errors.");
             System.exit(1);
         }
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitProgramPreorder(this);
+        this.classes.acceptVisitor(visitor);
+        visitor.visitProgramPostorder(this);
     }
 
 }

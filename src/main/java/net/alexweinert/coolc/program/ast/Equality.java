@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -63,6 +64,15 @@ public class Equality extends Expression {
     private boolean isBasicType(AbstractSymbol candidate) {
         return candidate.equals(TreeConstants.Int) || candidate.equals(TreeConstants.Bool)
                 || candidate.equals(TreeConstants.Str);
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitEqualityPreorder(this);
+        this.e1.acceptVisitor(visitor);
+        visitor.visitEqualityInorder(this);
+        this.e2.acceptVisitor(visitor);
+        visitor.visitEqualityPostorder(this);
     }
 
 }

@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.Enumeration;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -52,4 +53,12 @@ public class Block extends Expression {
         }
         return blockType;
     }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitBlockPreorder(this);
+        this.body.acceptVisitor(visitor);
+        visitor.visitBlockPostorder(this);
+    }
+
 }

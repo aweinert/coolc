@@ -1,7 +1,10 @@
 package net.alexweinert.coolc.program.ast;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Vector;
+
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 
 /**
  * Defines list phylum Classes
@@ -24,5 +27,18 @@ public class Classes extends ListNode<Class> {
         final Collection<Class> newElements = this.copyElements();
         newElements.add(node);
         return new Classes(this.getLineNumber(), newElements);
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitClassesPreorder(this);
+        final Iterator<Class> iterator = this.iterator();
+        while (iterator.hasNext()) {
+            iterator.next().acceptVisitor(visitor);
+            if (iterator.hasNext()) {
+                visitor.visitClassesInorder(this);
+            }
+        }
+        visitor.visitClassesPostorder(this);
     }
 }

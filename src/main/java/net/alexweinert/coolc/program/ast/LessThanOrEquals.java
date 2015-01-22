@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -59,6 +60,15 @@ public class LessThanOrEquals extends Expression {
         }
 
         return TreeConstants.Bool;
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitLessThanOrEqualsPreorder(this);
+        this.e1.acceptVisitor(visitor);
+        visitor.visitLessThanOrEqualsInorder(this);
+        this.e2.acceptVisitor(visitor);
+        visitor.visitLessThanOrEqualsPostorder(this);
     }
 
 }

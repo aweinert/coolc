@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -47,6 +48,14 @@ public class IsVoid extends Expression {
         // correctly
         AbstractSymbol expressionType = this.e1.typecheck(enclosingClass, classTable, featureTable);
         return TreeConstants.Bool;
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitIsVoidPreorder(this);
+        this.e1.acceptVisitor(visitor);
+        visitor.visitIsVoidPostorder(this);
+
     }
 
 }

@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 
 /**
@@ -47,6 +48,13 @@ public class Case extends TreeNode {
         dump_AbstractSymbol(out, n + 2, name);
         dump_AbstractSymbol(out, n + 2, type_decl);
         expr.dump_with_types(out, n + 2);
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitCasePreorder(this);
+        this.expr.acceptVisitor(visitor);
+        visitor.visitCasePostorder(this);
     }
 
 }

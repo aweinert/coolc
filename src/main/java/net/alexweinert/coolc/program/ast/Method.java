@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.Enumeration;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -89,5 +90,14 @@ public class Method extends Feature {
 
     public AbstractSymbol getReturnType() {
         return this.return_type;
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitMethodPreorder(this);
+        this.formals.acceptVisitor(visitor);
+        visitor.visitMethodInorder(this);
+        this.expr.acceptVisitor(visitor);
+        visitor.visitMethodPostorder(this);
     }
 }

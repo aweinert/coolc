@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.Enumeration;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -74,6 +75,15 @@ public class Typecase extends Expression {
         }
 
         return leastUpperBound;
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitTypecasePreorder(this);
+        this.expr.acceptVisitor(visitor);
+        visitor.visitTypecaseInorder(this);
+        this.cases.acceptVisitor(visitor);
+        visitor.visitTypecasePostorder(this);
     }
 
 }

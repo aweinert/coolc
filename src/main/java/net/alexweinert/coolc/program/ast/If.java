@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -65,6 +66,17 @@ public class If extends Expression {
         }
 
         return classTable.getLeastUpperBound(thenBranchType, elseBranchType);
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitIfPreorder(this);
+        this.pred.acceptVisitor(visitor);
+        visitor.visitIfPreorderOne(this);
+        this.then_exp.acceptVisitor(visitor);
+        visitor.visitIfPreorderTwo(this);
+        this.else_exp.acceptVisitor(visitor);
+        visitor.visitIfPostorder(this);
     }
 
 }

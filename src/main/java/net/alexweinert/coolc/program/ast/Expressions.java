@@ -1,6 +1,9 @@
 package net.alexweinert.coolc.program.ast;
 
 import java.util.Collection;
+import java.util.Iterator;
+
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 
 /**
  * Defines list phylum Expressions
@@ -22,5 +25,18 @@ public class Expressions extends ListNode<Expression> {
         final Collection<Expression> newElements = this.copyElements();
         newElements.add(node);
         return new Expressions(this.getLineNumber(), newElements);
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitExpressionsPreorder(this);
+        final Iterator<Expression> iterator = this.iterator();
+        while (iterator.hasNext()) {
+            iterator.next().acceptVisitor(visitor);
+            if (iterator.hasNext()) {
+                visitor.visitExpressionsInorder(this);
+            }
+        }
+        visitor.visitExpressionsPostorder(this);
     }
 }

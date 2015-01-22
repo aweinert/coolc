@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -80,6 +81,15 @@ public class Let extends Expression {
         FeatureTable extendedTable = featureTable.copyAndExtend(enclosingClass.getName(), this.identifier,
                 this.type_decl);
         return this.body.typecheck(enclosingClass, classTable, extendedTable);
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitLetPreorder(this);
+        this.init.acceptVisitor(visitor);
+        visitor.visitLetInorder(this);
+        this.body.acceptVisitor(visitor);
+        visitor.visitLetPostorder(this);
     }
 
 }

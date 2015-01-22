@@ -1,6 +1,9 @@
 package net.alexweinert.coolc.program.ast;
 
 import java.util.Collection;
+import java.util.Iterator;
+
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 
 /**
  * Defines list phylum Features
@@ -22,5 +25,18 @@ public class Features extends ListNode<Feature> {
         final Collection<Feature> newElements = this.copyElements();
         newElements.add(node);
         return new Features(this.getLineNumber(), newElements);
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitFeaturesPreorder(this);
+        final Iterator<Feature> iterator = this.iterator();
+        while (iterator.hasNext()) {
+            iterator.next().acceptVisitor(visitor);
+            if (iterator.hasNext()) {
+                visitor.visitFeaturesInorder(this);
+            }
+        }
+        visitor.visitFeaturesPostorder(this);
     }
 }

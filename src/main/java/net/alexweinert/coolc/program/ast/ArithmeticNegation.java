@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -51,6 +52,13 @@ public class ArithmeticNegation extends Expression {
         }
 
         return TreeConstants.Int;
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitArithmeticNegationPreorder(this);
+        this.e1.acceptVisitor(visitor);
+        visitor.visitArithmeticNegationPostOrder(this);
     }
 
 }

@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.Enumeration;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -84,6 +85,14 @@ public class Class extends TreeNode {
 
     public Features getFeatures() {
         return features;
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitClassPreorder(this);
+        this.features.acceptVisitor(visitor);
+        visitor.visitClassPostorder(this);
+
     }
 
 }

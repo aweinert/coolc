@@ -12,6 +12,7 @@ import java.io.PrintStream;
 import java.util.Map;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -59,6 +60,11 @@ public class ObjectReference extends Expression {
             return TreeConstants.Object_;
         }
         return attributeTypes.get(this.name);
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitObjectReference(this);
     }
 
 }

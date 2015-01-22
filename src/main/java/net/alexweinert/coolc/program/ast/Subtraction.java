@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
@@ -59,6 +60,15 @@ public class Subtraction extends Expression {
         }
 
         return TreeConstants.Int;
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitSubtractionPreorder(visitor);
+        this.e1.acceptVisitor(visitor);
+        visitor.visitSubtractionInorder(visitor);
+        this.e2.acceptVisitor(visitor);
+        visitor.visitSubtractionPostorder(visitor);
     }
 
 }

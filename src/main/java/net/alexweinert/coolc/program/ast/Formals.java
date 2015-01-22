@@ -1,6 +1,9 @@
 package net.alexweinert.coolc.program.ast;
 
 import java.util.Collection;
+import java.util.Iterator;
+
+import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 
 /**
  * Defines list phylum Formals
@@ -22,5 +25,18 @@ public class Formals extends ListNode<Formal> {
         final Collection<Formal> newElements = this.copyElements();
         newElements.add(node);
         return new Formals(this.getLineNumber(), newElements);
+    }
+
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitFormalsPreorder(this);
+        final Iterator<Formal> iterator = this.iterator();
+        while (iterator.hasNext()) {
+            iterator.next().acceptVisitor(visitor);
+            if (iterator.hasNext()) {
+                visitor.visitFormalsInorder(this);
+            }
+        }
+        visitor.visitFormalsPostorder(this);
     }
 }
