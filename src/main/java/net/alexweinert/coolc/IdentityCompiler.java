@@ -18,7 +18,9 @@ public class IdentityCompiler {
             final Parser parser = new Parser(new Lexer(reader));
             Program program = (Program) parser.parse().value;
             reader.close();
-            System.out.println(PrettyPrinter.printAst(program));
+            Writer writer = new FileWriter(args[1]);
+            writer.write(PrettyPrinter.printAst(program));
+            writer.close();
         } catch (Throwable e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
