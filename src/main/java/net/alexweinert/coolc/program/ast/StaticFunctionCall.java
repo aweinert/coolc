@@ -68,7 +68,7 @@ public class StaticFunctionCall extends Expression {
     @Override
     protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
-        if (!classTable.conformsTo(enclosingClass.getName(), expressionType, this.type_name)) {
+        if (!classTable.conformsTo(enclosingClass.getIdentifier(), expressionType, this.type_name)) {
             String errorString = String.format(
                     "Expression type %s does not conform to declared static dispatch type %s.", expressionType,
                     this.type_name);
@@ -95,7 +95,7 @@ public class StaticFunctionCall extends Expression {
                     classTable, featureTable);
             AbstractSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
 
-            if (!classTable.conformsTo(enclosingClass.getName(), actualType, formalType)) {
+            if (!classTable.conformsTo(enclosingClass.getIdentifier(), actualType, formalType)) {
                 Method targetMethodDef = featureTable.findMethodDefinition(classTable.getClass(this.type_name),
                         this.name);
                 AbstractSymbol formalName = ((Formal) targetMethodDef.formals.get(actualIndex)).name;
@@ -120,6 +120,14 @@ public class StaticFunctionCall extends Expression {
         visitor.visitStaticFunctionCallInorder(this);
         this.actual.acceptVisitor(visitor);
         visitor.visitStaticFunctionCallPostorder(this);
+    }
+
+    public AbstractSymbol getStaticType() {
+        return type_name;
+    }
+
+    public AbstractSymbol getFunctionIdentifier() {
+        return name;
     }
 
 }

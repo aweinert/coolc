@@ -1,7 +1,6 @@
 package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
-import java.util.Enumeration;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
@@ -71,7 +70,15 @@ public class Class extends TreeNode {
         out.println(Utilities.pad(n + 2) + ")");
     }
 
-    public AbstractSymbol getName() {
+    @Override
+    public void acceptVisitor(ASTVisitor visitor) {
+        visitor.visitClassPreorder(this);
+        this.features.acceptVisitor(visitor);
+        visitor.visitClassPostorder(this);
+
+    }
+
+    public AbstractSymbol getIdentifier() {
         return name;
     }
 
@@ -85,14 +92,6 @@ public class Class extends TreeNode {
 
     public Features getFeatures() {
         return features;
-    }
-
-    @Override
-    public void acceptVisitor(ASTVisitor visitor) {
-        visitor.visitClassPreorder(this);
-        this.features.acceptVisitor(visitor);
-        visitor.visitClassPostorder(this);
-
     }
 
 }

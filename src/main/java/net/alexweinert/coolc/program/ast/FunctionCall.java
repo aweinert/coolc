@@ -64,7 +64,7 @@ public class FunctionCall extends Expression {
         AbstractSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
         final AbstractSymbol dispatchTargetClass;
         if (expressionType.equals(TreeConstants.SELF_TYPE)) {
-            dispatchTargetClass = enclosingClass.getName();
+            dispatchTargetClass = enclosingClass.getIdentifier();
         } else {
             dispatchTargetClass = expressionType;
         }
@@ -91,7 +91,7 @@ public class FunctionCall extends Expression {
                     classTable, featureTable);
             AbstractSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
 
-            if (!classTable.conformsTo(enclosingClass.getName(), actualType, formalType)) {
+            if (!classTable.conformsTo(enclosingClass.getIdentifier(), actualType, formalType)) {
                 Method targetMethodDef = featureTable.findMethodDefinition(classTable.getClass(dispatchTargetClass),
                         this.name);
                 AbstractSymbol formalName = ((Formal) targetMethodDef.formals.get(actualIndex)).name;
@@ -117,6 +117,10 @@ public class FunctionCall extends Expression {
         visitor.visitFunctionCallInorder(this);
         this.expr.acceptVisitor(visitor);
         visitor.visitFunctionCallPostorder(this);
+    }
+
+    public AbstractSymbol getFunctionIdentifier() {
+        return name;
     }
 
 }

@@ -46,7 +46,7 @@ public class ArithmeticNegation extends Expression {
     protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol operandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
 
-        if (!classTable.conformsTo(enclosingClass.getName(), operandType, TreeConstants.Int)) {
+        if (!classTable.conformsTo(enclosingClass.getIdentifier(), operandType, TreeConstants.Int)) {
             String errorString = String.format("Argument of '~' has type %s instead of Int.", operandType);
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
         }

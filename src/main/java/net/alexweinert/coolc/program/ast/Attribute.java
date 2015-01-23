@@ -46,13 +46,13 @@ public class Attribute extends Feature {
             // If we have no initializer, we simply believe whatever the declaration tells us
             return;
         } else {
-            FeatureTable extendedFeatureTable = featureTable.copyAndExtend(enclosingClass.getName(),
+            FeatureTable extendedFeatureTable = featureTable.copyAndExtend(enclosingClass.getIdentifier(),
                     TreeConstants.self, TreeConstants.SELF_TYPE);
             AbstractSymbol initializerType = this.init.typecheck(enclosingClass, classTable, extendedFeatureTable);
             // Could also use the featureTable at this point, but taking the declared type directly saves us one
             // indirection
             AbstractSymbol declaredType = this.type_decl;
-            if (!classTable.conformsTo(enclosingClass.getName(), initializerType, declaredType)) {
+            if (!classTable.conformsTo(enclosingClass.getIdentifier(), initializerType, declaredType)) {
                 String errorString = String.format(
                         "Inferred type %s of initialization of attribute %s does not conform to declared type %s.",
                         initializerType, this.name, declaredType);
@@ -85,6 +85,10 @@ public class Attribute extends Feature {
         visitor.visitAttributePreorder(this);
         this.init.acceptVisitor(visitor);
         visitor.visitAttributePostorder(this);
+    }
+
+    public AbstractSymbol getDeclaredType() {
+        return type_decl;
     }
 
 }

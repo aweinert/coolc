@@ -54,7 +54,7 @@ public class Loop extends Expression {
         // Unused, but needed to annotate the tree with the correct type information
         AbstractSymbol bodyType = this.body.typecheck(enclosingClass, classTable, featureTable);
 
-        if (!classTable.conformsTo(enclosingClass.getName(), conditionType, TreeConstants.Bool)) {
+        if (!classTable.conformsTo(enclosingClass.getIdentifier(), conditionType, TreeConstants.Bool)) {
             String errorString = "Loop condition does not have type Bool.";
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
         }

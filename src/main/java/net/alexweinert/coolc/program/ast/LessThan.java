@@ -53,8 +53,8 @@ public class LessThan extends Expression {
         AbstractSymbol leftHandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
         AbstractSymbol rightHandType = this.e2.typecheck(enclosingClass, classTable, featureTable);
 
-        if (!(classTable.conformsTo(enclosingClass.getName(), leftHandType, TreeConstants.Int) && classTable
-                .conformsTo(enclosingClass.getName(), rightHandType, TreeConstants.Int))) {
+        if (!(classTable.conformsTo(enclosingClass.getIdentifier(), leftHandType, TreeConstants.Int) && classTable
+                .conformsTo(enclosingClass.getIdentifier(), rightHandType, TreeConstants.Int))) {
             String errorString = String.format("non-Int arguments: %s < %s", leftHandType, rightHandType);
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
         }

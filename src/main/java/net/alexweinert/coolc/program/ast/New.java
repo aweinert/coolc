@@ -58,4 +58,8 @@ public class New extends Expression {
         visitor.visitNew(this);
     }
 
+    public AbstractSymbol getTypeIdentifier() {
+        return type_name;
+    }
+
 }

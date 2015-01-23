@@ -60,7 +60,7 @@ public class If extends Expression {
         AbstractSymbol thenBranchType = this.then_exp.typecheck(enclosingClass, classTable, featureTable);
         AbstractSymbol elseBranchType = this.else_exp.typecheck(enclosingClass, classTable, featureTable);
 
-        if (!classTable.conformsTo(enclosingClass.getName(), conditionType, TreeConstants.Bool)) {
+        if (!classTable.conformsTo(enclosingClass.getIdentifier(), conditionType, TreeConstants.Bool)) {
             String errorString = "Predicate of 'if' does not have type Bool.";
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
         }

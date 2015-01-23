@@ -52,4 +52,8 @@ public class IntConst extends Expression {
         visitor.visitIntConst(this);
     }
 
+    public AbstractSymbol getValue() {
+        return token;
+    }
+
 }

@@ -57,4 +57,12 @@ public class Case extends TreeNode {
         visitor.visitCasePostorder(this);
     }
 
+    public AbstractSymbol getVariableIdentifier() {
+        return name;
+    }
+
+    public AbstractSymbol getDeclaredType() {
+        return type_decl;
+    }
+
 }

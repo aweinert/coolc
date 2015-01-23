@@ -64,7 +64,7 @@ public class Typecase extends Expression {
                 classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
             }
 
-            FeatureTable extendedTable = featureTable.copyAndExtend(enclosingClass.getName(), currentBranch.name,
+            FeatureTable extendedTable = featureTable.copyAndExtend(enclosingClass.getIdentifier(), currentBranch.name,
                     currentBranch.type_decl);
             AbstractSymbol caseType = currentBranch.expr.typecheck(enclosingClass, classTable, extendedTable);
             if (leastUpperBound == null) {

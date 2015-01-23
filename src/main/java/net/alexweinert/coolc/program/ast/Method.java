@@ -62,26 +62,22 @@ public class Method extends Feature {
 
     @Override
     public void typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        FeatureTable extendedFeatureTable = featureTable.copyAndExtend(enclosingClass.getName(), TreeConstants.self,
+        FeatureTable extendedFeatureTable = featureTable.copyAndExtend(enclosingClass.getIdentifier(), TreeConstants.self,
                 TreeConstants.SELF_TYPE);
 
         for (final Formal currentFormal : this.formals) {
-            extendedFeatureTable = extendedFeatureTable.copyAndExtend(enclosingClass.getName(), currentFormal.name,
+            extendedFeatureTable = extendedFeatureTable.copyAndExtend(enclosingClass.getIdentifier(), currentFormal.name,
                     currentFormal.type_decl);
         }
 
         AbstractSymbol bodyType = this.expr.typecheck(enclosingClass, classTable, extendedFeatureTable);
 
-        if (!classTable.conformsTo(enclosingClass.getName(), bodyType, this.return_type)) {
+        if (!classTable.conformsTo(enclosingClass.getIdentifier(), bodyType, this.return_type)) {
             String errorString = String.format(
                     "Inferred return type %s of method %s does not conform to declared return type %s.", bodyType,
                     this.name, this.return_type);
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
         }
-    }
-
-    public AbstractSymbol getName() {
-        return this.name;
     }
 
     public Formals getFormals() {

@@ -16,6 +16,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  */
 public class Assign extends Expression {
     final protected AbstractSymbol name;
+
     final protected Expression expr;
 
     /**
@@ -50,7 +51,7 @@ public class Assign extends Expression {
 
     @Override
     protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        AbstractSymbol leftHandType = featureTable.getAttributeTypes(enclosingClass.getName()).get(this.name);
+        AbstractSymbol leftHandType = featureTable.getAttributeTypes(enclosingClass.getIdentifier()).get(this.name);
         AbstractSymbol rightHandType = this.expr.typecheck(enclosingClass, classTable, featureTable);
 
         // Check that the left-hand-side of the assignment is not self
@@ -67,7 +68,7 @@ public class Assign extends Expression {
             return rightHandType;
         }
 
-        if (!classTable.conformsTo(enclosingClass.getName(), rightHandType, leftHandType)) {
+        if (!classTable.conformsTo(enclosingClass.getIdentifier(), rightHandType, leftHandType)) {
             String errorString = String.format(
                     "Type %s of assigned expression does not conform to declared type %s of identifier %s.",
                     rightHandType, leftHandType, this.name);
@@ -84,6 +85,10 @@ public class Assign extends Expression {
         visitor.visitAssignPreorder(this);
         this.expr.acceptVisitor(visitor);
         visitor.visitAssignPostorder(this);
+    }
+
+    public AbstractSymbol getVariableIdentifier() {
+        return name;
     }
 
 }

@@ -52,4 +52,8 @@ public class BoolConst extends Expression {
         visitor.visitBoolConst(this);
     }
 
+    public Boolean getValue() {
+        return this.val;
+    }
+
 }

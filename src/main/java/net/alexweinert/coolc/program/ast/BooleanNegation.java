@@ -46,7 +46,7 @@ public class BooleanNegation extends Expression {
     protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         AbstractSymbol operandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
 
-        if (!classTable.conformsTo(enclosingClass.getName(), operandType, TreeConstants.Bool)) {
+        if (!classTable.conformsTo(enclosingClass.getIdentifier(), operandType, TreeConstants.Bool)) {
             String errorString = String.format("Argument of 'not' has type %s instead of Bool.", operandType);
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
         }

@@ -85,7 +85,7 @@ public class FeatureTable {
             Map<AbstractSymbol, AbstractSymbol> currentAttributeTypes = new HashMap<>();
 
             // Make sure that the special variable self has the correct type
-            currentAttributeTypes.put(TreeConstants.self, currentClass.getName());
+            currentAttributeTypes.put(TreeConstants.self, currentClass.getIdentifier());
 
             // Walk through all the features and gather their declared types
             for (final Feature currentFeature : currentClass.getFeatures()) {
@@ -98,8 +98,8 @@ public class FeatureTable {
                 }
             }
 
-            this.methodSignatures.put(currentClass.getName(), currentMethodSignatures);
-            this.attributeTypes.put(currentClass.getName(), currentAttributeTypes);
+            this.methodSignatures.put(currentClass.getIdentifier(), currentMethodSignatures);
+            this.attributeTypes.put(currentClass.getIdentifier(), currentAttributeTypes);
         }
 
         for (Class childClass : classTable.getClasses()) {
@@ -107,36 +107,36 @@ public class FeatureTable {
              * and add the unconflicting parents' definitions */
             for (Class parentClass : classTable.getAncestors(childClass)) {
                 // Add all the parents' attributes to the child
-                for (AbstractSymbol parentAttribute : this.getAttributeTypes(parentClass.getName()).keySet()) {
+                for (AbstractSymbol parentAttribute : this.getAttributeTypes(parentClass.getIdentifier()).keySet()) {
                     if (parentAttribute.equals(TreeConstants.self)) {
                         continue;
                     }
 
                     // Check that the attribute has not been redefined in the childclass
-                    if (this.getAttributeTypes(childClass.getName()).containsKey(parentAttribute)) {
+                    if (this.getAttributeTypes(childClass.getIdentifier()).containsKey(parentAttribute)) {
                         // Find the actual definition of the attribute in the currentClass
                         String errorString = String.format("Attribute %s has already been defined in parent class %s.",
-                                parentAttribute, childClass.getName(), parentClass.getName());
+                                parentAttribute, childClass.getIdentifier(), parentClass.getIdentifier());
                         Attribute attributeDefinition = findAttributeDefinition(childClass, parentAttribute);
                         classTable.semantError(childClass.getFilename(), attributeDefinition).println(errorString);
 
                         // If this error happens, we use the type declared in the child class, which has already been
                         // added
                     } else {
-                        AbstractSymbol parentAttributeType = this.getAttributeTypes(parentClass.getName()).get(
+                        AbstractSymbol parentAttributeType = this.getAttributeTypes(parentClass.getIdentifier()).get(
                                 parentAttribute);
-                        this.getAttributeTypes(childClass.getName()).put(parentAttribute, parentAttributeType);
+                        this.getAttributeTypes(childClass.getIdentifier()).put(parentAttribute, parentAttributeType);
                     }
 
                 }
 
                 // Add all the parents' methods to the child
-                for (AbstractSymbol parentMethod : this.getMethodSignatures(parentClass.getName()).keySet()) {
+                for (AbstractSymbol parentMethod : this.getMethodSignatures(parentClass.getIdentifier()).keySet()) {
                     // Check that, if functions are redefined, their signatures match
-                    if (this.getMethodSignatures(childClass.getName()).containsKey(parentMethod)) {
-                        MethodSignature childSignature = this.getMethodSignatures(childClass.getName()).get(
+                    if (this.getMethodSignatures(childClass.getIdentifier()).containsKey(parentMethod)) {
+                        MethodSignature childSignature = this.getMethodSignatures(childClass.getIdentifier()).get(
                                 parentMethod);
-                        MethodSignature parentSignature = this.getMethodSignatures(parentClass.getName()).get(
+                        MethodSignature parentSignature = this.getMethodSignatures(parentClass.getIdentifier()).get(
                                 parentMethod);
                         if (!childSignature.equals(parentSignature)) {
                             String errorString = generateErrorString(parentMethod, childSignature, parentSignature);
@@ -144,13 +144,13 @@ public class FeatureTable {
                                     findMethodDefinition(childClass, parentMethod)).println(errorString);
 
                             // Use the parent's definition instead of the child's
-                            this.getMethodSignatures(childClass.getName()).put(parentMethod, parentSignature);
+                            this.getMethodSignatures(childClass.getIdentifier()).put(parentMethod, parentSignature);
                         }
                     } else {
                         // Method is not redefined, simply copy the declaration
-                        MethodSignature parentSignature = this.getMethodSignatures(parentClass.getName()).get(
+                        MethodSignature parentSignature = this.getMethodSignatures(parentClass.getIdentifier()).get(
                                 parentMethod);
-                        this.getMethodSignatures(childClass.getName()).put(parentMethod, parentSignature);
+                        this.getMethodSignatures(childClass.getIdentifier()).put(parentMethod, parentSignature);
                     }
 
                 }
@@ -337,12 +337,12 @@ public class FeatureTable {
         // Construct the list of formal types
         for (final Formal currentFormal : currentMethod.getFormals()) {
             // Make sure that no formal parameter is named 'self'
-            if (currentFormal.getName().equals(TreeConstants.self)) {
+            if (currentFormal.getIdentifier().equals(TreeConstants.self)) {
                 String errorString = "'self' cannot be the name of a formal parameter.";
                 classTable.semantError(enclosingClass.getFilename(), currentFormal).println(errorString);
             }
 
-            formalTypes.add(currentFormal.getTypeDecl());
+            formalTypes.add(currentFormal.getDeclaredType());
         }
 
         // Make sure that the method name is unique in the context of the class

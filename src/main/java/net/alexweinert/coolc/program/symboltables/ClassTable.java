@@ -53,19 +53,19 @@ public class ClassTable {
         AbstractSymbol filename = AbstractTable.stringtable.addString("<basic class>");
 
         Class objectClass = createObjectClass(filename);
-        this.classes.put(objectClass.getName(), objectClass);
+        this.classes.put(objectClass.getIdentifier(), objectClass);
 
         Class ioClass = createIoClass(filename);
-        this.classes.put(ioClass.getName(), ioClass);
+        this.classes.put(ioClass.getIdentifier(), ioClass);
 
         Class intClass = createIntClass(filename);
-        this.classes.put(intClass.getName(), intClass);
+        this.classes.put(intClass.getIdentifier(), intClass);
 
         Class boolClass = createBoolClass(filename);
-        this.classes.put(boolClass.getName(), boolClass);
+        this.classes.put(boolClass.getIdentifier(), boolClass);
 
         Class strClass = createStringClass(filename);
-        this.classes.put(strClass.getName(), strClass);
+        this.classes.put(strClass.getIdentifier(), strClass);
     }
 
     private Class createStringClass(AbstractSymbol filename) {
@@ -167,14 +167,14 @@ public class ClassTable {
 
         // Walk through all the classes, add them one by one
         for (Class currentClass : cls) {
-            if (this.classes.containsKey(currentClass.getName())) {
+            if (this.classes.containsKey(currentClass.getIdentifier())) {
                 // If this is a redefinition, report the error and ignore the redefinition
-                String errorString = String.format("Redefinition of class %s.", currentClass.getName());
+                String errorString = String.format("Redefinition of class %s.", currentClass.getIdentifier());
                 PrintStream errorStream = this.semantError((Class) currentClass);
                 errorStream.println(errorString);
 
             } else {
-                this.classes.put(currentClass.getName(), currentClass);
+                this.classes.put(currentClass.getIdentifier(), currentClass);
             }
         }
     }
@@ -220,24 +220,24 @@ public class ClassTable {
 
         // Continue until we either find the parent or get stuck in a loop
         // TODO: Do not need to check for loop, if this takes too long
-        while (!(isNoClass(currentAncestor) || currentAncestor.getName().equals(parent) || visited
-                .contains(currentAncestor.getName()))) {
-            visited.add(currentAncestor.getName());
-            if (currentAncestor.getName().equals(TreeConstants.Object_)) {
+        while (!(isNoClass(currentAncestor) || currentAncestor.getIdentifier().equals(parent) || visited
+                .contains(currentAncestor.getIdentifier()))) {
+            visited.add(currentAncestor.getIdentifier());
+            if (currentAncestor.getIdentifier().equals(TreeConstants.Object_)) {
                 // Stop if we are at object, going further would lead us into null-pointer-dereferences
                 break;
             }
             currentAncestor = (Class) this.getClass(currentAncestor.getParent());
         }
 
-        if (currentAncestor.getName().equals(parent)) {
+        if (currentAncestor.getIdentifier().equals(parent)) {
             return true;
         }
         return false;
     }
 
     private boolean isNoClass(Class candidateClass) {
-        return candidateClass.getName().equals(TreeConstants.No_class);
+        return candidateClass.getIdentifier().equals(TreeConstants.No_class);
     }
 
     /**
@@ -319,7 +319,7 @@ public class ClassTable {
         // TODO This value should be cached. Could then also be used in other contexts
         List<Class> returnValue = new LinkedList<>();
 
-        if (currentClass.getName().equals(TreeConstants.Object_)) {
+        if (currentClass.getIdentifier().equals(TreeConstants.Object_)) {
             return returnValue;
         }
 
@@ -328,7 +328,7 @@ public class ClassTable {
         do {
             currentAncestor = this.getClass(currentAncestor.getParent());
             returnValue.add(currentAncestor);
-        } while (!currentAncestor.getName().equals(TreeConstants.Object_));
+        } while (!currentAncestor.getIdentifier().equals(TreeConstants.Object_));
 
         return returnValue;
     }

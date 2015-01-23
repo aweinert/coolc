@@ -71,14 +71,14 @@ public class Let extends Expression {
         // Typecheck the initializer with the current environment
         AbstractSymbol initializerType = this.init.typecheck(enclosingClass, classTable, featureTable);
 
-        if (!classTable.conformsTo(enclosingClass.getName(), initializerType, this.type_decl)) {
+        if (!classTable.conformsTo(enclosingClass.getIdentifier(), initializerType, this.type_decl)) {
             String errorString = String.format(
                     "Inferred type %s of initialization of %s does not conform to identifier's declared type %s.",
                     initializerType, this.identifier, this.type_decl);
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
         }
 
-        FeatureTable extendedTable = featureTable.copyAndExtend(enclosingClass.getName(), this.identifier,
+        FeatureTable extendedTable = featureTable.copyAndExtend(enclosingClass.getIdentifier(), this.identifier,
                 this.type_decl);
         return this.body.typecheck(enclosingClass, classTable, extendedTable);
     }
@@ -90,6 +90,14 @@ public class Let extends Expression {
         visitor.visitLetInorder(this);
         this.body.acceptVisitor(visitor);
         visitor.visitLetPostorder(this);
+    }
+
+    public AbstractSymbol getVariableIdentifier() {
+        return identifier;
+    }
+
+    public AbstractSymbol getDeclaredType() {
+        return type_decl;
     }
 
 }

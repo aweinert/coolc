@@ -53,7 +53,7 @@ public class ObjectReference extends Expression {
 
     @Override
     protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        Map<AbstractSymbol, AbstractSymbol> attributeTypes = featureTable.getAttributeTypes(enclosingClass.getName());
+        Map<AbstractSymbol, AbstractSymbol> attributeTypes = featureTable.getAttributeTypes(enclosingClass.getIdentifier());
         if (!attributeTypes.containsKey(this.name)) {
             String errorString = String.format("Undeclared identifier %s.", this.name);
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
@@ -65,6 +65,10 @@ public class ObjectReference extends Expression {
     @Override
     public void acceptVisitor(ASTVisitor visitor) {
         visitor.visitObjectReference(this);
+    }
+
+    public AbstractSymbol getVariableIdentifier() {
+        return name;
     }
 
 }

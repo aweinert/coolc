@@ -77,7 +77,7 @@ public class Program extends TreeNode {
             }
 
             if (inheritedBaseClass != null) {
-                String errorString = String.format("Class %s cannot inherit class %s", currentClass.getName(),
+                String errorString = String.format("Class %s cannot inherit class %s", currentClass.getIdentifier(),
                         TreeConstants.Int);
                 classTable.semantError((Class) currentClass).println(errorString);
             }
@@ -87,13 +87,13 @@ public class Program extends TreeNode {
     private void checkParentExistence(ClassTable classTable) {
         for (Class currentClass : classTable.getClasses()) {
             /* Skip the object-class, since this one is allowed to have a non existing parent */
-            if (currentClass.getName().equals(TreeConstants.Object_)) {
+            if (currentClass.getIdentifier().equals(TreeConstants.Object_)) {
                 continue;
             }
 
             if (!classTable.classExists(currentClass.getParent())) {
                 String errorString = String.format("Class %s inherits from an undefined class %s",
-                        currentClass.getName(), currentClass.getParent());
+                        currentClass.getIdentifier(), currentClass.getParent());
                 classTable.semantError((Class) currentClass).println(errorString);
             }
         }
@@ -116,10 +116,10 @@ public class Program extends TreeNode {
     private void checkReachability(ClassTable classTable, Collection<AbstractSymbol> reachable) {
         // Check that all defined classes are reachable from Object
         for (Class definedClass : classTable.getClasses()) {
-            if (!reachable.contains(definedClass.getName())) {
+            if (!reachable.contains(definedClass.getIdentifier())) {
                 String errorString = String.format(
-                        "Class %s, or an ancestor of %s, is involved in an inheritance cycle.", definedClass.getName(),
-                        definedClass.getName());
+                        "Class %s, or an ancestor of %s, is involved in an inheritance cycle.", definedClass.getIdentifier(),
+                        definedClass.getIdentifier());
                 classTable.semantError((Class) definedClass).println(errorString);
             }
         }
@@ -151,7 +151,7 @@ public class Program extends TreeNode {
                 // TODO Cache the children of all classes for performance reasons
                 for (Class potentialChild : classTable.getClasses()) {
                     if (potentialChild.getParent().equals(currentToCheck)) {
-                        toCheck.add(potentialChild.getName());
+                        toCheck.add(potentialChild.getIdentifier());
                     }
                 }
             }

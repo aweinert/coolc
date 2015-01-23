@@ -54,4 +54,7 @@ public class StringConst extends Expression {
         visitor.visitStringConstant(this);
     }
 
+    public AbstractSymbol getValue() {
+        return token;
+    }
 }
