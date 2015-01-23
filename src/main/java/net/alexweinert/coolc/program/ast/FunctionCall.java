@@ -115,7 +115,7 @@ public class FunctionCall extends Expression {
         visitor.visitFunctionCallPreorder(this);
         this.expr.acceptVisitor(visitor);
         visitor.visitFunctionCallInorder(this);
-        this.expr.acceptVisitor(visitor);
+        this.actual.acceptVisitor(visitor);
         visitor.visitFunctionCallPostorder(this);
     }
 
