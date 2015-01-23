@@ -99,7 +99,7 @@ import net.alexweinert.coolc.program.symboltables.*;
 /* Define newline seperately from whitespace, since it has to handled as a special
  * case quite often */
 NEWLINE		= \n
-WHITESPACE	= [ \f\r\v\t]
+WHITESPACE	= [ \f\r\t]
 
 /* Definitions according to COOL manual section 10.1 */
 /* Regular expression that matches every integer */
