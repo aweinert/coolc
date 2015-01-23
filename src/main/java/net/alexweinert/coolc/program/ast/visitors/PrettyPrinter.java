@@ -1,5 +1,7 @@
 package net.alexweinert.coolc.program.ast.visitors;
 
+import java.util.Stack;
+
 import net.alexweinert.coolc.program.ast.Addition;
 import net.alexweinert.coolc.program.ast.ArithmeticNegation;
 import net.alexweinert.coolc.program.ast.Assign;
@@ -41,7 +43,9 @@ public class PrettyPrinter extends ASTVisitor {
 
     final private StringBuilder stringBuilder = new StringBuilder();
 
-    private boolean insideFunctionCall = false;
+    // Tells us how to unparse expressions
+    // 0 on top means "inside block", 1 on top means "inside function call"
+    private ExpressionsContext expressionsContext = new ExpressionsContext();
 
     public static String printAst(TreeNode tree) {
         final PrettyPrinter printer = new PrettyPrinter();
@@ -76,7 +80,7 @@ public class PrettyPrinter extends ASTVisitor {
 
     @Override
     public void visitAssignPreorder(Assign assign) {
-        stringBuilder.append(assign.getVariableIdentifier().getString());
+        stringBuilder.append(assign.getVariableIdentifier());
         stringBuilder.append(" <- ");
     }
 
@@ -97,10 +101,12 @@ public class PrettyPrinter extends ASTVisitor {
     @Override
     public void visitBlockPreorder(Block block) {
         stringBuilder.append("{\n");
+        this.expressionsContext.pushBlockContext();
     }
 
     @Override
     public void visitBlockPostorder(Block block) {
+        this.expressionsContext.popContext();
         stringBuilder.append("}\n");
     }
 
@@ -129,7 +135,7 @@ public class PrettyPrinter extends ASTVisitor {
 
     @Override
     public void visitCasePostorder(Case caseNode) {
-        stringBuilder.append(";");
+        stringBuilder.append(";\n");
     }
 
     @Override
@@ -203,16 +209,22 @@ public class PrettyPrinter extends ASTVisitor {
 
     @Override
     public void visitExpressionsInorder(Expressions expressions) {
-        if (this.insideFunctionCall) {
+        if (this.expressionsContext.inFunctionCall()) {
             stringBuilder.append(", ");
         } else {
+            // We are inside a block
             stringBuilder.append(";\n");
         }
 
     }
 
     @Override
-    public void visitExpressionsPostorder(Expressions expressions) {}
+    public void visitExpressionsPostorder(Expressions expressions) {
+        if (this.expressionsContext.inBlock()) {
+            // We are inside a block, finish the last expression with a semicolon
+            stringBuilder.append(";\n");
+        }
+    }
 
     @Override
     public void visitFeaturesPreorder(Features features) {}
@@ -223,7 +235,10 @@ public class PrettyPrinter extends ASTVisitor {
     }
 
     @Override
-    public void visitFeaturesPostorder(Features features) {}
+    public void visitFeaturesPostorder(Features features) {
+        // Finish the last feature with a ; as well
+        stringBuilder.append(";");
+    }
 
     @Override
     public void visitFormal(Formal formal) {
@@ -251,12 +266,12 @@ public class PrettyPrinter extends ASTVisitor {
         stringBuilder.append(".");
         stringBuilder.append(functionCall.getFunctionIdentifier());
         stringBuilder.append("(");
-        this.insideFunctionCall = true;
+        this.expressionsContext.pushFunctionCallContext();
     }
 
     @Override
     public void visitFunctionCallPostorder(FunctionCall functionCall) {
-        this.insideFunctionCall = false;
+        this.expressionsContext.popContext();
         stringBuilder.append(")");
     }
 
@@ -287,7 +302,7 @@ public class PrettyPrinter extends ASTVisitor {
 
     @Override
     public void visitIsVoidPreorder(IsVoid isVoid) {
-        stringBuilder.append("isvoid");
+        stringBuilder.append("isvoid ");
     }
 
     @Override
@@ -334,7 +349,7 @@ public class PrettyPrinter extends ASTVisitor {
 
     @Override
     public void visitLetInorder(Let let) {
-        stringBuilder.append(" in ");
+        stringBuilder.append(" in \n");
     }
 
     @Override
@@ -420,16 +435,20 @@ public class PrettyPrinter extends ASTVisitor {
         stringBuilder.append(".");
         stringBuilder.append(staticFunctionCall.getFunctionIdentifier());
         stringBuilder.append("(");
+        this.expressionsContext.pushFunctionCallContext();
     }
 
     @Override
     public void visitStaticFunctionCallPostorder(StaticFunctionCall staticFunctionCall) {
         stringBuilder.append(")");
+        this.expressionsContext.popContext();
     }
 
     @Override
     public void visitStringConstant(StringConst stringConst) {
+        stringBuilder.append('"');
         stringBuilder.append(stringConst.getValue());
+        stringBuilder.append('"');
     }
 
     @Override
