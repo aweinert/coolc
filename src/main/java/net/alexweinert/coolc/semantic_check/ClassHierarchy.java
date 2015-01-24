@@ -21,7 +21,6 @@ public class ClassHierarchy {
 
     public boolean conformsTo(AbstractSymbol classOne, AbstractSymbol classTwo) {
         return this.parentClasses.get(classOne).contains(classTwo);
-
     }
 
     public AbstractSymbol getLeastUpperBound(AbstractSymbol classOne, AbstractSymbol classTwo) {
