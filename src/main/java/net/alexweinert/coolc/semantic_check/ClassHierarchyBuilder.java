@@ -20,7 +20,7 @@ class ClassHierarchyBuilder {
         }
     }
 
-    final Collection<Pair<AbstractSymbol, AbstractSymbol>> inheritanceInfo = new HashSet<>();
+    final private Collection<Pair<AbstractSymbol, AbstractSymbol>> inheritanceInfo = new HashSet<>();
 
     void addInheritance(AbstractSymbol childClass, AbstractSymbol parentClass) {
         this.inheritanceInfo.add(new Pair<>(childClass, parentClass));
