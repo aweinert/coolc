@@ -1,6 +1,7 @@
 package net.alexweinert.coolc.semantic_check;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,5 +29,9 @@ public class ClassHierarchy {
         commonParents.retainAll(this.parentClasses.get(classTwo));
 
         return commonParents.get(0);
+    }
+
+    public List<AbstractSymbol> getAncestors(AbstractSymbol classIdentifier) {
+        return new LinkedList<>(this.parentClasses.get(classIdentifier));
     }
 }
