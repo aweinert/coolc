@@ -1,7 +1,9 @@
 package net.alexweinert.coolc.semantic_check;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import net.alexweinert.coolc.program.ast.Attribute;
 import net.alexweinert.coolc.program.ast.Class;
@@ -11,13 +13,13 @@ import net.alexweinert.coolc.program.ast.Features;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
+import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 
 public class DoubleFeatureRemover extends ASTVisitor {
     private List<Class> classes = new LinkedList<>();
-    private List<Method> methods = new LinkedList<>();
-    private List<Attribute> attributes = new LinkedList<>();
+    private Map<AbstractSymbol, List<Attribute>> attributes = new HashMap<>();
+    private Map<AbstractSymbol, List<Method>> methods = new HashMap<>();
     private Program containingProgram;
-    private Class containingClass;
 
     public static Program removeDoubleFeatures(Program program) {
         final DoubleFeatureRemover remover = new DoubleFeatureRemover();
@@ -32,15 +34,34 @@ public class DoubleFeatureRemover extends ASTVisitor {
     }
 
     @Override
-    public void visitClassPreorder(Class classNode) {
-        this.containingClass = classNode;
-    }
-
-    @Override
     public void visitClassPostorder(Class classNode) {
+
         final List<Feature> featuresList = new LinkedList<>();
-        featuresList.addAll(this.attributes);
-        featuresList.addAll(this.methods);
+        for (List<Attribute> attributes : this.attributes.values()) {
+            if (attributes.size() > 1) {
+                System.out.println("ERROR: Multiple definitions of attribute " + attributes.get(0).getName()
+                        + " in class " + classNode.getIdentifier() + " at the following locations:");
+                for (Attribute attribute : attributes) {
+                    System.out.println("  Line " + attribute.getLineNumber());
+                }
+                System.out.println("  Only using the first one, ignoring subsequent ones");
+            }
+            featuresList.add(attributes.get(0));
+        }
+        this.attributes.clear();
+        for (List<Method> methods : this.methods.values()) {
+            if (methods.size() > 1) {
+                System.out.println("ERROR: Multiple definitions of attribute " + methods.get(0).getName()
+                        + " in class " + classNode.getIdentifier() + " at the following locations:");
+                for (Method method : methods) {
+                    System.out.println("  Line " + method.getLineNumber());
+                }
+                System.out.println("  Only using the first one, ignoring subsequent ones");
+            }
+            featuresList.add(methods.get(0));
+        }
+        this.methods.clear();
+
         final Features features = new Features(classNode.getLineNumber(), featuresList);
         this.classes.add(new Class(classNode.getLineNumber(), classNode.getIdentifier(), classNode.getParent(),
                 features, classNode.getParent()));
@@ -50,27 +71,17 @@ public class DoubleFeatureRemover extends ASTVisitor {
 
     @Override
     public void visitAttributePostorder(Attribute attribute) {
-        for (final Attribute existingAttribute : this.attributes) {
-            if (existingAttribute.getName().equals(attribute.getName())) {
-                System.out.println("ERROR: Multiple definition of attribute " + attribute.getName() + " in class "
-                        + this.containingClass.getIdentifier());
-                System.out.println("       Only respecting first definition, ignoring subsequent ones");
-                return;
-            }
+        if (!this.attributes.containsKey(attribute.getName())) {
+            this.attributes.put(attribute.getName(), new LinkedList<Attribute>());
         }
-        this.attributes.add(attribute);
+        this.attributes.get(attribute.getName()).add(attribute);
     }
 
     @Override
     public void visitMethodPostorder(Method method) {
-        for (final Method existingMethod : this.methods) {
-            if (existingMethod.getName().equals(method.getName())) {
-                System.out.println("ERROR: Multiple definition of method " + method.getName() + " in class "
-                        + this.containingClass.getIdentifier());
-                System.out.println("       Only respecting first definition, ignoring subsequent ones");
-                return;
-            }
+        if (!this.methods.containsKey(method.getName())) {
+            this.methods.put(method.getName(), new LinkedList<Method>());
         }
-        this.methods.add(method);
+        this.methods.get(method.getName()).add(method);
     }
 }
