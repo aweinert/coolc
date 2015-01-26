@@ -13,7 +13,7 @@ import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
  */
 public class Classes extends ListNode<Class> {
 
-    protected Classes(int lineNumber, Collection<Class> elements) {
+    public Classes(int lineNumber, Collection<Class> elements) {
         super(lineNumber, elements);
     }
 

@@ -11,7 +11,7 @@ import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
 public class Features extends ListNode<Feature> {
-    protected Features(int lineNumber, Collection<Feature> elements) {
+    public Features(int lineNumber, Collection<Feature> elements) {
         super(lineNumber, elements);
     }
 
