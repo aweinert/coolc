@@ -29,8 +29,8 @@ public class DoubleFeatureRemover extends ASTVisitor {
 
     @Override
     public void visitProgramPostorder(Program program) {
-        this.containingProgram = new Program(program.getLineNumber(),
-                new Classes(program.getLineNumber(), this.classes));
+        final Classes classes = new Classes(program.getFilename(), program.getLineNumber(), this.classes);
+        this.containingProgram = new Program(program.getFilename(), program.getLineNumber(), classes);
     }
 
     @Override
@@ -62,9 +62,9 @@ public class DoubleFeatureRemover extends ASTVisitor {
         }
         this.methods.clear();
 
-        final Features features = new Features(classNode.getLineNumber(), featuresList);
-        this.classes.add(new Class(classNode.getLineNumber(), classNode.getIdentifier(), classNode.getParent(),
-                features, classNode.getParent()));
+        final Features features = new Features(classNode.getFilename(), classNode.getLineNumber(), featuresList);
+        this.classes.add(new Class(classNode.getFilename(), classNode.getLineNumber(), classNode.getIdentifier(),
+                classNode.getParent(), features));
         this.attributes.clear();
         this.methods.clear();
     }
