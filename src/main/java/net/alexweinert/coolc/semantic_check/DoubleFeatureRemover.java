@@ -21,6 +21,8 @@ public class DoubleFeatureRemover extends ASTVisitor {
     private Map<AbstractSymbol, List<Method>> methods = new HashMap<>();
     private Program containingProgram;
 
+    private final DoubleFeatureErrorReporter error = new DoubleFeatureErrorReporter();
+
     public static Program removeDoubleFeatures(Program program) {
         final DoubleFeatureRemover remover = new DoubleFeatureRemover();
         program.acceptVisitor(remover);
@@ -39,24 +41,14 @@ public class DoubleFeatureRemover extends ASTVisitor {
         final List<Feature> featuresList = new LinkedList<>();
         for (List<Attribute> attributes : this.attributes.values()) {
             if (attributes.size() > 1) {
-                System.out.println("ERROR: Multiple definitions of attribute " + attributes.get(0).getName()
-                        + " in class " + classNode.getIdentifier() + " at the following locations:");
-                for (Attribute attribute : attributes) {
-                    System.out.println("  Line " + attribute.getLineNumber());
-                }
-                System.out.println("  Only using the first one, ignoring subsequent ones");
+                error.multipleAttributes(classNode.getIdentifier(), attributes);
             }
             featuresList.add(attributes.get(0));
         }
         this.attributes.clear();
         for (List<Method> methods : this.methods.values()) {
             if (methods.size() > 1) {
-                System.out.println("ERROR: Multiple definitions of attribute " + methods.get(0).getName()
-                        + " in class " + classNode.getIdentifier() + " at the following locations:");
-                for (Method method : methods) {
-                    System.out.println("  Line " + method.getLineNumber());
-                }
-                System.out.println("  Only using the first one, ignoring subsequent ones");
+                error.multipleMethods(classNode.getIdentifier(), methods);
             }
             featuresList.add(methods.get(0));
         }
