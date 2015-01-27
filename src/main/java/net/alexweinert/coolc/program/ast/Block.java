@@ -26,8 +26,8 @@ public class Block extends Expression {
      * @param a0
      *            initial value for body
      */
-    public Block(int lineNumber, Expressions a1) {
-        super(lineNumber);
+    public Block(String filename, int lineNumber, Expressions a1) {
+        super(filename, lineNumber);
         this.body = a1;
     }
 

@@ -25,8 +25,8 @@ public class BoolConst extends Expression {
      * @param a0
      *            initial value for val
      */
-    public BoolConst(int lineNumber, Boolean a1) {
-        super(lineNumber);
+    public BoolConst(String filename, int lineNumber, Boolean a1) {
+        super(filename, lineNumber);
         this.val = a1;
     }
 

@@ -25,8 +25,8 @@ public class IsVoid extends Expression {
      * @param a0
      *            initial value for e1
      */
-    public IsVoid(int lineNumber, Expression a1) {
-        super(lineNumber);
+    public IsVoid(String filename, int lineNumber, Expression a1) {
+        super(filename, lineNumber);
         e1 = a1;
     }
 

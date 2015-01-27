@@ -11,20 +11,20 @@ import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
 public class Formals extends ListNode<Formal> {
-    protected Formals(int lineNumber, Collection<Formal> elements) {
-        super(lineNumber, elements);
+    protected Formals(String filename, int lineNumber, Collection<Formal> elements) {
+        super(filename, lineNumber, elements);
     }
 
     /** Creates an empty "Formals" list */
-    public Formals(int lineNumber) {
-        super(lineNumber);
+    public Formals(String filename, int lineNumber) {
+        super(filename, lineNumber);
     }
 
     @Override
     public Formals add(Formal node) {
         final Collection<Formal> newElements = this.copyElements();
         newElements.add(node);
-        return new Formals(this.getLineNumber(), newElements);
+        return new Formals(this.getFilename(), this.getLineNumber(), newElements);
     }
 
     @Override

@@ -30,13 +30,13 @@ abstract class ListNode<T extends TreeNode> extends TreeNode implements Iterable
      */
     protected final List<T> elements;
 
-    protected ListNode(int lineNumber, Collection<T> elements) {
-        super(lineNumber);
+    protected ListNode(String filename, int lineNumber, Collection<T> elements) {
+        super(filename, lineNumber);
         this.elements = new LinkedList<>(elements);
     }
 
-    protected ListNode(int lineNumber) {
-        super(lineNumber);
+    protected ListNode(String filename, int lineNumber) {
+        super(filename, lineNumber);
         elements = new Vector<>();
     }
 

@@ -35,8 +35,9 @@ public class StaticFunctionCall extends Expression {
      * @param a3
      *            initial value for actual
      */
-    public StaticFunctionCall(int lineNumber, Expression a1, AbstractSymbol a2, AbstractSymbol a3, Expressions a4) {
-        super(lineNumber);
+    public StaticFunctionCall(String filename, int lineNumber, Expression a1, AbstractSymbol a2, AbstractSymbol a3,
+            Expressions a4) {
+        super(filename, lineNumber);
         expr = a1;
         type_name = a2;
         name = a3;

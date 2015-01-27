@@ -25,8 +25,8 @@ public class BooleanNegation extends Expression {
      * @param a0
      *            initial value for e1
      */
-    public BooleanNegation(int lineNumber, Expression a1) {
-        super(lineNumber);
+    public BooleanNegation(String filename, int lineNumber, Expression a1) {
+        super(filename, lineNumber);
         this.e1 = a1;
     }
 

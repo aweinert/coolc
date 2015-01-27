@@ -76,27 +76,26 @@ public class ClassTable {
         // concat(arg: Str) : Str performs string concatenation
         // substr(arg: Int, arg2: Int): Str substring selection
 
-        Class Str_class = new Class(
-                0,
-                TreeConstants.Str,
-                TreeConstants.Object_,
-                new Features(0)
-                        .add(new Attribute(0, TreeConstants.val, TreeConstants.Int, new NoExpression(0)))
-                        .add(new Attribute(0, TreeConstants.str_field, TreeConstants.prim_slot, new NoExpression(0)))
-                        .add(new Method(0, TreeConstants.length, new Formals(0), TreeConstants.Int, new NoExpression(0)))
-                        .add(new Method(0, TreeConstants.concat, new Formals(0).add(new Formal(0, TreeConstants.arg,
-                                TreeConstants.Str)), TreeConstants.Str, new NoExpression(0)))
-                        .add(new Method(0, TreeConstants.substr, new Formals(0).add(
-                                new Formal(0, TreeConstants.arg, TreeConstants.Int)).add(
-                                new Formal(0, TreeConstants.arg2, TreeConstants.Int)), TreeConstants.Str,
-                                new NoExpression(0))), filename);
+        Class Str_class = new Class("builtin", 0, TreeConstants.Str, TreeConstants.Object_, new Features("builtin", 0)
+                .add(new Attribute("builtin", 0, TreeConstants.val, TreeConstants.Int, new NoExpression("builtin", 0)))
+                .add(new Attribute("builtin", 0, TreeConstants.str_field, TreeConstants.prim_slot, new NoExpression(
+                        "builtin", 0)))
+                .add(new Method("builtin", 0, TreeConstants.length, new Formals("builtin", 0), TreeConstants.Int,
+                        new NoExpression("builtin", 0)))
+                .add(new Method("builtin", 0, TreeConstants.concat, new Formals("builtin", 0).add(new Formal("builtin",
+                        0, TreeConstants.arg, TreeConstants.Str)), TreeConstants.Str, new NoExpression("builtin", 0)))
+                .add(new Method("builtin", 0, TreeConstants.substr, new Formals("builtin", 0).add(
+                        new Formal("builtin", 0, TreeConstants.arg, TreeConstants.Int)).add(
+                        new Formal("builtin", 0, TreeConstants.arg2, TreeConstants.Int)), TreeConstants.Str,
+                        new NoExpression("builtin", 0))));
         return Str_class;
     }
 
     private Class createBoolClass(AbstractSymbol filename) {
         // Bool also has only the "val" slot.
-        Class Bool_class = new Class(0, TreeConstants.Bool, TreeConstants.Object_, new Features(0).add(new Attribute(0,
-                TreeConstants.val, TreeConstants.prim_slot, new NoExpression(0))), filename);
+        Class Bool_class = new Class("builtin", 0, TreeConstants.Bool, TreeConstants.Object_,
+                new Features("builtin", 0).add(new Attribute("builtin", 0, TreeConstants.val, TreeConstants.prim_slot,
+                        new NoExpression("builtin", 0))));
         return Bool_class;
     }
 
@@ -104,8 +103,9 @@ public class ClassTable {
         // The Int class has no methods and only a single attribute, the
         // "val" for the integer.
 
-        Class Int_class = new Class(0, TreeConstants.Int, TreeConstants.Object_, new Features(0).add(new Attribute(0,
-                TreeConstants.val, TreeConstants.prim_slot, new NoExpression(0))), filename);
+        Class Int_class = new Class("builtin", 0, TreeConstants.Int, TreeConstants.Object_,
+                new Features("builtin", 0).add(new Attribute("builtin", 0, TreeConstants.val, TreeConstants.prim_slot,
+                        new NoExpression("builtin", 0))));
         return Int_class;
     }
 
@@ -116,14 +116,17 @@ public class ClassTable {
         // in_string() : Str reads a string from the input
         // in_int() : Int "   an int     " "     "
 
-        Class IO_class = new Class(0, TreeConstants.IO, TreeConstants.Object_, new Features(0)
-                .add(new Method(0, TreeConstants.out_string, new Formals(0).add(new Formal(0, TreeConstants.arg,
-                        TreeConstants.Str)), TreeConstants.SELF_TYPE, new NoExpression(0)))
-                .add(new Method(0, TreeConstants.out_int, new Formals(0).add(new Formal(0, TreeConstants.arg,
-                        TreeConstants.Int)), TreeConstants.SELF_TYPE, new NoExpression(0)))
-                .add(new Method(0, TreeConstants.in_string, new Formals(0), TreeConstants.Str, new NoExpression(0)))
-                .add(new Method(0, TreeConstants.in_int, new Formals(0), TreeConstants.Int, new NoExpression(0))),
-                filename);
+        Class IO_class = new Class("builtin", 0, TreeConstants.IO, TreeConstants.Object_, new Features("builtin", 0)
+                .add(new Method("builtin", 0, TreeConstants.out_string, new Formals("builtin", 0).add(new Formal(
+                        "builtin", 0, TreeConstants.arg, TreeConstants.Str)), TreeConstants.SELF_TYPE,
+                        new NoExpression("builtin", 0)))
+                .add(new Method("builtin", 0, TreeConstants.out_int, new Formals("builtin", 0).add(new Formal(
+                        "builtin", 0, TreeConstants.arg, TreeConstants.Int)), TreeConstants.SELF_TYPE,
+                        new NoExpression("builtin", 0)))
+                .add(new Method("builtin", 0, TreeConstants.in_string, new Formals("builtin", 0), TreeConstants.Str,
+                        new NoExpression("builtin", 0)))
+                .add(new Method("builtin", 0, TreeConstants.in_int, new Formals("builtin", 0), TreeConstants.Int,
+                        new NoExpression("builtin", 0))));
         return IO_class;
     }
 
@@ -143,14 +146,14 @@ public class ClassTable {
         // of class name
         // copy() : SELF_TYPE returns a copy of the object
 
-        Class Object_class = new Class(0, TreeConstants.Object_, TreeConstants.No_class,
-                new Features(0)
-                        .add(new Method(0, TreeConstants.cool_abort, new Formals(0), TreeConstants.Object_,
-                                new NoExpression(0)))
-                        .add(new Method(0, TreeConstants.type_name, new Formals(0), TreeConstants.Str,
-                                new NoExpression(0)))
-                        .add(new Method(0, TreeConstants.copy, new Formals(0), TreeConstants.SELF_TYPE,
-                                new NoExpression(0))), filename);
+        Class Object_class = new Class("builtin", 0, TreeConstants.Object_, TreeConstants.No_class, new Features(
+                "builtin", 0)
+                .add(new Method("builtin", 0, TreeConstants.cool_abort, new Formals("builtin", 0),
+                        TreeConstants.Object_, new NoExpression("builtin", 0)))
+                .add(new Method("builtin", 0, TreeConstants.type_name, new Formals("builtin", 0), TreeConstants.Str,
+                        new NoExpression("builtin", 0)))
+                .add(new Method("builtin", 0, TreeConstants.copy, new Formals("builtin", 0), TreeConstants.SELF_TYPE,
+                        new NoExpression("builtin", 0))));
         return Object_class;
     }
 
@@ -266,7 +269,7 @@ public class ClassTable {
      * @return a print stream to which the rest of the error message is to be printed.
      * 
      * */
-    public PrintStream semantError(AbstractSymbol filename, TreeNode t) {
+    public PrintStream semantError(String filename, TreeNode t) {
         errorStream.print(filename + ":" + t.getLineNumber() + ": ");
         return semantError();
     }

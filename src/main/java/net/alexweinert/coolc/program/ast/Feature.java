@@ -10,8 +10,8 @@ import net.alexweinert.coolc.program.symboltables.FeatureTable;
 public abstract class Feature extends TreeNode {
     final protected AbstractSymbol name;
 
-    protected Feature(int lineNumber, AbstractSymbol name) {
-        super(lineNumber);
+    protected Feature(String filename, int lineNumber, AbstractSymbol name) {
+        super(filename, lineNumber);
         this.name = name;
     }
 

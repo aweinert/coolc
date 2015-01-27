@@ -28,8 +28,8 @@ public class Division extends Expression {
      * @param a1
      *            initial value for e2
      */
-    public Division(int lineNumber, Expression a1, Expression a2) {
-        super(lineNumber);
+    public Division(String filename, int lineNumber, Expression a1, Expression a2) {
+        super(filename, lineNumber);
         e1 = a1;
         e2 = a2;
     }

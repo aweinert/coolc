@@ -32,8 +32,8 @@ public class FunctionCall extends Expression {
      * @param a2
      *            initial value for actual
      */
-    public FunctionCall(int lineNumber, Expression a1, AbstractSymbol a2, Expressions a3) {
-        super(lineNumber);
+    public FunctionCall(String filename, int lineNumber, Expression a1, AbstractSymbol a2, Expressions a3) {
+        super(filename, lineNumber);
         expr = a1;
         name = a2;
         actual = a3;

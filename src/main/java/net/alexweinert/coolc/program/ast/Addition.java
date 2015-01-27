@@ -28,8 +28,8 @@ public class Addition extends Expression {
      * @param a2
      *            initial value for e2
      */
-    public Addition(int lineNumber, Expression a1, Expression a2) {
-        super(lineNumber);
+    public Addition(String filename, int lineNumber, Expression a1, Expression a2) {
+        super(filename, lineNumber);
         this.e1 = a1;
         this.e2 = a2;
     }

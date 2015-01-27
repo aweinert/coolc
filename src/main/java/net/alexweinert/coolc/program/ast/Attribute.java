@@ -30,8 +30,8 @@ public class Attribute extends Feature {
      * @param a2
      *            initial value for init
      */
-    public Attribute(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
-        super(lineNumber, a1);
+    public Attribute(String filename, int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
+        super(filename, lineNumber, a1);
         this.type_decl = a2;
         this.init = a3;
     }

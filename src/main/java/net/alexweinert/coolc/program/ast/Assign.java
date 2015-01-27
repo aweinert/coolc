@@ -29,8 +29,8 @@ public class Assign extends Expression {
      * @param a1
      *            initial value for expr
      */
-    public Assign(int lineNumber, AbstractSymbol a1, Expression a2) {
-        super(lineNumber);
+    public Assign(String filename, int lineNumber, AbstractSymbol a1, Expression a2) {
+        super(filename, lineNumber);
         this.name = a1;
         this.expr = a2;
     }

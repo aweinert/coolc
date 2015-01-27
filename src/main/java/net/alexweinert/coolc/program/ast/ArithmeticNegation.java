@@ -25,8 +25,8 @@ public class ArithmeticNegation extends Expression {
      * @param a0
      *            initial value for e1
      */
-    public ArithmeticNegation(int lineNumber, Expression a1) {
-        super(lineNumber);
+    public ArithmeticNegation(String filename, int lineNumber, Expression a1) {
+        super(filename, lineNumber);
         e1 = a1;
     }
 

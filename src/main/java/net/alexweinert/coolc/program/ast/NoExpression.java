@@ -21,8 +21,8 @@ public class NoExpression extends Expression {
      * @param lineNumber
      *            the line in the source file from which this node came.
      */
-    public NoExpression(int lineNumber) {
-        super(lineNumber);
+    public NoExpression(String filename, int lineNumber) {
+        super(filename, lineNumber);
     }
 
     public void dump(PrintStream out, int n) {

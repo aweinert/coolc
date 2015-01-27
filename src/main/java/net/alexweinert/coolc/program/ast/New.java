@@ -25,8 +25,8 @@ public class New extends Expression {
      * @param a0
      *            initial value for type_name
      */
-    public New(int lineNumber, AbstractSymbol a1) {
-        super(lineNumber);
+    public New(String filename, int lineNumber, AbstractSymbol a1) {
+        super(filename, lineNumber);
         type_name = a1;
     }
 

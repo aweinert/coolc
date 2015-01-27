@@ -25,8 +25,8 @@ public class Formal extends TreeNode {
      * @param a1
      *            initial value for type_decl
      */
-    public Formal(int lineNumber, AbstractSymbol a1, AbstractSymbol a2) {
-        super(lineNumber);
+    public Formal(String filename, int lineNumber, AbstractSymbol a1, AbstractSymbol a2) {
+        super(filename, lineNumber);
         name = a1;
         type_decl = a2;
     }

@@ -28,8 +28,8 @@ public class Loop extends Expression {
      * @param a1
      *            initial value for body
      */
-    public Loop(int lineNumber, Expression a1, Expression a2) {
-        super(lineNumber);
+    public Loop(String filename, int lineNumber, Expression a1, Expression a2) {
+        super(filename, lineNumber);
         pred = a1;
         body = a2;
     }

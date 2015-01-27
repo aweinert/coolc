@@ -31,8 +31,8 @@ public class If extends Expression {
      * @param a2
      *            initial value for else_exp
      */
-    public If(int lineNumber, Expression a1, Expression a2, Expression a3) {
-        super(lineNumber);
+    public If(String filename, int lineNumber, Expression a1, Expression a2, Expression a3) {
+        super(filename, lineNumber);
         pred = a1;
         then_exp = a2;
         else_exp = a3;

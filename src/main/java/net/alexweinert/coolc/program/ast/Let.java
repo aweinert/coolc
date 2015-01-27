@@ -34,8 +34,8 @@ public class Let extends Expression {
      * @param a3
      *            initial value for body
      */
-    public Let(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3, Expression a4) {
-        super(lineNumber);
+    public Let(String filename, int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3, Expression a4) {
+        super(filename, lineNumber);
         identifier = a1;
         type_decl = a2;
         init = a3;

@@ -17,7 +17,6 @@ public class Class extends TreeNode {
     final protected AbstractSymbol name;
     final protected AbstractSymbol parent;
     final protected Features features;
-    final protected AbstractSymbol filename;
 
     /**
      * Creates "class_c" AST node.
@@ -30,15 +29,12 @@ public class Class extends TreeNode {
      *            initial value for parent
      * @param a2
      *            initial value for features
-     * @param a3
-     *            initial value for filename
      */
-    public Class(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Features a3, AbstractSymbol a4) {
-        super(lineNumber);
+    public Class(String filename, int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Features a3) {
+        super(filename, lineNumber);
         name = a1;
         parent = a2;
         features = a3;
-        filename = a4;
     }
 
     public void typecheck(ClassTable classTable, FeatureTable featureTable) {
@@ -53,7 +49,7 @@ public class Class extends TreeNode {
         dump_AbstractSymbol(out, n + 2, name);
         dump_AbstractSymbol(out, n + 2, parent);
         features.dump(out, n + 2);
-        dump_AbstractSymbol(out, n + 2, filename);
+        out.print(Utilities.pad(n + 2) + this.getFilename());
     }
 
     public void dump_with_types(PrintStream out, int n) {
@@ -62,7 +58,7 @@ public class Class extends TreeNode {
         dump_AbstractSymbol(out, n + 2, name);
         dump_AbstractSymbol(out, n + 2, parent);
         out.print(Utilities.pad(n + 2) + "\"");
-        Utilities.printEscapedString(out, filename.getString());
+        Utilities.printEscapedString(out, this.getFilename());
         out.println("\"\n" + Utilities.pad(n + 2) + "(");
         for (final Feature currentFeature : this.features) {
             currentFeature.dump_with_types(out, n + 2);
@@ -84,10 +80,6 @@ public class Class extends TreeNode {
 
     public AbstractSymbol getParent() {
         return parent;
-    }
-
-    public AbstractSymbol getFilename() {
-        return filename;
     }
 
     public Features getFeatures() {

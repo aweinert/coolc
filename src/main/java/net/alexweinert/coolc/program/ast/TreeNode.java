@@ -22,6 +22,8 @@ import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 
 public abstract class TreeNode {
+    /** the name of the file this node came from */
+    private final String filename;
     /** line in the source file from which this node came. */
     private final int lineNumber;
 
@@ -31,7 +33,8 @@ public abstract class TreeNode {
      * @param lineNumber
      *            The line in the source file from which this node came.
      * */
-    protected TreeNode(int lineNumber) {
+    protected TreeNode(String filename, int lineNumber) {
+        this.filename = filename;
         this.lineNumber = lineNumber;
     }
 
@@ -42,6 +45,10 @@ public abstract class TreeNode {
      * */
     public int getLineNumber() {
         return lineNumber;
+    }
+
+    public String getFilename() {
+        return this.filename;
     }
 
     /**

@@ -11,20 +11,20 @@ import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
 public class Features extends ListNode<Feature> {
-    public Features(int lineNumber, Collection<Feature> elements) {
-        super(lineNumber, elements);
+    public Features(String filename, int lineNumber, Collection<Feature> elements) {
+        super(filename, lineNumber, elements);
     }
 
     /** Creates an empty "Features" list */
-    public Features(int lineNumber) {
-        super(lineNumber);
+    public Features(String filename, int lineNumber) {
+        super(filename, lineNumber);
     }
 
     @Override
     public Features add(Feature node) {
         final Collection<Feature> newElements = this.copyElements();
         newElements.add(node);
-        return new Features(this.getLineNumber(), newElements);
+        return new Features(this.getFilename(), this.getLineNumber(), newElements);
     }
 
     @Override

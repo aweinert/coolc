@@ -11,20 +11,20 @@ import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
 public class Cases extends ListNode<Case> {
-    protected Cases(int lineNumber, Collection<Case> elements) {
-        super(lineNumber, elements);
+    protected Cases(String filename, int lineNumber, Collection<Case> elements) {
+        super(filename, lineNumber, elements);
     }
 
     /** Creates an empty "Cases" list */
-    public Cases(int lineNumber) {
-        super(lineNumber);
+    public Cases(String filename, int lineNumber) {
+        super(filename, lineNumber);
     }
 
     @Override
     public Cases add(Case node) {
         final Collection<Case> newElements = this.copyElements();
         newElements.add(node);
-        return new Cases(this.getLineNumber(), newElements);
+        return new Cases(this.getFilename(), this.getLineNumber(), newElements);
     }
 
     @Override

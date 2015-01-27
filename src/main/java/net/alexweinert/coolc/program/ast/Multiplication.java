@@ -28,8 +28,8 @@ public class Multiplication extends Expression {
      * @param a1
      *            initial value for e2
      */
-    public Multiplication(int lineNumber, Expression a1, Expression a2) {
-        super(lineNumber);
+    public Multiplication(String filename, int lineNumber, Expression a1, Expression a2) {
+        super(filename, lineNumber);
         e1 = a1;
         e2 = a2;
     }

@@ -9,8 +9,8 @@ import net.alexweinert.coolc.program.symboltables.FeatureTable;
 
 /** Defines simple phylum Expression */
 public abstract class Expression extends TreeNode {
-    protected Expression(int lineNumber) {
-        super(lineNumber);
+    protected Expression(String filename, int lineNumber) {
+        super(filename, lineNumber);
     }
 
     final private AbstractSymbol type = null;

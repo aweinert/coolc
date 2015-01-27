@@ -13,20 +13,20 @@ import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
  */
 public class Classes extends ListNode<Class> {
 
-    public Classes(int lineNumber, Collection<Class> elements) {
-        super(lineNumber, elements);
+    public Classes(String filename, int lineNumber, Collection<Class> elements) {
+        super(filename, lineNumber, elements);
     }
 
     /** Creates an empty "Classes" list */
-    public Classes(int lineNumber) {
-        super(lineNumber);
+    public Classes(String filename, int lineNumber) {
+        super(filename, lineNumber);
     }
 
     @Override
     public Classes add(Class node) {
         final Collection<Class> newElements = this.copyElements();
         newElements.add(node);
-        return new Classes(this.getLineNumber(), newElements);
+        return new Classes(this.getFilename(), this.getLineNumber(), newElements);
     }
 
     @Override

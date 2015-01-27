@@ -26,8 +26,8 @@ public class Program extends TreeNode {
      * @param classes
      *            initial value for classes
      */
-    public Program(int lineNumber, Classes classes) {
-        super(lineNumber);
+    public Program(String filename, int lineNumber, Classes classes) {
+        super(filename, lineNumber);
         this.classes = classes;
     }
 
@@ -118,8 +118,8 @@ public class Program extends TreeNode {
         for (Class definedClass : classTable.getClasses()) {
             if (!reachable.contains(definedClass.getIdentifier())) {
                 String errorString = String.format(
-                        "Class %s, or an ancestor of %s, is involved in an inheritance cycle.", definedClass.getIdentifier(),
-                        definedClass.getIdentifier());
+                        "Class %s, or an ancestor of %s, is involved in an inheritance cycle.",
+                        definedClass.getIdentifier(), definedClass.getIdentifier());
                 classTable.semantError((Class) definedClass).println(errorString);
             }
         }

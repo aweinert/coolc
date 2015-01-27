@@ -34,8 +34,8 @@ public class Method extends Feature {
      * @param a3
      *            initial value for expr
      */
-    public Method(int lineNumber, AbstractSymbol a1, Formals a2, AbstractSymbol a3, Expression a4) {
-        super(lineNumber, a1);
+    public Method(String filename, int lineNumber, AbstractSymbol a1, Formals a2, AbstractSymbol a3, Expression a4) {
+        super(filename, lineNumber, a1);
         formals = a2;
         return_type = a3;
         expr = a4;
@@ -62,12 +62,12 @@ public class Method extends Feature {
 
     @Override
     public void typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        FeatureTable extendedFeatureTable = featureTable.copyAndExtend(enclosingClass.getIdentifier(), TreeConstants.self,
-                TreeConstants.SELF_TYPE);
+        FeatureTable extendedFeatureTable = featureTable.copyAndExtend(enclosingClass.getIdentifier(),
+                TreeConstants.self, TreeConstants.SELF_TYPE);
 
         for (final Formal currentFormal : this.formals) {
-            extendedFeatureTable = extendedFeatureTable.copyAndExtend(enclosingClass.getIdentifier(), currentFormal.name,
-                    currentFormal.type_decl);
+            extendedFeatureTable = extendedFeatureTable.copyAndExtend(enclosingClass.getIdentifier(),
+                    currentFormal.name, currentFormal.type_decl);
         }
 
         AbstractSymbol bodyType = this.expr.typecheck(enclosingClass, classTable, extendedFeatureTable);

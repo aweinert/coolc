@@ -25,8 +25,8 @@ public class StringConst extends Expression {
      * @param a0
      *            initial value for token
      */
-    public StringConst(int lineNumber, AbstractSymbol a1) {
-        super(lineNumber);
+    public StringConst(String filename, int lineNumber, AbstractSymbol a1) {
+        super(filename, lineNumber);
         token = a1;
     }
 

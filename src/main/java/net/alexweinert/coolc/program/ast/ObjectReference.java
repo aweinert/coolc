@@ -34,8 +34,8 @@ public class ObjectReference extends Expression {
      * @param a0
      *            initial value for name
      */
-    public ObjectReference(int lineNumber, AbstractSymbol a1) {
-        super(lineNumber);
+    public ObjectReference(String filename, int lineNumber, AbstractSymbol a1) {
+        super(filename, lineNumber);
         name = a1;
     }
 
@@ -53,7 +53,8 @@ public class ObjectReference extends Expression {
 
     @Override
     protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        Map<AbstractSymbol, AbstractSymbol> attributeTypes = featureTable.getAttributeTypes(enclosingClass.getIdentifier());
+        Map<AbstractSymbol, AbstractSymbol> attributeTypes = featureTable.getAttributeTypes(enclosingClass
+                .getIdentifier());
         if (!attributeTypes.containsKey(this.name)) {
             String errorString = String.format("Undeclared identifier %s.", this.name);
             classTable.semantError(enclosingClass.getFilename(), this).println(errorString);

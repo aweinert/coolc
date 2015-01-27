@@ -29,8 +29,8 @@ public class Typecase extends Expression {
      * @param a1
      *            initial value for cases
      */
-    public Typecase(int lineNumber, Expression a1, Cases a2) {
-        super(lineNumber);
+    public Typecase(String filename, int lineNumber, Expression a1, Cases a2) {
+        super(filename, lineNumber);
         expr = a1;
         cases = a2;
     }

@@ -28,8 +28,8 @@ public class Case extends TreeNode {
      * @param a2
      *            initial value for expr
      */
-    public Case(int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
-        super(lineNumber);
+    public Case(String filename, int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
+        super(filename, lineNumber);
         this.name = a1;
         this.type_decl = a2;
         this.expr = a3;
