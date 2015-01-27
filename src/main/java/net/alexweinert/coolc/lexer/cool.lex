@@ -35,7 +35,7 @@ import net.alexweinert.coolc.program.symboltables.*;
 
     private AbstractSymbol filename;
 
-    void set_filename(String fname) {
+    public void set_filename(String fname) {
 		filename = AbstractTable.stringtable.addString(fname);
     }
 
