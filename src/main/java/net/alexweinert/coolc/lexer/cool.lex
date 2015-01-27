@@ -33,13 +33,13 @@ import net.alexweinert.coolc.program.symboltables.*;
 		return curr_lineno;
     }
 
-    private AbstractSymbol filename;
+    private String filename;
 
     public void set_filename(String fname) {
-		filename = AbstractTable.stringtable.addString(fname);
+		filename = fname;
     }
 
-    public AbstractSymbol curr_filename() {
+    public String curr_filename() {
 		return filename;
     }
 
