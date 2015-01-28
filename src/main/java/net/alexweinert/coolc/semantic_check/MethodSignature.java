@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 
-public class MethodSignature {
+class MethodSignature {
     private AbstractSymbol returnType;
     private AbstractSymbol methodIdentifier;
     private List<AbstractSymbol> argumentTypes;

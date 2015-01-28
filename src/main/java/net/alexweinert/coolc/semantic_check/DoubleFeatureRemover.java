@@ -15,7 +15,7 @@ import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 
-public class DoubleFeatureRemover extends ASTVisitor {
+class DoubleFeatureRemover extends ASTVisitor {
     private List<Class> classes = new LinkedList<>();
     private Map<AbstractSymbol, List<Attribute>> attributes = new HashMap<>();
     private Map<AbstractSymbol, List<Method>> methods = new HashMap<>();

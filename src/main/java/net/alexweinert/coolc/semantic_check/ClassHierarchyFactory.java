@@ -6,7 +6,7 @@ import net.alexweinert.coolc.program.ast.TreeNode;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.AbstractTable;
 
-public class ClassHierarchyFactory extends ASTVisitor {
+class ClassHierarchyFactory extends ASTVisitor {
     final private ClassHierarchyBuilder builder = new ClassHierarchyBuilder();
 
     public static ClassHierarchy buildHierarchy(TreeNode ast) {

@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 
-public class ClassInterface {
+class ClassInterface {
     final private AbstractSymbol classIdentifier;
     final private List<MethodSignature> methods;
 
