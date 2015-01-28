@@ -86,4 +86,21 @@ public class Class extends TreeNode {
         return features;
     }
 
+    public Attribute getAttribute(AbstractSymbol identifier) {
+        for (Feature feature : this.features) {
+            if (feature.getName().equals(identifier) && feature instanceof Attribute) {
+                return (Attribute) feature;
+            }
+        }
+        return null;
+    }
+
+    public Method getMethod(AbstractSymbol identifier) {
+        for (Feature feature : this.features) {
+            if (feature.getName().equals(identifier) && feature instanceof Method) {
+                return (Method) feature;
+            }
+        }
+        return null;
+    }
 }
