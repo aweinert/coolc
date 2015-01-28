@@ -44,6 +44,20 @@ public class Program extends TreeNode {
         }
     }
 
+    /**
+     * @param identifier
+     *            Some class identifier
+     * @return The node of a class with the given name, if there exists one. Null if none exists.
+     */
+    public Class getClass(AbstractSymbol identifier) {
+        for (Class classNode : this.classes) {
+            if (classNode.getIdentifier().equals(identifier)) {
+                return classNode;
+            }
+        }
+        return null;
+    }
+
     /** Checks the program for semantic correctness */
     public void semant() {
         // Construct the class tree and check for errors in the form of it
