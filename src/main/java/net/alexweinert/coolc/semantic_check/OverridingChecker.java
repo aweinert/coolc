@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.program.ast.Attribute;
 import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Classes;
@@ -93,6 +94,15 @@ class OverridingChecker extends ASTVisitor {
     public void visitProgramPostorder(Program program) {
         final Classes newClasses = new Classes(program.getFilename(), program.getLineNumber(), this.classes);
         this.resultingProgram = new Program(program.getFilename(), program.getLineNumber(), newClasses);
+    }
+
+    /**
+     * Checks that no class overrides its parent's attributes and that each class only overrides its parent's methods in
+     * the allowed way (i.e., argument and return types match)
+     */
+    public static Program checkOverriding(Program program, Output out) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
