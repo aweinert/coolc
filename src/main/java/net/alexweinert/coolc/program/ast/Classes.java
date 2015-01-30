@@ -30,6 +30,13 @@ public class Classes extends ListNode<Class> {
     }
 
     @Override
+    public Classes remove(Class node) {
+        final Collection<Class> newElements = this.copyElements();
+        newElements.remove(node);
+        return new Classes(this.getFilename(), this.getLineNumber(), newElements);
+    }
+
+    @Override
     public void acceptVisitor(ASTVisitor visitor) {
         visitor.visitClassesPreorder(this);
         final Iterator<Class> iterator = this.iterator();

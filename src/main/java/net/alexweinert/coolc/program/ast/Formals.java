@@ -28,6 +28,13 @@ public class Formals extends ListNode<Formal> {
     }
 
     @Override
+    public Formals remove(Formal node) {
+        final Collection<Formal> newElements = this.copyElements();
+        newElements.remove(node);
+        return new Formals(this.getFilename(), this.getLineNumber(), newElements);
+    }
+
+    @Override
     public void acceptVisitor(ASTVisitor visitor) {
         visitor.visitFormalsPreorder(this);
         final Iterator<Formal> iterator = this.iterator();

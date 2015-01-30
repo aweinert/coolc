@@ -28,6 +28,13 @@ public class Expressions extends ListNode<Expression> {
     }
 
     @Override
+    public Expressions remove(Expression node) {
+        final Collection<Expression> newElements = this.copyElements();
+        newElements.remove(node);
+        return new Expressions(this.getFilename(), this.getLineNumber(), newElements);
+    }
+
+    @Override
     public void acceptVisitor(ASTVisitor visitor) {
         visitor.visitExpressionsPreorder(this);
         final Iterator<Expression> iterator = this.iterator();

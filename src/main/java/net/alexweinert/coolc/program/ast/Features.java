@@ -28,6 +28,13 @@ public class Features extends ListNode<Feature> {
     }
 
     @Override
+    public Features remove(Feature node) {
+        final Collection<Feature> newElements = this.copyElements();
+        newElements.remove(node);
+        return new Features(this.getFilename(), this.getLineNumber(), newElements);
+    }
+
+    @Override
     public void acceptVisitor(ASTVisitor visitor) {
         visitor.visitFeaturesPreorder(this);
         final Iterator<Feature> iterator = this.iterator();

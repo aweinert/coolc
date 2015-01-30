@@ -56,6 +56,13 @@ abstract class ListNode<T extends TreeNode> extends TreeNode implements Iterable
      * */
     public abstract ListNode<T> add(T node);
 
+    /**
+     * @param node
+     *            A node to remove
+     * @return A new ListNode with one occurrence of the given node removed
+     */
+    public abstract ListNode<T> remove(T node);
+
     public int size() {
         return this.elements.size();
     }

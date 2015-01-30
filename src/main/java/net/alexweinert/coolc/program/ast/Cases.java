@@ -1,6 +1,7 @@
 package net.alexweinert.coolc.program.ast;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
@@ -24,6 +25,13 @@ public class Cases extends ListNode<Case> {
     public Cases add(Case node) {
         final Collection<Case> newElements = this.copyElements();
         newElements.add(node);
+        return new Cases(this.getFilename(), this.getLineNumber(), newElements);
+    }
+
+    @Override
+    public Cases remove(Case node) {
+        final Collection<Case> newElements = this.copyElements();
+        newElements.remove(node);
         return new Cases(this.getFilename(), this.getLineNumber(), newElements);
     }
 
