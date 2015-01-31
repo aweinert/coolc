@@ -16,7 +16,9 @@ public class Main {
         final Program program;
         try {
             final Reader reader = new FileReader(args[0]);
-            final Parser parser = new Parser(new Lexer(reader));
+            final Lexer lexer = new Lexer(reader);
+            lexer.set_filename(args[0]);
+            final Parser parser = new Parser(lexer);
             program = (Program) parser.parse().value;
             reader.close();
         } catch (Throwable e) {
