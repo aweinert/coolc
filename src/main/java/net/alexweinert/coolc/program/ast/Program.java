@@ -2,8 +2,8 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -221,6 +221,10 @@ public class Program extends TreeNode {
         visitor.visitProgramPreorder(this);
         this.classes.acceptVisitor(visitor);
         visitor.visitProgramPostorder(this);
+    }
+
+    public Classes getClasses() {
+        return new LinkedList<>(this.classes);
     }
 
 }
