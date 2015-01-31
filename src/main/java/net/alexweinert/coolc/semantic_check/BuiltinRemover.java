@@ -21,7 +21,7 @@ class BuiltinRemover {
     }
 
     private static Program removeBuiltinClass(Program program, String identifier, Output out) {
-        final Class classNode = program.getClass(AbstractTable.stringtable.addString("Object"));
+        final Class classNode = program.getClass(AbstractTable.stringtable.addString(identifier));
         if (classNode != null) {
             final String errorString = String.format("Redefinition of builtin class %s at %s:%d", identifier,
                     classNode.getFilename(), classNode.getLineNumber());
