@@ -224,7 +224,7 @@ public class Program extends TreeNode {
     }
 
     public Classes getClasses() {
-        return new LinkedList<>(this.classes);
+        return this.classes;
     }
 
 }
