@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mvn exec:java -Dexec.mainClass="net.alexweinert.coolc.Main" -Dexec.args="$@"
