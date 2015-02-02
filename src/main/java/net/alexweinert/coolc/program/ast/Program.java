@@ -227,4 +227,34 @@ public class Program extends TreeNode {
         return this.classes;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((classes == null) ? 0 : classes.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Program other = (Program) obj;
+        if (classes == null) {
+            if (other.classes != null) {
+                return false;
+            }
+        } else if (!classes.equals(other.classes)) {
+            return false;
+        }
+        return true;
+    }
+
 }

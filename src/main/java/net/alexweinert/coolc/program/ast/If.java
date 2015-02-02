@@ -79,4 +79,50 @@ public class If extends Expression {
         visitor.visitIfPostorder(this);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((else_exp == null) ? 0 : else_exp.hashCode());
+        result = prime * result + ((pred == null) ? 0 : pred.hashCode());
+        result = prime * result + ((then_exp == null) ? 0 : then_exp.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        If other = (If) obj;
+        if (else_exp == null) {
+            if (other.else_exp != null) {
+                return false;
+            }
+        } else if (!else_exp.equals(other.else_exp)) {
+            return false;
+        }
+        if (pred == null) {
+            if (other.pred != null) {
+                return false;
+            }
+        } else if (!pred.equals(other.pred)) {
+            return false;
+        }
+        if (then_exp == null) {
+            if (other.then_exp != null) {
+                return false;
+            }
+        } else if (!then_exp.equals(other.then_exp)) {
+            return false;
+        }
+        return true;
+    }
+
 }

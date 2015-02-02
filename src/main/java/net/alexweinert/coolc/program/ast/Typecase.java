@@ -86,4 +86,42 @@ public class Typecase extends Expression {
         visitor.visitTypecasePostorder(this);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((cases == null) ? 0 : cases.hashCode());
+        result = prime * result + ((expr == null) ? 0 : expr.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Typecase other = (Typecase) obj;
+        if (cases == null) {
+            if (other.cases != null) {
+                return false;
+            }
+        } else if (!cases.equals(other.cases)) {
+            return false;
+        }
+        if (expr == null) {
+            if (other.expr != null) {
+                return false;
+            }
+        } else if (!expr.equals(other.expr)) {
+            return false;
+        }
+        return true;
+    }
+
 }

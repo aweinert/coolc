@@ -96,4 +96,50 @@ public class Method extends Feature {
         this.expr.acceptVisitor(visitor);
         visitor.visitMethodPostorder(this);
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((expr == null) ? 0 : expr.hashCode());
+        result = prime * result + ((formals == null) ? 0 : formals.hashCode());
+        result = prime * result + ((return_type == null) ? 0 : return_type.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Method other = (Method) obj;
+        if (expr == null) {
+            if (other.expr != null) {
+                return false;
+            }
+        } else if (!expr.equals(other.expr)) {
+            return false;
+        }
+        if (formals == null) {
+            if (other.formals != null) {
+                return false;
+            }
+        } else if (!formals.equals(other.formals)) {
+            return false;
+        }
+        if (return_type == null) {
+            if (other.return_type != null) {
+                return false;
+            }
+        } else if (!return_type.equals(other.return_type)) {
+            return false;
+        }
+        return true;
+    }
 }

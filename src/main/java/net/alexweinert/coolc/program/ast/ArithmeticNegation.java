@@ -61,4 +61,34 @@ public class ArithmeticNegation extends Expression {
         visitor.visitArithmeticNegationPostOrder(this);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((e1 == null) ? 0 : e1.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        ArithmeticNegation other = (ArithmeticNegation) obj;
+        if (e1 == null) {
+            if (other.e1 != null) {
+                return false;
+            }
+        } else if (!e1.equals(other.e1)) {
+            return false;
+        }
+        return true;
+    }
+
 }

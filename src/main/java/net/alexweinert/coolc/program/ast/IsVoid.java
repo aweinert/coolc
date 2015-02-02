@@ -58,4 +58,34 @@ public class IsVoid extends Expression {
 
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((e1 == null) ? 0 : e1.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        IsVoid other = (IsVoid) obj;
+        if (e1 == null) {
+            if (other.e1 != null) {
+                return false;
+            }
+        } else if (!e1.equals(other.e1)) {
+            return false;
+        }
+        return true;
+    }
+
 }

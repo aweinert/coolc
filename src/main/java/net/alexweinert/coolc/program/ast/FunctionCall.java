@@ -123,4 +123,50 @@ public class FunctionCall extends Expression {
         return name;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((actual == null) ? 0 : actual.hashCode());
+        result = prime * result + ((expr == null) ? 0 : expr.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        FunctionCall other = (FunctionCall) obj;
+        if (actual == null) {
+            if (other.actual != null) {
+                return false;
+            }
+        } else if (!actual.equals(other.actual)) {
+            return false;
+        }
+        if (expr == null) {
+            if (other.expr != null) {
+                return false;
+            }
+        } else if (!expr.equals(other.expr)) {
+            return false;
+        }
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        return true;
+    }
+
 }

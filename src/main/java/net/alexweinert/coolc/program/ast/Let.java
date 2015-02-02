@@ -100,4 +100,58 @@ public class Let extends Expression {
         return type_decl;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((body == null) ? 0 : body.hashCode());
+        result = prime * result + ((identifier == null) ? 0 : identifier.hashCode());
+        result = prime * result + ((init == null) ? 0 : init.hashCode());
+        result = prime * result + ((type_decl == null) ? 0 : type_decl.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Let other = (Let) obj;
+        if (body == null) {
+            if (other.body != null) {
+                return false;
+            }
+        } else if (!body.equals(other.body)) {
+            return false;
+        }
+        if (identifier == null) {
+            if (other.identifier != null) {
+                return false;
+            }
+        } else if (!identifier.equals(other.identifier)) {
+            return false;
+        }
+        if (init == null) {
+            if (other.init != null) {
+                return false;
+            }
+        } else if (!init.equals(other.init)) {
+            return false;
+        }
+        if (type_decl == null) {
+            if (other.type_decl != null) {
+                return false;
+            }
+        } else if (!type_decl.equals(other.type_decl)) {
+            return false;
+        }
+        return true;
+    }
+
 }

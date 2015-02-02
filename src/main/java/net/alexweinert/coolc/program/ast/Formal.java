@@ -56,4 +56,42 @@ public class Formal extends TreeNode {
     public AbstractSymbol getDeclaredType() {
         return this.type_decl;
     }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((type_decl == null) ? 0 : type_decl.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Formal other = (Formal) obj;
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        if (type_decl == null) {
+            if (other.type_decl != null) {
+                return false;
+            }
+        } else if (!type_decl.equals(other.type_decl)) {
+            return false;
+        }
+        return true;
+    }
 }
