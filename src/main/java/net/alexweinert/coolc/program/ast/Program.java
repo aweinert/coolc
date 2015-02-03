@@ -257,4 +257,8 @@ public class Program extends TreeNode {
         return true;
     }
 
+    public Program setClasses(Classes newClasses) {
+        return new Program(this.getFilename(), this.getLineNumber(), newClasses);
+    }
+
 }

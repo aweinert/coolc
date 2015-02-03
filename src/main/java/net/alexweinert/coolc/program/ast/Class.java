@@ -149,4 +149,8 @@ public class Class extends TreeNode {
         }
         return true;
     }
+
+    public Class setParent(AbstractSymbol newParent) {
+        return new Class(this.getFilename(), this.getLineNumber(), this.name, newParent, this.features);
+    }
 }
