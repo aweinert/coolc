@@ -5,12 +5,12 @@ import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.AbstractTable;
 
-class BuiltinRemover {
+class BuiltinRedefinitionRemover {
 
     /**
      * Removes the redefinitions of builtin classes from the program, if they exist
      */
-    public static Program removeBuiltinClasses(Program program, ISemanticErrorReporter out) {
+    public static Program removeBuiltinRedefinition(Program program, ISemanticErrorReporter out) {
         final Program withoutObjectClass = removeBuiltinClass(program, AbstractTable.stringtable.addString("Object"),
                 out);
         final Program withoutBoolClass = removeBuiltinClass(program, AbstractTable.stringtable.addString("Bool"), out);
