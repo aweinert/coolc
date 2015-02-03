@@ -21,10 +21,23 @@ class DoubleFeatureRemover extends ASTVisitor {
     private Map<AbstractSymbol, List<Method>> methods = new HashMap<>();
     private Program containingProgram;
 
-    private final DoubleFeatureErrorReporter error = new DoubleFeatureErrorReporter();
+    private final ISemanticErrorReporter error;
 
-    public static Program removeDoubleFeatures(Program program) {
-        final DoubleFeatureRemover remover = new DoubleFeatureRemover();
+    DoubleFeatureRemover(ISemanticErrorReporter error) {
+        this.error = error;
+    }
+
+    DoubleFeatureRemover(List<Class> classes, Map<AbstractSymbol, List<Attribute>> attributes,
+            Map<AbstractSymbol, List<Method>> methods, Program containingProgram, ISemanticErrorReporter error) {
+        this.classes = classes;
+        this.attributes = attributes;
+        this.methods = methods;
+        this.containingProgram = containingProgram;
+        this.error = error;
+    }
+
+    public static Program removeDoubleFeatures(Program program, ISemanticErrorReporter error) {
+        final DoubleFeatureRemover remover = new DoubleFeatureRemover(error);
         program.acceptVisitor(remover);
         return remover.containingProgram;
     }
@@ -41,14 +54,14 @@ class DoubleFeatureRemover extends ASTVisitor {
         final List<Feature> featuresList = new LinkedList<>();
         for (List<Attribute> attributes : this.attributes.values()) {
             if (attributes.size() > 1) {
-                error.multipleAttributes(classNode.getIdentifier(), attributes);
+                error.reportMultipleAttributes(classNode, attributes);
             }
             featuresList.add(attributes.get(0));
         }
         this.attributes.clear();
         for (List<Method> methods : this.methods.values()) {
             if (methods.size() > 1) {
-                error.multipleMethods(classNode.getIdentifier(), methods);
+                error.reportMultipleMethods(classNode, methods);
             }
             featuresList.add(methods.get(0));
         }

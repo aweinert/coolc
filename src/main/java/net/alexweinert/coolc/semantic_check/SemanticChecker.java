@@ -5,9 +5,10 @@ import net.alexweinert.coolc.program.ast.Program;
 
 public class SemanticChecker {
     public static Program checkSemantics(Program program, Output out) {
+        final SemanticErrorReporter error = new SemanticErrorReporter(out);
 
-        program = BuiltinRemover.removeBuiltinClasses(program, out);
-        program = BuiltinInheritanceChecker.checkBuiltinInheritance(program, out);
+        program = BuiltinRemover.removeBuiltinClasses(program, error);
+        program = BuiltinInheritanceChecker.checkBuiltinInheritance(program, error);
         program = ParentDefinednessChecker.checkParentDefinedness(program, out);
         program = CircularInheritanceRemover.removeCircularInheritance(program, out);
         program = InterfaceChecker.checkInterfaces(program, out);
