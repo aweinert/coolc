@@ -32,18 +32,19 @@ class BuiltinInheritanceChecker extends ASTVisitor {
         final boolean inheritsBool = classNode.getParent().equals(AbstractTable.stringtable.addString("Bool"));
         final boolean inheritsString = classNode.getParent().equals(AbstractTable.stringtable.addString("String"));
         final boolean inheritsIO = classNode.getParent().equals(AbstractTable.stringtable.addString("IO"));
+        final String formatString = "Class %s inherits from base class %s at %s:%d";
         if (inheritsInt) {
-            out.error(String.format("Class %s inherits from base class Int at %s:%d", classNode.getIdentifier(),
-                    classNode.getFilename(), classNode.getLineNumber()));
+            out.error(String.format(formatString, classNode.getIdentifier(), "Int", classNode.getFilename(),
+                    classNode.getLineNumber()));
         } else if (inheritsBool) {
-            out.error(String.format("Class %s inherits from base class Bool at %s:%d", classNode.getIdentifier(),
-                    classNode.getFilename(), classNode.getLineNumber()));
+            out.error(String.format(formatString, classNode.getIdentifier(), "Bool", classNode.getFilename(),
+                    classNode.getLineNumber()));
         } else if (inheritsString) {
-            out.error(String.format("Class %s inherits from base class String at %s:%d", classNode.getIdentifier(),
-                    classNode.getFilename(), classNode.getLineNumber()));
+            out.error(String.format(formatString, classNode.getIdentifier(), "String", classNode.getFilename(),
+                    classNode.getLineNumber()));
         } else if (inheritsIO) {
-            out.error(String.format("Class %s inherits from base class IO at %s:%d", classNode.getIdentifier(),
-                    classNode.getFilename(), classNode.getLineNumber()));
+            out.error(String.format(formatString, classNode.getIdentifier(), "IO", classNode.getFilename(),
+                    classNode.getLineNumber()));
         }
 
         final boolean forbiddenInheritance = inheritsInt || inheritsBool || inheritsString || inheritsIO;
