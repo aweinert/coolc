@@ -25,7 +25,7 @@ public class IntTable extends AbstractTable<Integer> {
      * 
      * @see IntSymbol
      * */
-    protected AbstractSymbol getNewSymbol(String s, int index) {
+    protected AbstractSymbol<Integer> getNewSymbol(String s, int index) {
         return new IntSymbol(s, index);
     }
 
@@ -36,12 +36,12 @@ public class IntTable extends AbstractTable<Integer> {
      *            the integer to add
      * @return the symbol for the integer i
      * */
-    public AbstractSymbol addInt(int i) {
+    public AbstractSymbol<Integer> addInt(int i) {
         final String s = Integer.toString(i);
-        AbstractSymbol sym = null;
+        AbstractSymbol<Integer> sym = null;
         for (int index = 0; index < tbl.size(); index++) {
             try {
-                sym = (AbstractSymbol) tbl.elementAt(index);
+                sym = (AbstractSymbol<Integer>) tbl.elementAt(index);
             } catch (ArrayIndexOutOfBoundsException ex) {
                 Utilities.fatalError("Unexpected exception: " + ex);
             }
@@ -54,7 +54,7 @@ public class IntTable extends AbstractTable<Integer> {
         return sym;
     }
 
-    public AbstractSymbol addInt(String s) {
+    public AbstractSymbol<Integer> addInt(String s) {
         return this.addInt(Integer.parseInt(s));
     }
 
