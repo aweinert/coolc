@@ -35,19 +35,9 @@ public class IdTable extends AbstractTable<String> {
      * @return the symbol for the string s
      * */
     public AbstractSymbol<String> addString(String s) {
-        AbstractSymbol<String> sym = null;
-        for (int i = 0; i < tbl.size(); i++) {
-            try {
-                sym = (AbstractSymbol<String>) tbl.elementAt(i);
-            } catch (ArrayIndexOutOfBoundsException ex) {
-                Utilities.fatalError("Unexpected exception: " + ex);
-            }
-            if (sym.equalString(s)) {
-                return sym;
-            }
+        if (!this.tbl.containsKey(s)) {
+            this.tbl.put(s, getNewSymbol(s, tbl.size()));
         }
-        sym = getNewSymbol(s, tbl.size());
-        tbl.addElement(sym);
-        return sym;
+        return this.tbl.get(s);
     }
 }

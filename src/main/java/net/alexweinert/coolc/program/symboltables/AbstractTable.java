@@ -15,8 +15,8 @@ package net.alexweinert.coolc.program.symboltables;
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
 
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.alexweinert.coolc.program.Utilities;
 
@@ -73,7 +73,7 @@ public abstract class AbstractTable<T> {
     public static IntTable inttable = new IntTable();
 
     /** Vector of table entries */
-    protected Vector<AbstractSymbol<T>> tbl = new Vector<>();
+    protected Map<T, AbstractSymbol<T>> tbl = new HashMap<>();
 
     /** Creates a new symbol of the appropriate type */
     protected abstract AbstractSymbol<T> getNewSymbol(String s, int index);
@@ -89,33 +89,16 @@ public abstract class AbstractTable<T> {
      * */
     public AbstractSymbol<T> lookup(String s) {
         AbstractSymbol<T> sym = null;
-        for (int i = 0; i < tbl.size(); i++) {
-            try {
-                sym = (AbstractSymbol<T>) tbl.elementAt(i);
-            } catch (ArrayIndexOutOfBoundsException ex) {
-                Utilities.fatalError("Unexpected exception: " + ex);
-            }
-            if (sym.equalString(s)) {
-                return sym;
-            }
+        if (this.tbl.containsKey(s)) {
+            return this.tbl.get(s);
+        } else {
+            Utilities.fatalError("String table lookup failed on string: " + s);
+            return null;
         }
-        Utilities.fatalError("String table lookup failed on string: " + s);
-        return null;
     }
 
     /** Produces a printable representation of the string table */
     public String toString() {
-        String res = "[\n";
-        AbstractSymbol<T> sym = null;
-        for (int i = 0; i < tbl.size(); i++) {
-            try {
-                sym = (AbstractSymbol<T>) tbl.elementAt(i);
-            } catch (ArrayIndexOutOfBoundsException ex) {
-                Utilities.fatalError("Unexpected exception: " + ex);
-            }
-            res += "  " + sym.toString() + "\n";
-        }
-        res += "]\n";
-        return res;
+        return this.tbl.toString();
     }
 }

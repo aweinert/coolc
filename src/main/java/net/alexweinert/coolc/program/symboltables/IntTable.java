@@ -37,21 +37,10 @@ public class IntTable extends AbstractTable<Integer> {
      * @return the symbol for the integer i
      * */
     public AbstractSymbol<Integer> addInt(int i) {
-        final String s = Integer.toString(i);
-        AbstractSymbol<Integer> sym = null;
-        for (int index = 0; index < tbl.size(); index++) {
-            try {
-                sym = (AbstractSymbol<Integer>) tbl.elementAt(index);
-            } catch (ArrayIndexOutOfBoundsException ex) {
-                Utilities.fatalError("Unexpected exception: " + ex);
-            }
-            if (sym.equalString(s)) {
-                return sym;
-            }
+        if (!this.tbl.containsKey(i)) {
+            this.tbl.put(i, getNewSymbol(Integer.toString(i), tbl.size()));
         }
-        sym = getNewSymbol(s, tbl.size());
-        tbl.addElement(sym);
-        return sym;
+        return this.tbl.get(i);
     }
 
     public AbstractSymbol<Integer> addInt(String s) {
@@ -67,14 +56,8 @@ public class IntTable extends AbstractTable<Integer> {
      *            the output stream
      * */
     public void codeStringTable(int intclasstag, PrintStream s) {
-        IntSymbol sym = null;
-        for (int i = tbl.size() - 1; i >= 0; i--) {
-            try {
-                sym = (IntSymbol) tbl.elementAt(i);
-            } catch (ArrayIndexOutOfBoundsException ex) {
-                Utilities.fatalError("Unexpected exception: " + ex);
-            }
-            sym.codeDef(intclasstag, s);
+        for (AbstractSymbol<Integer> sym : this.tbl.values()) {
+            ((IntSymbol) sym).codeDef(intclasstag, s);
         }
     }
 }
