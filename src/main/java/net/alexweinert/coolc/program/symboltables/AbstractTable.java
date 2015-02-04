@@ -91,25 +91,6 @@ public abstract class AbstractTable<T> {
     }
 
     /**
-     * Looks up a symbol in this string table by its index
-     * 
-     * A fatal error is signalled if the index is out of bounds.
-     * 
-     * @param index
-     *            the index of the symbol
-     * @return a symbol corresponding to the index
-     * */
-    public AbstractSymbol<T> lookup(int index) {
-        AbstractSymbol<T> sym = null;
-        try {
-            sym = (AbstractSymbol<T>) tbl.elementAt(index);
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            Utilities.fatalError("Symbol index out of bounds: " + index);
-        }
-        return sym;
-    }
-
-    /**
      * Looks up a symbol in this string table by its string representation
      * 
      * A fatal error is signalled if the string is not in the table
