@@ -24,8 +24,8 @@ import net.alexweinert.coolc.unparser.CgenSupport;
  * handled by StringTable and IntTable respectively, but since there are only two boolean constants, we handle them
  * here.
  */
-public class BoolSymbol {
-    private boolean val;
+public class BoolSymbol extends AbstractSymbol<Boolean> {
+    private final boolean val;
 
     /**
      * Creates a new boolean constant.
@@ -34,6 +34,7 @@ public class BoolSymbol {
      *            the value
      * */
     BoolSymbol(boolean val) {
+        super(Boolean.toString(val), 0, val ? 1 : 0);
         this.val = val;
     }
 
@@ -44,7 +45,7 @@ public class BoolSymbol {
      *            the value
      * */
     BoolSymbol(Boolean val) {
-        this.val = val.booleanValue();
+        this(val.booleanValue());
     }
 
     final static BoolSymbol truebool = new BoolSymbol(true);
@@ -83,5 +84,10 @@ public class BoolSymbol {
 
         s.println(""); // dispatch table
         s.println(CgenSupport.WORD + (val ? "1" : "0")); // value (0 or 1)
+    }
+
+    @Override
+    public Object clone() {
+        return this;
     }
 }
