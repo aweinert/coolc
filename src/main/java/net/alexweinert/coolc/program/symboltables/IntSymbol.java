@@ -27,7 +27,7 @@ import net.alexweinert.coolc.unparser.CgenSupport;
  * 
  * @see AbstractSymbol
  * */
-public class IntSymbol extends AbstractSymbol {
+public class IntSymbol extends AbstractSymbol<Integer> {
     /* Creates a new symbol.
      * 
      * @see AbstractSymbol */

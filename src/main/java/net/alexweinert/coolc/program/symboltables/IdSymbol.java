@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.program.symboltables;
 
-/*Copyright (c) 2000 The Regents of the University of California. All rights reserved.
+/* Copyright (c) 2000 The Regents of the University of California. All rights reserved.
  * 
  * Permission to use, copy, modify, and distribute this software for any purpose, without fee, and without written
  * agreement is hereby granted, provided that the above copyright notice and the following two paragraphs appear in all
@@ -15,9 +15,8 @@ package net.alexweinert.coolc.program.symboltables;
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
 
-
 /** String table entry for identifiers. */
-public class IdSymbol extends AbstractSymbol {
+public class IdSymbol extends AbstractSymbol<String> {
     /* Creates a new symbol.
      * 
      * @see AbstractSymbol */

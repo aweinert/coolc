@@ -35,7 +35,7 @@ package net.alexweinert.coolc.program.symboltables;
  *
  * @see AbstractTable
  * */
-public abstract class AbstractSymbol {
+public abstract class AbstractSymbol<T> {
     /** The stored string */
     protected String str;
 

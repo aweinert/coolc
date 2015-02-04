@@ -23,7 +23,7 @@ import java.io.PrintStream;
 import net.alexweinert.coolc.unparser.CgenSupport;
 
 /** String table entry for string constants. */
-public class StringSymbol extends AbstractSymbol {
+public class StringSymbol extends AbstractSymbol<String> {
     /* Creates a new symbol.
      * 
      * @see AbstractSymbol */
