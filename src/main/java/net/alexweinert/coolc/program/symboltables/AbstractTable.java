@@ -79,16 +79,6 @@ public abstract class AbstractTable<T> {
     protected abstract AbstractSymbol<T> getNewSymbol(String s, int index);
 
     /**
-     * Returns an enumeration of symbols in this string table
-     *
-     * @return an enumeration of symbols
-     * @see java.util.Enumeration
-     * */
-    public Enumeration<AbstractSymbol<T>> getSymbols() {
-        return tbl.elements();
-    }
-
-    /**
      * Looks up a symbol in this string table by its string representation
      * 
      * A fatal error is signalled if the string is not in the table
