@@ -75,10 +75,10 @@ public abstract class AbstractTable<T> {
     protected static int MAXSIZE = 1000000;
 
     /** Vector of table entries */
-    protected Vector<AbstractSymbol> tbl = new Vector<>();
+    protected Vector<AbstractSymbol<T>> tbl = new Vector<>();
 
     /** Creates a new symbol of the appropriate type */
-    protected abstract AbstractSymbol getNewSymbol(String s, int len, int index);
+    protected abstract AbstractSymbol<T> getNewSymbol(String s, int len, int index);
 
     /**
      * Returns an enumeration of symbols in this string table
@@ -86,7 +86,7 @@ public abstract class AbstractTable<T> {
      * @return an enumeration of symbols
      * @see java.util.Enumeration
      * */
-    public Enumeration<AbstractSymbol> getSymbols() {
+    public Enumeration<AbstractSymbol<T>> getSymbols() {
         return tbl.elements();
     }
 
@@ -99,10 +99,10 @@ public abstract class AbstractTable<T> {
      *            the index of the symbol
      * @return a symbol corresponding to the index
      * */
-    public AbstractSymbol lookup(int index) {
-        AbstractSymbol sym = null;
+    public AbstractSymbol<T> lookup(int index) {
+        AbstractSymbol<T> sym = null;
         try {
-            sym = (AbstractSymbol) tbl.elementAt(index);
+            sym = (AbstractSymbol<T>) tbl.elementAt(index);
         } catch (ArrayIndexOutOfBoundsException ex) {
             Utilities.fatalError("Symbol index out of bounds: " + index);
         }
@@ -118,12 +118,12 @@ public abstract class AbstractTable<T> {
      *            the string representation of the symbol
      * @return a symbol corresponding to the string
      * */
-    public AbstractSymbol lookup(String s) {
+    public AbstractSymbol<T> lookup(String s) {
         int len = s.length();
-        AbstractSymbol sym = null;
+        AbstractSymbol<T> sym = null;
         for (int i = 0; i < tbl.size(); i++) {
             try {
-                sym = (AbstractSymbol) tbl.elementAt(i);
+                sym = (AbstractSymbol<T>) tbl.elementAt(i);
             } catch (ArrayIndexOutOfBoundsException ex) {
                 Utilities.fatalError("Unexpected exception: " + ex);
             }
@@ -138,10 +138,10 @@ public abstract class AbstractTable<T> {
     /** Produces a printable representation of the string table */
     public String toString() {
         String res = "[\n";
-        AbstractSymbol sym = null;
+        AbstractSymbol<T> sym = null;
         for (int i = 0; i < tbl.size(); i++) {
             try {
-                sym = (AbstractSymbol) tbl.elementAt(i);
+                sym = (AbstractSymbol<T>) tbl.elementAt(i);
             } catch (ArrayIndexOutOfBoundsException ex) {
                 Utilities.fatalError("Unexpected exception: " + ex);
             }
