@@ -53,7 +53,7 @@ public abstract class AbstractSymbol<T> {
      *            the table index
      * */
     public AbstractSymbol(String str, int len, int index) {
-        this.str = str.length() == len ? str : str.substring(0, len);
+        this.str = str;
         this.index = index;
     }
 
