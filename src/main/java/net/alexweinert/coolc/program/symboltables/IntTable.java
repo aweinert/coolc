@@ -30,6 +30,36 @@ public class IntTable extends AbstractTable {
     }
 
     /**
+     * Adds the string representation of the specified integer to this string table
+     *
+     * @param i
+     *            the integer to add
+     * @return the symbol for the integer i
+     * */
+    public AbstractSymbol addInt(int i) {
+        final String s = Integer.toString(i);
+        int len = Math.min(s.length(), MAXSIZE);
+        AbstractSymbol sym = null;
+        for (int index = 0; index < tbl.size(); index++) {
+            try {
+                sym = (AbstractSymbol) tbl.elementAt(index);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                Utilities.fatalError("Unexpected exception: " + ex);
+            }
+            if (sym.equalString(s, len)) {
+                return sym;
+            }
+        }
+        sym = getNewSymbol(s, len, tbl.size());
+        tbl.addElement(sym);
+        return sym;
+    }
+
+    public AbstractSymbol addInt(String s) {
+        return this.addInt(Integer.parseInt(s));
+    }
+
+    /**
      * Generates code for all int constants in the int table.
      * 
      * @param intclasstag

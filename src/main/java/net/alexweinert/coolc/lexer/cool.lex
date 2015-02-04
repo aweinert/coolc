@@ -258,7 +258,7 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 
 
 <YYINITIAL>{INTEGER}  { /* Integers */
-                          return new Symbol(Tokens.INT_CONST, AbstractTable.inttable.addString(yytext())); }
+                          return new Symbol(Tokens.INT_CONST, AbstractTable.inttable.addInt(yytext())); }
 
 <YYINITIAL>[Cc][Aa][Ss][Ee]	{ return new Symbol(Tokens.CASE); }
 <YYINITIAL>[Cc][Ll][Aa][Ss][Ss] { return new Symbol(Tokens.CLASS); }

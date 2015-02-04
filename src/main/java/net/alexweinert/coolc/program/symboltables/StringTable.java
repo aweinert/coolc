@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.program.symboltables;
 
-/*Copyright (c) 2000 The Regents of the University of California. All rights reserved.
+/* Copyright (c) 2000 The Regents of the University of California. All rights reserved.
  * 
  * Permission to use, copy, modify, and distribute this software for any purpose, without fee, and without written
  * agreement is hereby granted, provided that the above copyright notice and the following two paragraphs appear in all
@@ -27,6 +27,44 @@ public class StringTable extends AbstractTable {
      * */
     protected AbstractSymbol getNewSymbol(String s, int len, int index) {
         return new StringSymbol(s, len, index);
+    }
+
+    /**
+     * Adds prefix of the specified length to this string table
+     *
+     * @param s
+     *            the string to add
+     * @param maxchars
+     *            the length of the prefix
+     * @return the symbol for the string s
+     * */
+    public AbstractSymbol addString(String s, int maxchars) {
+        int len = Math.min(s.length(), maxchars);
+        AbstractSymbol sym = null;
+        for (int i = 0; i < tbl.size(); i++) {
+            try {
+                sym = (AbstractSymbol) tbl.elementAt(i);
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                Utilities.fatalError("Unexpected exception: " + ex);
+            }
+            if (sym.equalString(s, len)) {
+                return sym;
+            }
+        }
+        sym = getNewSymbol(s, len, tbl.size());
+        tbl.addElement(sym);
+        return sym;
+    }
+
+    /**
+     * Adds the specified string to this string table
+     *
+     * @param s
+     *            the string to add
+     * @return the symbol for the string s
+     * */
+    public AbstractSymbol addString(String s) {
+        return addString(s, MAXSIZE);
     }
 
     /**
