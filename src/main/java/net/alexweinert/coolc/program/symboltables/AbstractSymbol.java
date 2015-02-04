@@ -65,8 +65,7 @@ public abstract class AbstractSymbol<T> {
      * @return true if the strings are equal
      * */
     public boolean equalString(String str, int len) {
-        String other = str.length() == len ? str : str.substring(0, len);
-        return this.str.equals(other);
+        return this.str.equals(str);
     }
 
     /**
