@@ -23,25 +23,22 @@ public class IdTable extends AbstractTable<String> {
      * 
      * @see IdSymbol
      * */
-    protected AbstractSymbol getNewSymbol(String s, int index) {
+    protected AbstractSymbol<String> getNewSymbol(String s, int index) {
         return new IdSymbol(s, index);
     }
 
     /**
-     * Adds prefix of the specified length to this string table
+     * Adds the specified string to this string table
      *
      * @param s
      *            the string to add
-     * @param maxchars
-     *            the length of the prefix
      * @return the symbol for the string s
      * */
-    public AbstractSymbol addString(String s, int maxchars) {
-        int len = Math.min(s.length(), maxchars);
-        AbstractSymbol sym = null;
+    public AbstractSymbol<String> addString(String s) {
+        AbstractSymbol<String> sym = null;
         for (int i = 0; i < tbl.size(); i++) {
             try {
-                sym = (AbstractSymbol) tbl.elementAt(i);
+                sym = (AbstractSymbol<String>) tbl.elementAt(i);
             } catch (ArrayIndexOutOfBoundsException ex) {
                 Utilities.fatalError("Unexpected exception: " + ex);
             }
@@ -52,16 +49,5 @@ public class IdTable extends AbstractTable<String> {
         sym = getNewSymbol(s, tbl.size());
         tbl.addElement(sym);
         return sym;
-    }
-
-    /**
-     * Adds the specified string to this string table
-     *
-     * @param s
-     *            the string to add
-     * @return the symbol for the string s
-     * */
-    public AbstractSymbol addString(String s) {
-        return addString(s, this.tbl.size());
     }
 }
