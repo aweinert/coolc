@@ -69,19 +69,6 @@ public abstract class AbstractSymbol<T> {
     }
 
     /**
-     * Tests if the index argument is equal to the index of this symbol.
-     *
-     * It is only meaningful to compare indecies of symbols from the same string table.
-     * 
-     * @param index
-     *            the index to compare
-     * @return true if the indecies are equal
-     * */
-    public boolean equalsIndex(int index) {
-        return this.index == index;
-    }
-
-    /**
      * Tests if two symbols are equal.
      *
      * Symbol equality is equivalent to equality of their indecies, so it is only meaningful to compare symbols that
