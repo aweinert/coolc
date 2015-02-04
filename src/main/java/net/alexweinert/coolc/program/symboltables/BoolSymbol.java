@@ -34,7 +34,7 @@ public class BoolSymbol extends AbstractSymbol<Boolean> {
      *            the value
      * */
     BoolSymbol(boolean val) {
-        super(Boolean.toString(val), 0, val ? 1 : 0);
+        super(Boolean.toString(val), val ? 1 : 0);
         this.val = val;
     }
 

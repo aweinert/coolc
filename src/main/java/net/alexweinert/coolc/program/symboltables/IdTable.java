@@ -23,8 +23,8 @@ public class IdTable extends AbstractTable<String> {
      * 
      * @see IdSymbol
      * */
-    protected AbstractSymbol getNewSymbol(String s, int len, int index) {
-        return new IdSymbol(s, len, index);
+    protected AbstractSymbol getNewSymbol(String s, int index) {
+        return new IdSymbol(s, index);
     }
 
     /**
@@ -45,11 +45,11 @@ public class IdTable extends AbstractTable<String> {
             } catch (ArrayIndexOutOfBoundsException ex) {
                 Utilities.fatalError("Unexpected exception: " + ex);
             }
-            if (sym.equalString(s, len)) {
+            if (sym.equalString(s)) {
                 return sym;
             }
         }
-        sym = getNewSymbol(s, len, tbl.size());
+        sym = getNewSymbol(s, tbl.size());
         tbl.addElement(sym);
         return sym;
     }

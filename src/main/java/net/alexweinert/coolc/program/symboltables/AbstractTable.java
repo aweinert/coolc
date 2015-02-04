@@ -78,7 +78,7 @@ public abstract class AbstractTable<T> {
     protected Vector<AbstractSymbol<T>> tbl = new Vector<>();
 
     /** Creates a new symbol of the appropriate type */
-    protected abstract AbstractSymbol<T> getNewSymbol(String s, int len, int index);
+    protected abstract AbstractSymbol<T> getNewSymbol(String s, int index);
 
     /**
      * Returns an enumeration of symbols in this string table
@@ -100,7 +100,6 @@ public abstract class AbstractTable<T> {
      * @return a symbol corresponding to the string
      * */
     public AbstractSymbol<T> lookup(String s) {
-        int len = s.length();
         AbstractSymbol<T> sym = null;
         for (int i = 0; i < tbl.size(); i++) {
             try {
@@ -108,7 +107,7 @@ public abstract class AbstractTable<T> {
             } catch (ArrayIndexOutOfBoundsException ex) {
                 Utilities.fatalError("Unexpected exception: " + ex);
             }
-            if (sym.equalString(s, len)) {
+            if (sym.equalString(s)) {
                 return sym;
             }
         }

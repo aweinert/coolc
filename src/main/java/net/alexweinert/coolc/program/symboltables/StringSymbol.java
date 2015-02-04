@@ -27,8 +27,8 @@ public class StringSymbol extends AbstractSymbol<String> {
     /* Creates a new symbol.
      * 
      * @see AbstractSymbol */
-    public StringSymbol(String str, int len, int index) {
-        super(str, len, index);
+    public StringSymbol(String str, int index) {
+        super(str, index);
     }
 
     /**
@@ -75,6 +75,6 @@ public class StringSymbol extends AbstractSymbol<String> {
 
     /** Returns a copy of this symbol */
     public Object clone() {
-        return new StringSymbol(str, str.length(), index);
+        return new StringSymbol(str, index);
     }
 }

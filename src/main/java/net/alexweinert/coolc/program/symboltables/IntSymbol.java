@@ -31,8 +31,8 @@ public class IntSymbol extends AbstractSymbol<Integer> {
     /* Creates a new symbol.
      * 
      * @see AbstractSymbol */
-    public IntSymbol(String str, int len, int index) {
-        super(str, len, index);
+    public IntSymbol(String str, int index) {
+        super(str, index);
     }
 
     /**
@@ -72,6 +72,6 @@ public class IntSymbol extends AbstractSymbol<Integer> {
 
     /** Returns a copy of this symbol */
     public Object clone() {
-        return new IntSymbol(str, str.length(), index);
+        return new IntSymbol(str, index);
     }
 }

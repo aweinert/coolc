@@ -52,7 +52,7 @@ public abstract class AbstractSymbol<T> {
      * @param index
      *            the table index
      * */
-    public AbstractSymbol(String str, int len, int index) {
+    public AbstractSymbol(String str, int index) {
         this.str = str;
         this.index = index;
     }
@@ -64,7 +64,7 @@ public abstract class AbstractSymbol<T> {
      *            the string to compare
      * @return true if the strings are equal
      * */
-    public boolean equalString(String str, int len) {
+    public boolean equalString(String str) {
         return this.str.equals(str);
     }
 

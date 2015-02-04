@@ -20,12 +20,12 @@ public class IdSymbol extends AbstractSymbol<String> {
     /* Creates a new symbol.
      * 
      * @see AbstractSymbol */
-    public IdSymbol(String str, int len, int index) {
-        super(str, len, index);
+    public IdSymbol(String str, int index) {
+        super(str, index);
     }
 
     /** Returns a copy of this symbol */
     public Object clone() {
-        return new IdSymbol(str, str.length(), index);
+        return new IdSymbol(str, index);
     }
 }
