@@ -62,7 +62,7 @@ import net.alexweinert.coolc.program.Utilities;
  * @see IdSymbol
  * @see IntSymbol
  */
-public abstract class AbstractTable {
+public abstract class AbstractTable<T> {
     /** Global string table of string constants */
     public static StringTable stringtable = new StringTable();
 

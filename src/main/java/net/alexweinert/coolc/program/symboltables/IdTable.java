@@ -17,7 +17,7 @@ import net.alexweinert.coolc.program.Utilities;
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
 
-public class IdTable extends AbstractTable {
+public class IdTable extends AbstractTable<String> {
     /**
      * Creates a new IdSymbol object.
      * 

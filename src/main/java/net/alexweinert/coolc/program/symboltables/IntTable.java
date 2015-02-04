@@ -19,7 +19,7 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 
-public class IntTable extends AbstractTable {
+public class IntTable extends AbstractTable<Integer> {
     /**
      * Creates a new IntSymbol object.
      * 

@@ -19,7 +19,7 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 
-public class StringTable extends AbstractTable {
+public class StringTable extends AbstractTable<String> {
     /**
      * Creates a new StringSymbol object.
      * 
