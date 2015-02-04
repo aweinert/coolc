@@ -38,7 +38,6 @@ public class IntTable extends AbstractTable<Integer> {
      * */
     public AbstractSymbol addInt(int i) {
         final String s = Integer.toString(i);
-        int len = Math.min(s.length(), MAXSIZE);
         AbstractSymbol sym = null;
         for (int index = 0; index < tbl.size(); index++) {
             try {

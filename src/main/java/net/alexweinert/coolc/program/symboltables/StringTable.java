@@ -64,7 +64,7 @@ public class StringTable extends AbstractTable<String> {
      * @return the symbol for the string s
      * */
     public AbstractSymbol addString(String s) {
-        return addString(s, MAXSIZE);
+        return addString(s, this.tbl.size());
     }
 
     /**

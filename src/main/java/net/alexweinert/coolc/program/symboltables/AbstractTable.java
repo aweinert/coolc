@@ -72,8 +72,6 @@ public abstract class AbstractTable<T> {
     /** Global string table of integer constants */
     public static IntTable inttable = new IntTable();
 
-    protected static int MAXSIZE = 1000000;
-
     /** Vector of table entries */
     protected Vector<AbstractSymbol<T>> tbl = new Vector<>();
 
