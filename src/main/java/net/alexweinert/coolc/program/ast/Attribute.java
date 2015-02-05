@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
@@ -15,7 +15,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Attribute extends Feature {
-    final protected AbstractSymbol type_decl;
+    final protected IdSymbol type_decl;
     final protected Expression init;
 
     /**
@@ -30,13 +30,13 @@ public class Attribute extends Feature {
      * @param a2
      *            initial value for init
      */
-    public Attribute(String filename, int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
+    public Attribute(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, Expression a3) {
         super(filename, lineNumber, a1);
         this.type_decl = a2;
         this.init = a3;
     }
 
-    public AbstractSymbol getName() {
+    public IdSymbol getName() {
         return this.name;
     }
 
@@ -48,10 +48,10 @@ public class Attribute extends Feature {
         } else {
             FeatureTable extendedFeatureTable = featureTable.copyAndExtend(enclosingClass.getIdentifier(),
                     TreeConstants.self, TreeConstants.SELF_TYPE);
-            AbstractSymbol initializerType = this.init.typecheck(enclosingClass, classTable, extendedFeatureTable);
+            IdSymbol initializerType = this.init.typecheck(enclosingClass, classTable, extendedFeatureTable);
             // Could also use the featureTable at this point, but taking the declared type directly saves us one
             // indirection
-            AbstractSymbol declaredType = this.type_decl;
+            IdSymbol declaredType = this.type_decl;
             if (!classTable.conformsTo(enclosingClass.getIdentifier(), initializerType, declaredType)) {
                 String errorString = String.format(
                         "Inferred type %s of initialization of attribute %s does not conform to declared type %s.",
@@ -63,20 +63,20 @@ public class Attribute extends Feature {
 
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "attr\n");
-        dump_AbstractSymbol(out, n + 2, name);
-        dump_AbstractSymbol(out, n + 2, type_decl);
+        dump_IdSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, type_decl);
         init.dump(out, n + 2);
     }
 
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_attr");
-        dump_AbstractSymbol(out, n + 2, name);
-        dump_AbstractSymbol(out, n + 2, type_decl);
+        dump_IdSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, type_decl);
         init.dump_with_types(out, n + 2);
     }
 
-    public AbstractSymbol getTypeDecl() {
+    public IdSymbol getTypeDecl() {
         return this.type_decl;
     }
 
@@ -87,7 +87,7 @@ public class Attribute extends Feature {
         visitor.visitAttributePostorder(this);
     }
 
-    public AbstractSymbol getDeclaredType() {
+    public IdSymbol getDeclaredType() {
         return type_decl;
     }
 

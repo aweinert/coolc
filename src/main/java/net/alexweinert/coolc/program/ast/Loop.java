@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
@@ -49,10 +49,10 @@ public class Loop extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        AbstractSymbol conditionType = this.pred.typecheck(enclosingClass, classTable, featureTable);
+    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+        IdSymbol conditionType = this.pred.typecheck(enclosingClass, classTable, featureTable);
         // Unused, but needed to annotate the tree with the correct type information
-        AbstractSymbol bodyType = this.body.typecheck(enclosingClass, classTable, featureTable);
+        IdSymbol bodyType = this.body.typecheck(enclosingClass, classTable, featureTable);
 
         if (!classTable.conformsTo(enclosingClass.getIdentifier(), conditionType, TreeConstants.Bool)) {
             String errorString = "Loop condition does not have type Bool.";

@@ -5,7 +5,7 @@ import java.util.Enumeration;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
@@ -52,11 +52,11 @@ public class Typecase extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         // We do not need the static type of the expression anywhere, but we need to typecheck it anyways
-        AbstractSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
+        IdSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
 
-        AbstractSymbol leastUpperBound = null;
+        IdSymbol leastUpperBound = null;
         for (final Case currentBranch : this.cases) {
             // Check that we do not try to bind self
             if (currentBranch.name.equals(TreeConstants.self)) {
@@ -66,7 +66,7 @@ public class Typecase extends Expression {
 
             FeatureTable extendedTable = featureTable.copyAndExtend(enclosingClass.getIdentifier(), currentBranch.name,
                     currentBranch.type_decl);
-            AbstractSymbol caseType = currentBranch.expr.typecheck(enclosingClass, classTable, extendedTable);
+            IdSymbol caseType = currentBranch.expr.typecheck(enclosingClass, classTable, extendedTable);
             if (leastUpperBound == null) {
                 leastUpperBound = caseType;
             } else {

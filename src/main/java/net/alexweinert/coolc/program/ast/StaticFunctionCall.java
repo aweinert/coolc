@@ -5,7 +5,7 @@ import java.util.Enumeration;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
@@ -17,8 +17,8 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  */
 public class StaticFunctionCall extends Expression {
     final protected Expression expr;
-    final protected AbstractSymbol type_name;
-    final protected AbstractSymbol name;
+    final protected IdSymbol type_name;
+    final protected IdSymbol name;
     final protected Expressions actual;
 
     /**
@@ -35,7 +35,7 @@ public class StaticFunctionCall extends Expression {
      * @param a3
      *            initial value for actual
      */
-    public StaticFunctionCall(String filename, int lineNumber, Expression a1, AbstractSymbol a2, AbstractSymbol a3,
+    public StaticFunctionCall(String filename, int lineNumber, Expression a1, IdSymbol a2, IdSymbol a3,
             Expressions a4) {
         super(filename, lineNumber);
         expr = a1;
@@ -47,8 +47,8 @@ public class StaticFunctionCall extends Expression {
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "static_dispatch\n");
         expr.dump(out, n + 2);
-        dump_AbstractSymbol(out, n + 2, type_name);
-        dump_AbstractSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, type_name);
+        dump_IdSymbol(out, n + 2, name);
         actual.dump(out, n + 2);
     }
 
@@ -56,8 +56,8 @@ public class StaticFunctionCall extends Expression {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_static_dispatch");
         expr.dump_with_types(out, n + 2);
-        dump_AbstractSymbol(out, n + 2, type_name);
-        dump_AbstractSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, type_name);
+        dump_IdSymbol(out, n + 2, name);
         out.println(Utilities.pad(n + 2) + "(");
         for (final Expression actual : this.actual) {
             actual.dump_with_types(out, n + 2);
@@ -67,8 +67,8 @@ public class StaticFunctionCall extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        AbstractSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
+    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+        IdSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
         if (!classTable.conformsTo(enclosingClass.getIdentifier(), expressionType, this.type_name)) {
             String errorString = String.format(
                     "Expression type %s does not conform to declared static dispatch type %s.", expressionType,
@@ -92,14 +92,14 @@ public class StaticFunctionCall extends Expression {
 
         // Check that all the actual parameters conform to the formal parameters
         for (int actualIndex = 0; actualIndex < this.actual.size(); ++actualIndex) {
-            AbstractSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass,
+            IdSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass,
                     classTable, featureTable);
-            AbstractSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
+            IdSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
 
             if (!classTable.conformsTo(enclosingClass.getIdentifier(), actualType, formalType)) {
                 Method targetMethodDef = featureTable.findMethodDefinition(classTable.getClass(this.type_name),
                         this.name);
-                AbstractSymbol formalName = ((Formal) targetMethodDef.formals.get(actualIndex)).name;
+                IdSymbol formalName = ((Formal) targetMethodDef.formals.get(actualIndex)).name;
                 String errorString = String.format(
                         "In call of method %s, type %s of parameter %s does not conform to declared type %s.",
                         this.name, actualType, formalName, formalType);
@@ -123,11 +123,11 @@ public class StaticFunctionCall extends Expression {
         visitor.visitStaticFunctionCallPostorder(this);
     }
 
-    public AbstractSymbol getStaticType() {
+    public IdSymbol getStaticType() {
         return type_name;
     }
 
-    public AbstractSymbol getFunctionIdentifier() {
+    public IdSymbol getFunctionIdentifier() {
         return name;
     }
 

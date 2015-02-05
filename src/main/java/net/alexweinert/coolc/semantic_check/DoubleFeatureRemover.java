@@ -13,12 +13,12 @@ import net.alexweinert.coolc.program.ast.Features;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 class DoubleFeatureRemover extends ASTVisitor {
     private List<Class> classes = new LinkedList<>();
-    private Map<AbstractSymbol, List<Attribute>> attributes = new HashMap<>();
-    private Map<AbstractSymbol, List<Method>> methods = new HashMap<>();
+    private Map<IdSymbol, List<Attribute>> attributes = new HashMap<>();
+    private Map<IdSymbol, List<Method>> methods = new HashMap<>();
     private Program containingProgram;
 
     private final ISemanticErrorReporter error;
@@ -27,8 +27,8 @@ class DoubleFeatureRemover extends ASTVisitor {
         this.error = error;
     }
 
-    DoubleFeatureRemover(List<Class> classes, Map<AbstractSymbol, List<Attribute>> attributes,
-            Map<AbstractSymbol, List<Method>> methods, Program containingProgram, ISemanticErrorReporter error) {
+    DoubleFeatureRemover(List<Class> classes, Map<IdSymbol, List<Attribute>> attributes,
+            Map<IdSymbol, List<Method>> methods, Program containingProgram, ISemanticErrorReporter error) {
         this.classes = classes;
         this.attributes = attributes;
         this.methods = methods;

@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 /**
  * Defines AST constructor 'branch'.
@@ -12,8 +12,8 @@ import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Case extends TreeNode {
-    final protected AbstractSymbol name;
-    final protected AbstractSymbol type_decl;
+    final protected IdSymbol name;
+    final protected IdSymbol type_decl;
     final protected Expression expr;
 
     /**
@@ -28,7 +28,7 @@ public class Case extends TreeNode {
      * @param a2
      *            initial value for expr
      */
-    public Case(String filename, int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3) {
+    public Case(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, Expression a3) {
         super(filename, lineNumber);
         this.name = a1;
         this.type_decl = a2;
@@ -37,16 +37,16 @@ public class Case extends TreeNode {
 
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "branch\n");
-        dump_AbstractSymbol(out, n + 2, name);
-        dump_AbstractSymbol(out, n + 2, type_decl);
+        dump_IdSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, type_decl);
         expr.dump(out, n + 2);
     }
 
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_branch");
-        dump_AbstractSymbol(out, n + 2, name);
-        dump_AbstractSymbol(out, n + 2, type_decl);
+        dump_IdSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, type_decl);
         expr.dump_with_types(out, n + 2);
     }
 
@@ -57,11 +57,11 @@ public class Case extends TreeNode {
         visitor.visitCasePostorder(this);
     }
 
-    public AbstractSymbol getVariableIdentifier() {
+    public IdSymbol getVariableIdentifier() {
         return name;
     }
 
-    public AbstractSymbol getDeclaredType() {
+    public IdSymbol getDeclaredType() {
         return type_decl;
     }
 

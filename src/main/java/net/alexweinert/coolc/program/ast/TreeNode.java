@@ -19,7 +19,9 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.program.symboltables.IntSymbol;
+import net.alexweinert.coolc.program.symboltables.StringSymbol;
 
 public abstract class TreeNode {
     /** the name of the file this node came from */
@@ -76,7 +78,27 @@ public abstract class TreeNode {
      * 
      * This method is used internally by the generated AST classes
      * */
-    protected void dump_AbstractSymbol(PrintStream out, int n, AbstractSymbol sym) {
+    protected void dump_IdSymbol(PrintStream out, int n, IdSymbol sym) {
+        out.print(Utilities.pad(n));
+        out.println(sym.getString());
+    }
+
+    /**
+     * Dumps a printable representation of an AbstactSymbol value.
+     * 
+     * This method is used internally by the generated AST classes
+     * */
+    protected void dump_IntSymbol(PrintStream out, int n, IntSymbol sym) {
+        out.print(Utilities.pad(n));
+        out.println(sym.getString());
+    }
+
+    /**
+     * Dumps a printable representation of an AbstactSymbol value.
+     * 
+     * This method is used internally by the generated AST classes
+     * */
+    protected void dump_StringSymbol(PrintStream out, int n, StringSymbol sym) {
         out.print(Utilities.pad(n));
         out.println(sym.getString());
     }

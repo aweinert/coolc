@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 class ClassHierarchyBuilder {
     private class Pair<T, U> {
@@ -20,25 +20,25 @@ class ClassHierarchyBuilder {
         }
     }
 
-    final private Collection<Pair<AbstractSymbol, AbstractSymbol>> inheritanceInfo = new HashSet<>();
+    final private Collection<Pair<IdSymbol, IdSymbol>> inheritanceInfo = new HashSet<>();
 
-    void addInheritance(AbstractSymbol childClass, AbstractSymbol parentClass) {
+    void addInheritance(IdSymbol childClass, IdSymbol parentClass) {
         this.inheritanceInfo.add(new Pair<>(childClass, parentClass));
     }
 
     ClassHierarchy buildHierarchy() {
-        final Map<AbstractSymbol, List<AbstractSymbol>> hierarchy = new HashMap<>();
-        for (Pair<AbstractSymbol, AbstractSymbol> singleInheritance : this.inheritanceInfo) {
-            final List<AbstractSymbol> ancestors = this.computeAncestors(singleInheritance.x);
+        final Map<IdSymbol, List<IdSymbol>> hierarchy = new HashMap<>();
+        for (Pair<IdSymbol, IdSymbol> singleInheritance : this.inheritanceInfo) {
+            final List<IdSymbol> ancestors = this.computeAncestors(singleInheritance.x);
             hierarchy.put(singleInheritance.x, ancestors);
         }
         return new ClassHierarchy(hierarchy);
     }
 
-    private List<AbstractSymbol> computeAncestors(AbstractSymbol root) {
-        final List<AbstractSymbol> ancestors = new LinkedList<>();
+    private List<IdSymbol> computeAncestors(IdSymbol root) {
+        final List<IdSymbol> ancestors = new LinkedList<>();
         ancestors.add(root);
-        Pair<AbstractSymbol, AbstractSymbol> singleInheritance = this.findSingleInheritance(root);
+        Pair<IdSymbol, IdSymbol> singleInheritance = this.findSingleInheritance(root);
         while (singleInheritance != null) {
             ancestors.add(singleInheritance.y);
             singleInheritance = this.findSingleInheritance(singleInheritance.y);
@@ -46,8 +46,8 @@ class ClassHierarchyBuilder {
         return ancestors;
     }
 
-    private Pair<AbstractSymbol, AbstractSymbol> findSingleInheritance(AbstractSymbol lhs) {
-        for (Pair<AbstractSymbol, AbstractSymbol> singleInheritance : this.inheritanceInfo) {
+    private Pair<IdSymbol, IdSymbol> findSingleInheritance(IdSymbol lhs) {
+        for (Pair<IdSymbol, IdSymbol> singleInheritance : this.inheritanceInfo) {
             if (singleInheritance.x.equals(lhs)) {
                 return singleInheritance;
             }

@@ -6,7 +6,7 @@ import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.program.ast.Attribute;
 import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Method;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 class SemanticErrorReporter implements ISemanticErrorReporter {
     private final Output out;
@@ -85,7 +85,7 @@ class SemanticErrorReporter implements ISemanticErrorReporter {
     }
 
     @Override
-    public void reportRedefinitionOfBuiltInClass(AbstractSymbol identifier, Class classNode) {
+    public void reportRedefinitionOfBuiltInClass(IdSymbol identifier, Class classNode) {
         final String errorString = String.format("Redefinition of builtin class %s at %s:%d", identifier,
                 classNode.getFilename(), classNode.getLineNumber());
         out.error(errorString);

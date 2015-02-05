@@ -7,12 +7,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 class ClassInterfaceBuilder {
-    private Map<AbstractSymbol, Collection<MethodSignature>> definedSignatures = new HashMap<>();
+    private Map<IdSymbol, Collection<MethodSignature>> definedSignatures = new HashMap<>();
 
-    public void addMethodSignature(AbstractSymbol classIdentifier, MethodSignature signature) {
+    public void addMethodSignature(IdSymbol classIdentifier, MethodSignature signature) {
         if (!this.definedSignatures.containsKey(classIdentifier)) {
             this.definedSignatures.put(classIdentifier, new HashSet<MethodSignature>());
         }
@@ -21,16 +21,16 @@ class ClassInterfaceBuilder {
 
     public Collection<ClassInterface> buildInterfaces(ClassHierarchy hierarchy) {
         final Collection<ClassInterface> returnValue = new HashSet<>();
-        for (AbstractSymbol classIdentifier : this.definedSignatures.keySet()) {
+        for (IdSymbol classIdentifier : this.definedSignatures.keySet()) {
             returnValue.add(this.buildInterfaces(classIdentifier, hierarchy));
         }
         return returnValue;
     }
 
-    private ClassInterface buildInterfaces(AbstractSymbol classIdentifier, ClassHierarchy hierarchy) {
+    private ClassInterface buildInterfaces(IdSymbol classIdentifier, ClassHierarchy hierarchy) {
         final List<MethodSignature> methods = new LinkedList<>();
-        final List<AbstractSymbol> ancestors = hierarchy.getAncestors(classIdentifier);
-        for (AbstractSymbol ancestor : ancestors) {
+        final List<IdSymbol> ancestors = hierarchy.getAncestors(classIdentifier);
+        for (IdSymbol ancestor : ancestors) {
             for (MethodSignature signature : this.definedSignatures.get(ancestor)) {
                 if (ancestor.equals(classIdentifier) && this.containsEqualMethod(methods, signature)) {
                     System.out.println("ERROR: Class " + classIdentifier + " contains multiple definitions of "

@@ -4,9 +4,10 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.program.symboltables.StringSymbol;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
 
 /**
@@ -15,7 +16,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class StringConst extends Expression {
-    final protected AbstractSymbol token;
+    final protected StringSymbol token;
 
     /**
      * Creates "string_const" AST node.
@@ -25,14 +26,14 @@ public class StringConst extends Expression {
      * @param a0
      *            initial value for token
      */
-    public StringConst(String filename, int lineNumber, AbstractSymbol a1) {
+    public StringConst(String filename, int lineNumber, StringSymbol a1) {
         super(filename, lineNumber);
         token = a1;
     }
 
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "string_const\n");
-        dump_AbstractSymbol(out, n + 2, token);
+        dump_StringSymbol(out, n + 2, token);
     }
 
     public void dump_with_types(PrintStream out, int n) {
@@ -45,7 +46,7 @@ public class StringConst extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         return TreeConstants.Str;
     }
 
@@ -54,7 +55,7 @@ public class StringConst extends Expression {
         visitor.visitStringConstant(this);
     }
 
-    public AbstractSymbol getValue() {
+    public StringSymbol getValue() {
         return token;
     }
 

@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
@@ -15,8 +15,8 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Let extends Expression {
-    final protected AbstractSymbol identifier;
-    final protected AbstractSymbol type_decl;
+    final protected IdSymbol identifier;
+    final protected IdSymbol type_decl;
     final protected Expression init;
     final protected Expression body;
 
@@ -34,7 +34,7 @@ public class Let extends Expression {
      * @param a3
      *            initial value for body
      */
-    public Let(String filename, int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Expression a3, Expression a4) {
+    public Let(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, Expression a3, Expression a4) {
         super(filename, lineNumber);
         identifier = a1;
         type_decl = a2;
@@ -44,8 +44,8 @@ public class Let extends Expression {
 
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "let\n");
-        dump_AbstractSymbol(out, n + 2, identifier);
-        dump_AbstractSymbol(out, n + 2, type_decl);
+        dump_IdSymbol(out, n + 2, identifier);
+        dump_IdSymbol(out, n + 2, type_decl);
         init.dump(out, n + 2);
         body.dump(out, n + 2);
     }
@@ -53,15 +53,15 @@ public class Let extends Expression {
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_let");
-        dump_AbstractSymbol(out, n + 2, identifier);
-        dump_AbstractSymbol(out, n + 2, type_decl);
+        dump_IdSymbol(out, n + 2, identifier);
+        dump_IdSymbol(out, n + 2, type_decl);
         init.dump_with_types(out, n + 2);
         body.dump_with_types(out, n + 2);
         dump_type(out, n);
     }
 
     @Override
-    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         // Make sure that we do not try to bindlet
         if (this.identifier.equals(TreeConstants.self)) {
             String errorString = "'self' cannot be bound in a 'let' expression.";
@@ -69,7 +69,7 @@ public class Let extends Expression {
         }
 
         // Typecheck the initializer with the current environment
-        AbstractSymbol initializerType = this.init.typecheck(enclosingClass, classTable, featureTable);
+        IdSymbol initializerType = this.init.typecheck(enclosingClass, classTable, featureTable);
 
         if (!classTable.conformsTo(enclosingClass.getIdentifier(), initializerType, this.type_decl)) {
             String errorString = String.format(
@@ -92,11 +92,11 @@ public class Let extends Expression {
         visitor.visitLetPostorder(this);
     }
 
-    public AbstractSymbol getVariableIdentifier() {
+    public IdSymbol getVariableIdentifier() {
         return identifier;
     }
 
-    public AbstractSymbol getDeclaredType() {
+    public IdSymbol getDeclaredType() {
         return type_decl;
     }
 

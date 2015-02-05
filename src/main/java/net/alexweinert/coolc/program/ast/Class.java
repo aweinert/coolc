@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 
@@ -14,8 +14,8 @@ import net.alexweinert.coolc.program.symboltables.FeatureTable;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Class extends TreeNode {
-    final protected AbstractSymbol name;
-    final protected AbstractSymbol parent;
+    final protected IdSymbol name;
+    final protected IdSymbol parent;
     final protected Features features;
 
     /**
@@ -30,7 +30,7 @@ public class Class extends TreeNode {
      * @param a2
      *            initial value for features
      */
-    public Class(String filename, int lineNumber, AbstractSymbol a1, AbstractSymbol a2, Features a3) {
+    public Class(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, Features a3) {
         super(filename, lineNumber);
         name = a1;
         parent = a2;
@@ -46,8 +46,8 @@ public class Class extends TreeNode {
 
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "class_c\n");
-        dump_AbstractSymbol(out, n + 2, name);
-        dump_AbstractSymbol(out, n + 2, parent);
+        dump_IdSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, parent);
         features.dump(out, n + 2);
         out.print(Utilities.pad(n + 2) + this.getFilename());
     }
@@ -55,8 +55,8 @@ public class Class extends TreeNode {
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_class");
-        dump_AbstractSymbol(out, n + 2, name);
-        dump_AbstractSymbol(out, n + 2, parent);
+        dump_IdSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, parent);
         out.print(Utilities.pad(n + 2) + "\"");
         Utilities.printEscapedString(out, this.getFilename());
         out.println("\"\n" + Utilities.pad(n + 2) + "(");
@@ -74,11 +74,11 @@ public class Class extends TreeNode {
 
     }
 
-    public AbstractSymbol getIdentifier() {
+    public IdSymbol getIdentifier() {
         return name;
     }
 
-    public AbstractSymbol getParent() {
+    public IdSymbol getParent() {
         return parent;
     }
 
@@ -86,7 +86,7 @@ public class Class extends TreeNode {
         return features;
     }
 
-    public Attribute getAttribute(AbstractSymbol identifier) {
+    public Attribute getAttribute(IdSymbol identifier) {
         for (Feature feature : this.features) {
             if (feature.getName().equals(identifier) && feature instanceof Attribute) {
                 return (Attribute) feature;
@@ -95,7 +95,7 @@ public class Class extends TreeNode {
         return null;
     }
 
-    public Method getMethod(AbstractSymbol identifier) {
+    public Method getMethod(IdSymbol identifier) {
         for (Feature feature : this.features) {
             if (feature.getName().equals(identifier) && feature instanceof Method) {
                 return (Method) feature;
@@ -150,7 +150,7 @@ public class Class extends TreeNode {
         return true;
     }
 
-    public Class setParent(AbstractSymbol newParent) {
+    public Class setParent(IdSymbol newParent) {
         return new Class(this.getFilename(), this.getLineNumber(), this.name, newParent, this.features);
     }
 }

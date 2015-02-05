@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
@@ -43,10 +43,10 @@ public class IsVoid extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         // We do not use the expression type, but we need to typecheck the expression anyways to annotate the tree
         // correctly
-        AbstractSymbol expressionType = this.e1.typecheck(enclosingClass, classTable, featureTable);
+        IdSymbol expressionType = this.e1.typecheck(enclosingClass, classTable, featureTable);
         return TreeConstants.Bool;
     }
 

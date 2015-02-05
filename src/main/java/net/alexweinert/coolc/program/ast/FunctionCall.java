@@ -5,7 +5,7 @@ import java.util.Enumeration;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
@@ -17,7 +17,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  */
 public class FunctionCall extends Expression {
     final protected Expression expr;
-    final protected AbstractSymbol name;
+    final protected IdSymbol name;
     final protected Expressions actual;
 
     /**
@@ -32,7 +32,7 @@ public class FunctionCall extends Expression {
      * @param a2
      *            initial value for actual
      */
-    public FunctionCall(String filename, int lineNumber, Expression a1, AbstractSymbol a2, Expressions a3) {
+    public FunctionCall(String filename, int lineNumber, Expression a1, IdSymbol a2, Expressions a3) {
         super(filename, lineNumber);
         expr = a1;
         name = a2;
@@ -42,7 +42,7 @@ public class FunctionCall extends Expression {
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "dispatch\n");
         expr.dump(out, n + 2);
-        dump_AbstractSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, name);
         actual.dump(out, n + 2);
     }
 
@@ -50,7 +50,7 @@ public class FunctionCall extends Expression {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_dispatch");
         expr.dump_with_types(out, n + 2);
-        dump_AbstractSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, name);
         out.println(Utilities.pad(n + 2) + "(");
         for (final Expression parameter : this.actual) {
             parameter.dump_with_types(out, n + 2);
@@ -60,9 +60,9 @@ public class FunctionCall extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        AbstractSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
-        final AbstractSymbol dispatchTargetClass;
+    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+        IdSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
+        final IdSymbol dispatchTargetClass;
         if (expressionType.equals(TreeConstants.SELF_TYPE)) {
             dispatchTargetClass = enclosingClass.getIdentifier();
         } else {
@@ -87,14 +87,14 @@ public class FunctionCall extends Expression {
 
         // Check that all the actual parameters conform to the formal parameters
         for (int actualIndex = 0; actualIndex < this.actual.size(); ++actualIndex) {
-            AbstractSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass,
+            IdSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass,
                     classTable, featureTable);
-            AbstractSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
+            IdSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
 
             if (!classTable.conformsTo(enclosingClass.getIdentifier(), actualType, formalType)) {
                 Method targetMethodDef = featureTable.findMethodDefinition(classTable.getClass(dispatchTargetClass),
                         this.name);
-                AbstractSymbol formalName = ((Formal) targetMethodDef.formals.get(actualIndex)).name;
+                IdSymbol formalName = ((Formal) targetMethodDef.formals.get(actualIndex)).name;
                 String errorString = String.format(
                         "In call of method %s, type %s of parameter %s does not conform to declared type %s.",
                         this.name, actualType, formalName, formalType);
@@ -119,7 +119,7 @@ public class FunctionCall extends Expression {
         visitor.visitFunctionCallPostorder(this);
     }
 
-    public AbstractSymbol getFunctionIdentifier() {
+    public IdSymbol getFunctionIdentifier() {
         return name;
     }
 

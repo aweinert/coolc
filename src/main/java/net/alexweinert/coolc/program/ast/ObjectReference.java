@@ -13,7 +13,7 @@ import java.util.Map;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
@@ -24,7 +24,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class ObjectReference extends Expression {
-    final protected AbstractSymbol name;
+    final protected IdSymbol name;
 
     /**
      * Creates "object" AST node.
@@ -34,26 +34,26 @@ public class ObjectReference extends Expression {
      * @param a0
      *            initial value for name
      */
-    public ObjectReference(String filename, int lineNumber, AbstractSymbol a1) {
+    public ObjectReference(String filename, int lineNumber, IdSymbol a1) {
         super(filename, lineNumber);
         name = a1;
     }
 
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "object\n");
-        dump_AbstractSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, name);
     }
 
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_object");
-        dump_AbstractSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, name);
         dump_type(out, n);
     }
 
     @Override
-    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        Map<AbstractSymbol, AbstractSymbol> attributeTypes = featureTable.getAttributeTypes(enclosingClass
+    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+        Map<IdSymbol, IdSymbol> attributeTypes = featureTable.getAttributeTypes(enclosingClass
                 .getIdentifier());
         if (!attributeTypes.containsKey(this.name)) {
             String errorString = String.format("Undeclared identifier %s.", this.name);
@@ -68,7 +68,7 @@ public class ObjectReference extends Expression {
         visitor.visitObjectReference(this);
     }
 
-    public AbstractSymbol getVariableIdentifier() {
+    public IdSymbol getVariableIdentifier() {
         return name;
     }
 

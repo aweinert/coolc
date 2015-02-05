@@ -13,7 +13,7 @@ import net.alexweinert.coolc.program.ast.Features;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 class OverridingChecker extends ASTVisitor {
 
@@ -25,7 +25,7 @@ class OverridingChecker extends ASTVisitor {
     final private List<Class> classes = new LinkedList<>();
     private Program containingProgram;
     private Program resultingProgram;
-    private List<AbstractSymbol> ancestorsDescendingOrder;
+    private List<IdSymbol> ancestorsDescendingOrder;
 
     OverridingChecker(ClassHierarchy hierarchy, ISemanticErrorReporter error) {
         this.hierarchy = hierarchy;
@@ -40,7 +40,7 @@ class OverridingChecker extends ASTVisitor {
 
     @Override
     public void visitAttributePostorder(Attribute attribute) {
-        for (AbstractSymbol ancestor : this.ancestorsDescendingOrder) {
+        for (IdSymbol ancestor : this.ancestorsDescendingOrder) {
             final Attribute existingAttribute = this.containingProgram.getClass(ancestor).getAttribute(
                     attribute.getName());
             if (existingAttribute != null) {
@@ -53,7 +53,7 @@ class OverridingChecker extends ASTVisitor {
 
     @Override
     public void visitMethodPostorder(Method method) {
-        for (AbstractSymbol ancestor : this.ancestorsDescendingOrder) {
+        for (IdSymbol ancestor : this.ancestorsDescendingOrder) {
             final Method existingMethod = this.containingProgram.getClass(ancestor).getMethod(method.getName());
             if (existingMethod != null) {
                 this.error.reportWronglyOverriddenMethod(method, existingMethod);
@@ -65,7 +65,7 @@ class OverridingChecker extends ASTVisitor {
 
     @Override
     public void visitClassPreorder(Class classNode) {
-        final List<AbstractSymbol> ancestors = this.hierarchy.getAncestors(classNode.getIdentifier());
+        final List<IdSymbol> ancestors = this.hierarchy.getAncestors(classNode.getIdentifier());
         Collections.reverse(ancestors);
         this.ancestorsDescendingOrder = ancestors.subList(0, ancestors.size() - 2);
     }

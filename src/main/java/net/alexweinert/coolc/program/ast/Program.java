@@ -9,7 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
@@ -49,7 +49,7 @@ public class Program extends TreeNode {
      *            Some class identifier
      * @return The node of a class with the given name, if there exists one. Null if none exists.
      */
-    public Class getClass(AbstractSymbol identifier) {
+    public Class getClass(IdSymbol identifier) {
         for (Class classNode : this.classes) {
             if (classNode.getIdentifier().equals(identifier)) {
                 return classNode;
@@ -81,7 +81,7 @@ public class Program extends TreeNode {
 
     private void checkBasicClasses(ClassTable classTable) {
         for (Class currentClass : classTable.getClasses()) {
-            AbstractSymbol inheritedBaseClass = null;
+            IdSymbol inheritedBaseClass = null;
             if (((Class) currentClass).getParent().equals(TreeConstants.Int)) {
                 inheritedBaseClass = TreeConstants.Int;
             } else if (((Class) currentClass).getParent().equals(TreeConstants.Bool)) {
@@ -114,7 +114,7 @@ public class Program extends TreeNode {
     }
 
     private void checkTreeForm(ClassTable classTable) {
-        Collection<AbstractSymbol> reachable = this.checkSinglePath(classTable);
+        Collection<IdSymbol> reachable = this.checkSinglePath(classTable);
         this.checkReachability(classTable, reachable);
     }
 
@@ -127,7 +127,7 @@ public class Program extends TreeNode {
      * @param reachable
      *            The set of classes that are reachable from Object via the inheritance hierarchy
      */
-    private void checkReachability(ClassTable classTable, Collection<AbstractSymbol> reachable) {
+    private void checkReachability(ClassTable classTable, Collection<IdSymbol> reachable) {
         // Check that all defined classes are reachable from Object
         for (Class definedClass : classTable.getClasses()) {
             if (!reachable.contains(definedClass.getIdentifier())) {
@@ -140,21 +140,21 @@ public class Program extends TreeNode {
     }
 
     /**
-     * Checks that there is only a single path from Object to every AbstractSymbol that is reachable from it. If this is
+     * Checks that there is only a single path from Object to every IdSymbol that is reachable from it. If this is
      * the case, then Object is the root of a (inheritance) tree
      * 
      * @param classTable
      *            The table of all classes
      * @return The set of all classes that conform to Object
      */
-    private Collection<AbstractSymbol> checkSinglePath(ClassTable classTable) {
-        Collection<AbstractSymbol> visited = new HashSet<>();
-        Queue<AbstractSymbol> toCheck = new LinkedBlockingQueue<>();
+    private Collection<IdSymbol> checkSinglePath(ClassTable classTable) {
+        Collection<IdSymbol> visited = new HashSet<>();
+        Queue<IdSymbol> toCheck = new LinkedBlockingQueue<>();
 
         toCheck.add(TreeConstants.Object_);
 
         while (!toCheck.isEmpty()) {
-            AbstractSymbol currentToCheck = toCheck.poll();
+            IdSymbol currentToCheck = toCheck.poll();
             if (visited.contains(currentToCheck)) {
                 String errorString = String.format("%s is reachable from two parents", currentToCheck);
                 classTable.semantError((Class) classTable.getClass(currentToCheck)).println(errorString);

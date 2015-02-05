@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
@@ -49,9 +49,9 @@ public class Equality extends Expression {
     }
 
     @Override
-    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        AbstractSymbol leftHandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
-        AbstractSymbol rightHandType = this.e2.typecheck(enclosingClass, classTable, featureTable);
+    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+        IdSymbol leftHandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
+        IdSymbol rightHandType = this.e2.typecheck(enclosingClass, classTable, featureTable);
 
         if ((isBasicType(leftHandType) || isBasicType(rightHandType)) && (!leftHandType.equals(rightHandType))) {
             String errorString = String.format("Illegal comparison with a basic type.");
@@ -61,7 +61,7 @@ public class Equality extends Expression {
         return TreeConstants.Bool;
     }
 
-    private boolean isBasicType(AbstractSymbol candidate) {
+    private boolean isBasicType(IdSymbol candidate) {
         return candidate.equals(TreeConstants.Int) || candidate.equals(TreeConstants.Bool)
                 || candidate.equals(TreeConstants.Str);
     }

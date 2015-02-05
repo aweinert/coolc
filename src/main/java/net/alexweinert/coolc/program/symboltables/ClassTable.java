@@ -43,14 +43,14 @@ public class ClassTable {
     private int semantErrors = 0;
     private PrintStream errorStream = System.err;
 
-    private Map<AbstractSymbol, Class> classes = new HashMap<>();
+    private Map<IdSymbol, Class> classes = new HashMap<>();
 
     /**
      * Creates data structures representing basic Cool classes (Object, IO, Int, Bool, String). Please note: as is this
      * method does not do anything useful; you will need to edit it to make if do what you want.
      * */
     private void installBasicClasses() {
-        AbstractSymbol filename = AbstractTable.stringtable.addString("<basic class>");
+        StringSymbol filename = AbstractTable.stringtable.addString("<basic class>");
 
         Class objectClass = createObjectClass(filename);
         this.classes.put(objectClass.getIdentifier(), objectClass);
@@ -68,7 +68,7 @@ public class ClassTable {
         this.classes.put(strClass.getIdentifier(), strClass);
     }
 
-    private Class createStringClass(AbstractSymbol filename) {
+    private Class createStringClass(StringSymbol filename) {
         // The class Str has a number of slots and operations:
         // val the length of the string
         // str_field the string itself
@@ -91,7 +91,7 @@ public class ClassTable {
         return Str_class;
     }
 
-    private Class createBoolClass(AbstractSymbol filename) {
+    private Class createBoolClass(StringSymbol filename) {
         // Bool also has only the "val" slot.
         Class Bool_class = new Class("builtin", 0, TreeConstants.Bool, TreeConstants.Object_,
                 new Features("builtin", 0).add(new Attribute("builtin", 0, TreeConstants.val, TreeConstants.prim_slot,
@@ -99,7 +99,7 @@ public class ClassTable {
         return Bool_class;
     }
 
-    private Class createIntClass(AbstractSymbol filename) {
+    private Class createIntClass(StringSymbol filename) {
         // The Int class has no methods and only a single attribute, the
         // "val" for the integer.
 
@@ -109,7 +109,7 @@ public class ClassTable {
         return Int_class;
     }
 
-    private Class createIoClass(AbstractSymbol filename) {
+    private Class createIoClass(StringSymbol filename) {
         // The IO class inherits from Object. Its methods are
         // out_string(Str) : SELF_TYPE writes a string to the output
         // out_int(Int) : SELF_TYPE "    an int    " "     "
@@ -130,7 +130,7 @@ public class ClassTable {
         return IO_class;
     }
 
-    private Class createObjectClass(AbstractSymbol filename) {
+    private Class createObjectClass(StringSymbol filename) {
         // The following demonstrates how to create dummy parse trees to
         // refer to basic Cool classes. There's no need for method
         // bodies -- these are already built into the runtime system.
@@ -182,14 +182,14 @@ public class ClassTable {
         }
     }
 
-    public Class getClass(AbstractSymbol symbol) {
+    public Class getClass(IdSymbol symbol) {
         return this.classes.get(symbol);
     }
 
     /**
      * @return True if the given class exists in the program
      */
-    public boolean classExists(AbstractSymbol symbol) {
+    public boolean classExists(IdSymbol symbol) {
         return this.classes.containsKey(symbol);
     }
 
@@ -203,7 +203,7 @@ public class ClassTable {
     /**
      * @return True iff child <= parent. Either one or both may be SELF_TYPE.
      */
-    public boolean conformsTo(AbstractSymbol enclosingClass, AbstractSymbol child, AbstractSymbol parent) {
+    public boolean conformsTo(IdSymbol enclosingClass, IdSymbol child, IdSymbol parent) {
         if (child.equals(TreeConstants.No_type)) {
             // No_Type conforms to all types
             return true;
@@ -217,7 +217,7 @@ public class ClassTable {
             parent = enclosingClass;
         }
 
-        Collection<AbstractSymbol> visited = new HashSet<>();
+        Collection<IdSymbol> visited = new HashSet<>();
 
         Class currentAncestor = (Class) this.getClass(child);
 
@@ -294,17 +294,17 @@ public class ClassTable {
      * @return The least upper bound of className1 and className2, i.e., the most specific class c such that className1
      *         <= c and className2 <= c.
      */
-    public AbstractSymbol getLeastUpperBound(AbstractSymbol className1, AbstractSymbol className2) {
+    public IdSymbol getLeastUpperBound(IdSymbol className1, IdSymbol className2) {
         // First, collect all ancestors of className1
-        Collection<AbstractSymbol> predecessors1 = new LinkedList<>();
-        AbstractSymbol currentPredecessor1 = className1;
+        Collection<IdSymbol> predecessors1 = new LinkedList<>();
+        IdSymbol currentPredecessor1 = className1;
         do {
             predecessors1.add(currentPredecessor1);
             currentPredecessor1 = this.getClass(currentPredecessor1).getParent();
         } while (!currentPredecessor1.equals(TreeConstants.No_class));
 
         // Now, walk through the predecessors of className2 and check when we meet a predecessor of className1
-        AbstractSymbol currentPredecessor2 = className2;
+        IdSymbol currentPredecessor2 = className2;
         while (!predecessors1.contains(currentPredecessor2)) {
             currentPredecessor2 = this.getClass(currentPredecessor2).getParent();
         }

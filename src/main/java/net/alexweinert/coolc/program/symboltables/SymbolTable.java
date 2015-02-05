@@ -44,11 +44,11 @@ import net.alexweinert.coolc.program.Utilities;
  * with some data. The ``data'' is whatever data the programmer wishes to associate with each identifier. An example
  * illustrating the use of symbol tables is in the file SymtabExample.java.
  *
- * @see AbstractSymbol
+ * @see IdSymbol
  * @see SymtabExample
  * */
 public class SymbolTable {
-    private Stack<Hashtable<AbstractSymbol, Object>> tbl;
+    private Stack<Hashtable<IdSymbol, Object>> tbl;
 
     /** Creates an empty symbol table. */
     public SymbolTable() {
@@ -59,7 +59,7 @@ public class SymbolTable {
      * Enters a new scope. A scope must be entered before anything can be added to the table.
      * */
     public void enterScope() {
-        tbl.push(new Hashtable<AbstractSymbol, Object>());
+        tbl.push(new Hashtable<IdSymbol, Object>());
     }
 
     /** Exits the most recently entered scope. */
@@ -78,7 +78,7 @@ public class SymbolTable {
      * @param info
      *            the data asosciated with id
      * */
-    public void addId(AbstractSymbol id, Object info) {
+    public void addId(IdSymbol id, Object info) {
         if (tbl.empty()) {
             Utilities.fatalError("addId: can't add a symbol without a scope.");
         }
@@ -93,7 +93,7 @@ public class SymbolTable {
      *            the symbol
      * @return the info associated with sym, or null if not found
      * */
-    public Object lookup(AbstractSymbol sym) {
+    public Object lookup(IdSymbol sym) {
         if (tbl.empty()) {
             Utilities.fatalError("lookup: no scope in symbol table.");
         }
@@ -115,7 +115,7 @@ public class SymbolTable {
      *            the symbol
      * @return the info associated with sym, or null if not found
      * */
-    public Object probe(AbstractSymbol sym) {
+    public Object probe(IdSymbol sym) {
         if (tbl.empty()) {
             Utilities.fatalError("lookup: no scope in symbol table.");
         }

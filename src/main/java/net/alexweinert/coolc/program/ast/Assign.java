@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
@@ -15,7 +15,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Assign extends Expression {
-    final protected AbstractSymbol name;
+    final protected IdSymbol name;
 
     final protected Expression expr;
 
@@ -29,7 +29,7 @@ public class Assign extends Expression {
      * @param a1
      *            initial value for expr
      */
-    public Assign(String filename, int lineNumber, AbstractSymbol a1, Expression a2) {
+    public Assign(String filename, int lineNumber, IdSymbol a1, Expression a2) {
         super(filename, lineNumber);
         this.name = a1;
         this.expr = a2;
@@ -37,22 +37,22 @@ public class Assign extends Expression {
 
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "assign\n");
-        dump_AbstractSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, name);
         expr.dump(out, n + 2);
     }
 
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_assign");
-        dump_AbstractSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, name);
         expr.dump_with_types(out, n + 2);
         dump_type(out, n);
     }
 
     @Override
-    protected AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        AbstractSymbol leftHandType = featureTable.getAttributeTypes(enclosingClass.getIdentifier()).get(this.name);
-        AbstractSymbol rightHandType = this.expr.typecheck(enclosingClass, classTable, featureTable);
+    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+        IdSymbol leftHandType = featureTable.getAttributeTypes(enclosingClass.getIdentifier()).get(this.name);
+        IdSymbol rightHandType = this.expr.typecheck(enclosingClass, classTable, featureTable);
 
         // Check that the left-hand-side of the assignment is not self
         if (this.name.equals(TreeConstants.self)) {
@@ -87,7 +87,7 @@ public class Assign extends Expression {
         visitor.visitAssignPostorder(this);
     }
 
-    public AbstractSymbol getVariableIdentifier() {
+    public IdSymbol getVariableIdentifier() {
         return name;
     }
 

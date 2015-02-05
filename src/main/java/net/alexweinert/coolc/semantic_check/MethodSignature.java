@@ -3,35 +3,35 @@ package net.alexweinert.coolc.semantic_check;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 class MethodSignature {
-    private AbstractSymbol returnType;
-    private AbstractSymbol methodIdentifier;
-    private List<AbstractSymbol> argumentTypes;
-    private AbstractSymbol definingClass;
+    private IdSymbol returnType;
+    private IdSymbol methodIdentifier;
+    private List<IdSymbol> argumentTypes;
+    private IdSymbol definingClass;
 
-    MethodSignature(AbstractSymbol returnType, AbstractSymbol methodIdentifier, List<AbstractSymbol> argumentTypes,
-            AbstractSymbol definingClass) {
+    MethodSignature(IdSymbol returnType, IdSymbol methodIdentifier, List<IdSymbol> argumentTypes,
+            IdSymbol definingClass) {
         this.returnType = returnType;
         this.methodIdentifier = methodIdentifier;
         this.argumentTypes = new LinkedList<>(argumentTypes);
         this.definingClass = definingClass;
     }
 
-    public AbstractSymbol getReturnType() {
+    public IdSymbol getReturnType() {
         return returnType;
     }
 
-    public AbstractSymbol getIdentifier() {
+    public IdSymbol getIdentifier() {
         return this.methodIdentifier;
     }
 
-    public List<AbstractSymbol> getArgumentTypes() {
+    public List<IdSymbol> getArgumentTypes() {
         return new LinkedList<>(argumentTypes);
     }
 
-    public AbstractSymbol getDefiningClass() {
+    public IdSymbol getDefiningClass() {
         return definingClass;
     }
 }

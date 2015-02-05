@@ -50,6 +50,11 @@ import net.alexweinert.coolc.program.symboltables.*;
 		StringSymbol symbol = AbstractTable.stringtable.addString(value);
 		return new Symbol(type, symbol);
 	}
+
+	private Symbol createIdToken(int type, String value) {
+		IdSymbol symbol = AbstractTable.idtable.addString(value);
+		return new Symbol(type, symbol);
+	}
 %}
 
 
@@ -280,8 +285,8 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 <YYINITIAL>t[Rr][Uu][Ee]	{ return new Symbol(Tokens.BOOL_CONST, Boolean.TRUE); }
 <YYINITIAL>[Ww][Hh][Ii][Ll][Ee] { return new Symbol(Tokens.WHILE); }
 
-<YYINITIAL>{OBJECT_ID} { return createStringToken(Tokens.OBJECTID, yytext()); }
-<YYINITIAL>{TYPE_ID} { return createStringToken(Tokens.TYPEID, yytext()); }
+<YYINITIAL>{OBJECT_ID} { return createIdToken(Tokens.OBJECTID, yytext()); }
+<YYINITIAL>{TYPE_ID} { return createIdToken(Tokens.TYPEID, yytext()); }
 <YYINITIAL> "*)" { return createStringToken(Tokens.ERROR, "Unmatched *)"); }
 
 

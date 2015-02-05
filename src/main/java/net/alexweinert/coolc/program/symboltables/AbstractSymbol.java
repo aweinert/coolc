@@ -35,7 +35,7 @@ package net.alexweinert.coolc.program.symboltables;
  *
  * @see AbstractTable
  * */
-public abstract class AbstractSymbol<T> {
+abstract class AbstractSymbol<T> {
     /** The stored string */
     protected String str;
 
@@ -79,7 +79,7 @@ public abstract class AbstractSymbol<T> {
      * @return true if the symbols are equal
      * */
     public boolean equals(Object another) {
-        return (another instanceof AbstractSymbol) && ((AbstractSymbol) another).str.equals(this.str);
+        return (another instanceof AbstractSymbol<?>) && ((AbstractSymbol<?>) another).str.equals(this.str);
     }
 
     /** Returns the string representation of this symbol. */

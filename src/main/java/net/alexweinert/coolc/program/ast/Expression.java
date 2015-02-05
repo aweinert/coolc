@@ -3,7 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 
@@ -13,7 +13,7 @@ public abstract class Expression extends TreeNode {
         super(filename, lineNumber);
     }
 
-    final private AbstractSymbol type = null;
+    final private IdSymbol type = null;
 
     public abstract void dump_with_types(PrintStream out, int n);
 
@@ -25,12 +25,12 @@ public abstract class Expression extends TreeNode {
         }
     }
 
-    public AbstractSymbol typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        AbstractSymbol checkedType = this.inferType(enclosingClass, classTable, featureTable);
+    public IdSymbol typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+        IdSymbol checkedType = this.inferType(enclosingClass, classTable, featureTable);
         return checkedType;
     }
 
-    protected abstract AbstractSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable);
+    protected abstract IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable);
 
     @Override
     public int hashCode() {

@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 /**
  * Defines AST constructor 'formalc'.
@@ -12,8 +12,8 @@ import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Formal extends TreeNode {
-    final protected AbstractSymbol name;
-    final protected AbstractSymbol type_decl;
+    final protected IdSymbol name;
+    final protected IdSymbol type_decl;
 
     /**
      * Creates "formalc" AST node.
@@ -25,7 +25,7 @@ public class Formal extends TreeNode {
      * @param a1
      *            initial value for type_decl
      */
-    public Formal(String filename, int lineNumber, AbstractSymbol a1, AbstractSymbol a2) {
+    public Formal(String filename, int lineNumber, IdSymbol a1, IdSymbol a2) {
         super(filename, lineNumber);
         name = a1;
         type_decl = a2;
@@ -33,15 +33,15 @@ public class Formal extends TreeNode {
 
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "formalc\n");
-        dump_AbstractSymbol(out, n + 2, name);
-        dump_AbstractSymbol(out, n + 2, type_decl);
+        dump_IdSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, type_decl);
     }
 
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_formal");
-        dump_AbstractSymbol(out, n + 2, name);
-        dump_AbstractSymbol(out, n + 2, type_decl);
+        dump_IdSymbol(out, n + 2, name);
+        dump_IdSymbol(out, n + 2, type_decl);
     }
 
     @Override
@@ -49,11 +49,11 @@ public class Formal extends TreeNode {
         visitor.visitFormal(this);
     }
 
-    public AbstractSymbol getIdentifier() {
+    public IdSymbol getIdentifier() {
         return this.name;
     }
 
-    public AbstractSymbol getDeclaredType() {
+    public IdSymbol getDeclaredType() {
         return this.type_decl;
     }
 

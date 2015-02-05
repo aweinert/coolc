@@ -2,20 +2,20 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
 
 /** Defines simple phylum Feature */
 public abstract class Feature extends TreeNode {
-    final protected AbstractSymbol name;
+    final protected IdSymbol name;
 
-    protected Feature(String filename, int lineNumber, AbstractSymbol name) {
+    protected Feature(String filename, int lineNumber, IdSymbol name) {
         super(filename, lineNumber);
         this.name = name;
     }
 
-    public AbstractSymbol getName() {
+    public IdSymbol getName() {
         return this.name;
     }
 

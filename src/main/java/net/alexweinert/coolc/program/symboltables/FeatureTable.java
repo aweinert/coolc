@@ -20,20 +20,20 @@ public class FeatureTable {
      */
     public class MethodSignature {
         /** The return type of the method */
-        private AbstractSymbol returnType;
+        private IdSymbol returnType;
         /** The types of the formal arguments, from left to right */
-        private List<AbstractSymbol> argumentTypes;
+        private List<IdSymbol> argumentTypes;
 
-        public MethodSignature(AbstractSymbol returnType, Collection<AbstractSymbol> argumentTypes) {
+        public MethodSignature(IdSymbol returnType, Collection<IdSymbol> argumentTypes) {
             this.returnType = returnType;
             this.argumentTypes = new LinkedList<>(argumentTypes);
         }
 
-        public AbstractSymbol getReturnType() {
+        public IdSymbol getReturnType() {
             return returnType;
         }
 
-        public List<AbstractSymbol> getArgumentTypes() {
+        public List<IdSymbol> getArgumentTypes() {
             return argumentTypes;
         }
 
@@ -75,14 +75,14 @@ public class FeatureTable {
     }
 
     /** Type: [ClassName x MethodName -> MethodSignature] */
-    private Map<AbstractSymbol, Map<AbstractSymbol, MethodSignature>> methodSignatures = new HashMap<>();
+    private Map<IdSymbol, Map<IdSymbol, MethodSignature>> methodSignatures = new HashMap<>();
     /** Type: [ClassName x AttributeName -> AttributeType] */
-    private Map<AbstractSymbol, Map<AbstractSymbol, AbstractSymbol>> attributeTypes = new HashMap<>();
+    private Map<IdSymbol, Map<IdSymbol, IdSymbol>> attributeTypes = new HashMap<>();
 
     public FeatureTable(ClassTable classTable) {
         for (Class currentClass : classTable.getClasses()) {
-            Map<AbstractSymbol, MethodSignature> currentMethodSignatures = new HashMap<>();
-            Map<AbstractSymbol, AbstractSymbol> currentAttributeTypes = new HashMap<>();
+            Map<IdSymbol, MethodSignature> currentMethodSignatures = new HashMap<>();
+            Map<IdSymbol, IdSymbol> currentAttributeTypes = new HashMap<>();
 
             // Make sure that the special variable self has the correct type
             currentAttributeTypes.put(TreeConstants.self, currentClass.getIdentifier());
@@ -107,7 +107,7 @@ public class FeatureTable {
              * and add the unconflicting parents' definitions */
             for (Class parentClass : classTable.getAncestors(childClass)) {
                 // Add all the parents' attributes to the child
-                for (AbstractSymbol parentAttribute : this.getAttributeTypes(parentClass.getIdentifier()).keySet()) {
+                for (IdSymbol parentAttribute : this.getAttributeTypes(parentClass.getIdentifier()).keySet()) {
                     if (parentAttribute.equals(TreeConstants.self)) {
                         continue;
                     }
@@ -123,7 +123,7 @@ public class FeatureTable {
                         // If this error happens, we use the type declared in the child class, which has already been
                         // added
                     } else {
-                        AbstractSymbol parentAttributeType = this.getAttributeTypes(parentClass.getIdentifier()).get(
+                        IdSymbol parentAttributeType = this.getAttributeTypes(parentClass.getIdentifier()).get(
                                 parentAttribute);
                         this.getAttributeTypes(childClass.getIdentifier()).put(parentAttribute, parentAttributeType);
                     }
@@ -131,7 +131,7 @@ public class FeatureTable {
                 }
 
                 // Add all the parents' methods to the child
-                for (AbstractSymbol parentMethod : this.getMethodSignatures(parentClass.getIdentifier()).keySet()) {
+                for (IdSymbol parentMethod : this.getMethodSignatures(parentClass.getIdentifier()).keySet()) {
                     // Check that, if functions are redefined, their signatures match
                     if (this.getMethodSignatures(childClass.getIdentifier()).containsKey(parentMethod)) {
                         MethodSignature childSignature = this.getMethodSignatures(childClass.getIdentifier()).get(
@@ -164,7 +164,7 @@ public class FeatureTable {
      * reported. If the number of arguments are the same, but the types differ at some point, the leftmost location at
      * which the types differ is reported.
      */
-    private String generateErrorString(AbstractSymbol methodSignature, MethodSignature childSignature,
+    private String generateErrorString(IdSymbol methodSignature, MethodSignature childSignature,
             MethodSignature parentSignature) {
         if (!parentSignature.returnType.equals(childSignature.returnType)) {
             return String.format("In redefined method %s, return type %s is different from original return type %s.",
@@ -175,8 +175,8 @@ public class FeatureTable {
 
         } else {
             // Walk through the types of the arguments and compare them one by one
-            List<AbstractSymbol> parentFormalTypes = parentSignature.getArgumentTypes();
-            List<AbstractSymbol> childFormalTypes = childSignature.getArgumentTypes();
+            List<IdSymbol> parentFormalTypes = parentSignature.getArgumentTypes();
+            List<IdSymbol> childFormalTypes = childSignature.getArgumentTypes();
 
             for (int formalTypeIndex = 0; formalTypeIndex < parentSignature.getArgumentTypes().size(); ++formalTypeIndex) {
                 if (!parentFormalTypes.get(formalTypeIndex).equals(childFormalTypes.get(formalTypeIndex))) {
@@ -202,7 +202,7 @@ public class FeatureTable {
      * @return The attr-node that defines the attribute of the given name, if the given class has an attribute of this
      *         name
      */
-    public Attribute findAttributeDefinition(Class currentClass, AbstractSymbol attributeName) {
+    public Attribute findAttributeDefinition(Class currentClass, IdSymbol attributeName) {
         for (final Feature currentFeature : currentClass.getFeatures()) {
             if (currentFeature instanceof Attribute && ((Attribute) currentFeature).getName().equals(attributeName)) {
                 return (Attribute) currentFeature;
@@ -222,7 +222,7 @@ public class FeatureTable {
      * @return The method-node that defines the attribute of the given name, if the given class has an attribute of this
      *         name
      */
-    public Method findMethodDefinition(Class currentClass, AbstractSymbol methodName) {
+    public Method findMethodDefinition(Class currentClass, IdSymbol methodName) {
         for (final Feature currentFeature : currentClass.getFeatures()) {
             if (currentFeature instanceof Method && ((Method) currentFeature).getName().equals(methodName)) {
                 return (Method) currentFeature;
@@ -238,17 +238,17 @@ public class FeatureTable {
      * @param attributeTypes
      *            The map of ClassNames and AttributeNames to their types. Is not copied.
      */
-    private FeatureTable(Map<AbstractSymbol, Map<AbstractSymbol, MethodSignature>> methodSignatures,
-            Map<AbstractSymbol, Map<AbstractSymbol, AbstractSymbol>> attributeTypes) {
+    private FeatureTable(Map<IdSymbol, Map<IdSymbol, MethodSignature>> methodSignatures,
+            Map<IdSymbol, Map<IdSymbol, IdSymbol>> attributeTypes) {
         this.methodSignatures = methodSignatures;
         this.attributeTypes = attributeTypes;
     }
 
-    public Map<AbstractSymbol, AbstractSymbol> getAttributeTypes(AbstractSymbol className) {
+    public Map<IdSymbol, IdSymbol> getAttributeTypes(IdSymbol className) {
         return this.attributeTypes.get(className);
     }
 
-    public Map<AbstractSymbol, MethodSignature> getMethodSignatures(AbstractSymbol className) {
+    public Map<IdSymbol, MethodSignature> getMethodSignatures(IdSymbol className) {
         return this.methodSignatures.get(className);
     }
 
@@ -263,15 +263,15 @@ public class FeatureTable {
      * @param memberType
      *            The type of className.memberName
      */
-    public FeatureTable copyAndExtend(AbstractSymbol className, AbstractSymbol memberName, AbstractSymbol memberType) {
+    public FeatureTable copyAndExtend(IdSymbol className, IdSymbol memberName, IdSymbol memberType) {
         FeatureTable returnValue = this.deepCopy();
 
         // Get the attribute types map for the given class, or create one if there is none
-        final Map<AbstractSymbol, AbstractSymbol> attributeTypes;
+        final Map<IdSymbol, IdSymbol> attributeTypes;
         if (returnValue.attributeTypes.containsKey(className)) {
             attributeTypes = returnValue.attributeTypes.get(className);
         } else {
-            attributeTypes = new HashMap<AbstractSymbol, AbstractSymbol>();
+            attributeTypes = new HashMap<IdSymbol, IdSymbol>();
             returnValue.attributeTypes.put(className, attributeTypes);
         }
 
@@ -285,9 +285,9 @@ public class FeatureTable {
      * @return A deep copy of this object
      */
     private FeatureTable deepCopy() {
-        Map<AbstractSymbol, Map<AbstractSymbol, AbstractSymbol>> attributeTypesClone = new HashMap<>(
+        Map<IdSymbol, Map<IdSymbol, IdSymbol>> attributeTypesClone = new HashMap<>(
                 this.attributeTypes);
-        Map<AbstractSymbol, Map<AbstractSymbol, MethodSignature>> methodSignaturesClone = new HashMap<>(
+        Map<IdSymbol, Map<IdSymbol, MethodSignature>> methodSignaturesClone = new HashMap<>(
                 this.methodSignatures);
 
         return new FeatureTable(methodSignaturesClone, attributeTypesClone);
@@ -299,8 +299,8 @@ public class FeatureTable {
      * 
      * @return The inputmap augmented with the information given by the current feature.
      */
-    private Map<AbstractSymbol, AbstractSymbol> addAttributeType(ClassTable classTable, Class enclosingClass,
-            Map<AbstractSymbol, AbstractSymbol> attributeTypes, Feature currentFeature) {
+    private Map<IdSymbol, IdSymbol> addAttributeType(ClassTable classTable, Class enclosingClass,
+            Map<IdSymbol, IdSymbol> attributeTypes, Feature currentFeature) {
         Attribute currentAttribute = (Attribute) currentFeature;
 
         // Check that the new attribute is not self
@@ -327,12 +327,12 @@ public class FeatureTable {
      * 
      * @return The inputmap augmented with the information given by the current feature.
      */
-    private Map<AbstractSymbol, MethodSignature> addMethodSignature(ClassTable classTable, Class enclosingClass,
-            Map<AbstractSymbol, MethodSignature> methodSignatures, Feature currentFeature) {
+    private Map<IdSymbol, MethodSignature> addMethodSignature(ClassTable classTable, Class enclosingClass,
+            Map<IdSymbol, MethodSignature> methodSignatures, Feature currentFeature) {
         Method currentMethod = (Method) currentFeature;
 
-        AbstractSymbol returnType = currentMethod.getReturnType();
-        List<AbstractSymbol> formalTypes = new LinkedList<>();
+        IdSymbol returnType = currentMethod.getReturnType();
+        List<IdSymbol> formalTypes = new LinkedList<>();
 
         // Construct the list of formal types
         for (final Formal currentFormal : currentMethod.getFormals()) {
