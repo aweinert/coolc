@@ -62,7 +62,7 @@ import net.alexweinert.coolc.program.Utilities;
  * @see IdSymbol
  * @see IntSymbol
  */
-public abstract class AbstractTable<T> {
+abstract class AbstractTable<T> {
     /** Vector of table entries */
     protected Map<T, AbstractSymbol<T>> tbl = new HashMap<>();
 

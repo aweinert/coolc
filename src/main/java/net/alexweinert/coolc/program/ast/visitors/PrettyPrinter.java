@@ -1,7 +1,5 @@
 package net.alexweinert.coolc.program.ast.visitors;
 
-import java.util.Stack;
-
 import net.alexweinert.coolc.program.ast.Addition;
 import net.alexweinert.coolc.program.ast.ArithmeticNegation;
 import net.alexweinert.coolc.program.ast.Assign;
@@ -37,7 +35,6 @@ import net.alexweinert.coolc.program.ast.StaticFunctionCall;
 import net.alexweinert.coolc.program.ast.StringConst;
 import net.alexweinert.coolc.program.ast.TreeNode;
 import net.alexweinert.coolc.program.ast.Typecase;
-import net.alexweinert.coolc.program.symboltables.AbstractTable;
 
 public class PrettyPrinter extends ASTVisitor {
 
