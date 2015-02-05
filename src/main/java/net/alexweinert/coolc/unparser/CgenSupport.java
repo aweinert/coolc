@@ -19,8 +19,8 @@ package net.alexweinert.coolc.unparser;
 
 import java.io.PrintStream;
 
-import net.alexweinert.coolc.program.symboltables.AbstractSymbol;
 import net.alexweinert.coolc.program.symboltables.BoolSymbol;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.IntSymbol;
 import net.alexweinert.coolc.program.symboltables.StringSymbol;
 
@@ -426,7 +426,7 @@ public class CgenSupport {
      * @param s
      *            the output stream
      * */
-    public static void emitDispTableRef(AbstractSymbol sym, PrintStream s) {
+    public static void emitDispTableRef(IdSymbol sym, PrintStream s) {
         s.print(sym + DISPTAB_SUFFIX);
     }
 
@@ -438,7 +438,7 @@ public class CgenSupport {
      * @param s
      *            the output stream
      * */
-    public static void emitInitRef(AbstractSymbol sym, PrintStream s) {
+    public static void emitInitRef(IdSymbol sym, PrintStream s) {
         s.print(sym + CLASSINIT_SUFFIX);
     }
 
@@ -450,7 +450,7 @@ public class CgenSupport {
      * @param s
      *            the output stream
      * */
-    public static void emitProtObjRef(AbstractSymbol sym, PrintStream s) {
+    public static void emitProtObjRef(IdSymbol sym, PrintStream s) {
         s.print(sym + PROTOBJ_SUFFIX);
     }
 
@@ -464,7 +464,7 @@ public class CgenSupport {
      * @param s
      *            the output stream
      * */
-    public static void emitMethodRef(AbstractSymbol classname, AbstractSymbol methodname, PrintStream s) {
+    public static void emitMethodRef(IdSymbol classname, IdSymbol methodname, PrintStream s) {
         s.print(classname + METHOD_SEP + methodname);
     }
 
