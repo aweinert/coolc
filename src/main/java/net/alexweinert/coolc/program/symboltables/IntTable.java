@@ -25,7 +25,7 @@ public class IntTable extends AbstractTable<Integer> {
      * 
      * @see IntSymbol
      * */
-    protected AbstractSymbol<Integer> getNewSymbol(String s, int index) {
+    protected IntSymbol getNewSymbol(String s, int index) {
         return new IntSymbol(s, index);
     }
 
@@ -36,14 +36,14 @@ public class IntTable extends AbstractTable<Integer> {
      *            the integer to add
      * @return the symbol for the integer i
      * */
-    public AbstractSymbol<Integer> addInt(int i) {
+    public IntSymbol addInt(int i) {
         if (!this.tbl.containsKey(i)) {
             this.tbl.put(i, getNewSymbol(Integer.toString(i), tbl.size()));
         }
-        return this.tbl.get(i);
+        return (IntSymbol) this.tbl.get(i);
     }
 
-    public AbstractSymbol<Integer> addInt(String s) {
+    public IntSymbol addInt(String s) {
         return this.addInt(Integer.parseInt(s));
     }
 

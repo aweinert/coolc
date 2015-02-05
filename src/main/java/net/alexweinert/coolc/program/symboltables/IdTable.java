@@ -23,7 +23,7 @@ public class IdTable extends AbstractTable<String> {
      * 
      * @see IdSymbol
      * */
-    protected AbstractSymbol<String> getNewSymbol(String s, int index) {
+    protected IdSymbol getNewSymbol(String s, int index) {
         return new IdSymbol(s, index);
     }
 
@@ -34,10 +34,10 @@ public class IdTable extends AbstractTable<String> {
      *            the string to add
      * @return the symbol for the string s
      * */
-    public AbstractSymbol<String> addString(String s) {
+    public IdSymbol addString(String s) {
         if (!this.tbl.containsKey(s)) {
             this.tbl.put(s, getNewSymbol(s, tbl.size()));
         }
-        return this.tbl.get(s);
+        return (IdSymbol) this.tbl.get(s);
     }
 }
