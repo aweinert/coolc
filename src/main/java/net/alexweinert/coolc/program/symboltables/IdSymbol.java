@@ -23,9 +23,4 @@ public class IdSymbol extends AbstractSymbol<String> {
     public IdSymbol(String str, int index) {
         super(str, index);
     }
-
-    /** Returns a copy of this symbol */
-    public Object clone() {
-        return new IdSymbol(str, index);
-    }
 }

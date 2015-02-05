@@ -91,7 +91,4 @@ public abstract class AbstractSymbol<T> {
     public String toString() {
         return str;
     }
-
-    /** Returns a copy of this symbol */
-    public abstract Object clone();
 }

@@ -85,9 +85,4 @@ public class BoolSymbol extends AbstractSymbol<Boolean> {
         s.println(""); // dispatch table
         s.println(CgenSupport.WORD + (val ? "1" : "0")); // value (0 or 1)
     }
-
-    @Override
-    public Object clone() {
-        return this;
-    }
 }

@@ -72,9 +72,4 @@ public class StringSymbol extends AbstractSymbol<String> {
     public void codeRef(PrintStream s) {
         s.print(CgenSupport.STRCONST_PREFIX + index);
     }
-
-    /** Returns a copy of this symbol */
-    public Object clone() {
-        return new StringSymbol(str, index);
-    }
 }
