@@ -47,12 +47,12 @@ import net.alexweinert.coolc.program.symboltables.*;
 	private int commentDepth = 0;
 
 	private Symbol createStringToken(int type, String value) {
-		StringSymbol symbol = AbstractTable.stringtable.addString(value);
+		StringSymbol symbol = StringTable.getInstance().addString(value);
 		return new Symbol(type, symbol);
 	}
 
 	private Symbol createIdToken(int type, String value) {
-		IdSymbol symbol = AbstractTable.idtable.addString(value);
+		IdSymbol symbol = IdTable.getInstance().addString(value);
 		return new Symbol(type, symbol);
 	}
 %}
@@ -157,7 +157,7 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 
 <YYINITIAL> \*\) {
 	// Since we are in YYINITIAL, we know that we encountered an unmatched comment end
-	StringSymbol errorMessage = AbstractTable.stringtable.addString("Unmatched *)");
+	StringSymbol errorMessage = StringTable.getInstance().addString("Unmatched *)");
 	return new Symbol(Tokens.ERROR, errorMessage);
 }
 
@@ -263,7 +263,7 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 
 
 <YYINITIAL>{INTEGER}  { /* Integers */
-                          return new Symbol(Tokens.INT_CONST, AbstractTable.inttable.addInt(yytext())); }
+                          return new Symbol(Tokens.INT_CONST, IntTable.getInstance().addInt(yytext())); }
 
 <YYINITIAL>[Cc][Aa][Ss][Ee]	{ return new Symbol(Tokens.CASE); }
 <YYINITIAL>[Cc][Ll][Aa][Ss][Ss] { return new Symbol(Tokens.CLASS); }

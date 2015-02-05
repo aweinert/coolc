@@ -20,6 +20,13 @@ import java.io.PrintStream;
 import net.alexweinert.coolc.program.Utilities;
 
 public class StringTable extends AbstractTable<String> {
+
+    private static final StringTable instance = new StringTable();
+
+    public static StringTable getInstance() {
+        return instance;
+    }
+
     /**
      * Creates a new StringSymbol object.
      * 

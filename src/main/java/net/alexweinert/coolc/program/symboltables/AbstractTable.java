@@ -42,8 +42,8 @@ import net.alexweinert.coolc.program.Utilities;
  * <p>
  * 
  * An important point about the structure of the Cool compiler is that there are actually three distinct string tables:
- * one for string constants (<a href="#stringtable">AbstractTable.stringtable</a>), one for integer constants (<a
- * href="#inttable">AbstractTable.inttable</a>), and one for identifiers (<a href="#idtable">AbstractTable.idtable</a>).
+ * one for string constants (<a href="#stringtable">StringTable.getInstance()</a>), one for integer constants (<a
+ * href="#inttable">IntTable.getInstance()</a>), and one for identifiers (<a href="#idtable">IdTable.getInstance()</a>).
  * The code generator must distinguish integer constants and string constants from each other and from identifiers,
  * because special code is produced for each string constant and each integer constant in the program. Having three
  * distinct string tables makes this distinction easy. Note that each of the three tables has a different element type
@@ -63,15 +63,6 @@ import net.alexweinert.coolc.program.Utilities;
  * @see IntSymbol
  */
 public abstract class AbstractTable<T> {
-    /** Global string table of string constants */
-    public static StringTable stringtable = new StringTable();
-
-    /** Global string table of identifiers */
-    public static IdTable idtable = new IdTable();
-
-    /** Global string table of integer constants */
-    public static IntTable inttable = new IntTable();
-
     /** Vector of table entries */
     protected Map<T, AbstractSymbol<T>> tbl = new HashMap<>();
 

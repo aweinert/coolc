@@ -42,7 +42,7 @@ public class StringSymbol extends AbstractSymbol<String> {
      *
      * */
     public void codeDef(int stringclasstag, PrintStream s) {
-        IntSymbol lensym = (IntSymbol) AbstractTable.inttable.addInt(str.length());
+        IntSymbol lensym = (IntSymbol) IntTable.getInstance().addInt(str.length());
 
         // Add -1 eye catcher
         s.println(CgenSupport.WORD + "-1");

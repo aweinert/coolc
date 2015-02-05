@@ -1,11 +1,10 @@
 package net.alexweinert.coolc.semantic_check;
 
-import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Classes;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractTable;
+import net.alexweinert.coolc.program.symboltables.IdTable;
 
 class BuiltinInheritanceChecker extends ASTVisitor {
 
@@ -28,14 +27,14 @@ class BuiltinInheritanceChecker extends ASTVisitor {
 
     @Override
     public void visitClassPostorder(Class classNode) {
-        final boolean inheritsInt = classNode.getParent().equals(AbstractTable.idtable.addString("Int"));
-        final boolean inheritsBool = classNode.getParent().equals(AbstractTable.idtable.addString("Bool"));
-        final boolean inheritsString = classNode.getParent().equals(AbstractTable.idtable.addString("String"));
-        final boolean inheritsIO = classNode.getParent().equals(AbstractTable.idtable.addString("IO"));
+        final boolean inheritsInt = classNode.getParent().equals(IdTable.getInstance().addString("Int"));
+        final boolean inheritsBool = classNode.getParent().equals(IdTable.getInstance().addString("Bool"));
+        final boolean inheritsString = classNode.getParent().equals(IdTable.getInstance().addString("String"));
+        final boolean inheritsIO = classNode.getParent().equals(IdTable.getInstance().addString("IO"));
         final boolean forbiddenInheritance = inheritsInt || inheritsBool || inheritsString || inheritsIO;
         if (forbiddenInheritance) {
             out.reportBaseClassInheritance(classNode);
-            this.classes.remove(classNode).add(classNode.setParent(AbstractTable.idtable.addString("Object")));
+            this.classes.remove(classNode).add(classNode.setParent(IdTable.getInstance().addString("Object")));
         }
     }
 

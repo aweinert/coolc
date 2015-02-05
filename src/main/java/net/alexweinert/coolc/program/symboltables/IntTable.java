@@ -20,6 +20,12 @@ import java.io.PrintStream;
 import net.alexweinert.coolc.program.Utilities;
 
 public class IntTable extends AbstractTable<Integer> {
+    private static final IntTable instance = new IntTable();
+
+    public static IntTable getInstance() {
+        return instance;
+    }
+
     /**
      * Creates a new IntSymbol object.
      * 

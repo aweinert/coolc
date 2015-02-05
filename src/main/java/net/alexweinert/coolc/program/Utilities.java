@@ -18,10 +18,12 @@ import java.io.PrintStream;
 
 import java_cup.runtime.Symbol;
 import net.alexweinert.coolc.parser.Tokens;
-import net.alexweinert.coolc.program.symboltables.AbstractTable;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.program.symboltables.IdTable;
 import net.alexweinert.coolc.program.symboltables.IntSymbol;
+import net.alexweinert.coolc.program.symboltables.IntTable;
 import net.alexweinert.coolc.program.symboltables.StringSymbol;
+import net.alexweinert.coolc.program.symboltables.StringTable;
 
 public class Utilities {
     // change this to true to enable table checking
@@ -217,7 +219,7 @@ public class Utilities {
             val = ((IntSymbol) s.value).getString();
             System.err.print(" = " + val);
             if (checkTables) {
-                AbstractTable.inttable.lookup(val);
+                IntTable.getInstance().lookup(val);
             }
             break;
         case Tokens.TYPEID:
@@ -225,7 +227,7 @@ public class Utilities {
             val = ((IdSymbol) s.value).getString();
             System.err.print(" = " + val);
             if (checkTables) {
-                AbstractTable.idtable.lookup(val);
+                IdTable.getInstance().lookup(val);
             }
             break;
         case Tokens.STR_CONST:
@@ -234,7 +236,7 @@ public class Utilities {
             printEscapedString(System.err, val);
             System.err.print("\"");
             if (checkTables) {
-                AbstractTable.stringtable.lookup(val);
+                StringTable.getInstance().lookup(val);
             }
             break;
         case Tokens.ERROR:
@@ -267,7 +269,7 @@ public class Utilities {
             val = ((IntSymbol) s.value).getString();
             str.print(" " + val);
             if (checkTables) {
-                AbstractTable.inttable.lookup(val);
+                IntTable.getInstance().lookup(val);
             }
             break;
         case Tokens.TYPEID:
@@ -275,7 +277,7 @@ public class Utilities {
             val = ((IdSymbol) s.value).getString();
             str.print(" " + val);
             if (checkTables) {
-                AbstractTable.idtable.lookup(val);
+                IdTable.getInstance().lookup(val);
             }
             break;
         case Tokens.STR_CONST:
@@ -284,7 +286,7 @@ public class Utilities {
             printEscapedString(str, val);
             str.print("\"");
             if (checkTables) {
-                AbstractTable.stringtable.lookup(val);
+                StringTable.getInstance().lookup(val);
             }
             break;
         case Tokens.ERROR:

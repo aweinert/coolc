@@ -4,7 +4,7 @@ import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.ast.TreeNode;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.AbstractTable;
+import net.alexweinert.coolc.program.symboltables.IdTable;
 
 class ClassHierarchyFactory extends ASTVisitor {
     final private ClassHierarchyBuilder builder = new ClassHierarchyBuilder();
@@ -18,11 +18,11 @@ class ClassHierarchyFactory extends ASTVisitor {
     @Override
     public void visitProgramPreorder(Program program) {
         // Install predefined classes
-        this.builder.addInheritance(AbstractTable.idtable.addString("IO"), AbstractTable.idtable.addString("Object"));
-        this.builder.addInheritance(AbstractTable.idtable.addString("Int"), AbstractTable.idtable.addString("Object"));
-        this.builder.addInheritance(AbstractTable.idtable.addString("String"),
-                AbstractTable.idtable.addString("Object"));
-        this.builder.addInheritance(AbstractTable.idtable.addString("Bool"), AbstractTable.idtable.addString("Object"));
+        this.builder.addInheritance(IdTable.getInstance().addString("IO"), IdTable.getInstance().addString("Object"));
+        this.builder.addInheritance(IdTable.getInstance().addString("Int"), IdTable.getInstance().addString("Object"));
+        this.builder.addInheritance(IdTable.getInstance().addString("String"), IdTable.getInstance()
+                .addString("Object"));
+        this.builder.addInheritance(IdTable.getInstance().addString("Bool"), IdTable.getInstance().addString("Object"));
     }
 
     public void visitClassPreorder(Class classNode) {

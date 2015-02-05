@@ -18,6 +18,12 @@ import net.alexweinert.coolc.program.Utilities;
  * MODIFICATIONS. */
 
 public class IdTable extends AbstractTable<String> {
+    private static final IdTable instance = new IdTable();
+
+    public static IdTable getInstance() {
+        return IdTable.instance;
+    }
+
     /**
      * Creates a new IdSymbol object.
      * 

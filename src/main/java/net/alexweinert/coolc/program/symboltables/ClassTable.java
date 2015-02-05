@@ -50,7 +50,7 @@ public class ClassTable {
      * method does not do anything useful; you will need to edit it to make if do what you want.
      * */
     private void installBasicClasses() {
-        StringSymbol filename = AbstractTable.stringtable.addString("<basic class>");
+        StringSymbol filename = StringTable.getInstance().addString("<basic class>");
 
         Class objectClass = createObjectClass(filename);
         this.classes.put(objectClass.getIdentifier(), objectClass);
