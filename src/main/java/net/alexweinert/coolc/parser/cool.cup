@@ -64,9 +64,10 @@ terminal CASE, ESAC, OF, DARROW, NEW, ISVOID;
 terminal ASSIGN, NOT, LE, ERROR;
 terminal PLUS, DIV, MINUS, MULT, EQ, LT, DOT, NEG, COMMA, SEMI, COLON;
 terminal LPAREN, RPAREN, AT, LBRACE, RBRACE;
-terminal AbstractSymbol STR_CONST, INT_CONST;
+terminal StringSymbol STR_CONST;
+terminal IntSymbol INT_CONST;
 terminal Boolean BOOL_CONST;
-terminal AbstractSymbol TYPEID, OBJECTID;
+terminal IdSymbol TYPEID, OBJECTID;
 
 /*  DON'T CHANGE ANYTHING ABOVE THIS LINE, OR YOUR PARSER WON'T WORK      */
 /**************************************************************************/
@@ -88,7 +89,7 @@ nonterminal Formals formals;
 nonterminal Formal formal;
 nonterminal Case case;
 nonterminal Cases cases;
-nonterminal AbstractSymbol opt_inherits;
+nonterminal IdSymbol opt_inherits;
 
 
 /*
