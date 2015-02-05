@@ -47,7 +47,7 @@ import net.alexweinert.coolc.program.symboltables.*;
 	private int commentDepth = 0;
 
 	private Symbol createStringToken(int type, String value) {
-		AbstractSymbol symbol = AbstractTable.stringtable.addString(value);
+		StringSymbol symbol = AbstractTable.stringtable.addString(value);
 		return new Symbol(type, symbol);
 	}
 %}
@@ -152,7 +152,7 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 
 <YYINITIAL> \*\) {
 	// Since we are in YYINITIAL, we know that we encountered an unmatched comment end
-	AbstractSymbol errorMessage = AbstractTable.stringtable.addString("Unmatched *)");
+	StringSymbol errorMessage = AbstractTable.stringtable.addString("Unmatched *)");
 	return new Symbol(Tokens.ERROR, errorMessage);
 }
 
@@ -229,7 +229,7 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 	// Found the end of the literal, tokenize the string if it not too long
 	yybegin(YYINITIAL);
 	String literal = this.string_buf.toString();
-	final AbstractSymbol value;
+	final StringSymbol value;
 	final int tokenCategory;
 	if(literal.length() > MAX_STR_CONST) {
 		return createStringToken(Tokens.ERROR, "String constant too long");
