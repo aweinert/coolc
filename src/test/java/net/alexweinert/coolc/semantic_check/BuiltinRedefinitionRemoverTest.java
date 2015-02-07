@@ -1,17 +1,15 @@
 package net.alexweinert.coolc.semantic_check;
 
 import java.util.Arrays;
-import java.util.Collections;
 
-import org.junit.Assert;
+import net.alexweinert.coolc.program.ast.ASTFactory;
 import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Classes;
-import net.alexweinert.coolc.program.ast.Feature;
-import net.alexweinert.coolc.program.ast.Features;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.IdTable;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -19,43 +17,38 @@ public class BuiltinRedefinitionRemoverTest {
 
     @Test
     public void testObjectRemoval() {
-        this.testBuiltinRemoval(IdTable.getInstance().addString("Object"));
+        this.testBuiltinRemoval("Object");
     }
 
     @Test
     public void testBoolRemoval() {
-        this.testBuiltinRemoval(IdTable.getInstance().addString("Bool"));
+        this.testBuiltinRemoval("Bool");
     }
 
     @Test
     public void testIntRemoval() {
-        this.testBuiltinRemoval(IdTable.getInstance().addString("Int"));
+        this.testBuiltinRemoval("Int");
     }
 
     @Test
     public void testStringRemoval() {
-        this.testBuiltinRemoval(IdTable.getInstance().addString("String"));
+        this.testBuiltinRemoval("String");
     }
 
     @Test
     public void testIORemoval() {
-        this.testBuiltinRemoval(IdTable.getInstance().addString("IO"));
+        this.testBuiltinRemoval("IO");
     }
 
     @Test
     public void testNonRemoval() {
         final ISemanticErrorReporter err = Mockito.mock(ISemanticErrorReporter.class);
 
-        final IdSymbol objectSymbol = IdTable.getInstance().addString("Object");
-        final IdSymbol classOneSymbol = IdTable.getInstance().addString("ClassOne");
-        final IdSymbol classTwoSymbol = IdTable.getInstance().addString("ClassTwo");
-        final Class classOne = new Class("test.cl", 1, classOneSymbol, objectSymbol, new Features("test.cl", 1,
-                Collections.<Feature> emptyList()));
-        final Class classTwo = new Class("test.cl", 1, classTwoSymbol, objectSymbol, new Features("test.cl", 1,
-                Collections.<Feature> emptyList()));
+        final ASTFactory factory = new ASTFactory();
 
-        final Program testProgram = new Program("test.cl", 1, new Classes("test.cl", 1, Arrays.asList(classOne,
-                classTwo)));
+        final Class classOne = factory.classNode("ClassOne", "Object");
+        final Class classTwo = factory.classNode("ClassTwo", "Object");
+        final Program testProgram = factory.program(classOne, classTwo);
 
         final Program resultProgram = BuiltinRedefinitionRemover.removeBuiltinRedefinition(testProgram, err);
 
@@ -64,20 +57,20 @@ public class BuiltinRedefinitionRemoverTest {
         Mockito.verifyZeroInteractions(err);
     }
 
-    private void testBuiltinRemoval(IdSymbol builtinId) {
+    private void testBuiltinRemoval(String builtinIdString) {
         final ISemanticErrorReporter err = Mockito.mock(ISemanticErrorReporter.class);
+        final ASTFactory factory = new ASTFactory();
 
-        final IdSymbol objectSymbol = IdTable.getInstance().addString("Object");
-        final IdSymbol otherSymbol = IdTable.getInstance().addString("Other");
-        final Class intRedefinition = new Class("test.cl", 1, builtinId, objectSymbol, new Features("test.cl", 1,
-                Collections.<Feature> emptyList()));
-        final Class otherClass = new Class("test.cl", 1, otherSymbol, objectSymbol, new Features("test.cl", 1,
-                Collections.<Feature> emptyList()));
+        final Class intRedefinition = factory.classNode(builtinIdString, "Object");
+        final Class otherClass = factory.classNode("Other", "Object");
 
         final Program testProgram = new Program("test.cl", 1, new Classes("test.cl", 1, Arrays.asList(intRedefinition,
                 otherClass)));
 
         final Program resultProgram = BuiltinRedefinitionRemover.removeBuiltinRedefinition(testProgram, err);
+
+        final IdSymbol builtinId = IdTable.getInstance().addString(builtinIdString);
+        final IdSymbol otherSymbol = IdTable.getInstance().addString("Other");
 
         Assert.assertNull(resultProgram.getClass(builtinId));
         Assert.assertEquals(otherClass, resultProgram.getClass(otherSymbol));
