@@ -34,7 +34,8 @@ class BuiltinInheritanceChecker extends ASTVisitor {
         final boolean forbiddenInheritance = inheritsInt || inheritsBool || inheritsString || inheritsIO;
         if (forbiddenInheritance) {
             out.reportBaseClassInheritance(classNode);
-            this.classes.remove(classNode).add(classNode.setParent(IdTable.getInstance().addString("Object")));
+            this.classes = this.classes.remove(classNode).add(
+                    classNode.setParent(IdTable.getInstance().addString("Object")));
         }
     }
 
