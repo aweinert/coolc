@@ -98,4 +98,10 @@ class SemanticErrorReporter implements ISemanticErrorReporter {
                 classNode.getFilename(), classNode.getLineNumber()));
     }
 
+    @Override
+    public void reportUndefinedParentClass(Class classNode) {
+        final String formatString = "Parent %s of class %s is undefined. Defined at %s:%d\nSetting parent to Object";
+        out.error(String.format(formatString, classNode.getParent(), classNode.getIdentifier(),
+                classNode.getFilename(), classNode.getLineNumber()));
+    }
 }

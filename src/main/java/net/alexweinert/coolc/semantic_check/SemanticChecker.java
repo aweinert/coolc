@@ -9,7 +9,7 @@ public class SemanticChecker {
 
         program = BuiltinRedefinitionRemover.removeBuiltinRedefinition(program, error);
         program = BuiltinInheritanceChecker.checkBuiltinInheritance(program, error);
-        program = ParentDefinednessChecker.checkParentDefinedness(program, out);
+        program = ParentDefinednessChecker.checkParentDefinedness(program, error);
         program = CircularInheritanceRemover.removeCircularInheritance(program, out);
         program = InterfaceChecker.checkInterfaces(program, out);
         program = OverridingChecker.checkOverriding(program, out);

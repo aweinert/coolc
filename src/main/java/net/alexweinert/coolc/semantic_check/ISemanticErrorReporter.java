@@ -19,4 +19,6 @@ public interface ISemanticErrorReporter {
     void reportRedefinitionOfBuiltInClass(IdSymbol identifier, Class classNode);
 
     void reportBaseClassInheritance(Class classNode);
+
+    void reportUndefinedParentClass(Class classNode);
 }
