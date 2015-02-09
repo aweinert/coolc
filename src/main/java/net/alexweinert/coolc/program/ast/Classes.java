@@ -1,8 +1,9 @@
 package net.alexweinert.coolc.program.ast;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 
@@ -34,6 +35,21 @@ public class Classes extends ListNode<Class> {
         final Collection<Class> newElements = this.copyElements();
         newElements.remove(node);
         return new Classes(this.getFilename(), this.getLineNumber(), newElements);
+    }
+
+    /**
+     * Returns a new list in which the first occurrence of oldNode is replaced with newNode. If oldNode does not occur
+     * in this list, the list is returned
+     */
+    public Classes replace(Class oldNode, Class newNode) {
+        final List<Class> newElements = this.copyElements();
+        for (int i = 0; i < newElements.size(); ++i) {
+            if (newElements.get(i).equals(oldNode)) {
+                newElements.set(i, newNode);
+                return new Classes(this.getFilename(), this.getLineNumber(), newElements);
+            }
+        }
+        return this;
     }
 
     @Override
