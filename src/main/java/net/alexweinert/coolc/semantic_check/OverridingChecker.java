@@ -18,7 +18,7 @@ import net.alexweinert.coolc.program.symboltables.IdSymbol;
 class OverridingChecker extends ASTVisitor {
 
     final private ClassHierarchy hierarchy;
-    final private ISemanticErrorReporter error;
+    final private SemanticErrorReporter error;
 
     final private List<Attribute> attributes = new LinkedList<>();
     final private List<Method> methods = new LinkedList<>();
@@ -27,12 +27,12 @@ class OverridingChecker extends ASTVisitor {
     private Program resultingProgram;
     private List<IdSymbol> ancestorsDescendingOrder;
 
-    OverridingChecker(ClassHierarchy hierarchy, ISemanticErrorReporter error) {
+    OverridingChecker(ClassHierarchy hierarchy, SemanticErrorReporter error) {
         this.hierarchy = hierarchy;
         this.error = error;
     }
 
-    public static Program checkInheritance(Program program, ClassHierarchy hierarchy, ISemanticErrorReporter error) {
+    public static Program checkInheritance(Program program, ClassHierarchy hierarchy, SemanticErrorReporter error) {
         final OverridingChecker checker = new OverridingChecker(hierarchy, error);
         program.acceptVisitor(checker);
         return checker.resultingProgram;

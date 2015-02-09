@@ -21,14 +21,14 @@ class DoubleFeatureRemover extends ASTVisitor {
     private Map<IdSymbol, List<Method>> methods = new HashMap<>();
     private Program containingProgram;
 
-    private final ISemanticErrorReporter error;
+    private final SemanticErrorReporter error;
 
-    DoubleFeatureRemover(ISemanticErrorReporter error) {
+    DoubleFeatureRemover(SemanticErrorReporter error) {
         this.error = error;
     }
 
     DoubleFeatureRemover(List<Class> classes, Map<IdSymbol, List<Attribute>> attributes,
-            Map<IdSymbol, List<Method>> methods, Program containingProgram, ISemanticErrorReporter error) {
+            Map<IdSymbol, List<Method>> methods, Program containingProgram, SemanticErrorReporter error) {
         this.classes = classes;
         this.attributes = attributes;
         this.methods = methods;
@@ -36,7 +36,7 @@ class DoubleFeatureRemover extends ASTVisitor {
         this.error = error;
     }
 
-    public static Program removeDoubleFeatures(Program program, ISemanticErrorReporter error) {
+    public static Program removeDoubleFeatures(Program program, SemanticErrorReporter error) {
         final DoubleFeatureRemover remover = new DoubleFeatureRemover(error);
         program.acceptVisitor(remover);
         return remover.containingProgram;

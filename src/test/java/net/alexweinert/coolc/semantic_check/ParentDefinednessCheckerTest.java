@@ -18,7 +18,7 @@ public class ParentDefinednessCheckerTest {
 
         final Program testProgram = factory.program(undefParentClass, defParentClass);
 
-        final ISemanticErrorReporter err = Mockito.mock(ISemanticErrorReporter.class);
+        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
 
         final Program expectedProgram = factory.program(factory.classNode("ClassOne", "Object"), defParentClass);
         final Program receivedProgram = ParentDefinednessChecker.checkParentDefinedness(testProgram, err);

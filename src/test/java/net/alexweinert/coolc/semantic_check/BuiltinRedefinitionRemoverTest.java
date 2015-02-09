@@ -42,7 +42,7 @@ public class BuiltinRedefinitionRemoverTest {
 
     @Test
     public void testNonRemoval() {
-        final ISemanticErrorReporter err = Mockito.mock(ISemanticErrorReporter.class);
+        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
 
         final ASTFactory factory = new ASTFactory();
 
@@ -58,7 +58,7 @@ public class BuiltinRedefinitionRemoverTest {
     }
 
     private void testBuiltinRemoval(String builtinIdString) {
-        final ISemanticErrorReporter err = Mockito.mock(ISemanticErrorReporter.class);
+        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
         final ASTFactory factory = new ASTFactory();
 
         final Class intRedefinition = factory.classNode(builtinIdString, "Object");

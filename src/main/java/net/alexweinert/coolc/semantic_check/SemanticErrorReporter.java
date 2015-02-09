@@ -8,14 +8,13 @@ import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
-class SemanticErrorReporter implements ISemanticErrorReporter {
+class SemanticErrorReporter {
     private final Output out;
 
     SemanticErrorReporter(Output out) {
         this.out = out;
     }
 
-    @Override
     public void reportMultipleAttributes(Class classNode, List<Attribute> attributes) {
         final StringBuilder builder = new StringBuilder();
         builder.append("ERROR: Multiple definitions of attribute ");
@@ -34,7 +33,6 @@ class SemanticErrorReporter implements ISemanticErrorReporter {
         out.error(builder.toString());
     }
 
-    @Override
     public void reportMultipleMethods(Class classNode, List<Method> methods) {
         final StringBuilder builder = new StringBuilder();
         builder.append("ERROR: Multiple definitions of method ");
@@ -53,7 +51,6 @@ class SemanticErrorReporter implements ISemanticErrorReporter {
         out.error(builder.toString());
     }
 
-    @Override
     public void reportOverriddenAttribute(Attribute originalAttribute, Attribute offendingAttribute) {
         final StringBuilder builder = new StringBuilder();
         builder.append("Redefined attribute at ");
@@ -69,7 +66,6 @@ class SemanticErrorReporter implements ISemanticErrorReporter {
 
     }
 
-    @Override
     public void reportWronglyOverriddenMethod(Method originalMethod, Method offendingMethod) {
         final StringBuilder builder = new StringBuilder();
         builder.append("Wrongly overridden method at ");
@@ -84,21 +80,18 @@ class SemanticErrorReporter implements ISemanticErrorReporter {
         out.error(builder.toString());
     }
 
-    @Override
     public void reportRedefinitionOfBuiltInClass(IdSymbol identifier, Class classNode) {
         final String errorString = String.format("Redefinition of builtin class %s at %s:%d", identifier,
                 classNode.getFilename(), classNode.getLineNumber());
         out.error(errorString);
     }
 
-    @Override
     public void reportBaseClassInheritance(Class classNode) {
         final String formatString = "Class %s inherits from base class %s at %s:%d\nIgnoring inheritance declaration";
         out.error(String.format(formatString, classNode.getIdentifier(), classNode.getParent(),
                 classNode.getFilename(), classNode.getLineNumber()));
     }
 
-    @Override
     public void reportUndefinedParentClass(Class classNode) {
         final String formatString = "Parent %s of class %s is undefined. Defined at %s:%d\nSetting parent to Object";
         out.error(String.format(formatString, classNode.getParent(), classNode.getIdentifier(),

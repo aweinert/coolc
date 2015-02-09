@@ -12,7 +12,7 @@ public class BuiltinInheritanceCheckerTest {
 
     @Test
     public void testObjectInheritance() {
-        final ISemanticErrorReporter err = Mockito.mock(ISemanticErrorReporter.class);
+        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
 
         final ASTFactory factory = new ASTFactory("test.cl");
 
@@ -46,7 +46,7 @@ public class BuiltinInheritanceCheckerTest {
     }
 
     private void testBuiltinInheritance(String builtinId) {
-        final ISemanticErrorReporter err = Mockito.mock(ISemanticErrorReporter.class);
+        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
 
         final ASTFactory factory = new ASTFactory("test.cl");
 

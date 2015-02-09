@@ -13,7 +13,7 @@ class ParentDefinednessChecker {
      * it is set to Object. The given program may not contain any classes that inherit from base classes, except for
      * Object
      */
-    public static Program checkParentDefinedness(Program program, ISemanticErrorReporter err) {
+    public static Program checkParentDefinedness(Program program, SemanticErrorReporter err) {
         Classes returnClasses = program.getClasses();
         final IdSymbol objectId = IdTable.getInstance().addString("Object");
         for (Class classNode : program.getClasses()) {

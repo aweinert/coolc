@@ -8,18 +8,18 @@ import net.alexweinert.coolc.program.symboltables.IdTable;
 
 class BuiltinInheritanceChecker extends ASTVisitor {
 
-    private final ISemanticErrorReporter out;
+    private final SemanticErrorReporter out;
     private Program program;
     private Classes classes;
 
-    private BuiltinInheritanceChecker(ISemanticErrorReporter out) {
+    private BuiltinInheritanceChecker(SemanticErrorReporter out) {
         this.out = out;
     }
 
     /**
      * Finds all classes that inherit from the builtin classes and sets their parent to Object instead
      */
-    public static Program checkBuiltinInheritance(Program program, ISemanticErrorReporter out) {
+    public static Program checkBuiltinInheritance(Program program, SemanticErrorReporter out) {
         final BuiltinInheritanceChecker checker = new BuiltinInheritanceChecker(out);
         program.acceptVisitor(checker);
         return checker.program;

@@ -10,7 +10,7 @@ class BuiltinRedefinitionRemover {
     /**
      * Removes the redefinitions of builtin classes from the program, if they exist
      */
-    public static Program removeBuiltinRedefinition(Program program, ISemanticErrorReporter out) {
+    public static Program removeBuiltinRedefinition(Program program, SemanticErrorReporter out) {
         final Program withoutObjectClass = removeBuiltinClass(program, IdTable.getInstance().addString("Object"), out);
         final Program withoutBoolClass = removeBuiltinClass(withoutObjectClass,
                 IdTable.getInstance().addString("Bool"), out);
@@ -24,7 +24,7 @@ class BuiltinRedefinitionRemover {
         return withoutIOClass;
     }
 
-    private static Program removeBuiltinClass(Program program, IdSymbol identifier, ISemanticErrorReporter out) {
+    private static Program removeBuiltinClass(Program program, IdSymbol identifier, SemanticErrorReporter out) {
         final Class classNode = program.getClass(identifier);
         if (classNode != null) {
             out.reportRedefinitionOfBuiltInClass(identifier, classNode);
