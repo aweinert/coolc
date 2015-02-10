@@ -102,6 +102,7 @@ class SemanticErrorReporter {
 
     public void reportCircularInheritance(Set<Class> inheritanceCircle, Class tieBreaker) {
         StringBuilder builder = new StringBuilder("Detected circular inheritance:\n");
+        final Class firstClass = inheritanceCircle.iterator().next();
         final Iterator<Class> circleIterator = inheritanceCircle.iterator();
         while (circleIterator.hasNext()) {
             final Class currentClass = circleIterator.next();
@@ -111,14 +112,17 @@ class SemanticErrorReporter {
             builder.append(currentClass.getFilename());
             builder.append(":");
             builder.append(currentClass.getLineNumber());
-            builder.append(")");
-            if (circleIterator.hasNext()) {
-                builder.append(" inherits from");
-            }
-            builder.append("\n");
+            builder.append(") inherits from\n");
         }
+        builder.append("  class ");
+        builder.append(firstClass.getIdentifier());
+        builder.append(" (defined at ");
+        builder.append(firstClass.getFilename());
+        builder.append(":");
+        builder.append(firstClass.getLineNumber());
+        builder.append(")\n");
         builder.append("Breaking circle by setting parent of ");
-        builder.append(tieBreaker.getParent());
+        builder.append(tieBreaker.getIdentifier());
         builder.append(" to Object");
         out.error(builder.toString());
     }
