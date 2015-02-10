@@ -1,6 +1,8 @@
 package net.alexweinert.coolc.semantic_check;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.program.ast.Attribute;
@@ -96,5 +98,28 @@ class SemanticErrorReporter {
         final String formatString = "Parent %s of class %s is undefined. Defined at %s:%d\nSetting parent to Object";
         out.error(String.format(formatString, classNode.getParent(), classNode.getIdentifier(),
                 classNode.getFilename(), classNode.getLineNumber()));
+    }
+
+    public void reportCircularInheritance(Set<Class> inheritanceCircle, Class tieBreaker) {
+        StringBuilder builder = new StringBuilder("Detected circular inheritance:\n");
+        final Iterator<Class> circleIterator = inheritanceCircle.iterator();
+        while (circleIterator.hasNext()) {
+            final Class currentClass = circleIterator.next();
+            builder.append("  class ");
+            builder.append(currentClass.getIdentifier());
+            builder.append(" (defined at ");
+            builder.append(currentClass.getFilename());
+            builder.append(":");
+            builder.append(currentClass.getLineNumber());
+            builder.append(")");
+            if (circleIterator.hasNext()) {
+                builder.append(" inherits from");
+            }
+            builder.append("\n");
+        }
+        builder.append("Breaking circle by setting parent of ");
+        builder.append(tieBreaker.getParent());
+        builder.append(" to Object");
+        out.error(builder.toString());
     }
 }
