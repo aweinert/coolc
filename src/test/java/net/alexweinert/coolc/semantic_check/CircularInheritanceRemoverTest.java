@@ -62,7 +62,7 @@ public class CircularInheritanceRemoverTest {
 
         final Set<Class> circularClasses = new HashSet<>(Arrays.asList(classOne, classTwo));
 
-        Mockito.verify(err).reportCircularInheritance(circularClasses, Mockito.any(Class.class));
+        Mockito.verify(err).reportCircularInheritance(Mockito.eq(circularClasses), Mockito.any(Class.class));
         Mockito.verifyNoMoreInteractions(err);
 
         final Class receivedClassOne = receivedProgram.getClass(classOne.getIdentifier());
