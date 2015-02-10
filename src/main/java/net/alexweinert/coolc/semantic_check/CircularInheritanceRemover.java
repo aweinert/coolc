@@ -1,5 +1,6 @@
 package net.alexweinert.coolc.semantic_check;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,8 +19,13 @@ class CircularInheritanceRemover {
     public static Program removeCircularInheritance(Program program, SemanticErrorReporter err) {
         Classes returnClasses = program.getClasses();
         final IdSymbol objectId = IdTable.getInstance().addString("Object");
+        final Collection<IdSymbol> alreadyVisited = new HashSet<>();
         for (Class classNode : program.getClasses()) {
+            if (alreadyVisited.contains(classNode.getIdentifier())) {
+                continue;
+            }
             final Set<IdSymbol> ancestorIds = getAncestors(program, classNode.getIdentifier());
+            alreadyVisited.addAll(ancestorIds);
             if (!ancestorIds.contains(objectId)) {
                 final IdSymbol tieBreakerId = findTieBreaker(program, ancestorIds);
                 err.reportCircularInheritance(getClasses(program, ancestorIds), program.getClass(tieBreakerId));
