@@ -47,7 +47,8 @@ public class Program extends TreeNode {
     /**
      * @param identifier
      *            Some class identifier
-     * @return The node of a class with the given name, if there exists one. Null if none exists.
+     * @return The node of the first defined class with the given name, if there exists at least one. Null if none
+     *         exists.
      */
     public Class getClass(IdSymbol identifier) {
         for (Class classNode : this.classes) {
@@ -140,8 +141,8 @@ public class Program extends TreeNode {
     }
 
     /**
-     * Checks that there is only a single path from Object to every IdSymbol that is reachable from it. If this is
-     * the case, then Object is the root of a (inheritance) tree
+     * Checks that there is only a single path from Object to every IdSymbol that is reachable from it. If this is the
+     * case, then Object is the root of a (inheritance) tree
      * 
      * @param classTable
      *            The table of all classes
