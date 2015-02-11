@@ -17,6 +17,20 @@ import org.mockito.Mockito;
 public class MultipleClassesRemoverTest {
 
     @Test
+    public void testNonRemoval() {
+        final ASTFactory factory = new ASTFactory();
+        final Program testProgram = factory.program(factory.classNode("ClassOne", "Object"),
+                factory.classNode("ClassTwo", "Object"));
+
+        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
+
+        final Program receivedProgram = MultipleClassesRemover.removeMultipleClassDefinitions(testProgram, err);
+
+        Assert.assertEquals(receivedProgram, testProgram);
+        Mockito.verifyZeroInteractions(err);
+    }
+
+    @Test
     public void testRedefinitionRemoval() {
         final IdSymbol classOneSymbol = IdTable.getInstance().addString("ClassOne");
         final IdSymbol objectSymbol = IdTable.getInstance().addString("Object");
