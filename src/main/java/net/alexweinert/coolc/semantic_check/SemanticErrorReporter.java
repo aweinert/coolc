@@ -126,4 +126,10 @@ class SemanticErrorReporter {
         builder.append(" to Object");
         out.error(builder.toString());
     }
+
+    public void reportClassRedefinition(Class originalClass, Class redefinedClass) {
+        final String formatString = "Redefinition of class %s at %s:%d. Original definition at %s:%d. Ignoring redefinition";
+        out.error(String.format(formatString, originalClass.getIdentifier(), redefinedClass.getFilename(),
+                redefinedClass.getLineNumber(), originalClass.getFilename(), originalClass.getLineNumber()));
+    }
 }
