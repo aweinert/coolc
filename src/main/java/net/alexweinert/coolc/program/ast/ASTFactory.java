@@ -26,4 +26,16 @@ public class ASTFactory {
         return new Class(this.filename, 1, identifierSymbol, parentSymbol, new Features(this.filename, 1,
                 Arrays.asList(features)));
     }
+
+    public Attribute attribute(String identifier, String type) {
+        final Expression noExpression = new NoExpression(this.filename, 1);
+        return this.attribute(identifier, type, noExpression);
+    }
+
+    public Attribute attribute(String identifier, String type, Expression initializer) {
+        final IdSymbol identifierSymbol = IdTable.getInstance().addString(identifier);
+        final IdSymbol typeSymbol = IdTable.getInstance().addString(type);
+
+        return new Attribute(this.filename, 1, identifierSymbol, typeSymbol, initializer);
+    }
 }
