@@ -12,7 +12,7 @@ public class SemanticChecker {
         program = BuiltinInheritanceChecker.checkBuiltinInheritance(program, error);
         program = ParentDefinednessChecker.checkParentDefinedness(program, error);
         program = CircularInheritanceRemover.removeCircularInheritance(program, error);
-        program = InterfaceChecker.checkInterfaces(program, out);
+        program = InterfaceChecker.checkInterfaces(program, error);
         program = OverridingChecker.checkOverriding(program, out);
 
         return program;

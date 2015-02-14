@@ -9,9 +9,8 @@ class InterfaceChecker {
      * Checks for all classes that they only define one attribute of each identifier and only one method of each
      * identifier
      */
-    public static Program checkInterfaces(Program program, Output out) {
-        // TODO Auto-generated method stub
-        return null;
+    public static Program checkInterfaces(Program program, SemanticErrorReporter err) {
+        return DoubleFeatureRemover.removeDoubleFeatures(program, err);
     }
 
 }
