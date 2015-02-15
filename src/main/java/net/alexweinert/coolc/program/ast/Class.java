@@ -1,6 +1,7 @@
 package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
+import java.util.Iterator;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
@@ -152,5 +153,21 @@ public class Class extends TreeNode {
 
     public Class setParent(IdSymbol newParent) {
         return new Class(this.getFilename(), this.getLineNumber(), this.name, newParent, this.features);
+    }
+
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(this.getIdentifier());
+        builder.append(" inherits ");
+        builder.append(this.getParent());
+        builder.append(" {\n");
+        final Iterator<Feature> it = this.features.iterator();
+        while (it.hasNext()) {
+            builder.append("\t");
+            builder.append(it.next().toString());
+            builder.append("\n");
+        }
+        builder.append("}");
+        return builder.toString();
     }
 }

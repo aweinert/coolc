@@ -2,6 +2,7 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 import java.util.Enumeration;
+import java.util.Iterator;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
@@ -141,5 +142,26 @@ public class Method extends Feature {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(this.getName());
+        builder.append(" : ");
+        builder.append(this.getReturnType());
+        builder.append(" (");
+        final Iterator<Formal> it = this.formals.iterator();
+        while (it.hasNext()) {
+            builder.append(it.next().toString());
+            if (it.hasNext()) {
+                builder.append(", ");
+            }
+        }
+
+        builder.append(") {\n\t");
+        builder.append(this.expr);
+        builder.append("\n}");
+        return builder.toString();
     }
 }

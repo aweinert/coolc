@@ -3,6 +3,7 @@ package net.alexweinert.coolc.program.ast;
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -262,4 +263,16 @@ public class Program extends TreeNode {
         return new Program(this.getFilename(), this.getLineNumber(), newClasses);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        Iterator<Class> it = this.classes.iterator();
+        while (it.hasNext()) {
+            builder.append(it.next().toString());
+            if (it.hasNext()) {
+                builder.append("\n\n");
+            }
+        }
+        return builder.toString();
+    }
 }
