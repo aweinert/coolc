@@ -13,7 +13,7 @@ public class SemanticChecker {
         program = ParentDefinednessChecker.checkParentDefinedness(program, error);
         program = CircularInheritanceRemover.removeCircularInheritance(program, error);
         program = InterfaceChecker.checkInterfaces(program, error);
-        program = OverridingChecker.checkOverriding(program, out);
+        program = OverridingChecker.checkOverriding(program, error);
 
         return program;
     }

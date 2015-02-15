@@ -99,9 +99,9 @@ class OverridingChecker extends ASTVisitor {
      * Checks that no class overrides its parent's attributes and that each class only overrides its parent's methods in
      * the allowed way (i.e., argument and return types match)
      */
-    public static Program checkOverriding(Program program, Output out) {
-        // TODO Auto-generated method stub
-        return null;
+    public static Program checkOverriding(Program program, SemanticErrorReporter err) {
+        final ClassHierarchy hierarchy = ClassHierarchyFactory.buildHierarchy(program);
+        return OverridingChecker.checkInheritance(program, hierarchy, err);
     }
 
 }
