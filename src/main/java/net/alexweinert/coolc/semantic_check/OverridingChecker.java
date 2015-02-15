@@ -32,7 +32,7 @@ class OverridingChecker extends ASTVisitor {
         this.error = error;
     }
 
-    public static Program checkInheritance(Program program, ClassHierarchy hierarchy, SemanticErrorReporter error) {
+    private static Program checkInheritance(Program program, ClassHierarchy hierarchy, SemanticErrorReporter error) {
         final OverridingChecker checker = new OverridingChecker(hierarchy, error);
         program.acceptVisitor(checker);
         return checker.resultingProgram;
