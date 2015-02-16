@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.program.ast.Attribute;
 import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Classes;
@@ -14,6 +13,7 @@ import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.program.symboltables.IdTable;
 
 class OverridingChecker extends ASTVisitor {
 
@@ -54,10 +54,12 @@ class OverridingChecker extends ASTVisitor {
     @Override
     public void visitMethodPostorder(Method method) {
         for (IdSymbol ancestor : this.ancestorsDescendingOrder) {
-            final Method existingMethod = this.containingProgram.getClass(ancestor).getMethod(method.getName());
-            if (existingMethod != null) {
-                this.error.reportWronglyOverriddenMethod(method, existingMethod);
-                return;
+            if (!ancestor.equals(IdTable.getInstance().addString("Object"))) {
+                final Method existingMethod = this.containingProgram.getClass(ancestor).getMethod(method.getName());
+                if (existingMethod != null) {
+                    this.error.reportWronglyOverriddenMethod(method, existingMethod);
+                    return;
+                }
             }
         }
         this.methods.add(method);
