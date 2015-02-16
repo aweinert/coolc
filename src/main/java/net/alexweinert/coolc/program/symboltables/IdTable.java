@@ -46,4 +46,24 @@ public class IdTable extends AbstractTable<String> {
         }
         return (IdSymbol) this.tbl.get(s);
     }
+
+    public IdSymbol getObjectSymbol() {
+        return this.addString("Object");
+    }
+
+    public IdSymbol getBoolSymbol() {
+        return this.addString("Bool");
+    }
+
+    public IdSymbol getIntSymbol() {
+        return this.addString("Int");
+    }
+
+    public IdSymbol getStringSymbol() {
+        return this.addString("String");
+    }
+
+    public IdSymbol getIOSymbol() {
+        return this.addString("IO");
+    }
 }
