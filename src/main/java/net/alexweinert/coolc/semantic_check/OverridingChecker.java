@@ -54,7 +54,7 @@ class OverridingChecker extends ASTVisitor {
     @Override
     public void visitMethodPostorder(Method method) {
         for (IdSymbol ancestor : this.ancestorsDescendingOrder) {
-            if (!ancestor.equals(IdTable.getInstance().addString("Object"))) {
+            if (!ancestor.equals(IdTable.getInstance().getObjectSymbol())) {
                 final Method existingMethod = this.containingProgram.getClass(ancestor).getMethod(method.getName());
                 if (existingMethod != null) {
                     this.error.reportWronglyOverriddenMethod(method, existingMethod);

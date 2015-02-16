@@ -18,11 +18,10 @@ class ClassHierarchyFactory extends ASTVisitor {
     @Override
     public void visitProgramPreorder(Program program) {
         // Install predefined classes
-        this.builder.addInheritance(IdTable.getInstance().addString("IO"), IdTable.getInstance().addString("Object"));
-        this.builder.addInheritance(IdTable.getInstance().addString("Int"), IdTable.getInstance().addString("Object"));
-        this.builder.addInheritance(IdTable.getInstance().addString("String"), IdTable.getInstance()
-                .addString("Object"));
-        this.builder.addInheritance(IdTable.getInstance().addString("Bool"), IdTable.getInstance().addString("Object"));
+        this.builder.addInheritance(IdTable.getInstance().getIOSymbol(), IdTable.getInstance().getObjectSymbol());
+        this.builder.addInheritance(IdTable.getInstance().getIntSymbol(), IdTable.getInstance().getObjectSymbol());
+        this.builder.addInheritance(IdTable.getInstance().getStringSymbol(), IdTable.getInstance().getObjectSymbol());
+        this.builder.addInheritance(IdTable.getInstance().getBoolSymbol(), IdTable.getInstance().getObjectSymbol());
     }
 
     public void visitClassPreorder(Class classNode) {

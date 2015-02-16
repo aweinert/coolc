@@ -27,15 +27,15 @@ class BuiltinInheritanceChecker extends ASTVisitor {
 
     @Override
     public void visitClassPostorder(Class classNode) {
-        final boolean inheritsInt = classNode.getParent().equals(IdTable.getInstance().addString("Int"));
-        final boolean inheritsBool = classNode.getParent().equals(IdTable.getInstance().addString("Bool"));
-        final boolean inheritsString = classNode.getParent().equals(IdTable.getInstance().addString("String"));
-        final boolean inheritsIO = classNode.getParent().equals(IdTable.getInstance().addString("IO"));
+        final boolean inheritsInt = classNode.getParent().equals(IdTable.getInstance().getIntSymbol());
+        final boolean inheritsBool = classNode.getParent().equals(IdTable.getInstance().getBoolSymbol());
+        final boolean inheritsString = classNode.getParent().equals(IdTable.getInstance().getStringSymbol());
+        final boolean inheritsIO = classNode.getParent().equals(IdTable.getInstance().getIOSymbol());
         final boolean forbiddenInheritance = inheritsInt || inheritsBool || inheritsString || inheritsIO;
         if (forbiddenInheritance) {
             out.reportBaseClassInheritance(classNode);
             this.classes = this.classes.remove(classNode).add(
-                    classNode.setParent(IdTable.getInstance().addString("Object")));
+                    classNode.setParent(IdTable.getInstance().getObjectSymbol()));
         }
     }
 

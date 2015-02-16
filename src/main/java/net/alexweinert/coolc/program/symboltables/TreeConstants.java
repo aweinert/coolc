@@ -26,7 +26,7 @@ public class TreeConstants {
 
     public static final IdSymbol arg2 = IdTable.getInstance().addString("arg2");
 
-    public static final IdSymbol Bool = IdTable.getInstance().addString("Bool");
+    public static final IdSymbol Bool = IdTable.getInstance().getBoolSymbol();
 
     public static final IdSymbol concat = IdTable.getInstance().addString("concat");
 
@@ -34,13 +34,13 @@ public class TreeConstants {
 
     public static final IdSymbol copy = IdTable.getInstance().addString("copy");
 
-    public static final IdSymbol Int = IdTable.getInstance().addString("Int");
+    public static final IdSymbol Int = IdTable.getInstance().getIntSymbol();
 
     public static final IdSymbol in_int = IdTable.getInstance().addString("in_int");
 
     public static final IdSymbol in_string = IdTable.getInstance().addString("in_string");
 
-    public static final IdSymbol IO = IdTable.getInstance().addString("IO");
+    public static final IdSymbol IO = IdTable.getInstance().getIOSymbol();
 
     public static final IdSymbol length = IdTable.getInstance().addString("length");
 
@@ -52,7 +52,7 @@ public class TreeConstants {
 
     public static final IdSymbol No_type = IdTable.getInstance().addString("_no_type");
 
-    public static final IdSymbol Object_ = IdTable.getInstance().addString("Object");
+    public static final IdSymbol Object_ = IdTable.getInstance().getObjectSymbol();
 
     public static final IdSymbol out_int = IdTable.getInstance().addString("out_int");
 
@@ -64,7 +64,7 @@ public class TreeConstants {
 
     public static final IdSymbol SELF_TYPE = IdTable.getInstance().addString("SELF_TYPE");
 
-    public static final IdSymbol Str = IdTable.getInstance().addString("String");
+    public static final IdSymbol Str = IdTable.getInstance().getStringSymbol();
 
     public static final IdSymbol str_field = IdTable.getInstance().addString("_str_field");
 

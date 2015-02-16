@@ -15,7 +15,7 @@ class ParentDefinednessChecker {
      */
     public static Program checkParentDefinedness(Program program, SemanticErrorReporter err) {
         Classes returnClasses = program.getClasses();
-        final IdSymbol objectId = IdTable.getInstance().addString("Object");
+        final IdSymbol objectId = IdTable.getInstance().getObjectSymbol();
         for (Class classNode : program.getClasses()) {
             // We need only check for inheritance from Object here, due to the precondition of the method
             final boolean inheritsFromObject = classNode.getParent().equals(objectId);

@@ -18,7 +18,7 @@ class CircularInheritanceRemover {
      */
     public static Program removeCircularInheritance(Program program, SemanticErrorReporter err) {
         Classes returnClasses = program.getClasses();
-        final IdSymbol objectId = IdTable.getInstance().addString("Object");
+        final IdSymbol objectId = IdTable.getInstance().getObjectSymbol();
         final Collection<IdSymbol> alreadyVisited = new HashSet<>();
         for (Class classNode : program.getClasses()) {
             if (alreadyVisited.contains(classNode.getIdentifier())) {
@@ -41,7 +41,7 @@ class CircularInheritanceRemover {
      * Returns the ancestors of the class with the given id. Return value contains the id of the class itself.
      */
     private static Set<IdSymbol> getAncestors(Program program, IdSymbol classId) {
-        final IdSymbol objectId = IdTable.getInstance().addString("Object");
+        final IdSymbol objectId = IdTable.getInstance().getObjectSymbol();
         final Set<IdSymbol> returnValue = new HashSet<>();
         IdSymbol currentAncestor = classId;
         do {

@@ -40,7 +40,7 @@ public class CircularInheritanceRemoverTest {
         Assert.assertNotNull(receivedClassTwo);
 
         // Assert that ClassOne now inherits from Object
-        final IdSymbol objectSymbol = IdTable.getInstance().addString("Object");
+        final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
         final boolean classOneInheritsObject = receivedClassOne.getParent().equals(objectSymbol);
         Assert.assertTrue(classOneInheritsObject);
 
@@ -75,7 +75,7 @@ public class CircularInheritanceRemoverTest {
         Assert.assertNotNull(receivedClassThree);
 
         // Make sure that only one class out of classOne and classTwo has had its parent set to Object
-        final IdSymbol objectSymbol = IdTable.getInstance().addString("Object");
+        final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
         final boolean classOneInheritsObject = receivedClassOne.getParent().equals(objectSymbol);
         final boolean classTwoInheritsObject = receivedClassTwo.getParent().equals(objectSymbol);
         final boolean classOneInheritsClassTwo = receivedClassOne.getParent().equals(classTwo.getIdentifier());

@@ -33,7 +33,7 @@ public class MultipleClassesRemoverTest {
     @Test
     public void testRedefinitionRemoval() {
         final IdSymbol classOneSymbol = IdTable.getInstance().addString("ClassOne");
-        final IdSymbol objectSymbol = IdTable.getInstance().addString("Object");
+        final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
         final Class definitionOne = new Class("", 1, classOneSymbol, objectSymbol, new Features("", 1,
                 Collections.<Feature> emptyList()));
         final Class definitionTwo = new Class("", 2, classOneSymbol, objectSymbol, new Features("", 2,
