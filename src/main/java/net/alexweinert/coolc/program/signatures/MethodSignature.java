@@ -12,7 +12,7 @@ public class MethodSignature {
     private IdSymbol methodIdentifier;
     private List<IdSymbol> argumentTypes;
 
-    public MethodSignature create(Method method) {
+    public static MethodSignature create(Method method) {
         final List<IdSymbol> argumentTypes = new LinkedList<>();
         for (Formal formal : method.getFormals()) {
             argumentTypes.add(formal.getDeclaredType());
