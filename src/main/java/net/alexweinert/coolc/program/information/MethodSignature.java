@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.program.signatures;
+package net.alexweinert.coolc.program.information;
 
 import java.util.LinkedList;
 import java.util.List;
