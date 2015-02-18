@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.semantic_check;
+package net.alexweinert.coolc.program.information;
 
 import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Program;
@@ -6,7 +6,7 @@ import net.alexweinert.coolc.program.ast.TreeNode;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.IdTable;
 
-class ClassHierarchyFactory extends ASTVisitor {
+public class ClassHierarchyFactory extends ASTVisitor {
     final private ClassHierarchyBuilder builder = new ClassHierarchyBuilder();
 
     public static ClassHierarchy buildHierarchy(TreeNode ast) {

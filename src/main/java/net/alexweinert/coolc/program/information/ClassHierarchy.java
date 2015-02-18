@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.semantic_check;
+package net.alexweinert.coolc.program.information;
 
 import java.util.HashMap;
 import java.util.LinkedList;

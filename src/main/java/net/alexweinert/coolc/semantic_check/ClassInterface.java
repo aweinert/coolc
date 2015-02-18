@@ -3,6 +3,7 @@ package net.alexweinert.coolc.semantic_check;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.alexweinert.coolc.program.information.MethodSignature;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 class ClassInterface {

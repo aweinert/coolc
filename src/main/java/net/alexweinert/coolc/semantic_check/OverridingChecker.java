@@ -12,6 +12,8 @@ import net.alexweinert.coolc.program.ast.Features;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
+import net.alexweinert.coolc.program.information.ClassHierarchy;
+import net.alexweinert.coolc.program.information.ClassHierarchyFactory;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.IdTable;
 
