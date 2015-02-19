@@ -1,11 +1,16 @@
 package net.alexweinert.coolc.semantic_check;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.alexweinert.coolc.program.ast.ASTFactory;
 import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.information.ClassHierarchy;
 import net.alexweinert.coolc.program.information.ClassHierarchyFactory;
+import net.alexweinert.coolc.program.information.DeclaredClassSignature;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,9 +29,14 @@ public class OverridingCheckerTest {
 
         final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
 
-        // TODO: Mock hierarchy
+        // TODO: Mock hierarchy, declaredSignatures
         final ClassHierarchy hierarchy = ClassHierarchyFactory.buildHierarchy(testProgram);
-        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, err);
+        final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
+        declaredSignatures.put(classOne.getIdentifier(), DeclaredClassSignature.create(classOne));
+        declaredSignatures.put(classTwo.getIdentifier(), DeclaredClassSignature.create(classTwo));
+
+        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, declaredSignatures,
+                err);
 
         Assert.assertEquals(testProgram, receivedProgram);
         Mockito.verifyZeroInteractions(err);
@@ -43,9 +53,13 @@ public class OverridingCheckerTest {
 
         final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
 
-        // TODO: Mock hierarchy
+        // TODO: Mock hierarchy, declaredSignatures
         final ClassHierarchy hierarchy = ClassHierarchyFactory.buildHierarchy(testProgram);
-        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, err);
+        final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
+        declaredSignatures.put(classOne.getIdentifier(), DeclaredClassSignature.create(classOne));
+        declaredSignatures.put(classTwo.getIdentifier(), DeclaredClassSignature.create(classTwo));
+        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, declaredSignatures,
+                err);
 
         Assert.assertEquals(testProgram, receivedProgram);
         Mockito.verifyZeroInteractions(err);
@@ -64,9 +78,13 @@ public class OverridingCheckerTest {
 
         final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
 
-        // TODO: Mock hierarchy
+        // TODO: Mock hierarchy, declaredSignatures
         final ClassHierarchy hierarchy = ClassHierarchyFactory.buildHierarchy(testProgram);
-        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, err);
+        final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
+        declaredSignatures.put(classOne.getIdentifier(), DeclaredClassSignature.create(classOne));
+        declaredSignatures.put(classTwo.getIdentifier(), DeclaredClassSignature.create(classTwo));
+        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, declaredSignatures,
+                err);
 
         Assert.assertEquals(testProgram, receivedProgram);
         Mockito.verify(err).reportWronglyOverriddenMethod(methodDefOne, methodDefTwo);

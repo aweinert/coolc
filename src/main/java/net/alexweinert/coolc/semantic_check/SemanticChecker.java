@@ -25,7 +25,7 @@ public class SemanticChecker {
         program = InterfaceChecker.checkInterfaces(program, error);
 
         final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = createDeclaredSignatures(program);
-        program = OverridingChecker.checkOverriding(program, hierarchy, error);
+        program = OverridingChecker.checkOverriding(program, hierarchy, declaredSignatures, error);
 
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = createDefinedSignatures(program, hierarchy,
                 declaredSignatures);
