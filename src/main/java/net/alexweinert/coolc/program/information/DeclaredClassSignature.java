@@ -11,10 +11,7 @@ import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
-public class DeclaredClassSignature {
-    final private Map<IdSymbol, Attribute> attributes;
-    final private Map<IdSymbol, MethodSignature> methods;
-
+public class DeclaredClassSignature extends ClassSignature {
     private class SignatureBuilder extends ASTVisitor {
         private final List<Attribute> attributes = new LinkedList<>();
         private final List<MethodSignature> methodSignatures = new LinkedList<>();
@@ -44,16 +41,15 @@ public class DeclaredClassSignature {
             attributeMap.put(attribute.getName(), attribute);
         }
 
-        final Map<IdSymbol, MethodSignature> methods = new HashMap<>();
+        final Map<IdSymbol, MethodSignature> methodMap = new HashMap<>();
         for (MethodSignature signature : signatureBuilder.methodSignatures) {
-            methods.put(signature.getIdentifier(), signature);
+            methodMap.put(signature.getIdentifier(), signature);
         }
 
-        return new DeclaredClassSignature(attributes, methods);
+        return new DeclaredClassSignature(attributeMap, methodMap);
     }
 
     private DeclaredClassSignature(Map<IdSymbol, Attribute> attributes, Map<IdSymbol, MethodSignature> methods) {
-        this.attributes = attributes;
-        this.methods = methods;
+        super(attributes, methods);
     }
 }
