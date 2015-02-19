@@ -2,6 +2,7 @@ package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
 import java.util.Iterator;
+import java.util.List;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
@@ -169,5 +170,10 @@ public class Class extends TreeNode {
         }
         builder.append("}");
         return builder.toString();
+    }
+
+    public Class setFeatures(List<Feature> features2) {
+        return new Class(this.getFilename(), this.getLineNumber(), this.name, this.parent, new Features(
+                this.features.getFilename(), this.features.getLineNumber(), features2));
     }
 }
