@@ -5,11 +5,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 public class ClassHierarchy {
 
     final private Map<IdSymbol, List<IdSymbol>> parentClasses;
+
+    /**
+     * The given program may not contain circular inheritance, redefinitions of base classes, or classes that inherit
+     * from base classes
+     */
+    public static ClassHierarchy create(Program program) {
+        return ClassHierarchyFactory.buildHierarchy(program);
+    }
 
     /**
      * @param parentClasses
