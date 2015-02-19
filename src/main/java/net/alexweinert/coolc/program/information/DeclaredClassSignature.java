@@ -27,6 +27,9 @@ public class DeclaredClassSignature extends ClassSignature {
         }
     }
 
+    /**
+     * The given class may not contain any two attributes of the same name and no two methods of the same name
+     */
     public DeclaredClassSignature create(Class classNode) {
         final SignatureBuilder signatureBuilder = new SignatureBuilder();
         classNode.acceptVisitor(signatureBuilder);
