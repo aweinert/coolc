@@ -15,11 +15,6 @@ public class DeclaredClassSignature extends ClassSignature {
     private class SignatureBuilder extends ASTVisitor {
         private final List<Attribute> attributes = new LinkedList<>();
         private final List<MethodSignature> methodSignatures = new LinkedList<>();
-        private final Class containingClass;
-
-        public SignatureBuilder(Class classNode) {
-            this.containingClass = classNode;
-        }
 
         @Override
         public void visitAttributePostorder(Attribute attribute) {
@@ -33,7 +28,7 @@ public class DeclaredClassSignature extends ClassSignature {
     }
 
     public DeclaredClassSignature create(Class classNode) {
-        final SignatureBuilder signatureBuilder = new SignatureBuilder(classNode);
+        final SignatureBuilder signatureBuilder = new SignatureBuilder();
         classNode.acceptVisitor(signatureBuilder);
 
         final Map<IdSymbol, Attribute> attributeMap = new HashMap<>();
