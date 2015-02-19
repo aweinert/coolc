@@ -86,7 +86,9 @@ public class OverridingCheckerTest {
         final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, declaredSignatures,
                 err);
 
-        Assert.assertEquals(testProgram, receivedProgram);
+        final Program expectedProgram = factory.program(classOne, factory.classNode("ClassTwo", "ClassOne"));
+
+        Assert.assertEquals(expectedProgram, receivedProgram);
         Mockito.verify(err).reportWronglyOverriddenMethod(methodDefOne, methodDefTwo);
         Mockito.verifyNoMoreInteractions(err);
     }
