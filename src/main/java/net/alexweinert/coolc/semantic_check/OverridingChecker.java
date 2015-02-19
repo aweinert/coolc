@@ -103,8 +103,7 @@ class OverridingChecker extends ASTVisitor {
      * Checks that no class overrides its parent's attributes and that each class only overrides its parent's methods in
      * the allowed way (i.e., argument and return types match)
      */
-    public static Program checkOverriding(Program program, SemanticErrorReporter err) {
-        final ClassHierarchy hierarchy = ClassHierarchyFactory.buildHierarchy(program);
+    public static Program checkOverriding(Program program, ClassHierarchy hierarchy, SemanticErrorReporter err) {
         return OverridingChecker.checkInheritance(program, hierarchy, err);
     }
 
