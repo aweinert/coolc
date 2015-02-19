@@ -8,6 +8,11 @@ import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 public class DefinedClassSignature extends ClassSignature {
 
+    /**
+     * The given signatures together with the hierarchy must obey the Cool-rules for overriding, i.e., subclasses are
+     * not allowed to override attributes and they may only override methods if the signature of the method is exactly
+     * the same.
+     */
     public static DefinedClassSignature create(IdSymbol classId, ClassHierarchy hierarchy,
             Map<IdSymbol, DeclaredClassSignature> declaredSignatures) {
         final Map<IdSymbol, Attribute> attributes = new HashMap<>();
