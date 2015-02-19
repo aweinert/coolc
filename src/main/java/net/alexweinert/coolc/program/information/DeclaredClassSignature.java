@@ -12,7 +12,7 @@ import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 public class DeclaredClassSignature extends ClassSignature {
-    private class SignatureBuilder extends ASTVisitor {
+    private static class SignatureBuilder extends ASTVisitor {
         private final List<Attribute> attributes = new LinkedList<>();
         private final List<MethodSignature> methodSignatures = new LinkedList<>();
 
@@ -30,7 +30,7 @@ public class DeclaredClassSignature extends ClassSignature {
     /**
      * The given class may not contain any two attributes of the same name and no two methods of the same name
      */
-    public DeclaredClassSignature create(Class classNode) {
+    public static DeclaredClassSignature create(Class classNode) {
         final SignatureBuilder signatureBuilder = new SignatureBuilder();
         classNode.acceptVisitor(signatureBuilder);
 
