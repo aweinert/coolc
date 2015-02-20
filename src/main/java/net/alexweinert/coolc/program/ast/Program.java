@@ -4,15 +4,15 @@ import java.io.PrintStream;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
 
 /**
@@ -261,6 +261,10 @@ public class Program extends TreeNode {
 
     public Program setClasses(Classes newClasses) {
         return new Program(this.getFilename(), this.getLineNumber(), newClasses);
+    }
+
+    public Program setClasses(List<Class> newClasses) {
+        return this.setClasses(new Classes(this.classes.getFilename(), this.classes.getLineNumber(), newClasses));
     }
 
     @Override
