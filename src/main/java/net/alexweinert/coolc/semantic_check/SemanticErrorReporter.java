@@ -8,6 +8,7 @@ import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.program.ast.Attribute;
 import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Method;
+import net.alexweinert.coolc.program.ast.TreeNode;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 class SemanticErrorReporter {
@@ -145,5 +146,11 @@ class SemanticErrorReporter {
         out.error(String.format(formatString, method.getName(), method.getFilename(), method.getLineNumber(),
                 method.getReturnType(), resultType));
 
+    }
+
+    public void reportTypeMismatch(TreeNode expression, IdSymbol actualType, IdSymbol expexctedType) {
+        final String formatString = "Type mismatch in operands of expression at %s:%d\n  Expected Type: %s\n  Actual Type: %s\n";
+        out.error(String.format(formatString, expression.getFilename(), expression.getLineNumber(), expexctedType,
+                actualType));
     }
 }
