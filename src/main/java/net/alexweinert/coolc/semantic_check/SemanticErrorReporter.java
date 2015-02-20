@@ -132,4 +132,18 @@ class SemanticErrorReporter {
         out.error(String.format(formatString, originalClass.getIdentifier(), redefinedClass.getFilename(),
                 redefinedClass.getLineNumber(), originalClass.getFilename(), originalClass.getLineNumber()));
     }
+
+    public void reportAttributeInitializerTypeError(Attribute attribute, ExpressionType initializerType) {
+        final String formatString = "Type error in initialization of attribute %s at %s:%d\n  Declared Type: %s\n  Type of initializer: %s";
+        out.error(String.format(formatString, attribute.getName(), attribute.getFilename(), attribute.getLineNumber(),
+                attribute.getDeclaredType(), initializerType));
+
+    }
+
+    public void reportMethodBodyTypeError(Method method, ExpressionType resultType) {
+        final String formatString = "Type error in definition of method %s at %s:%d\n  Declared Type: %s\n  Type of body expression: %s";
+        out.error(String.format(formatString, method.getName(), method.getFilename(), method.getLineNumber(),
+                method.getReturnType(), resultType));
+
+    }
 }
