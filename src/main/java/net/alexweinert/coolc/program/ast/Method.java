@@ -42,6 +42,10 @@ public class Method extends Feature {
         expr = a4;
     }
 
+    public Expression getBody() {
+        return this.expr;
+    }
+
     public void dump(PrintStream out, int n) {
         out.print(Utilities.pad(n) + "method\n");
         dump_IdSymbol(out, n + 2, name);
