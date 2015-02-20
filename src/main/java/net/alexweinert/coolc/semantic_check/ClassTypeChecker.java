@@ -31,7 +31,8 @@ class ClassTypeChecker extends ASTVisitor {
         if (attribute.getInitializer() instanceof NoExpression) {
             return;
         }
-        final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, classScope, definedSignatures, err);
+        final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, classScope, hierarchy,
+                definedSignatures, err);
         attribute.getInitializer().acceptVisitor(checker);
         final IdSymbol initializerType = checker.getResultType().getTypeId(this.classId);
         final IdSymbol declaredType = attribute.getDeclaredType();
@@ -43,7 +44,8 @@ class ClassTypeChecker extends ASTVisitor {
     @Override
     public void visitMethodPostorder(Method method) {
         final VariablesScope methodScope = VariablesScope.createFromMethod(classScope, method);
-        final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, methodScope, definedSignatures, err);
+        final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, methodScope, hierarchy,
+                definedSignatures, err);
         method.getBody().acceptVisitor(checker);
         final IdSymbol bodyType = checker.getResultType().getTypeId(this.classId);
         final IdSymbol declaredType = method.getReturnType();
