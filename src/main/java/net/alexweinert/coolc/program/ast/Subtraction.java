@@ -64,11 +64,11 @@ public class Subtraction extends Expression {
 
     @Override
     public void acceptVisitor(ASTVisitor visitor) {
-        visitor.visitSubtractionPreorder(visitor);
+        visitor.visitSubtractionPreorder(this);
         this.e1.acceptVisitor(visitor);
-        visitor.visitSubtractionInorder(visitor);
+        visitor.visitSubtractionInorder(this);
         this.e2.acceptVisitor(visitor);
-        visitor.visitSubtractionPostorder(visitor);
+        visitor.visitSubtractionPostorder(this);
     }
 
     @Override

@@ -159,11 +159,11 @@ public abstract class ASTVisitor {
 
     public void visitStringConstant(StringConst stringConst) {}
 
-    public void visitSubtractionPreorder(ASTVisitor visitor) {}
+    public void visitSubtractionPreorder(Subtraction subtraction) {}
 
-    public void visitSubtractionInorder(ASTVisitor visitor) {}
+    public void visitSubtractionInorder(Subtraction subtraction) {}
 
-    public void visitSubtractionPostorder(ASTVisitor visitor) {}
+    public void visitSubtractionPostorder(Subtraction subtraction) {}
 
     public void visitTypecasePreorder(Typecase typecase) {}
 

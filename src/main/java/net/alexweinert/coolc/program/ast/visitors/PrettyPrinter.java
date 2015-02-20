@@ -33,6 +33,7 @@ import net.alexweinert.coolc.program.ast.ObjectReference;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.ast.StaticFunctionCall;
 import net.alexweinert.coolc.program.ast.StringConst;
+import net.alexweinert.coolc.program.ast.Subtraction;
 import net.alexweinert.coolc.program.ast.TreeNode;
 import net.alexweinert.coolc.program.ast.Typecase;
 
@@ -449,17 +450,17 @@ public class PrettyPrinter extends ASTVisitor {
     }
 
     @Override
-    public void visitSubtractionPreorder(ASTVisitor visitor) {
+    public void visitSubtractionPreorder(Subtraction subtraction) {
         stringBuilder.append("(");
     }
 
     @Override
-    public void visitSubtractionInorder(ASTVisitor visitor) {
+    public void visitSubtractionInorder(Subtraction subtraction) {
         stringBuilder.append(" - ");
     }
 
     @Override
-    public void visitSubtractionPostorder(ASTVisitor visitor) {
+    public void visitSubtractionPostorder(Subtraction subtraction) {
         stringBuilder.append(")");
     }
 
