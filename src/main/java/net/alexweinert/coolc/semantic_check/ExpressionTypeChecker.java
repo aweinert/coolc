@@ -6,6 +6,7 @@ import java.util.Stack;
 import net.alexweinert.coolc.program.ast.Addition;
 import net.alexweinert.coolc.program.ast.ArithmeticNegation;
 import net.alexweinert.coolc.program.ast.BoolConst;
+import net.alexweinert.coolc.program.ast.BooleanNegation;
 import net.alexweinert.coolc.program.ast.Division;
 import net.alexweinert.coolc.program.ast.Expression;
 import net.alexweinert.coolc.program.ast.IntConst;
@@ -138,6 +139,18 @@ class ExpressionTypeChecker extends ASTVisitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
+    }
+
+    @Override
+    public void visitBooleanNegationPostorder(BooleanNegation booleanNegation) {
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+
+        final IdSymbol argType = this.argumentTypes.pop().getTypeId(classId);
+        if (!this.hierarchy.conformsTo(argType, boolSymbol)) {
+            err.reportTypeMismatch(booleanNegation, argType, boolSymbol);
+        }
+
+        this.argumentTypes.push(ExpressionType.create(boolSymbol));
     }
 
 }
