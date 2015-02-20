@@ -30,6 +30,8 @@ public class SemanticChecker {
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = createDefinedSignatures(program, hierarchy,
                 declaredSignatures);
 
+        TypeChecker.typecheck(program, hierarchy, definedSignatures, error);
+
         return program;
     }
 
