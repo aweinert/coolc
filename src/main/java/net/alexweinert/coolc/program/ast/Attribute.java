@@ -40,6 +40,10 @@ public class Attribute extends Feature {
         return this.name;
     }
 
+    public Expression getInitializer() {
+        return this.init;
+    }
+
     @Override
     public void typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         if (this.init instanceof NoExpression) {
