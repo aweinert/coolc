@@ -6,6 +6,8 @@ import java.util.List;
 
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.IdTable;
+import net.alexweinert.coolc.program.symboltables.IntTable;
+import net.alexweinert.coolc.program.symboltables.StringTable;
 
 public class ASTFactory {
     private final String filename;
@@ -67,5 +69,33 @@ public class ASTFactory {
         final IdSymbol typeSymbol = IdTable.getInstance().addString(type);
 
         return new Formal(this.filename, this.lineNumber, identifierSymbol, typeSymbol);
+    }
+
+    public IntConst intConst(int value) {
+        return new IntConst(this.filename, this.lineNumber, IntTable.getInstance().addInt(value));
+    }
+
+    public StringConst stringConst(String value) {
+        return new StringConst(this.filename, this.lineNumber, StringTable.getInstance().addString(value));
+    }
+
+    public BoolConst boolConst(boolean value) {
+        return new BoolConst(this.filename, this.lineNumber, value);
+    }
+
+    public Addition add(Expression lhs, Expression rhs) {
+        return new Addition(this.filename, this.lineNumber, lhs, rhs);
+    }
+
+    public Subtraction sub(Expression lhs, Expression rhs) {
+        return new Subtraction(this.filename, this.lineNumber, lhs, rhs);
+    }
+
+    public Multiplication mult(Expression lhs, Expression rhs) {
+        return new Multiplication(this.filename, this.lineNumber, lhs, rhs);
+    }
+
+    public Division div(Expression lhs, Expression rhs) {
+        return new Division(this.filename, this.lineNumber, lhs, rhs);
     }
 }
