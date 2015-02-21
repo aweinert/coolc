@@ -83,6 +83,10 @@ public class ASTFactory {
         return new BoolConst(this.filename, this.lineNumber, value);
     }
 
+    public ObjectReference varRef(String varName) {
+        return new ObjectReference(this.filename, this.lineNumber, IdTable.getInstance().addString(varName));
+    }
+
     public Addition add(Expression lhs, Expression rhs) {
         return new Addition(this.filename, this.lineNumber, lhs, rhs);
     }
