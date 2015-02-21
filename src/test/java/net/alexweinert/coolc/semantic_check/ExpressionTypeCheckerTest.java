@@ -10,11 +10,30 @@ import net.alexweinert.coolc.program.information.DefinedClassSignature;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.IdTable;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.Assert;
 import org.mockito.Mockito;
 
 public class ExpressionTypeCheckerTest {
+
+    ClassHierarchy hierarchy;
+
+    @Before
+    public void defineStandardHierarchy() {
+        this.hierarchy = Mockito.mock(ClassHierarchy.class);
+        final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
+        Mockito.when(hierarchy.conformsTo(objectSymbol, objectSymbol)).thenReturn(true);
+
+        final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
+        Mockito.when(hierarchy.conformsTo(intSymbol, intSymbol)).thenReturn(true);
+
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+        Mockito.when(hierarchy.conformsTo(boolSymbol, boolSymbol)).thenReturn(true);
+
+        final IdSymbol stringSymbol = IdTable.getInstance().getStringSymbol();
+        Mockito.when(hierarchy.conformsTo(stringSymbol, stringSymbol)).thenReturn(true);
+    }
 
     @Test
     public void testIntConstant() {
@@ -132,16 +151,6 @@ public class ExpressionTypeCheckerTest {
     private void testWelltypedExpression(IdSymbol expectedType, Expression testExpression, VariablesScope initialScope) {
         final IdSymbol classId = IdTable.getInstance().addString("TestClass");
 
-        final ClassHierarchy hierarchy = Mockito.mock(ClassHierarchy.class);
-        final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
-        Mockito.when(hierarchy.conformsTo(intSymbol, intSymbol)).thenReturn(true);
-
-        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
-        Mockito.when(hierarchy.conformsTo(boolSymbol, boolSymbol)).thenReturn(true);
-
-        final IdSymbol stringSymbol = IdTable.getInstance().getStringSymbol();
-        Mockito.when(hierarchy.conformsTo(stringSymbol, stringSymbol)).thenReturn(true);
-
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
 
         final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
@@ -154,5 +163,4 @@ public class ExpressionTypeCheckerTest {
 
         Mockito.verifyZeroInteractions(err);
     }
-
 }
