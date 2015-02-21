@@ -5,6 +5,7 @@ import java.util.Stack;
 
 import net.alexweinert.coolc.program.ast.Addition;
 import net.alexweinert.coolc.program.ast.ArithmeticNegation;
+import net.alexweinert.coolc.program.ast.Assign;
 import net.alexweinert.coolc.program.ast.BoolConst;
 import net.alexweinert.coolc.program.ast.BooleanNegation;
 import net.alexweinert.coolc.program.ast.Division;
@@ -151,6 +152,24 @@ class ExpressionTypeChecker extends ASTVisitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(boolSymbol));
+    }
+
+    @Override
+    public void visitAssignPostorder(Assign assign) {
+        final IdSymbol assignedVariable = assign.getVariableIdentifier();
+        final ExpressionType rhsType = this.argumentTypes.pop();
+        final IdSymbol rhsTypeId = rhsType.getTypeId(this.classId);
+        final IdSymbol lhsTypeId = this.variablesScopes.peek().getVariableType(assignedVariable)
+                .getTypeId(this.classId);
+
+        if (this.hierarchy.conformsTo(rhsTypeId, lhsTypeId)) {
+            this.argumentTypes.push(rhsType);
+        } else {
+            err.reportTypeMismatch(assign, rhsTypeId, lhsTypeId);
+            final IdSymbol lhsDeclaredType = this.variablesScopes.peek().getVariableType(assignedVariable)
+                    .getTypeId(this.classId);
+            this.argumentTypes.push(ExpressionType.create(lhsDeclaredType));
+        }
     }
 
 }
