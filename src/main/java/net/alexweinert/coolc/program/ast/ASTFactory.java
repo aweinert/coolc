@@ -110,4 +110,8 @@ public class ASTFactory {
     public LessThanOrEquals le(Expression lhs, Expression rhs) {
         return new LessThanOrEquals(this.filename, this.lineNumber, lhs, rhs);
     }
+
+    public Assign assignment(String variable, Expression expr) {
+        return new Assign(this.filename, this.lineNumber, IdTable.getInstance().addString(variable), expr);
+    }
 }
