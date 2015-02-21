@@ -97,9 +97,27 @@ public class ExpressionTypeCheckerTest {
         this.testWelltypedVariableFreeExpression(boolSymbol, testExpression);
     }
 
+    @Test
+    public void testWelltypedObjectReference() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.varRef("foo");
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+
+        final VariablesScope scope = Mockito.mock(VariablesScope.class);
+        Mockito.when(scope.getVariableType(IdTable.getInstance().addString("foo"))).thenReturn(
+                ExpressionType.create(boolSymbol));
+
+        this.testWelltypedExpression(boolSymbol, testExpression, scope);
+    }
+
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
-        final IdSymbol classId = IdTable.getInstance().addString("TestClass");
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
+
+        this.testWelltypedExpression(expectedType, testExpression, initialScope);
+    }
+
+    private void testWelltypedExpression(IdSymbol expectedType, Expression testExpression, VariablesScope initialScope) {
+        final IdSymbol classId = IdTable.getInstance().addString("TestClass");
 
         final ClassHierarchy hierarchy = Mockito.mock(ClassHierarchy.class);
         final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
