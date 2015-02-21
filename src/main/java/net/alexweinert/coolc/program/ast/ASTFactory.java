@@ -98,4 +98,12 @@ public class ASTFactory {
     public Division div(Expression lhs, Expression rhs) {
         return new Division(this.filename, this.lineNumber, lhs, rhs);
     }
+
+    public LessThan lt(Expression lhs, Expression rhs) {
+        return new LessThan(this.filename, this.lineNumber, lhs, rhs);
+    }
+
+    public LessThanOrEquals le(Expression lhs, Expression rhs) {
+        return new LessThanOrEquals(this.filename, this.lineNumber, lhs, rhs);
+    }
 }
