@@ -79,6 +79,24 @@ public class ExpressionTypeCheckerTest {
         this.testWelltypedVariableFreeExpression(intSymbol, testExpression);
     }
 
+    @Test
+    public void testWelltypedLessThan() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.lt(factory.intConst(3), factory.intConst(5));
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+
+        this.testWelltypedVariableFreeExpression(boolSymbol, testExpression);
+    }
+
+    @Test
+    public void testWelltypedLessThanEquals() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.le(factory.intConst(3), factory.intConst(5));
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+
+        this.testWelltypedVariableFreeExpression(boolSymbol, testExpression);
+    }
+
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
         final IdSymbol classId = IdTable.getInstance().addString("TestClass");
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
