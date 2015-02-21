@@ -110,6 +110,19 @@ public class ExpressionTypeCheckerTest {
         this.testWelltypedExpression(boolSymbol, testExpression, scope);
     }
 
+    @Test
+    public void testWelltypedAssignment() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.assignment("foo", factory.intConst(3));
+        final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
+
+        final VariablesScope scope = Mockito.mock(VariablesScope.class);
+        Mockito.when(scope.getVariableType(IdTable.getInstance().addString("foo"))).thenReturn(
+                ExpressionType.create(intSymbol));
+
+        this.testWelltypedExpression(intSymbol, testExpression, scope);
+    }
+
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
 
