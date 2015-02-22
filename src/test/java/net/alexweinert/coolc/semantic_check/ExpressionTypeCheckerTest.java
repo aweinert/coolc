@@ -190,6 +190,31 @@ public class ExpressionTypeCheckerTest {
         this.testWelltypedExpression(classBSymbol, testExpression, scope);
     }
 
+    @Test
+    public void testIlltypedAssignment() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.assignment("x", factory.varRef("y"));
+
+        final IdSymbol classASymbol = IdTable.getInstance().addString("ClassA");
+        final IdSymbol classBSymbol = IdTable.getInstance().addString("ClassB");
+
+        final VariablesScope scope = Mockito.mock(VariablesScope.class);
+
+        final IdSymbol xSymbol = IdTable.getInstance().addString("x");
+        Mockito.when(scope.containsVariable(xSymbol)).thenReturn(true);
+        Mockito.when(scope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+
+        final IdSymbol ySymbol = IdTable.getInstance().addString("y");
+        Mockito.when(scope.containsVariable(ySymbol)).thenReturn(true);
+        Mockito.when(scope.getVariableType(ySymbol)).thenReturn(ExpressionType.create(classBSymbol));
+
+        Mockito.when(this.hierarchy.conformsTo(classBSymbol, classASymbol)).thenReturn(false);
+
+        SemanticErrorReporter err = this.testIlltypedExpression(classASymbol, testExpression, scope);
+
+        Mockito.verify(err).reportTypeMismatch(testExpression, classBSymbol, classASymbol);
+    }
+
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
 
@@ -210,5 +235,25 @@ public class ExpressionTypeCheckerTest {
         Assert.assertEquals(expectedType, checker.getResultType().getTypeId(classId));
 
         Mockito.verifyZeroInteractions(err);
+    }
+
+    /**
+     * @return A mock of SemanticErrorReporter used during typechecking of testExpression.
+     */
+    private SemanticErrorReporter testIlltypedExpression(IdSymbol expectedType, Expression testExpression,
+            VariablesScope initialScope) {
+        final IdSymbol classId = IdTable.getInstance().addString("TestClass");
+
+        final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
+
+        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
+
+        final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, initialScope, hierarchy,
+                definedSignatures, err);
+        testExpression.acceptVisitor(checker);
+
+        Assert.assertEquals(expectedType, checker.getResultType().getTypeId(classId));
+
+        return err;
     }
 }
