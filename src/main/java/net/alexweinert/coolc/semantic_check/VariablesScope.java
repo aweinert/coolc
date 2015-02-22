@@ -38,6 +38,10 @@ class VariablesScope {
         return new VariablesScope(newTypes);
     }
 
+    public boolean containsVariable(IdSymbol variableId) {
+        return this.variableTypes.containsKey(variableId);
+    }
+
     public ExpressionType getVariableType(IdSymbol variableId) {
         return this.variableTypes.get(variableId);
     }

@@ -123,9 +123,10 @@ public class ExpressionTypeCheckerTest {
         final Expression testExpression = factory.varRef("foo");
         final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
 
+        final IdSymbol variableId = IdTable.getInstance().addString("foo");
         final VariablesScope scope = Mockito.mock(VariablesScope.class);
-        Mockito.when(scope.getVariableType(IdTable.getInstance().addString("foo"))).thenReturn(
-                ExpressionType.create(boolSymbol));
+        Mockito.when(scope.getVariableType(variableId)).thenReturn(ExpressionType.create(boolSymbol));
+        Mockito.when(scope.containsVariable(variableId)).thenReturn(true);
 
         this.testWelltypedExpression(boolSymbol, testExpression, scope);
     }
