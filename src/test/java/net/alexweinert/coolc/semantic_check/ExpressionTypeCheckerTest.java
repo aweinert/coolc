@@ -153,7 +153,8 @@ public class ExpressionTypeCheckerTest {
     }
 
     @Test
-    public void testWelltypedAssignment() {
+    /** Tests that an assignment of the type x : A <- y : A has type A */
+    public void testSameTypeAssignment() {
         final ASTFactory factory = new ASTFactory();
         final Expression testExpression = factory.assignment("foo", factory.intConst(3));
         final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
@@ -163,6 +164,30 @@ public class ExpressionTypeCheckerTest {
                 ExpressionType.create(intSymbol));
 
         this.testWelltypedExpression(intSymbol, testExpression, scope);
+    }
+
+    @Test
+    /** Tests that an assignment of the type x : A <- y : B has type B, where A < B */
+    public void testSubtypeAssignment() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.assignment("x", factory.varRef("y"));
+
+        final IdSymbol classASymbol = IdTable.getInstance().addString("ClassA");
+        final IdSymbol classBSymbol = IdTable.getInstance().addString("ClassB");
+
+        final VariablesScope scope = Mockito.mock(VariablesScope.class);
+
+        final IdSymbol xSymbol = IdTable.getInstance().addString("x");
+        Mockito.when(scope.containsVariable(xSymbol)).thenReturn(true);
+        Mockito.when(scope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+
+        final IdSymbol ySymbol = IdTable.getInstance().addString("y");
+        Mockito.when(scope.containsVariable(ySymbol)).thenReturn(true);
+        Mockito.when(scope.getVariableType(ySymbol)).thenReturn(ExpressionType.create(classBSymbol));
+
+        Mockito.when(this.hierarchy.conformsTo(classBSymbol, classASymbol)).thenReturn(true);
+
+        this.testWelltypedExpression(classBSymbol, testExpression, scope);
     }
 
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
