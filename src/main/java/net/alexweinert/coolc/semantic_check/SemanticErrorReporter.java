@@ -8,6 +8,7 @@ import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.program.ast.Attribute;
 import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Method;
+import net.alexweinert.coolc.program.ast.ObjectReference;
 import net.alexweinert.coolc.program.ast.TreeNode;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
@@ -152,5 +153,12 @@ class SemanticErrorReporter {
         final String formatString = "Type mismatch in operands of expression at %s:%d\n  Expected Type: %s\n  Actual Type: %s\n";
         out.error(String.format(formatString, expression.getFilename(), expression.getLineNumber(), expexctedType,
                 actualType));
+    }
+
+    public void reportVariableOutOfScope(ObjectReference reference) {
+        final String formatString = "Variable %s does not exist in current scope at %s:%d";
+        out.error(String.format(formatString, reference.getVariableIdentifier(), reference.getFilename(),
+                reference.getLineNumber()));
+
     }
 }
