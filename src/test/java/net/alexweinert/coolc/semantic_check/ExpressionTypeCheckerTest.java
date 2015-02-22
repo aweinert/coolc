@@ -5,14 +5,15 @@ import java.util.Map;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
 import net.alexweinert.coolc.program.ast.Expression;
+import net.alexweinert.coolc.program.ast.ObjectReference;
 import net.alexweinert.coolc.program.information.ClassHierarchy;
 import net.alexweinert.coolc.program.information.DefinedClassSignature;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.IdTable;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.Assert;
 import org.mockito.Mockito;
 
 public class ExpressionTypeCheckerTest {
@@ -127,6 +128,27 @@ public class ExpressionTypeCheckerTest {
                 ExpressionType.create(boolSymbol));
 
         this.testWelltypedExpression(boolSymbol, testExpression, scope);
+    }
+
+    @Test
+    public void testObjectReferenceOutOfScope() {
+        final ASTFactory factory = new ASTFactory();
+        final ObjectReference testExpression = factory.varRef("foo");
+
+        final VariablesScope scope = Mockito.mock(VariablesScope.class);
+
+        final IdSymbol classId = IdTable.getInstance().addString("TestClass");
+
+        final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
+
+        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
+
+        final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, scope, hierarchy, definedSignatures,
+                err);
+        testExpression.acceptVisitor(checker);
+
+        Mockito.verify(err).reportVariableOutOfScope(testExpression);
+        Mockito.verifyNoMoreInteractions(err);
     }
 
     @Test
