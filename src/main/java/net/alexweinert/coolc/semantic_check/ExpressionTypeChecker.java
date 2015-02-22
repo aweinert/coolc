@@ -65,7 +65,14 @@ class ExpressionTypeChecker extends ASTVisitor {
 
     @Override
     public void visitObjectReference(ObjectReference objectReference) {
-        this.argumentTypes.push(this.variablesScopes.peek().getVariableType(objectReference.getVariableIdentifier()));
+        final ExpressionType referenceType = this.variablesScopes.peek().getVariableType(
+                objectReference.getVariableIdentifier());
+        if (referenceType != null) {
+            this.argumentTypes.push(referenceType);
+        } else {
+            err.reportVariableOutOfScope(objectReference);
+            this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getObjectSymbol()));
+        }
     }
 
     @Override
