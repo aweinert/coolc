@@ -114,4 +114,8 @@ public class ASTFactory {
     public Assign assignment(String variable, Expression expr) {
         return new Assign(this.filename, this.lineNumber, IdTable.getInstance().addString(variable), expr);
     }
+
+    public If ifStatement(Expression condition, Expression thenBranch, Expression elseBranch) {
+        return new If(this.filename, this.lineNumber, condition, thenBranch, elseBranch);
+    }
 }
