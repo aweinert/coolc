@@ -66,4 +66,8 @@ public class IdTable extends AbstractTable<String> {
     public IdSymbol getIOSymbol() {
         return this.addString("IO");
     }
+
+    public IdSymbol getSelfTypeSymbol() {
+        return this.addString("SELF_TYPE");
+    }
 }

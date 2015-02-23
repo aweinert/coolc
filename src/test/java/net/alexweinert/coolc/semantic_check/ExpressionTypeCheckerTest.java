@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
 import net.alexweinert.coolc.program.ast.Expression;
+import net.alexweinert.coolc.program.ast.If;
 import net.alexweinert.coolc.program.ast.ObjectReference;
 import net.alexweinert.coolc.program.information.ClassHierarchy;
 import net.alexweinert.coolc.program.information.DefinedClassSignature;
@@ -25,15 +26,19 @@ public class ExpressionTypeCheckerTest {
         this.hierarchy = Mockito.mock(ClassHierarchy.class);
         final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
         Mockito.when(hierarchy.conformsTo(objectSymbol, objectSymbol)).thenReturn(true);
+        Mockito.when(hierarchy.getLeastUpperBound(objectSymbol, objectSymbol)).thenReturn(objectSymbol);
 
         final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
         Mockito.when(hierarchy.conformsTo(intSymbol, intSymbol)).thenReturn(true);
+        Mockito.when(hierarchy.getLeastUpperBound(intSymbol, intSymbol)).thenReturn(intSymbol);
 
         final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
         Mockito.when(hierarchy.conformsTo(boolSymbol, boolSymbol)).thenReturn(true);
+        Mockito.when(hierarchy.getLeastUpperBound(boolSymbol, boolSymbol)).thenReturn(boolSymbol);
 
         final IdSymbol stringSymbol = IdTable.getInstance().getStringSymbol();
         Mockito.when(hierarchy.conformsTo(stringSymbol, stringSymbol)).thenReturn(true);
+        Mockito.when(hierarchy.getLeastUpperBound(stringSymbol, stringSymbol)).thenReturn(stringSymbol);
     }
 
     @Test
@@ -208,6 +213,80 @@ public class ExpressionTypeCheckerTest {
 
         Mockito.verify(err).reportTypeMismatch(testExpression, classBSymbol, classASymbol);
         Mockito.verifyNoMoreInteractions(err);
+    }
+
+    @Test
+    public void testWelltypedIfStatementSameType() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.ifStatement(factory.boolConst(true), factory.intConst(2),
+                factory.intConst(5));
+
+        final IdSymbol intTypeSymbol = IdTable.getInstance().getIntSymbol();
+
+        this.testWelltypedVariableFreeExpression(intTypeSymbol, testExpression);
+    }
+
+    @Test
+    public void testWelltypedIfStatementSubtype() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.ifStatement(factory.boolConst(true), factory.varRef("x"),
+                factory.varRef("y"));
+
+        final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
+        final IdSymbol xSymbol = IdTable.getInstance().addString("x");
+        final IdSymbol classASymbol = IdTable.getInstance().addString("ClassA");
+        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+        Mockito.when(initialScope.containsVariable(xSymbol)).thenReturn(true);
+
+        final IdSymbol ySymbol = IdTable.getInstance().addString("y");
+        final IdSymbol classBSymbol = IdTable.getInstance().addString("ClassB");
+        Mockito.when(initialScope.getVariableType(ySymbol)).thenReturn(ExpressionType.create(classBSymbol));
+        Mockito.when(initialScope.containsVariable(ySymbol)).thenReturn(true);
+
+        Mockito.when(this.hierarchy.getLeastUpperBound(classASymbol, classBSymbol)).thenReturn(classASymbol);
+        Mockito.when(this.hierarchy.getLeastUpperBound(classBSymbol, classASymbol)).thenReturn(classASymbol);
+
+        this.testWelltypedExpression(classASymbol, testExpression, initialScope);
+    }
+
+    @Test
+    public void testWelltypedIfStatementUnrelatedType() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.ifStatement(factory.boolConst(true), factory.varRef("x"),
+                factory.varRef("y"));
+
+        final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
+        final IdSymbol xSymbol = IdTable.getInstance().addString("x");
+        final IdSymbol classASymbol = IdTable.getInstance().addString("ClassA");
+        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+        Mockito.when(initialScope.containsVariable(xSymbol)).thenReturn(true);
+
+        final IdSymbol ySymbol = IdTable.getInstance().addString("y");
+        final IdSymbol classBSymbol = IdTable.getInstance().addString("ClassB");
+        Mockito.when(initialScope.getVariableType(ySymbol)).thenReturn(ExpressionType.create(classBSymbol));
+        Mockito.when(initialScope.containsVariable(ySymbol)).thenReturn(true);
+
+        final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
+
+        Mockito.when(this.hierarchy.getLeastUpperBound(classASymbol, classBSymbol)).thenReturn(objectSymbol);
+        Mockito.when(this.hierarchy.getLeastUpperBound(classBSymbol, classASymbol)).thenReturn(objectSymbol);
+
+        this.testWelltypedExpression(objectSymbol, testExpression, initialScope);
+    }
+
+    @Test
+    public void testIlltypedIfStatement() {
+        final ASTFactory factory = new ASTFactory();
+        final If testExpression = factory.ifStatement(factory.intConst(2), factory.boolConst(true),
+                factory.boolConst(false));
+
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+        final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
+
+        final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
+        final SemanticErrorReporter err = this.testIlltypedExpression(boolSymbol, testExpression, initialScope);
+
+        Mockito.verify(err).reportTypeMismatch(testExpression.getCondition(), intSymbol, boolSymbol);
     }
 
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
