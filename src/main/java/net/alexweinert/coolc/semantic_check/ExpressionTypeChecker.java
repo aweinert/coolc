@@ -10,6 +10,7 @@ import net.alexweinert.coolc.program.ast.BoolConst;
 import net.alexweinert.coolc.program.ast.BooleanNegation;
 import net.alexweinert.coolc.program.ast.Division;
 import net.alexweinert.coolc.program.ast.Expression;
+import net.alexweinert.coolc.program.ast.If;
 import net.alexweinert.coolc.program.ast.IntConst;
 import net.alexweinert.coolc.program.ast.LessThan;
 import net.alexweinert.coolc.program.ast.LessThanOrEquals;
@@ -180,4 +181,23 @@ class ExpressionTypeChecker extends ASTVisitor {
         }
     }
 
+    @Override
+    public void visitIfPreorderOne(If ifNode) {
+        final ExpressionType conditionType = this.argumentTypes.pop();
+        final IdSymbol conditionTypeSymbol = conditionType.getTypeId(this.classId);
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+        if (!conditionTypeSymbol.equals(boolSymbol)) {
+            err.reportTypeMismatch(ifNode.getCondition(), conditionTypeSymbol, boolSymbol);
+        }
+    };
+
+    @Override
+    public void visitIfPostorder(If ifNode) {
+        final ExpressionType elseBranchType = this.argumentTypes.pop();
+        final ExpressionType thenBranchType = this.argumentTypes.pop();
+        final ExpressionType leastUpperBound = thenBranchType.computeLeastUpperBound(elseBranchType, this.classId,
+                this.hierarchy);
+
+        this.argumentTypes.push(leastUpperBound);
+    }
 }
