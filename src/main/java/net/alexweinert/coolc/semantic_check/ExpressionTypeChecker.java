@@ -16,6 +16,7 @@ import net.alexweinert.coolc.program.ast.IntConst;
 import net.alexweinert.coolc.program.ast.IsVoid;
 import net.alexweinert.coolc.program.ast.LessThan;
 import net.alexweinert.coolc.program.ast.LessThanOrEquals;
+import net.alexweinert.coolc.program.ast.Let;
 import net.alexweinert.coolc.program.ast.Loop;
 import net.alexweinert.coolc.program.ast.Multiplication;
 import net.alexweinert.coolc.program.ast.ObjectReference;
@@ -230,5 +231,22 @@ class ExpressionTypeChecker extends ASTVisitor {
     public void visitIsVoidPostorder(IsVoid isVoid) {
         this.argumentTypes.pop();
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
+    }
+
+    @Override
+    public void visitLetInorder(Let let) {
+        final ExpressionType initializerType = this.argumentTypes.pop();
+        final IdSymbol initializerTypeSymbol = initializerType.getTypeId(this.classId);
+        final IdSymbol boolTypeSymbol = IdTable.getInstance().getBoolSymbol();
+        if (!initializerTypeSymbol.equals(boolTypeSymbol)) {
+            this.err.reportTypeMismatch(let.getInitializer(), initializerTypeSymbol, boolTypeSymbol);
+        }
+        final VariablesScope currentScope = this.variablesScopes.peek();
+        this.variablesScopes.push(currentScope.addVariable(let.getVariableIdentifier(), let.getDeclaredType()));
+    }
+
+    @Override
+    public void visitLetPostorder(Let let) {
+        this.variablesScopes.pop();
     }
 }
