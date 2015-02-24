@@ -131,4 +131,10 @@ public class ASTFactory {
     public IsVoid isVoid(Expression expr) {
         return new IsVoid(this.filename, this.lineNumber, expr);
     }
+
+    public Let let(String variable, String type, Expression init, Expression expr) {
+        final IdSymbol variableSymbol = IdTable.getInstance().addString(variable);
+        final IdSymbol typeSymbol = IdTable.getInstance().addString(type);
+        return new Let(this.filename, this.lineNumber, variableSymbol, typeSymbol, init, expr);
+    }
 }
