@@ -137,4 +137,18 @@ public class ASTFactory {
         final IdSymbol typeSymbol = IdTable.getInstance().addString(type);
         return new Let(this.filename, this.lineNumber, variableSymbol, typeSymbol, init, expr);
     }
+
+    public FunctionCall call(Expression calleeObject, String functionId, Expression... args) {
+        final IdSymbol functionIdSymbol = IdTable.getInstance().addString(functionId);
+        return new FunctionCall(this.filename, this.lineNumber, calleeObject, functionIdSymbol,
+                new ArgumentExpressions(this.filename, this.lineNumber, Arrays.asList(args)));
+    }
+
+    public StaticFunctionCall staticCall(Expression calleeObject, String calleeType, String functionId,
+            Expression... args) {
+        final IdSymbol calleeTypeSymbol = IdTable.getInstance().addString(calleeType);
+        final IdSymbol functionIdSymbol = IdTable.getInstance().addString(functionId);
+        return new StaticFunctionCall(this.filename, this.lineNumber, calleeObject, calleeTypeSymbol, functionIdSymbol,
+                new ArgumentExpressions(this.filename, this.lineNumber, Arrays.asList(args)));
+    }
 }
