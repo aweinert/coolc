@@ -169,4 +169,8 @@ public class FunctionCall extends Expression {
         return true;
     }
 
+    public ArgumentExpressions getArguments() {
+        return this.actual;
+    }
+
 }

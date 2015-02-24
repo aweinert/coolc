@@ -7,6 +7,7 @@ import java.util.Set;
 import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.program.ast.Attribute;
 import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.FunctionCall;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.ObjectReference;
 import net.alexweinert.coolc.program.ast.TreeNode;
@@ -159,6 +160,17 @@ class SemanticErrorReporter {
         final String formatString = "Variable %s does not exist in current scope at %s:%d";
         out.error(String.format(formatString, reference.getVariableIdentifier(), reference.getFilename(),
                 reference.getLineNumber()));
+    }
 
+    public void reportUndefinedMethod(FunctionCall call, IdSymbol calleeType) {
+        final String formatString = "Call of undefined method at %s:%d\n  Type %s of callee expression does not define method %s";
+        out.error(String.format(formatString, call.getFilename(), call.getLineNumber(), calleeType.toString(), call
+                .getFunctionIdentifier().toString()));
+    }
+
+    public void reportWrongNumberOfFunctionArguments(FunctionCall call, int expectedNumberOfArguments) {
+        final String formatString = "Wrong invocation of method at %s:%d\n  Expected number of arguments: %d\n  Given number of arguments: %d";
+        out.error(String.format(formatString, call.getFilename(), call.getLineNumber(), expectedNumberOfArguments, call
+                .getArguments().size()));
     }
 }
