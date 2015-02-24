@@ -16,7 +16,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
 public class Block extends Expression {
-    final protected Expressions body;
+    final protected BlockExpressions body;
 
     /**
      * Creates "block" AST node.
@@ -26,7 +26,7 @@ public class Block extends Expression {
      * @param a0
      *            initial value for body
      */
-    public Block(String filename, int lineNumber, Expressions a1) {
+    public Block(String filename, int lineNumber, BlockExpressions a1) {
         super(filename, lineNumber);
         this.body = a1;
     }
