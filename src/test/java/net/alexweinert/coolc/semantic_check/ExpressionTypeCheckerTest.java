@@ -333,6 +333,15 @@ public class ExpressionTypeCheckerTest {
         this.testWelltypedVariableFreeExpression(intSymbol, testExpression);
     }
 
+    @Test
+    public void testIsVoidExpression() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.isVoid(factory.intConst(3));
+
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+        this.testWelltypedVariableFreeExpression(boolSymbol, testExpression);
+    }
+
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
 
