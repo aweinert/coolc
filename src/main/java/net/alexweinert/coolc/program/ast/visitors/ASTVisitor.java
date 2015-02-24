@@ -11,6 +11,12 @@ public abstract class ASTVisitor {
 
     public void visitAdditionPostorder(Addition addition) {}
 
+    public void visitArgumentExpressionsPreorder(ArgumentExpressions expressions) {}
+
+    public void visitArgumentExpressionsInorder(ArgumentExpressions expressions) {}
+
+    public void visitArgumentExpressionsPostorder(ArgumentExpressions expressions) {}
+
     public void visitArithmeticNegationPreorder(ArithmeticNegation arithmeticNegation) {}
 
     public void visitArithmeticNegationPostOrder(ArithmeticNegation arithmeticNegation) {}
@@ -26,6 +32,12 @@ public abstract class ASTVisitor {
     public void visitBlockPreorder(Block block) {}
 
     public void visitBlockPostorder(Block block) {}
+
+    public void visitBlockExpressionsPreorder(BlockExpressions expressions) {}
+
+    public void visitBlockExpressionsInorder(BlockExpressions expressions) {}
+
+    public void visitBlockExpressionsPostorder(BlockExpressions expressions) {}
 
     public void visitBoolConst(BoolConst boolConst) {}
 
@@ -64,12 +76,6 @@ public abstract class ASTVisitor {
     public void visitEqualityInorder(Equality equality) {}
 
     public void visitEqualityPostorder(Equality equality) {}
-
-    public void visitExpressionsPreorder(Expressions expressions) {}
-
-    public void visitExpressionsInorder(Expressions expressions) {}
-
-    public void visitExpressionsPostorder(Expressions expressions) {}
 
     public void visitFeaturesPreorder(Features features) {}
 

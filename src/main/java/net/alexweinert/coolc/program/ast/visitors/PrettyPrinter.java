@@ -1,10 +1,12 @@
 package net.alexweinert.coolc.program.ast.visitors;
 
 import net.alexweinert.coolc.program.ast.Addition;
+import net.alexweinert.coolc.program.ast.ArgumentExpressions;
 import net.alexweinert.coolc.program.ast.ArithmeticNegation;
 import net.alexweinert.coolc.program.ast.Assign;
 import net.alexweinert.coolc.program.ast.Attribute;
 import net.alexweinert.coolc.program.ast.Block;
+import net.alexweinert.coolc.program.ast.BlockExpressions;
 import net.alexweinert.coolc.program.ast.BoolConst;
 import net.alexweinert.coolc.program.ast.BooleanNegation;
 import net.alexweinert.coolc.program.ast.Case;
@@ -13,7 +15,6 @@ import net.alexweinert.coolc.program.ast.Class;
 import net.alexweinert.coolc.program.ast.Classes;
 import net.alexweinert.coolc.program.ast.Division;
 import net.alexweinert.coolc.program.ast.Equality;
-import net.alexweinert.coolc.program.ast.Expressions;
 import net.alexweinert.coolc.program.ast.Features;
 import net.alexweinert.coolc.program.ast.Formal;
 import net.alexweinert.coolc.program.ast.Formals;
@@ -203,25 +204,18 @@ public class PrettyPrinter extends ASTVisitor {
     }
 
     @Override
-    public void visitExpressionsPreorder(Expressions expressions) {}
-
-    @Override
-    public void visitExpressionsInorder(Expressions expressions) {
-        if (this.expressionsContext.inFunctionCall()) {
-            stringBuilder.append(", ");
-        } else {
-            // We are inside a block
-            stringBuilder.append(";\n");
-        }
-
+    public void visitArgumentExpressionsInorder(ArgumentExpressions expressions) {
+        stringBuilder.append(", ");
     }
 
     @Override
-    public void visitExpressionsPostorder(Expressions expressions) {
-        if (this.expressionsContext.inBlock()) {
-            // We are inside a block, finish the last expression with a semicolon
-            stringBuilder.append(";\n");
-        }
+    public void visitBlockExpressionsInorder(BlockExpressions expressions) {
+        stringBuilder.append(";\n");
+    }
+
+    @Override
+    public void visitBlockExpressionsPostorder(BlockExpressions expressions) {
+        stringBuilder.append(";\n");
     }
 
     @Override

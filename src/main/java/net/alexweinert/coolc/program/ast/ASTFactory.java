@@ -124,7 +124,7 @@ public class ASTFactory {
     }
 
     public Block block(Expression... expressions) {
-        return new Block(this.filename, this.lineNumber, new Expressions(this.filename, this.lineNumber,
+        return new Block(this.filename, this.lineNumber, new BlockExpressions(this.filename, this.lineNumber,
                 Arrays.asList(expressions)));
     }
 }

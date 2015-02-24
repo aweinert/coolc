@@ -84,7 +84,8 @@ nonterminal Class class;
 nonterminal Features feature_list;
 nonterminal Feature feature;
 nonterminal Expression expr, opt_init, nested_let, let_expression;
-nonterminal Expressions actuals, exp_list, block_body;
+nonterminal ArgumentExpressions actuals, exp_list;
+nonterminal BlockExpressions block_body;
 nonterminal Formals formals;
 nonterminal Formal formal;
 nonterminal Case case;
@@ -270,7 +271,7 @@ expr
 /* Body of a block of expressions */
 block_body
 	::= /* Base case, create new, empty list */
-		{: RESULT = new Expressions(curr_filename(), curr_lineno()); :}
+		{: RESULT = new BlockExpressions(curr_filename(), curr_lineno()); :}
 	| block_body:el expr:e1 SEMI /* Add a new expression to the block */
 		{: RESULT = el.add(e1); :}
 	| block_body:el error SEMI /* If we have a malformed expression, just skip it */
@@ -316,7 +317,7 @@ case
 actuals
 	/* No arguments */
 	::= LPAREN RPAREN
-	    {: RESULT = new Expressions(curr_filename(), curr_lineno()); :}
+	    {: RESULT = new ArgumentExpressions(curr_filename(), curr_lineno()); :}
 	/* List of arguments */
 	| LPAREN exp_list:el RPAREN
 	    {: RESULT = el; :}
@@ -326,7 +327,7 @@ actuals
 exp_list
 	/* One expression */
 	::= expr:e
-	    {: RESULT = (new Expressions(curr_filename(), curr_lineno())).add(e); :} 
+	    {: RESULT = (new ArgumentExpressions(curr_filename(), curr_lineno())).add(e); :} 
 	/* Several expressions */
 	| exp_list:el COMMA expr:e
 	    {: RESULT = el.add(e); :}
