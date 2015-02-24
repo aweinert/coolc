@@ -14,6 +14,7 @@ import net.alexweinert.coolc.program.ast.If;
 import net.alexweinert.coolc.program.ast.IntConst;
 import net.alexweinert.coolc.program.ast.LessThan;
 import net.alexweinert.coolc.program.ast.LessThanOrEquals;
+import net.alexweinert.coolc.program.ast.Loop;
 import net.alexweinert.coolc.program.ast.Multiplication;
 import net.alexweinert.coolc.program.ast.ObjectReference;
 import net.alexweinert.coolc.program.ast.StringConst;
@@ -199,5 +200,22 @@ class ExpressionTypeChecker extends ASTVisitor {
                 this.hierarchy);
 
         this.argumentTypes.push(leastUpperBound);
+    }
+
+    @Override
+    public void visitLoopInorder(Loop loop) {
+        final ExpressionType conditionType = this.argumentTypes.pop();
+        final IdSymbol conditionTypeSymbol = conditionType.getTypeId(this.classId);
+        final IdSymbol boolTypeSymbol = IdTable.getInstance().getBoolSymbol();
+
+        if (!conditionTypeSymbol.equals(boolTypeSymbol)) {
+            this.err.reportTypeMismatch(loop.getCondition(), conditionTypeSymbol, boolTypeSymbol);
+        }
+    }
+
+    @Override
+    public void visitLoopPostorder(Loop loop) {
+        this.argumentTypes.pop();
+        this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getObjectSymbol()));
     }
 }
