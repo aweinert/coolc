@@ -6,6 +6,7 @@ import java.util.Stack;
 import net.alexweinert.coolc.program.ast.Addition;
 import net.alexweinert.coolc.program.ast.ArithmeticNegation;
 import net.alexweinert.coolc.program.ast.Assign;
+import net.alexweinert.coolc.program.ast.BlockExpressions;
 import net.alexweinert.coolc.program.ast.BoolConst;
 import net.alexweinert.coolc.program.ast.BooleanNegation;
 import net.alexweinert.coolc.program.ast.Division;
@@ -217,5 +218,10 @@ class ExpressionTypeChecker extends ASTVisitor {
     public void visitLoopPostorder(Loop loop) {
         this.argumentTypes.pop();
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getObjectSymbol()));
+    }
+
+    @Override
+    public void visitBlockExpressionsInorder(BlockExpressions expression) {
+        this.argumentTypes.pop();
     }
 }
