@@ -368,7 +368,16 @@ public class ExpressionTypeCheckerTest {
 
         final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
         final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
-        final SemanticErrorReporter err = this.testIlltypedVariableFreeExpression(boolSymbol, testExpression);
+        final IdSymbol variableSymbol = IdTable.getInstance().addString("x");
+
+        final VariablesScope innerScope = Mockito.mock(VariablesScope.class);
+        Mockito.when(innerScope.getVariableType(variableSymbol)).thenReturn(ExpressionType.create(boolSymbol));
+        Mockito.when(innerScope.containsVariable(variableSymbol)).thenReturn(true);
+
+        final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
+        Mockito.when(initialScope.addVariable(variableSymbol, boolSymbol)).thenReturn(innerScope);
+
+        final SemanticErrorReporter err = this.testIlltypedExpression(boolSymbol, testExpression, initialScope);
 
         Mockito.verify(err).reportTypeMismatch(testExpression.getInitializer(), intSymbol, boolSymbol);
         Mockito.verifyNoMoreInteractions(err);
