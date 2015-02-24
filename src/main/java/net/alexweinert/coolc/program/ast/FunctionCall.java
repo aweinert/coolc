@@ -18,7 +18,7 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
 public class FunctionCall extends Expression {
     final protected Expression expr;
     final protected IdSymbol name;
-    final protected Expressions actual;
+    final protected ArgumentExpressions actual;
 
     /**
      * Creates "dispatch" AST node.
@@ -32,7 +32,7 @@ public class FunctionCall extends Expression {
      * @param a2
      *            initial value for actual
      */
-    public FunctionCall(String filename, int lineNumber, Expression a1, IdSymbol a2, Expressions a3) {
+    public FunctionCall(String filename, int lineNumber, Expression a1, IdSymbol a2, ArgumentExpressions a3) {
         super(filename, lineNumber);
         expr = a1;
         name = a2;
@@ -87,8 +87,8 @@ public class FunctionCall extends Expression {
 
         // Check that all the actual parameters conform to the formal parameters
         for (int actualIndex = 0; actualIndex < this.actual.size(); ++actualIndex) {
-            IdSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass,
-                    classTable, featureTable);
+            IdSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass, classTable,
+                    featureTable);
             IdSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
 
             if (!classTable.conformsTo(enclosingClass.getIdentifier(), actualType, formalType)) {

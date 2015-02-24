@@ -19,7 +19,7 @@ public class StaticFunctionCall extends Expression {
     final protected Expression expr;
     final protected IdSymbol type_name;
     final protected IdSymbol name;
-    final protected Expressions actual;
+    final protected ArgumentExpressions actual;
 
     /**
      * Creates "static_dispatch" AST node.
@@ -36,7 +36,7 @@ public class StaticFunctionCall extends Expression {
      *            initial value for actual
      */
     public StaticFunctionCall(String filename, int lineNumber, Expression a1, IdSymbol a2, IdSymbol a3,
-            Expressions a4) {
+            ArgumentExpressions a4) {
         super(filename, lineNumber);
         expr = a1;
         type_name = a2;
@@ -92,8 +92,8 @@ public class StaticFunctionCall extends Expression {
 
         // Check that all the actual parameters conform to the formal parameters
         for (int actualIndex = 0; actualIndex < this.actual.size(); ++actualIndex) {
-            IdSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass,
-                    classTable, featureTable);
+            IdSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass, classTable,
+                    featureTable);
             IdSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
 
             if (!classTable.conformsTo(enclosingClass.getIdentifier(), actualType, formalType)) {
