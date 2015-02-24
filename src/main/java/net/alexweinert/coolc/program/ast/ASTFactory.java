@@ -118,4 +118,8 @@ public class ASTFactory {
     public If ifStatement(Expression condition, Expression thenBranch, Expression elseBranch) {
         return new If(this.filename, this.lineNumber, condition, thenBranch, elseBranch);
     }
+
+    public Loop loop(Expression cond, Expression body) {
+        return new Loop(this.filename, this.lineNumber, cond, body);
+    }
 }
