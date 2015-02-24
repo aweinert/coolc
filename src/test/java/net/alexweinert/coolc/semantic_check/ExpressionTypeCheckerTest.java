@@ -302,7 +302,7 @@ public class ExpressionTypeCheckerTest {
     }
 
     @Test
-    public void testIllTypedLoop() {
+    public void testIlltypedLoop() {
         final ASTFactory factory = new ASTFactory();
         final Loop testExpression = factory.loop(factory.intConst(1), factory.intConst(3));
 
@@ -313,6 +313,24 @@ public class ExpressionTypeCheckerTest {
         SemanticErrorReporter err = this.testIlltypedVariableFreeExpression(objectSymbol, testExpression);
         Mockito.verify(err).reportTypeMismatch(testExpression.getCondition(), intSymbol, boolSymbol);
         Mockito.verifyNoMoreInteractions(err);
+    }
+
+    @Test
+    public void testBlockOneStatement() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.block(factory.intConst(1));
+
+        final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
+        this.testWelltypedVariableFreeExpression(intSymbol, testExpression);
+    }
+
+    @Test
+    public void testBlockTwoStatements() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.block(factory.boolConst(true), factory.intConst(1));
+
+        final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
+        this.testWelltypedVariableFreeExpression(intSymbol, testExpression);
     }
 
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
