@@ -13,6 +13,7 @@ import net.alexweinert.coolc.program.ast.Division;
 import net.alexweinert.coolc.program.ast.Expression;
 import net.alexweinert.coolc.program.ast.If;
 import net.alexweinert.coolc.program.ast.IntConst;
+import net.alexweinert.coolc.program.ast.IsVoid;
 import net.alexweinert.coolc.program.ast.LessThan;
 import net.alexweinert.coolc.program.ast.LessThanOrEquals;
 import net.alexweinert.coolc.program.ast.Loop;
@@ -223,5 +224,11 @@ class ExpressionTypeChecker extends ASTVisitor {
     @Override
     public void visitBlockExpressionsInorder(BlockExpressions expression) {
         this.argumentTypes.pop();
+    }
+
+    @Override
+    public void visitIsVoidPostorder(IsVoid isVoid) {
+        this.argumentTypes.pop();
+        this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
     }
 }
