@@ -6,6 +6,7 @@ import java.util.Map;
 import net.alexweinert.coolc.program.ast.ASTFactory;
 import net.alexweinert.coolc.program.ast.Expression;
 import net.alexweinert.coolc.program.ast.If;
+import net.alexweinert.coolc.program.ast.Loop;
 import net.alexweinert.coolc.program.ast.ObjectReference;
 import net.alexweinert.coolc.program.information.ClassHierarchy;
 import net.alexweinert.coolc.program.information.DefinedClassSignature;
@@ -289,6 +290,31 @@ public class ExpressionTypeCheckerTest {
         Mockito.verify(err).reportTypeMismatch(testExpression.getCondition(), intSymbol, boolSymbol);
     }
 
+    @Test
+    public void testWelltypedLoop() {
+        final ASTFactory factory = new ASTFactory();
+        final Loop testExpression = factory.loop(factory.boolConst(true), factory.intConst(3));
+
+        final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
+
+        this.testWelltypedVariableFreeExpression(objectSymbol, testExpression);
+    }
+
+    @Test
+    public void testIllTypedLoop() {
+        final ASTFactory factory = new ASTFactory();
+        final Loop testExpression = factory.loop(factory.intConst(1), factory.intConst(3));
+
+        final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
+        final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+
+        SemanticErrorReporter err = this.testIlltypedVariableFreeExpression(objectSymbol, testExpression);
+        Mockito.verify(err).reportTypeMismatch(testExpression.getCondition(), intSymbol, boolSymbol);
+        Mockito.verifyNoMoreInteractions(err);
+
+    }
+
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
 
@@ -309,6 +335,12 @@ public class ExpressionTypeCheckerTest {
         Assert.assertEquals(expectedType, checker.getResultType().getTypeId(classId));
 
         Mockito.verifyZeroInteractions(err);
+    }
+
+    private SemanticErrorReporter testIlltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
+        final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
+
+        return this.testIlltypedExpression(expectedType, testExpression, initialScope);
     }
 
     /**
