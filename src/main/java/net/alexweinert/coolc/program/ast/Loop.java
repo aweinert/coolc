@@ -109,4 +109,8 @@ public class Loop extends Expression {
         return true;
     }
 
+    public Expression getCondition() {
+        return this.pred;
+    }
+
 }
