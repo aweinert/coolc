@@ -122,4 +122,9 @@ public class ASTFactory {
     public Loop loop(Expression cond, Expression body) {
         return new Loop(this.filename, this.lineNumber, cond, body);
     }
+
+    public Block block(Expression... expressions) {
+        return new Block(this.filename, this.lineNumber, new Expressions(this.filename, this.lineNumber,
+                Arrays.asList(expressions)));
+    }
 }
