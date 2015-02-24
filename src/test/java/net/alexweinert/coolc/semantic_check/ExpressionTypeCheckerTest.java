@@ -6,6 +6,7 @@ import java.util.Map;
 import net.alexweinert.coolc.program.ast.ASTFactory;
 import net.alexweinert.coolc.program.ast.Expression;
 import net.alexweinert.coolc.program.ast.If;
+import net.alexweinert.coolc.program.ast.Let;
 import net.alexweinert.coolc.program.ast.Loop;
 import net.alexweinert.coolc.program.ast.ObjectReference;
 import net.alexweinert.coolc.program.information.ClassHierarchy;
@@ -348,16 +349,29 @@ public class ExpressionTypeCheckerTest {
         final Expression testExpression = factory.let("x", "Bool", factory.boolConst(true), factory.varRef("x"));
 
         final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
-        this.testWelltypedVariableFreeExpression(boolSymbol, testExpression);
+        final IdSymbol variableSymbol = IdTable.getInstance().addString("x");
+
+        final VariablesScope innerScope = Mockito.mock(VariablesScope.class);
+        Mockito.when(innerScope.getVariableType(variableSymbol)).thenReturn(ExpressionType.create(boolSymbol));
+        Mockito.when(innerScope.containsVariable(variableSymbol)).thenReturn(true);
+
+        final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
+        Mockito.when(initialScope.addVariable(variableSymbol, boolSymbol)).thenReturn(innerScope);
+
+        this.testWelltypedExpression(boolSymbol, testExpression, initialScope);
     }
 
     @Test
     public void testIlltypedLet() {
         final ASTFactory factory = new ASTFactory();
-        final Expression testExpression = factory.let("x", "Bool", factory.intConst(3), factory.varRef("x"));
+        final Let testExpression = factory.let("x", "Bool", factory.intConst(3), factory.varRef("x"));
 
+        final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
         final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
-        this.testWelltypedVariableFreeExpression(boolSymbol, testExpression);
+        final SemanticErrorReporter err = this.testIlltypedVariableFreeExpression(boolSymbol, testExpression);
+
+        Mockito.verify(err).reportTypeMismatch(testExpression.getInitializer(), intSymbol, boolSymbol);
+        Mockito.verifyNoMoreInteractions(err);
 
     }
 
