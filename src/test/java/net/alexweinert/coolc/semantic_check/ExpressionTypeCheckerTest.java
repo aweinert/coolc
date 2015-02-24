@@ -288,6 +288,7 @@ public class ExpressionTypeCheckerTest {
         final SemanticErrorReporter err = this.testIlltypedExpression(boolSymbol, testExpression, initialScope);
 
         Mockito.verify(err).reportTypeMismatch(testExpression.getCondition(), intSymbol, boolSymbol);
+        Mockito.verifyNoMoreInteractions(err);
     }
 
     @Test
@@ -312,7 +313,6 @@ public class ExpressionTypeCheckerTest {
         SemanticErrorReporter err = this.testIlltypedVariableFreeExpression(objectSymbol, testExpression);
         Mockito.verify(err).reportTypeMismatch(testExpression.getCondition(), intSymbol, boolSymbol);
         Mockito.verifyNoMoreInteractions(err);
-
     }
 
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
