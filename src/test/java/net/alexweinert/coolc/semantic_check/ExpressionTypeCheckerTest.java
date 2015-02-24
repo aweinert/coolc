@@ -342,6 +342,25 @@ public class ExpressionTypeCheckerTest {
         this.testWelltypedVariableFreeExpression(boolSymbol, testExpression);
     }
 
+    @Test
+    public void testWelltypedLet() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.let("x", "Bool", factory.boolConst(true), factory.varRef("x"));
+
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+        this.testWelltypedVariableFreeExpression(boolSymbol, testExpression);
+    }
+
+    @Test
+    public void testIlltypedLet() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.let("x", "Bool", factory.intConst(3), factory.varRef("x"));
+
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+        this.testWelltypedVariableFreeExpression(boolSymbol, testExpression);
+
+    }
+
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
 
