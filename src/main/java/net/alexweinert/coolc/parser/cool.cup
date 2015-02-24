@@ -146,7 +146,7 @@ class
 /* Optional inherits-declaration */
 opt_inherits
 	::= /* No inherits declaration */
-		{: RESULT = AbstractTable.idtable.addString("Object"); :}
+		{: RESULT = IdTable.getInstance().getObjectSymbol(); :}
 	/* Actual inherits declaration */
 	| INHERITS TYPEID:typeid
 		{: RESULT = typeid; :}
@@ -251,7 +251,7 @@ expr
 
 	/* Method calls */
 	| OBJECTID:n actuals:a /* Call on self */
-	    {: RESULT = new FunctionCall(curr_filename(), curr_lineno(), new ObjectReference(curr_filename(), curr_lineno(), AbstractTable.idtable.addString("self")), n, a); :}
+	    {: RESULT = new FunctionCall(curr_filename(), curr_lineno(), new ObjectReference(curr_filename(), curr_lineno(), IdTable.getInstance().addString("self")), n, a); :}
 	| expr:expr DOT OBJECTID:objid actuals:actuals /* Call on variable */
 		{: RESULT = new FunctionCall(curr_filename(), curr_lineno(), expr, objid, actuals); :}
 	| expr:expr AT TYPEID:type DOT OBJECTID:objid actuals:actuals /* Call on casted variable */
