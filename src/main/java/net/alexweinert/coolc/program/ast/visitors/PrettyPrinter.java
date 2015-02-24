@@ -42,10 +42,6 @@ public class PrettyPrinter extends ASTVisitor {
 
     final private StringBuilder stringBuilder = new StringBuilder();
 
-    // Tells us how to unparse expressions
-    // 0 on top means "inside block", 1 on top means "inside function call"
-    private ExpressionsContext expressionsContext = new ExpressionsContext();
-
     public static String printAst(TreeNode tree) {
         final PrettyPrinter printer = new PrettyPrinter();
         tree.acceptVisitor(printer);
@@ -100,12 +96,10 @@ public class PrettyPrinter extends ASTVisitor {
     @Override
     public void visitBlockPreorder(Block block) {
         stringBuilder.append("{\n");
-        this.expressionsContext.pushBlockContext();
     }
 
     @Override
     public void visitBlockPostorder(Block block) {
-        this.expressionsContext.popContext();
         stringBuilder.append("}\n");
     }
 
@@ -258,12 +252,10 @@ public class PrettyPrinter extends ASTVisitor {
         stringBuilder.append(".");
         stringBuilder.append(functionCall.getFunctionIdentifier());
         stringBuilder.append("(");
-        this.expressionsContext.pushFunctionCallContext();
     }
 
     @Override
     public void visitFunctionCallPostorder(FunctionCall functionCall) {
-        this.expressionsContext.popContext();
         stringBuilder.append(")");
     }
 
@@ -427,13 +419,11 @@ public class PrettyPrinter extends ASTVisitor {
         stringBuilder.append(".");
         stringBuilder.append(staticFunctionCall.getFunctionIdentifier());
         stringBuilder.append("(");
-        this.expressionsContext.pushFunctionCallContext();
     }
 
     @Override
     public void visitStaticFunctionCallPostorder(StaticFunctionCall staticFunctionCall) {
         stringBuilder.append(")");
-        this.expressionsContext.popContext();
     }
 
     @Override
