@@ -154,4 +154,8 @@ public class Let extends Expression {
         return true;
     }
 
+    public Expression getInitializer() {
+        return this.init;
+    }
+
 }
