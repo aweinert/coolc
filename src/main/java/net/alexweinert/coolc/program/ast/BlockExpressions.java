@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 
-public class BlockExpressions extends Expressions {
+public class BlockExpressions extends ListNode<Expression> {
 
     public BlockExpressions(String filename, int lineNumber) {
         super(filename, lineNumber);

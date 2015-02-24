@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 
-public class ArgumentExpressions extends Expressions {
+public class ArgumentExpressions extends ListNode<Expression> {
     public ArgumentExpressions(String filename, int lineNumber) {
         super(filename, lineNumber);
     }
