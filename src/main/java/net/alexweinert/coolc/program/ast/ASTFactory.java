@@ -127,4 +127,8 @@ public class ASTFactory {
         return new Block(this.filename, this.lineNumber, new BlockExpressions(this.filename, this.lineNumber,
                 Arrays.asList(expressions)));
     }
+
+    public IsVoid isVoid(Expression expr) {
+        return new IsVoid(this.filename, this.lineNumber, expr);
+    }
 }
