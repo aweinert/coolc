@@ -1,13 +1,12 @@
 package net.alexweinert.coolc.program.ast;
 
 import java.io.PrintStream;
-import java.util.Enumeration;
 
 import net.alexweinert.coolc.program.Utilities;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.ClassTable;
 import net.alexweinert.coolc.program.symboltables.FeatureTable;
+import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.TreeConstants;
 
 /**
@@ -15,33 +14,27 @@ import net.alexweinert.coolc.program.symboltables.TreeConstants;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class StaticFunctionCall extends Expression {
-    final protected Expression expr;
+public class StaticFunctionCall extends FunctionCall {
     final protected IdSymbol type_name;
-    final protected IdSymbol name;
-    final protected ArgumentExpressions actual;
 
     /**
      * Creates "static_dispatch" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
-     * @param a0
-     *            initial value for expr
      * @param a1
-     *            initial value for type_name
+     *            initial value for expr
      * @param a2
-     *            initial value for name
+     *            initial value for type_name
      * @param a3
+     *            initial value for name
+     * @param a4
      *            initial value for actual
      */
     public StaticFunctionCall(String filename, int lineNumber, Expression a1, IdSymbol a2, IdSymbol a3,
             ArgumentExpressions a4) {
-        super(filename, lineNumber);
-        expr = a1;
+        super(filename, lineNumber, a1, a3, a4);
         type_name = a2;
-        name = a3;
-        actual = a4;
     }
 
     public void dump(PrintStream out, int n) {
@@ -125,10 +118,6 @@ public class StaticFunctionCall extends Expression {
 
     public IdSymbol getStaticType() {
         return type_name;
-    }
-
-    public IdSymbol getFunctionIdentifier() {
-        return name;
     }
 
     @Override
