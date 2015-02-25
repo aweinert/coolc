@@ -1,5 +1,7 @@
 package net.alexweinert.coolc.semantic_check;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -11,6 +13,7 @@ import net.alexweinert.coolc.program.ast.BoolConst;
 import net.alexweinert.coolc.program.ast.BooleanNegation;
 import net.alexweinert.coolc.program.ast.Division;
 import net.alexweinert.coolc.program.ast.Expression;
+import net.alexweinert.coolc.program.ast.FunctionCall;
 import net.alexweinert.coolc.program.ast.If;
 import net.alexweinert.coolc.program.ast.IntConst;
 import net.alexweinert.coolc.program.ast.IsVoid;
@@ -25,6 +28,7 @@ import net.alexweinert.coolc.program.ast.Subtraction;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.information.ClassHierarchy;
 import net.alexweinert.coolc.program.information.DefinedClassSignature;
+import net.alexweinert.coolc.program.information.MethodSignature;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.IdTable;
 
@@ -36,6 +40,7 @@ class ExpressionTypeChecker extends ASTVisitor {
     final private Stack<VariablesScope> variablesScopes;
     final private ClassHierarchy hierarchy;
     final private Map<IdSymbol, DefinedClassSignature> definedSignatures;
+    final private Stack<List<ExpressionType>> methodSignatures;
     final private SemanticErrorReporter err;
 
     public ExpressionTypeChecker(IdSymbol classId, VariablesScope initialScope, ClassHierarchy hierarchy,
@@ -45,6 +50,7 @@ class ExpressionTypeChecker extends ASTVisitor {
         this.variablesScopes.add(initialScope);
         this.hierarchy = hierarchy;
         this.definedSignatures = definedSignatures;
+        this.methodSignatures = new Stack<>();
         this.err = err;
     }
 
@@ -248,5 +254,29 @@ class ExpressionTypeChecker extends ASTVisitor {
     @Override
     public void visitLetPostorder(Let let) {
         this.variablesScopes.pop();
+    }
+
+    @Override
+    public void visitFunctionCallInorder(FunctionCall call) {
+        final IdSymbol calleeType = this.argumentTypes.pop().getTypeId(classId);
+        final DefinedClassSignature calleeSignature = this.definedSignatures.get(calleeType);
+        final MethodSignature methodSignature = calleeSignature.getMethodSignature(call.getFunctionIdentifier());
+        final List<ExpressionType> argumentTypes = new LinkedList<>();
+        if (methodSignature != null && methodSignature.getArgumentTypes().size() == call.getArguments().size()) {
+            for (IdSymbol argType : methodSignature.getArgumentTypes()) {
+                argumentTypes.add(ExpressionType.create(argType));
+            }
+        } else {
+            this.err.reportUndefinedMethod(call, calleeType);
+            for (int i = 0; i < call.getArguments().size(); ++i) {
+                argumentTypes.add(ExpressionType.create(IdTable.getInstance().getObjectSymbol()));
+            }
+        }
+        this.methodSignatures.push(argumentTypes);
+    }
+
+    @Override
+    public void visitFunctionCallPostorder(FunctionCall call) {
+        this.methodSignatures.pop();
     }
 }
