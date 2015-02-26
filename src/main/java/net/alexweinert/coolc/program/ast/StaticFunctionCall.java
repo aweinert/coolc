@@ -174,4 +174,8 @@ public class StaticFunctionCall extends FunctionCall {
         return true;
     }
 
+    public Expression getCallee() {
+        return this.expr;
+    }
+
 }

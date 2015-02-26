@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Stack;
 
 import net.alexweinert.coolc.program.ast.Addition;
+import net.alexweinert.coolc.program.ast.ArgumentExpressions;
 import net.alexweinert.coolc.program.ast.ArithmeticNegation;
 import net.alexweinert.coolc.program.ast.Assign;
 import net.alexweinert.coolc.program.ast.BlockExpressions;
@@ -23,6 +24,7 @@ import net.alexweinert.coolc.program.ast.Let;
 import net.alexweinert.coolc.program.ast.Loop;
 import net.alexweinert.coolc.program.ast.Multiplication;
 import net.alexweinert.coolc.program.ast.ObjectReference;
+import net.alexweinert.coolc.program.ast.StaticFunctionCall;
 import net.alexweinert.coolc.program.ast.StringConst;
 import net.alexweinert.coolc.program.ast.Subtraction;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
@@ -259,24 +261,83 @@ class ExpressionTypeChecker extends ASTVisitor {
     @Override
     public void visitFunctionCallInorder(FunctionCall call) {
         final IdSymbol calleeType = this.argumentTypes.pop().getTypeId(classId);
-        final DefinedClassSignature calleeSignature = this.definedSignatures.get(calleeType);
-        final MethodSignature methodSignature = calleeSignature.getMethodSignature(call.getFunctionIdentifier());
-        final List<ExpressionType> argumentTypes = new LinkedList<>();
-        if (methodSignature != null && methodSignature.getArgumentTypes().size() == call.getArguments().size()) {
-            for (IdSymbol argType : methodSignature.getArgumentTypes()) {
-                argumentTypes.add(ExpressionType.create(argType));
-            }
-        } else {
-            this.err.reportUndefinedMethod(call, calleeType);
-            for (int i = 0; i < call.getArguments().size(); ++i) {
-                argumentTypes.add(ExpressionType.create(IdTable.getInstance().getObjectSymbol()));
-            }
-        }
-        this.methodSignatures.push(argumentTypes);
+        this.pushArgumentTypes(call, calleeType);
     }
 
     @Override
     public void visitFunctionCallPostorder(FunctionCall call) {
         this.methodSignatures.pop();
     }
+
+    @Override
+    public void visitStaticFunctionCallInorder(StaticFunctionCall call) {
+        final IdSymbol calleeType = this.argumentTypes.pop().getTypeId(classId);
+        final IdSymbol declaredCalleeType = call.getStaticType();
+        if (!this.hierarchy.conformsTo(calleeType, declaredCalleeType)) {
+            this.err.reportTypeMismatch(call.getCallee(), calleeType, declaredCalleeType);
+        }
+
+        this.pushArgumentTypes(call, declaredCalleeType);
+
+    }
+
+    @Override
+    public void visitStaticFunctionCallPostorder(StaticFunctionCall call) {
+        this.methodSignatures.pop();
+    }
+
+    /**
+     * Updates this.methodSignatures to contain the declared argument types for the given call, where the callee
+     * expression is of the given type. Reports errors if the number of given arguments does not conform to the number
+     * of declared arguments.
+     */
+    private void pushArgumentTypes(FunctionCall call, final IdSymbol calleeType) {
+        final DefinedClassSignature calleeSignature = this.definedSignatures.get(calleeType);
+        final MethodSignature methodSignature = calleeSignature.getMethodSignature(call.getFunctionIdentifier());
+        final List<ExpressionType> argumentTypes = new LinkedList<>();
+        final boolean methodDefined = methodSignature != null;
+        if (!methodDefined) {
+            this.err.reportUndefinedMethod(call, calleeType);
+            for (int i = 0; i < call.getArguments().size(); ++i) {
+                argumentTypes.add(ExpressionType.create(IdTable.getInstance().getObjectSymbol()));
+            }
+        } else {
+            final int declaredNumberOfArgs = methodSignature.getArgumentTypes().size();
+            final int givenNumberOfArgs = call.getArguments().size();
+            final boolean correctNumberOfArguments = declaredNumberOfArgs == givenNumberOfArgs;
+
+            if (correctNumberOfArguments) {
+                for (IdSymbol argType : methodSignature.getArgumentTypes()) {
+                    argumentTypes.add(ExpressionType.create(argType));
+                }
+            } else {
+                this.err.reportWrongNumberOfFunctionArguments(call, methodSignature.getArgumentTypes().size());
+                for (IdSymbol argType : methodSignature.getArgumentTypes()) {
+                    argumentTypes.add(ExpressionType.create(argType));
+                }
+            }
+        }
+        this.methodSignatures.push(argumentTypes);
+    }
+
+    @Override
+    public void visitArgumentExpressionsInorder(ArgumentExpressions expressions) {
+        final IdSymbol givenArgumentType = this.argumentTypes.pop().getTypeId(this.classId);
+        final IdSymbol expectedArgumentType = this.methodSignatures.peek().get(0).getTypeId(this.classId);
+        this.methodSignatures.peek().remove(0);
+        if (!this.hierarchy.conformsTo(givenArgumentType, expectedArgumentType)) {
+            this.err.reportTypeMismatch(expressions, givenArgumentType, expectedArgumentType);
+        }
+    }
+
+    @Override
+    public void visitArgumentExpressionsPostorder(ArgumentExpressions expressions) {
+        final IdSymbol givenArgumentType = this.argumentTypes.pop().getTypeId(this.classId);
+        final IdSymbol expectedArgumentType = this.methodSignatures.peek().get(0).getTypeId(this.classId);
+        this.methodSignatures.peek().remove(0);
+        if (!this.hierarchy.conformsTo(givenArgumentType, expectedArgumentType)) {
+            this.err.reportTypeMismatch(expressions, givenArgumentType, expectedArgumentType);
+        }
+    }
+
 }
