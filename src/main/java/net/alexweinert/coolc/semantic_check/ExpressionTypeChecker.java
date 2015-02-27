@@ -37,12 +37,14 @@ import net.alexweinert.coolc.program.symboltables.IdTable;
 class ExpressionTypeChecker extends ASTVisitor {
 
     final private Stack<ExpressionType> argumentTypes = new Stack<>();
+    final private Stack<List<ExpressionType>> methodSignatures = new Stack<>();
+    final private Stack<IdSymbol> methodDefiningClasses = new Stack<>();
+    final private Stack<ExpressionType> methodReturnTypes = new Stack<>();
 
     final private IdSymbol classId;
     final private Stack<VariablesScope> variablesScopes;
     final private ClassHierarchy hierarchy;
     final private Map<IdSymbol, DefinedClassSignature> definedSignatures;
-    final private Stack<List<ExpressionType>> methodSignatures;
     final private SemanticErrorReporter err;
 
     public ExpressionTypeChecker(IdSymbol classId, VariablesScope initialScope, ClassHierarchy hierarchy,
@@ -52,7 +54,6 @@ class ExpressionTypeChecker extends ASTVisitor {
         this.variablesScopes.add(initialScope);
         this.hierarchy = hierarchy;
         this.definedSignatures = definedSignatures;
-        this.methodSignatures = new Stack<>();
         this.err = err;
     }
 
@@ -267,6 +268,8 @@ class ExpressionTypeChecker extends ASTVisitor {
     @Override
     public void visitFunctionCallPostorder(FunctionCall call) {
         this.methodSignatures.pop();
+        this.methodDefiningClasses.pop();
+        this.methodReturnTypes.pop();
     }
 
     @Override
@@ -278,12 +281,13 @@ class ExpressionTypeChecker extends ASTVisitor {
         }
 
         this.pushArgumentTypes(call, declaredCalleeType);
-
     }
 
     @Override
     public void visitStaticFunctionCallPostorder(StaticFunctionCall call) {
         this.methodSignatures.pop();
+        this.methodDefiningClasses.pop();
+        this.methodReturnTypes.pop();
     }
 
     /**
@@ -292,16 +296,16 @@ class ExpressionTypeChecker extends ASTVisitor {
      * of declared arguments.
      */
     private void pushArgumentTypes(FunctionCall call, final IdSymbol calleeType) {
+        this.methodDefiningClasses.push(calleeType);
+
         final DefinedClassSignature calleeSignature = this.definedSignatures.get(calleeType);
         final MethodSignature methodSignature = calleeSignature.getMethodSignature(call.getFunctionIdentifier());
+
         final List<ExpressionType> argumentTypes = new LinkedList<>();
         final boolean methodDefined = methodSignature != null;
-        if (!methodDefined) {
-            this.err.reportUndefinedMethod(call, calleeType);
-            for (int i = 0; i < call.getArguments().size(); ++i) {
-                argumentTypes.add(ExpressionType.create(IdTable.getInstance().getObjectSymbol()));
-            }
-        } else {
+        if (methodDefined) {
+            this.methodReturnTypes.push(ExpressionType.create(methodSignature.getReturnType()));
+
             final int declaredNumberOfArgs = methodSignature.getArgumentTypes().size();
             final int givenNumberOfArgs = call.getArguments().size();
             final boolean correctNumberOfArguments = declaredNumberOfArgs == givenNumberOfArgs;
@@ -312,9 +316,14 @@ class ExpressionTypeChecker extends ASTVisitor {
                 }
             } else {
                 this.err.reportWrongNumberOfFunctionArguments(call, methodSignature.getArgumentTypes().size());
-                for (IdSymbol argType : methodSignature.getArgumentTypes()) {
-                    argumentTypes.add(ExpressionType.create(argType));
+                for (int i = 0; i < givenNumberOfArgs; ++i) {
+                    argumentTypes.add(ExpressionType.create(IdTable.getInstance().getObjectSymbol()));
                 }
+            }
+        } else {
+            this.err.reportUndefinedMethod(call, calleeType);
+            for (int i = 0; i < call.getArguments().size(); ++i) {
+                argumentTypes.add(ExpressionType.create(IdTable.getInstance().getObjectSymbol()));
             }
         }
         this.methodSignatures.push(argumentTypes);
@@ -323,7 +332,8 @@ class ExpressionTypeChecker extends ASTVisitor {
     @Override
     public void visitArgumentExpressionsInorder(ArgumentExpressions expressions) {
         final IdSymbol givenArgumentType = this.argumentTypes.pop().getTypeId(this.classId);
-        final IdSymbol expectedArgumentType = this.methodSignatures.peek().get(0).getTypeId(this.classId);
+        final IdSymbol expectedArgumentType = this.methodSignatures.peek().get(0)
+                .getTypeId(this.methodDefiningClasses.peek());
         this.methodSignatures.peek().remove(0);
         if (!this.hierarchy.conformsTo(givenArgumentType, expectedArgumentType)) {
             this.err.reportTypeMismatch(expressions, givenArgumentType, expectedArgumentType);
@@ -333,7 +343,8 @@ class ExpressionTypeChecker extends ASTVisitor {
     @Override
     public void visitArgumentExpressionsPostorder(ArgumentExpressions expressions) {
         final IdSymbol givenArgumentType = this.argumentTypes.pop().getTypeId(this.classId);
-        final IdSymbol expectedArgumentType = this.methodSignatures.peek().get(0).getTypeId(this.classId);
+        final IdSymbol expectedArgumentType = this.methodSignatures.peek().get(0)
+                .getTypeId(this.methodDefiningClasses.peek());
         this.methodSignatures.peek().remove(0);
         if (!this.hierarchy.conformsTo(givenArgumentType, expectedArgumentType)) {
             this.err.reportTypeMismatch(expressions, givenArgumentType, expectedArgumentType);
