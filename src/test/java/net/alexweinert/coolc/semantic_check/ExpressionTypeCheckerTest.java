@@ -1,16 +1,19 @@
 package net.alexweinert.coolc.semantic_check;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
 import net.alexweinert.coolc.program.ast.Expression;
+import net.alexweinert.coolc.program.ast.FunctionCall;
 import net.alexweinert.coolc.program.ast.If;
 import net.alexweinert.coolc.program.ast.Let;
 import net.alexweinert.coolc.program.ast.Loop;
 import net.alexweinert.coolc.program.ast.ObjectReference;
 import net.alexweinert.coolc.program.information.ClassHierarchy;
 import net.alexweinert.coolc.program.information.DefinedClassSignature;
+import net.alexweinert.coolc.program.information.MethodSignature;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.IdTable;
 
@@ -381,6 +384,51 @@ public class ExpressionTypeCheckerTest {
 
         Mockito.verify(err).reportTypeMismatch(testExpression.getInitializer(), intSymbol, boolSymbol);
         Mockito.verifyNoMoreInteractions(err);
+    }
+
+    @Test
+    public void testWelltypedFunctionCallFlat() {
+        final ASTFactory factory = new ASTFactory();
+        final FunctionCall call = factory
+                .call(factory.varRef("x"), "bar", factory.intConst(2), factory.boolConst(true));
+
+        final IdSymbol xSymbol = IdTable.getInstance().addString("x");
+        final IdSymbol barSymbol = IdTable.getInstance().addString("bar");
+        final IdSymbol classASymbol = IdTable.getInstance().addString("ClassA");
+
+        final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
+        Mockito.when(initialScope.containsVariable(xSymbol)).thenReturn(true);
+        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+
+        final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
+        final MethodSignature barSignature = MethodSignature.create(factory.method("bar", "String",
+                factory.formal("x", "Int"), factory.formal("y", "Bool")));
+
+        final DefinedClassSignature classSignature = Mockito.mock(DefinedClassSignature.class);
+        Mockito.stub(classSignature.getMethodSignature(barSymbol)).toReturn(barSignature);
+
+        definedSignatures.put(classASymbol, classSignature);
+
+        final IdSymbol classId = IdTable.getInstance().addString("TestClass");
+
+        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
+
+        final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, initialScope, hierarchy,
+                definedSignatures, err);
+        call.acceptVisitor(checker);
+
+        Assert.assertEquals(IdTable.getInstance().getStringSymbol(), checker.getResultType().getTypeId(classId));
+
+        Mockito.verifyZeroInteractions(err);
+    }
+
+    @Test
+    public void testWelltypedFunctionCallNested() {
+
+    }
+
+    @Test
+    public void testWelltypedStaticFunctionCall() {
 
     }
 
