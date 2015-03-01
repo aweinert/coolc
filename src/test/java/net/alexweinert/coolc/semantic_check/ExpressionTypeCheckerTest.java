@@ -462,7 +462,40 @@ public class ExpressionTypeCheckerTest {
 
     @Test
     public void testWelltypedStaticFunctionCall() {
+        final ASTFactory factory = new ASTFactory();
+        final FunctionCall call = factory.staticCall(factory.varRef("x"), "ClassA", "bar", factory.intConst(2),
+                factory.boolConst(true));
 
+        final IdSymbol xSymbol = IdTable.getInstance().addString("x");
+        final IdSymbol barSymbol = IdTable.getInstance().addString("bar");
+        final IdSymbol classASymbol = IdTable.getInstance().addString("ClassA");
+
+        Mockito.when(this.hierarchy.conformsTo(classASymbol, classASymbol)).thenReturn(true);
+
+        final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
+        Mockito.when(initialScope.containsVariable(xSymbol)).thenReturn(true);
+        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+
+        final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
+        final MethodSignature barSignature = MethodSignature.create(factory.method("bar", "String",
+                factory.formal("x", "Int"), factory.formal("y", "Bool")));
+
+        final DefinedClassSignature classSignature = Mockito.mock(DefinedClassSignature.class);
+        Mockito.when(classSignature.getMethodSignature(barSymbol)).thenReturn(barSignature);
+
+        definedSignatures.put(classASymbol, classSignature);
+
+        final IdSymbol classId = IdTable.getInstance().addString("TestClass");
+
+        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
+
+        final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, initialScope, hierarchy,
+                definedSignatures, err);
+        call.acceptVisitor(checker);
+
+        Assert.assertEquals(IdTable.getInstance().getStringSymbol(), checker.getResultType().getTypeId(classId));
+
+        Mockito.verifyZeroInteractions(err);
     }
 
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
