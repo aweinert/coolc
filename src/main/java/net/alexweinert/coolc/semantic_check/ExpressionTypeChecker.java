@@ -352,6 +352,9 @@ class ExpressionTypeChecker extends ASTVisitor {
 
     @Override
     public void visitArgumentExpressionsPostorder(ArgumentExpressions expressions) {
+        if (expressions.size() == 0) {
+            return;
+        }
         final IdSymbol givenArgumentType = this.argumentTypes.pop().getTypeId(this.classId);
         final IdSymbol expectedArgumentType = this.methodSignatures.peek().get(0)
                 .getTypeId(this.methodDefiningClasses.peek());
