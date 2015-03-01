@@ -251,9 +251,9 @@ class ExpressionTypeChecker extends ASTVisitor {
     public void visitLetInorder(Let let) {
         final ExpressionType initializerType = this.argumentTypes.pop();
         final IdSymbol initializerTypeSymbol = initializerType.getTypeId(this.classId);
-        final IdSymbol boolTypeSymbol = IdTable.getInstance().getBoolSymbol();
-        if (!initializerTypeSymbol.equals(boolTypeSymbol)) {
-            this.err.reportTypeMismatch(let.getInitializer(), initializerTypeSymbol, boolTypeSymbol);
+        final IdSymbol expectedInitializerTypeSymbol = let.getDeclaredType();
+        if (!this.hierarchy.conformsTo(initializerTypeSymbol, expectedInitializerTypeSymbol)) {
+            this.err.reportTypeMismatch(let.getInitializer(), initializerTypeSymbol, expectedInitializerTypeSymbol);
         }
         final VariablesScope currentScope = this.variablesScopes.peek();
         this.variablesScopes.push(currentScope.addVariable(let.getVariableIdentifier(), let.getDeclaredType()));
