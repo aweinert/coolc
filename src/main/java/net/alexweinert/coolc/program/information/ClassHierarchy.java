@@ -34,7 +34,7 @@ public class ClassHierarchy {
     }
 
     public IdSymbol getLeastUpperBound(IdSymbol classOne, IdSymbol classTwo) {
-        final List<IdSymbol> commonParents = this.parentClasses.get(classOne);
+        final List<IdSymbol> commonParents = new LinkedList<>(this.parentClasses.get(classOne));
         commonParents.retainAll(this.parentClasses.get(classTwo));
 
         return commonParents.get(0);
