@@ -498,6 +498,14 @@ public class ExpressionTypeCheckerTest {
         Mockito.verifyZeroInteractions(err);
     }
 
+    @Test
+    public void testNew() {
+        final ASTFactory factory = new ASTFactory();
+        final Expression testExpression = factory.newNode("Int");
+
+        this.testWelltypedVariableFreeExpression(IdTable.getInstance().getIntSymbol(), testExpression);
+    }
+
     private void testWelltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
 

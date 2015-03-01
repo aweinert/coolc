@@ -151,4 +151,9 @@ public class ASTFactory {
         return new StaticFunctionCall(this.filename, this.lineNumber, calleeObject, calleeTypeSymbol, functionIdSymbol,
                 new ArgumentExpressions(this.filename, this.lineNumber, Arrays.asList(args)));
     }
+
+    public Expression newNode(String type) {
+        final IdSymbol typeSymbol = IdTable.getInstance().addString(type);
+        return new New(this.filename, this.lineNumber, typeSymbol);
+    }
 }
