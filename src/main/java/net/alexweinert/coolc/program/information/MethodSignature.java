@@ -1,11 +1,14 @@
 package net.alexweinert.coolc.program.information;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import net.alexweinert.coolc.program.ast.Formal;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.program.symboltables.IdTable;
 
 public class MethodSignature {
     private IdSymbol returnType;
@@ -18,6 +21,75 @@ public class MethodSignature {
             argumentTypes.add(formal.getDeclaredType());
         }
         return new MethodSignature(method.getReturnType(), method.getName(), argumentTypes);
+    }
+
+    public static MethodSignature createObjectAbortSignature() {
+        final IdSymbol returnType = IdTable.getInstance().getObjectSymbol();
+        final IdSymbol identifierSymbol = IdTable.getInstance().addString("abort");
+        return new MethodSignature(returnType, identifierSymbol, Collections.<IdSymbol> emptyList());
+    }
+
+    public static MethodSignature createObjectTypeNameSignature() {
+        final IdSymbol returnType = IdTable.getInstance().getStringSymbol();
+        final IdSymbol identifierSymbol = IdTable.getInstance().addString("type_name");
+        return new MethodSignature(returnType, identifierSymbol, Collections.<IdSymbol> emptyList());
+    }
+
+    public static MethodSignature createObjectCopySignature() {
+        final IdSymbol returnType = IdTable.getInstance().getSelfTypeSymbol();
+        final IdSymbol identifierSymbol = IdTable.getInstance().addString("copy");
+        return new MethodSignature(returnType, identifierSymbol, Collections.<IdSymbol> emptyList());
+    }
+
+    public static MethodSignature createStringLengthSignature() {
+        final IdSymbol returnType = IdTable.getInstance().getIntSymbol();
+        final IdSymbol identifierSymbol = IdTable.getInstance().addString("length");
+        return new MethodSignature(returnType, identifierSymbol, Collections.<IdSymbol> emptyList());
+    }
+
+    public static MethodSignature createStringConcatSignature() {
+        final IdSymbol returnType = IdTable.getInstance().getStringSymbol();
+        final IdSymbol identifierSymbol = IdTable.getInstance().addString("concat");
+        final List<IdSymbol> argumentTypes = new LinkedList<>();
+        argumentTypes.add(IdTable.getInstance().getStringSymbol());
+        return new MethodSignature(returnType, identifierSymbol, argumentTypes);
+    }
+
+    public static MethodSignature createStringSubstrSignature() {
+        final IdSymbol returnType = IdTable.getInstance().getStringSymbol();
+        final IdSymbol identifierSymbol = IdTable.getInstance().addString("substr");
+        final List<IdSymbol> argumentTypes = new LinkedList<>();
+        argumentTypes.add(IdTable.getInstance().getIntSymbol());
+        argumentTypes.add(IdTable.getInstance().getIntSymbol());
+        return new MethodSignature(returnType, identifierSymbol, argumentTypes);
+    }
+
+    public static MethodSignature createIOOutStringSignature() {
+        final IdSymbol returnType = IdTable.getInstance().getSelfTypeSymbol();
+        final IdSymbol identifierSymbol = IdTable.getInstance().addString("out_string");
+        final List<IdSymbol> argumentTypes = new LinkedList<>();
+        argumentTypes.add(IdTable.getInstance().getStringSymbol());
+        return new MethodSignature(returnType, identifierSymbol, argumentTypes);
+    }
+
+    public static MethodSignature createIOOutIntSignature() {
+        final IdSymbol returnType = IdTable.getInstance().getSelfTypeSymbol();
+        final IdSymbol identifierSymbol = IdTable.getInstance().addString("out_int");
+        final List<IdSymbol> argumentTypes = new LinkedList<>();
+        argumentTypes.add(IdTable.getInstance().getStringSymbol());
+        return new MethodSignature(returnType, identifierSymbol, argumentTypes);
+    }
+
+    public static MethodSignature createIOInStringSignature() {
+        final IdSymbol returnType = IdTable.getInstance().getStringSymbol();
+        final IdSymbol identifierSymbol = IdTable.getInstance().addString("in_string");
+        return new MethodSignature(returnType, identifierSymbol, Collections.<IdSymbol> emptyList());
+    }
+
+    public static MethodSignature createIOInIntSignature() {
+        final IdSymbol returnType = IdTable.getInstance().getIntSymbol();
+        final IdSymbol identifierSymbol = IdTable.getInstance().addString("in_int");
+        return new MethodSignature(returnType, identifierSymbol, Collections.<IdSymbol> emptyList());
     }
 
     MethodSignature(IdSymbol returnType, IdSymbol methodIdentifier, List<IdSymbol> argumentTypes) {

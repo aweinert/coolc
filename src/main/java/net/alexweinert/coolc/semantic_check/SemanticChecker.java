@@ -10,6 +10,7 @@ import net.alexweinert.coolc.program.information.ClassHierarchy;
 import net.alexweinert.coolc.program.information.DeclaredClassSignature;
 import net.alexweinert.coolc.program.information.DefinedClassSignature;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.program.symboltables.IdTable;
 
 public class SemanticChecker {
     public static Program checkSemantics(Program program, Output out) {
@@ -37,6 +38,12 @@ public class SemanticChecker {
 
     private static Map<IdSymbol, DeclaredClassSignature> createDeclaredSignatures(Program program) {
         final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
+        declaredSignatures.put(IdTable.getInstance().getObjectSymbol(), DeclaredClassSignature.createObjectSignature());
+        declaredSignatures.put(IdTable.getInstance().getIntSymbol(), DeclaredClassSignature.createIntSignature());
+        declaredSignatures.put(IdTable.getInstance().getBoolSymbol(), DeclaredClassSignature.createBoolSignature());
+        declaredSignatures.put(IdTable.getInstance().getStringSymbol(), DeclaredClassSignature.createStringSignature());
+        declaredSignatures.put(IdTable.getInstance().getIOSymbol(), DeclaredClassSignature.createIOSignature());
+
         for (Class classNode : program.getClasses()) {
             declaredSignatures.put(classNode.getIdentifier(), DeclaredClassSignature.create(classNode));
         }
