@@ -269,7 +269,7 @@ class ExpressionTypeChecker extends ASTVisitor {
     public void visitFunctionCallPostorder(FunctionCall call) {
         this.methodSignatures.pop();
         this.methodDefiningClasses.pop();
-        this.methodReturnTypes.pop();
+        this.argumentTypes.push(this.methodReturnTypes.pop());
     }
 
     @Override
@@ -287,7 +287,7 @@ class ExpressionTypeChecker extends ASTVisitor {
     public void visitStaticFunctionCallPostorder(StaticFunctionCall call) {
         this.methodSignatures.pop();
         this.methodDefiningClasses.pop();
-        this.methodReturnTypes.pop();
+        this.argumentTypes.push(this.methodReturnTypes.pop());
     }
 
     /**
