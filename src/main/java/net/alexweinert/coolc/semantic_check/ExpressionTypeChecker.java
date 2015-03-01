@@ -23,6 +23,7 @@ import net.alexweinert.coolc.program.ast.LessThanOrEquals;
 import net.alexweinert.coolc.program.ast.Let;
 import net.alexweinert.coolc.program.ast.Loop;
 import net.alexweinert.coolc.program.ast.Multiplication;
+import net.alexweinert.coolc.program.ast.New;
 import net.alexweinert.coolc.program.ast.ObjectReference;
 import net.alexweinert.coolc.program.ast.StaticFunctionCall;
 import net.alexweinert.coolc.program.ast.StringConst;
@@ -288,6 +289,11 @@ class ExpressionTypeChecker extends ASTVisitor {
         this.methodSignatures.pop();
         this.methodDefiningClasses.pop();
         this.argumentTypes.push(this.methodReturnTypes.pop());
+    }
+
+    @Override
+    public void visitNew(New newNode) {
+        this.argumentTypes.push(ExpressionType.create(newNode.getTypeIdentifier()));
     }
 
     /**
