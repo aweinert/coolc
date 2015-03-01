@@ -11,6 +11,7 @@ import net.alexweinert.coolc.program.information.ClassHierarchy;
 import net.alexweinert.coolc.program.information.ClassHierarchyFactory;
 import net.alexweinert.coolc.program.information.DeclaredClassSignature;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.program.symboltables.IdTable;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,7 +20,7 @@ import org.mockito.Mockito;
 public class OverridingCheckerTest {
 
     @Test
-    public void testNoOverriding() {
+    public void testNoOverridingMethods() {
         final ASTFactory factory = new ASTFactory();
 
         final Class classOne = factory.classNode("ClassOne", "Object", factory.method("methodOne", "String"));
@@ -34,6 +35,31 @@ public class OverridingCheckerTest {
         final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
         declaredSignatures.put(classOne.getIdentifier(), DeclaredClassSignature.create(classOne));
         declaredSignatures.put(classTwo.getIdentifier(), DeclaredClassSignature.create(classTwo));
+
+        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, declaredSignatures,
+                err);
+
+        Assert.assertEquals(testProgram, receivedProgram);
+        Mockito.verifyZeroInteractions(err);
+    }
+
+    @Test
+    public void testNoOverridingAttributes() {
+        final ASTFactory factory = new ASTFactory();
+
+        final Class classOne = factory.classNode("ClassOne", "Object", factory.attribute("attributeOne", "String"));
+        final Class classTwo = factory.classNode("ClassTwo", "ClassOne", factory.attribute("attributeTwo", "Int"));
+
+        final Program testProgram = factory.program(classOne, classTwo);
+
+        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
+
+        // TODO: Mock hierarchy, declaredSignatures
+        final ClassHierarchy hierarchy = ClassHierarchyFactory.buildHierarchy(testProgram);
+        final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
+        declaredSignatures.put(classOne.getIdentifier(), DeclaredClassSignature.create(classOne));
+        declaredSignatures.put(classTwo.getIdentifier(), DeclaredClassSignature.create(classTwo));
+        declaredSignatures.put(IdTable.getInstance().getObjectSymbol(), DeclaredClassSignature.createObjectSignature());
 
         final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, declaredSignatures,
                 err);
