@@ -18,7 +18,7 @@ public class DefinedClassSignature extends ClassSignature {
         final Map<IdSymbol, Attribute> attributes = new HashMap<>();
         final Map<IdSymbol, MethodSignature> methods = new HashMap<>();
 
-        for (IdSymbol ancestor : hierarchy.getAncestors(classId)) {
+        for (IdSymbol ancestor : hierarchy.getWeakAncestors(classId)) {
             final DeclaredClassSignature ancestorSignature = declaredSignatures.get(ancestor);
             for (Attribute attribute : ancestorSignature.getAttributes()) {
                 attributes.put(attribute.getName(), attribute);

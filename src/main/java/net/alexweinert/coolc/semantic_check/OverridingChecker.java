@@ -54,7 +54,7 @@ class OverridingChecker extends ASTVisitor {
     @Override
     public void visitAttributePostorder(Attribute attribute) {
         boolean existingAttributeFound = false;
-        for (IdSymbol ancestor : this.classHierarchy.getAncestors(this.containingClass.getIdentifier())) {
+        for (IdSymbol ancestor : this.classHierarchy.getStrictAncestors(this.containingClass.getIdentifier())) {
             if (declaredSignatures.get(ancestor).getAttribute(attribute.getName()) != null) {
                 err.reportOverriddenAttribute(containingProgram.getClass(ancestor).getAttribute(attribute.getName()),
                         attribute);
@@ -69,7 +69,7 @@ class OverridingChecker extends ASTVisitor {
     @Override
     public void visitMethodPostorder(Method method) {
         boolean existingMethodFound = false;
-        for (IdSymbol ancestor : this.classHierarchy.getAncestors(this.containingClass.getIdentifier())) {
+        for (IdSymbol ancestor : this.classHierarchy.getStrictAncestors(this.containingClass.getIdentifier())) {
             if (ancestor.equals(IdTable.getInstance().getObjectSymbol())) {
                 continue;
             }

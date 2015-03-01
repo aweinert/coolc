@@ -31,7 +31,7 @@ class ClassInterfaceBuilder {
 
     private ClassInterface buildInterfaces(IdSymbol classIdentifier, ClassHierarchy hierarchy) {
         final List<MethodSignature> methods = new LinkedList<>();
-        final List<IdSymbol> ancestors = hierarchy.getAncestors(classIdentifier);
+        final List<IdSymbol> ancestors = hierarchy.getWeakAncestors(classIdentifier);
         for (IdSymbol ancestor : ancestors) {
             for (MethodSignature signature : this.definedSignatures.get(ancestor)) {
                 if (ancestor.equals(classIdentifier) && this.containsEqualMethod(methods, signature)) {

@@ -40,7 +40,19 @@ public class ClassHierarchy {
         return commonParents.get(0);
     }
 
-    public List<IdSymbol> getAncestors(IdSymbol classIdentifier) {
+    /**
+     * Returns all ancestors of the given class, including the class itself
+     */
+    public List<IdSymbol> getWeakAncestors(IdSymbol classIdentifier) {
         return new LinkedList<>(this.parentClasses.get(classIdentifier));
+    }
+
+    /**
+     * Returns all ancestors of the given class, excluding the class itself
+     */
+    public List<IdSymbol> getStrictAncestors(IdSymbol classIdentifier) {
+        final List<IdSymbol> weakAncestors = this.getWeakAncestors(classIdentifier);
+        weakAncestors.remove(0);
+        return weakAncestors;
     }
 }
