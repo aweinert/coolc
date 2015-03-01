@@ -52,7 +52,23 @@ public class SemanticChecker {
 
     private static Map<IdSymbol, DefinedClassSignature> createDefinedSignatures(Program program,
             ClassHierarchy hierarchy, Map<IdSymbol, DeclaredClassSignature> declaredSignatures) {
+
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
+        final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
+        definedSignatures.put(objectSymbol, DefinedClassSignature.create(objectSymbol, hierarchy, declaredSignatures));
+
+        final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
+        definedSignatures.put(boolSymbol, DefinedClassSignature.create(boolSymbol, hierarchy, declaredSignatures));
+
+        final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
+        definedSignatures.put(intSymbol, DefinedClassSignature.create(intSymbol, hierarchy, declaredSignatures));
+
+        final IdSymbol stringSymbol = IdTable.getInstance().getStringSymbol();
+        definedSignatures.put(stringSymbol, DefinedClassSignature.create(stringSymbol, hierarchy, declaredSignatures));
+
+        final IdSymbol ioSymbol = IdTable.getInstance().getIOSymbol();
+        definedSignatures.put(ioSymbol, DefinedClassSignature.create(ioSymbol, hierarchy, declaredSignatures));
+
         for (Class classNode : program.getClasses()) {
             definedSignatures.put(classNode.getIdentifier(),
                     DefinedClassSignature.create(classNode.getIdentifier(), hierarchy, declaredSignatures));
