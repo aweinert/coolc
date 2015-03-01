@@ -1,6 +1,7 @@
 package net.alexweinert.coolc.program.information;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.program.symboltables.IdTable;
 
 class ClassHierarchyBuilder {
     private class Pair<T, U> {
@@ -28,6 +30,8 @@ class ClassHierarchyBuilder {
 
     ClassHierarchy buildHierarchy() {
         final Map<IdSymbol, List<IdSymbol>> hierarchy = new HashMap<>();
+        hierarchy.put(IdTable.getInstance().getObjectSymbol(),
+                Collections.singletonList(IdTable.getInstance().getObjectSymbol()));
         for (Pair<IdSymbol, IdSymbol> singleInheritance : this.inheritanceInfo) {
             final List<IdSymbol> ancestors = this.computeAncestors(singleInheritance.x);
             hierarchy.put(singleInheritance.x, ancestors);
