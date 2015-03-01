@@ -1,5 +1,6 @@
 package net.alexweinert.coolc.semantic_check;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,8 @@ import net.alexweinert.coolc.program.ast.Assign;
 import net.alexweinert.coolc.program.ast.BlockExpressions;
 import net.alexweinert.coolc.program.ast.BoolConst;
 import net.alexweinert.coolc.program.ast.BooleanNegation;
+import net.alexweinert.coolc.program.ast.Case;
+import net.alexweinert.coolc.program.ast.Cases;
 import net.alexweinert.coolc.program.ast.Division;
 import net.alexweinert.coolc.program.ast.Expression;
 import net.alexweinert.coolc.program.ast.FunctionCall;
@@ -28,6 +31,7 @@ import net.alexweinert.coolc.program.ast.ObjectReference;
 import net.alexweinert.coolc.program.ast.StaticFunctionCall;
 import net.alexweinert.coolc.program.ast.StringConst;
 import net.alexweinert.coolc.program.ast.Subtraction;
+import net.alexweinert.coolc.program.ast.Typecase;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.information.ClassHierarchy;
 import net.alexweinert.coolc.program.information.DefinedClassSignature;
@@ -357,4 +361,29 @@ class ExpressionTypeChecker extends ASTVisitor {
         }
     }
 
+    @Override
+    public void visitTypecasePostorder(Typecase typecase) {
+        final List<ExpressionType> branchTypes = new LinkedList<>();
+        for (int i = 0; i < typecase.getCases().size(); ++i) {
+            branchTypes.add(this.argumentTypes.pop());
+        }
+
+        final Iterator<ExpressionType> typeIterator = branchTypes.iterator();
+        ExpressionType leastUpperBound = typeIterator.next();
+        while (typeIterator.hasNext()) {
+            leastUpperBound = leastUpperBound.computeLeastUpperBound(typeIterator.next(), this.classId, this.hierarchy);
+        }
+        this.argumentTypes.push(leastUpperBound);
+    }
+
+    @Override
+    public void visitCasePreorder(Case caseNode) {
+        this.variablesScopes.push(this.variablesScopes.peek().addVariable(caseNode.getVariableIdentifier(),
+                caseNode.getDeclaredType()));
+    }
+
+    @Override
+    public void visitCasePostorder(Case caseNode) {
+        this.variablesScopes.pop();
+    }
 }

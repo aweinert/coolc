@@ -124,4 +124,8 @@ public class Typecase extends Expression {
         return true;
     }
 
+    public Cases getCases() {
+        return this.cases;
+    }
+
 }
