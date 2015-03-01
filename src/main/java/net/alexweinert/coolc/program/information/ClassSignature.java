@@ -7,7 +7,7 @@ import java.util.Map;
 import net.alexweinert.coolc.program.ast.Attribute;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
-class ClassSignature {
+public class ClassSignature {
     private final Map<IdSymbol, Attribute> attributes;
     private final Map<IdSymbol, MethodSignature> methods;
 
