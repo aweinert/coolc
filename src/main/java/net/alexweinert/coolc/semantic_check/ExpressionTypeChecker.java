@@ -16,6 +16,7 @@ import net.alexweinert.coolc.program.ast.BooleanNegation;
 import net.alexweinert.coolc.program.ast.Case;
 import net.alexweinert.coolc.program.ast.Cases;
 import net.alexweinert.coolc.program.ast.Division;
+import net.alexweinert.coolc.program.ast.Equality;
 import net.alexweinert.coolc.program.ast.Expression;
 import net.alexweinert.coolc.program.ast.FunctionCall;
 import net.alexweinert.coolc.program.ast.If;
@@ -151,6 +152,29 @@ class ExpressionTypeChecker extends ASTVisitor {
     @Override
     public void visitLessThanOrEqualsPostorder(LessThanOrEquals lessThanOrEquals) {
         this.visitArithmeticComparison(lessThanOrEquals);
+    }
+
+    @Override
+    public void visitEqualityPostorder(Equality equality) {
+        final ExpressionType rhsType = this.argumentTypes.pop();
+        final ExpressionType lhsType = this.argumentTypes.pop();
+
+        final boolean lhsIsInt = lhsType.equals(ExpressionType.create(IdTable.getInstance().getIntSymbol()));
+        final boolean lhsIsString = lhsType.equals(ExpressionType.create(IdTable.getInstance().getStringSymbol()));
+        final boolean lhsIsBool = lhsType.equals(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
+        final boolean lhsIsPrimitive = lhsIsInt || lhsIsString || lhsIsBool;
+        final boolean rhsIsInt = rhsType.equals(ExpressionType.create(IdTable.getInstance().getIntSymbol()));
+        final boolean rhsIsString = rhsType.equals(ExpressionType.create(IdTable.getInstance().getStringSymbol()));
+        final boolean rhsIsBool = rhsType.equals(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
+        final boolean rhsIsPrimitive = rhsIsInt || rhsIsString || rhsIsBool;
+        if (lhsIsPrimitive && !lhsType.equals(rhsType)) {
+            this.err.reportTypeMismatch(equality, rhsType.getTypeId(this.classId), lhsType.getTypeId(this.classId));
+        } else if (rhsIsPrimitive && !lhsType.equals(rhsType)) {
+            this.err.reportTypeMismatch(equality, lhsType.getTypeId(this.classId), rhsType.getTypeId(this.classId));
+        }
+
+        this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
+
     }
 
     private void visitArithmeticComparison(Expression operation) {
