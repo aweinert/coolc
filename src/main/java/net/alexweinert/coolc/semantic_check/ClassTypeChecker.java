@@ -20,7 +20,7 @@ class ClassTypeChecker extends ASTVisitor {
     ClassTypeChecker(IdSymbol classId, Map<IdSymbol, DefinedClassSignature> definedSignatures,
             ClassHierarchy hierarchy, SemanticErrorReporter err) {
         this.classId = classId;
-        this.classScope = VariablesScope.createFromClassSignature(definedSignatures.get(classId));
+        this.classScope = VariablesScope.createFromClassSignature(classId, definedSignatures.get(classId));
         this.definedSignatures = definedSignatures;
         this.hierarchy = hierarchy;
         this.err = err;

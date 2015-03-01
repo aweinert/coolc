@@ -8,12 +8,14 @@ import net.alexweinert.coolc.program.ast.Formal;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.information.DefinedClassSignature;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.program.symboltables.IdTable;
 
 class VariablesScope {
     final private Map<IdSymbol, ExpressionType> variableTypes;
 
-    public static VariablesScope createFromClassSignature(DefinedClassSignature signature) {
+    public static VariablesScope createFromClassSignature(IdSymbol classId, DefinedClassSignature signature) {
         final Map<IdSymbol, ExpressionType> types = new HashMap<>();
+        types.put(IdTable.getInstance().getSelfSymbol(), ExpressionType.create(classId));
         for (Attribute attribute : signature.getAttributes()) {
             types.put(attribute.getName(), ExpressionType.create(attribute.getDeclaredType()));
         }
