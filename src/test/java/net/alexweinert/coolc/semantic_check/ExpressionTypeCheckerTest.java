@@ -402,8 +402,8 @@ public class ExpressionTypeCheckerTest {
         Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
 
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
-        final MethodSignature barSignature = MethodSignature.create(factory.method("bar", "String",
-                factory.formal("x", "Int"), factory.formal("y", "Bool")));
+        final MethodSignature barSignature = MethodSignature.getFactory().create(
+                factory.method("bar", "String", factory.formal("x", "Int"), factory.formal("y", "Bool")));
 
         final DefinedClassSignature classSignature = Mockito.mock(DefinedClassSignature.class);
         Mockito.when(classSignature.getMethodSignature(barSymbol)).thenReturn(barSignature);
@@ -439,8 +439,8 @@ public class ExpressionTypeCheckerTest {
         Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
 
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
-        final MethodSignature barSignature = MethodSignature.create(factory.method("bar", "Int",
-                factory.formal("x", "Int"), factory.formal("y", "Bool")));
+        final MethodSignature barSignature = MethodSignature.getFactory().create(
+                factory.method("bar", "Int", factory.formal("x", "Int"), factory.formal("y", "Bool")));
 
         final DefinedClassSignature classSignature = Mockito.mock(DefinedClassSignature.class);
         Mockito.when(classSignature.getMethodSignature(barSymbol)).thenReturn(barSignature);
@@ -477,8 +477,8 @@ public class ExpressionTypeCheckerTest {
         Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
 
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
-        final MethodSignature barSignature = MethodSignature.create(factory.method("bar", "String",
-                factory.formal("x", "Int"), factory.formal("y", "Bool")));
+        final MethodSignature barSignature = MethodSignature.getFactory().create(
+                factory.method("bar", "String", factory.formal("x", "Int"), factory.formal("y", "Bool")));
 
         final DefinedClassSignature classSignature = Mockito.mock(DefinedClassSignature.class);
         Mockito.when(classSignature.getMethodSignature(barSymbol)).thenReturn(barSignature);

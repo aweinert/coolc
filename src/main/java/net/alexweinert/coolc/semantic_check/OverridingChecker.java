@@ -75,7 +75,7 @@ class OverridingChecker extends ASTVisitor {
             }
             final MethodSignature parentSignature = declaredSignatures.get(ancestor).getMethodSignature(
                     method.getName());
-            if (parentSignature != null && !parentSignature.equals(MethodSignature.create(method))) {
+            if (parentSignature != null && !parentSignature.equals(MethodSignature.getFactory().create(method))) {
                 final Method existingMethod = containingProgram.getClass(ancestor).getMethod(method.getName());
                 err.reportWronglyOverriddenMethod(existingMethod, method);
                 existingMethodFound = true;

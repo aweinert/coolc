@@ -25,7 +25,7 @@ public class DeclaredClassSignature extends ClassSignature {
 
         @Override
         public void visitMethodPostorder(Method method) {
-            this.methodSignatures.add(MethodSignature.create(method));
+            this.methodSignatures.add(MethodSignature.getFactory().create(method));
         }
     }
 
@@ -53,9 +53,10 @@ public class DeclaredClassSignature extends ClassSignature {
         final Map<IdSymbol, Attribute> attributes = new HashMap<>();
         final Map<IdSymbol, MethodSignature> methods = new HashMap<>();
 
-        methods.put(IdTable.getInstance().addString("abort"), MethodSignature.createObjectAbortSignature());
-        methods.put(IdTable.getInstance().addString("type_name"), MethodSignature.createObjectTypeNameSignature());
-        methods.put(IdTable.getInstance().addString("copy"), MethodSignature.createObjectCopySignature());
+        methods.put(IdTable.getInstance().addString("abort"), MethodSignature.getFactory().createObjectAbortSignature());
+        methods.put(IdTable.getInstance().addString("type_name"), MethodSignature.getFactory()
+                .createObjectTypeNameSignature());
+        methods.put(IdTable.getInstance().addString("copy"), MethodSignature.getFactory().createObjectCopySignature());
         return new DeclaredClassSignature(attributes, methods);
     }
 
@@ -73,9 +74,12 @@ public class DeclaredClassSignature extends ClassSignature {
         final Map<IdSymbol, Attribute> attributes = new HashMap<>();
         final Map<IdSymbol, MethodSignature> methods = new HashMap<>();
 
-        methods.put(IdTable.getInstance().addString("length"), MethodSignature.createStringLengthSignature());
-        methods.put(IdTable.getInstance().addString("concat"), MethodSignature.createStringConcatSignature());
-        methods.put(IdTable.getInstance().addString("substr"), MethodSignature.createStringSubstrSignature());
+        methods.put(IdTable.getInstance().addString("length"), MethodSignature.getFactory()
+                .createStringLengthSignature());
+        methods.put(IdTable.getInstance().addString("concat"), MethodSignature.getFactory()
+                .createStringConcatSignature());
+        methods.put(IdTable.getInstance().addString("substr"), MethodSignature.getFactory()
+                .createStringSubstrSignature());
         return new DeclaredClassSignature(attributes, methods);
     }
 
@@ -83,10 +87,12 @@ public class DeclaredClassSignature extends ClassSignature {
         final Map<IdSymbol, Attribute> attributes = new HashMap<>();
         final Map<IdSymbol, MethodSignature> methods = new HashMap<>();
 
-        methods.put(IdTable.getInstance().addString("out_string"), MethodSignature.createIOOutStringSignature());
-        methods.put(IdTable.getInstance().addString("out_int"), MethodSignature.createIOOutIntSignature());
-        methods.put(IdTable.getInstance().addString("in_string"), MethodSignature.createIOInStringSignature());
-        methods.put(IdTable.getInstance().addString("in_int"), MethodSignature.createIOInIntSignature());
+        methods.put(IdTable.getInstance().addString("out_string"), MethodSignature.getFactory()
+                .createIOOutStringSignature());
+        methods.put(IdTable.getInstance().addString("out_int"), MethodSignature.getFactory().createIOOutIntSignature());
+        methods.put(IdTable.getInstance().addString("in_string"), MethodSignature.getFactory()
+                .createIOInStringSignature());
+        methods.put(IdTable.getInstance().addString("in_int"), MethodSignature.getFactory().createIOInIntSignature());
         return new DeclaredClassSignature(attributes, methods);
     }
 
