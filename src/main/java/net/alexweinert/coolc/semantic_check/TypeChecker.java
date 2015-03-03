@@ -2,11 +2,11 @@ package net.alexweinert.coolc.semantic_check;
 
 import java.util.Map;
 
-import net.alexweinert.coolc.program.ast.ClassNode;
-import net.alexweinert.coolc.program.ast.Program;
-import net.alexweinert.coolc.program.information.ClassHierarchy;
-import net.alexweinert.coolc.program.information.DefinedClassSignature;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 public class TypeChecker {
     public static void typecheck(Program program, ClassHierarchy hierarchy,

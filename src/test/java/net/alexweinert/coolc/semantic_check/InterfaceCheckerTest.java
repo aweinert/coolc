@@ -4,11 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
-import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.ClassNode;
-import net.alexweinert.coolc.program.ast.Formal;
-import net.alexweinert.coolc.program.ast.Method;
-import net.alexweinert.coolc.program.ast.Program;
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Formal;
+import net.alexweinert.coolc.representations.cool.ast.Method;
+import net.alexweinert.coolc.representations.cool.ast.Program;
 
 import org.junit.Assert;
 import org.junit.Test;

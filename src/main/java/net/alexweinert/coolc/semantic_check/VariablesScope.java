@@ -3,12 +3,12 @@ package net.alexweinert.coolc.semantic_check;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.Formal;
-import net.alexweinert.coolc.program.ast.Method;
-import net.alexweinert.coolc.program.information.DefinedClassSignature;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
-import net.alexweinert.coolc.program.symboltables.IdTable;
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.Formal;
+import net.alexweinert.coolc.representations.cool.ast.Method;
+import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 class VariablesScope {
     final private Map<IdSymbol, ExpressionType> variableTypes;

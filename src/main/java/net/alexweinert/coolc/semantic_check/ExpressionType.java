@@ -1,8 +1,8 @@
 package net.alexweinert.coolc.semantic_check;
 
-import net.alexweinert.coolc.program.information.ClassHierarchy;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
-import net.alexweinert.coolc.program.symboltables.IdTable;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 abstract class ExpressionType {
     private static class SelfType extends ExpressionType {

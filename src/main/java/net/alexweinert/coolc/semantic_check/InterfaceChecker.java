@@ -5,15 +5,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.ClassNode;
-import net.alexweinert.coolc.program.ast.Classes;
-import net.alexweinert.coolc.program.ast.Feature;
-import net.alexweinert.coolc.program.ast.Features;
-import net.alexweinert.coolc.program.ast.Method;
-import net.alexweinert.coolc.program.ast.Program;
-import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Classes;
+import net.alexweinert.coolc.representations.cool.ast.Feature;
+import net.alexweinert.coolc.representations.cool.ast.Features;
+import net.alexweinert.coolc.representations.cool.ast.Method;
+import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 class InterfaceChecker extends ASTVisitor {
     private List<ClassNode> classes = new LinkedList<>();

@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Set;
 
 import net.alexweinert.coolc.Output;
-import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.ClassNode;
-import net.alexweinert.coolc.program.ast.FunctionCall;
-import net.alexweinert.coolc.program.ast.Method;
-import net.alexweinert.coolc.program.ast.ObjectReference;
-import net.alexweinert.coolc.program.ast.TreeNode;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.FunctionCall;
+import net.alexweinert.coolc.representations.cool.ast.Method;
+import net.alexweinert.coolc.representations.cool.ast.ObjectReference;
+import net.alexweinert.coolc.representations.cool.ast.TreeNode;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 class SemanticErrorReporter {
     private final Output out;

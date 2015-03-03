@@ -4,11 +4,11 @@ import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Collections;
 
-import net.alexweinert.coolc.program.ast.ClassNode;
-import net.alexweinert.coolc.program.ast.Classes;
-import net.alexweinert.coolc.program.ast.Features;
-import net.alexweinert.coolc.program.ast.Program;
-import net.alexweinert.coolc.program.symboltables.IdTable;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Classes;
+import net.alexweinert.coolc.representations.cool.ast.Features;
+import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 import org.junit.Assert;
 import org.junit.Test;

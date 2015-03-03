@@ -3,10 +3,10 @@ package net.alexweinert.coolc.semantic_check;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import net.alexweinert.coolc.program.ast.ClassNode;
-import net.alexweinert.coolc.program.ast.Classes;
-import net.alexweinert.coolc.program.ast.Program;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Classes;
+import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 class MultipleClassesRemover {
 

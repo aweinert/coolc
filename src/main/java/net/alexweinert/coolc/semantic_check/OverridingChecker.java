@@ -4,17 +4,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.ClassNode;
-import net.alexweinert.coolc.program.ast.Feature;
-import net.alexweinert.coolc.program.ast.Method;
-import net.alexweinert.coolc.program.ast.Program;
-import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.information.ClassHierarchy;
-import net.alexweinert.coolc.program.information.DeclaredClassSignature;
-import net.alexweinert.coolc.program.information.MethodSignature;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
-import net.alexweinert.coolc.program.symboltables.IdTable;
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Feature;
+import net.alexweinert.coolc.representations.cool.ast.Method;
+import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.information.DeclaredClassSignature;
+import net.alexweinert.coolc.representations.cool.information.MethodSignature;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 class OverridingChecker extends ASTVisitor {
     /**

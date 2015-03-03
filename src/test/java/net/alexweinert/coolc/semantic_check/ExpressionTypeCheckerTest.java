@@ -5,17 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
-import net.alexweinert.coolc.program.ast.Expression;
-import net.alexweinert.coolc.program.ast.FunctionCall;
-import net.alexweinert.coolc.program.ast.If;
-import net.alexweinert.coolc.program.ast.Let;
-import net.alexweinert.coolc.program.ast.Loop;
-import net.alexweinert.coolc.program.ast.ObjectReference;
-import net.alexweinert.coolc.program.information.ClassHierarchy;
-import net.alexweinert.coolc.program.information.DefinedClassSignature;
-import net.alexweinert.coolc.program.information.MethodSignature;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
-import net.alexweinert.coolc.program.symboltables.IdTable;
+import net.alexweinert.coolc.representations.cool.ast.Expression;
+import net.alexweinert.coolc.representations.cool.ast.FunctionCall;
+import net.alexweinert.coolc.representations.cool.ast.If;
+import net.alexweinert.coolc.representations.cool.ast.Let;
+import net.alexweinert.coolc.representations.cool.ast.Loop;
+import net.alexweinert.coolc.representations.cool.ast.ObjectReference;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
+import net.alexweinert.coolc.representations.cool.information.MethodSignature;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 import org.junit.Assert;
 import org.junit.Before;

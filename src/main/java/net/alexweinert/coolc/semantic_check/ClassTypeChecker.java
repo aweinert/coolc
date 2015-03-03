@@ -2,13 +2,13 @@ package net.alexweinert.coolc.semantic_check;
 
 import java.util.Map;
 
-import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.Method;
-import net.alexweinert.coolc.program.ast.NoExpression;
-import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.program.information.ClassHierarchy;
-import net.alexweinert.coolc.program.information.DefinedClassSignature;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.Method;
+import net.alexweinert.coolc.representations.cool.ast.NoExpression;
+import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 class ClassTypeChecker extends ASTVisitor {
     final private IdSymbol classId;

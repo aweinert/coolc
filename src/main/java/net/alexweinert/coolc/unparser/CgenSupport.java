@@ -19,10 +19,10 @@ package net.alexweinert.coolc.unparser;
 
 import java.io.PrintStream;
 
-import net.alexweinert.coolc.program.symboltables.BoolSymbol;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
-import net.alexweinert.coolc.program.symboltables.IntSymbol;
-import net.alexweinert.coolc.program.symboltables.StringSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.BoolSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.StringSymbol;
 
 /**
  * This class aggregates all kinds of support routines and constants for the code generator; all routines are statics,

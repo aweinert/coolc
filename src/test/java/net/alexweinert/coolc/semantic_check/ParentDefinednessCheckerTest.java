@@ -1,8 +1,8 @@
 package net.alexweinert.coolc.semantic_check;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
-import net.alexweinert.coolc.program.ast.ClassNode;
-import net.alexweinert.coolc.program.ast.Program;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Program;
 
 import org.junit.Assert;
 import org.junit.Test;

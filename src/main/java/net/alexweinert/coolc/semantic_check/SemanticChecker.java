@@ -4,13 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.alexweinert.coolc.Output;
-import net.alexweinert.coolc.program.ast.ClassNode;
-import net.alexweinert.coolc.program.ast.Program;
-import net.alexweinert.coolc.program.information.ClassHierarchy;
-import net.alexweinert.coolc.program.information.DeclaredClassSignature;
-import net.alexweinert.coolc.program.information.DefinedClassSignature;
-import net.alexweinert.coolc.program.symboltables.IdSymbol;
-import net.alexweinert.coolc.program.symboltables.IdTable;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.information.DeclaredClassSignature;
+import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 public class SemanticChecker {
     public static Program checkSemantics(Program program, Output out) {
