@@ -9,11 +9,19 @@ import net.alexweinert.coolc.program.symboltables.FeatureTable;
 
 /** Defines simple phylum Expression */
 public abstract class Expression extends TreeNode {
+    private IdSymbol type = null;
+
     protected Expression(String filename, int lineNumber) {
         super(filename, lineNumber);
     }
+    
+    public IdSymbol getType() {
+        return this.type;
+    }
 
-    final private IdSymbol type = null;
+    public void setType(IdSymbol type) {
+        this.type = type;
+    }
 
     public abstract void dump_with_types(PrintStream out, int n);
 
