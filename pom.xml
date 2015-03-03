@@ -45,7 +45,7 @@
 						<configuration>
 							<outputDirectory>src/main/java</outputDirectory>
 							<lexDefinitions>
-								<lexDefinition>src/main/java/net/alexweinert/coolc/lexer/cool.lex</lexDefinition>
+								<lexDefinition>src/main/java/net/alexweinert/coolc/processors/coolfrontend/cool.lex</lexDefinition>
 							</lexDefinitions>
 						</configuration>
 					</execution>
@@ -62,8 +62,8 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<cupDefinition>src/main/java/net/alexweinert/coolc/parser/cool.cup</cupDefinition>
-							<packageName>net.alexweinert.coolc.parser</packageName>
+							<cupDefinition>src/main/java/net/alexweinert/coolc/processors/coolfrontend/parser/cool.cup</cupDefinition>
+							<packageName>net.alexweinert.coolc.processors.coolfrontend.parser</packageName>
 							<className>Parser</className>
 							<outputDirectory>src/main/java/</outputDirectory>
 							<symbolsName>Tokens</symbolsName>

@@ -17,7 +17,7 @@ package net.alexweinert.coolc.representations.cool;
 import java.io.PrintStream;
 
 import java_cup.runtime.Symbol;
-import net.alexweinert.coolc.parser.Tokens;
+import net.alexweinert.coolc.processors.coolfrontend.parser.Tokens;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;

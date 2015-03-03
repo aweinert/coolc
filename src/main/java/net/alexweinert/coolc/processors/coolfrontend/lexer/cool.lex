@@ -6,7 +6,7 @@
  *
  */
 
-package net.alexweinert.coolc.lexer;
+package net.alexweinert.coolc.processors.coolfrontend.lexer;
 
 import java_cup.runtime.Symbol;
 import net.alexweinert.coolc.parser.Tokens;

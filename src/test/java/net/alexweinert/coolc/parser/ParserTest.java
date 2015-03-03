@@ -4,6 +4,8 @@ import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Collections;
 
+import net.alexweinert.coolc.processors.coolfrontend.parser.Parser;
+import net.alexweinert.coolc.processors.coolfrontend.parser.ParserFactory;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Classes;
 import net.alexweinert.coolc.representations.cool.ast.Features;

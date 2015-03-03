@@ -3,6 +3,7 @@
 .settings
 /target
 /src/main/java/net/alexweinert/coolc/lexer/Lexer.java
-/src/main/java/net/alexweinert/coolc/lexer/Lexer.java~
-/src/main/java/net/alexweinert/coolc/parser/Parser.java
-/src/main/java/net/alexweinert/coolc/parser/Tokens.java
+/src/main/java/net/alexweinert/coolc/processors/coolfrontend/lexer/Lexer.java
+/src/main/java/net/alexweinert/coolc/processors/coolfrontend/lexer/Lexer.java~
+/src/main/java/net/alexweinert/coolc/processors/coolfrontend/parser/Parser.java
+/src/main/java/net/alexweinert/coolc/processors/coolfrontend/parser/Tokens.java

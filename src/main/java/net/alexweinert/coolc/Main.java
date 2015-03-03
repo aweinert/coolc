@@ -1,7 +1,7 @@
 package net.alexweinert.coolc;
 
-import net.alexweinert.coolc.parser.Parser;
-import net.alexweinert.coolc.parser.ParserFactory;
+import net.alexweinert.coolc.processors.coolfrontend.parser.Parser;
+import net.alexweinert.coolc.processors.coolfrontend.parser.ParserFactory;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.semantic_check.SemanticChecker;
 

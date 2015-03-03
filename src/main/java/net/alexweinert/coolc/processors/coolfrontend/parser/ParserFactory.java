@@ -1,9 +1,9 @@
-package net.alexweinert.coolc.parser;
+package net.alexweinert.coolc.processors.coolfrontend.parser;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-import net.alexweinert.coolc.lexer.Lexer;
+import net.alexweinert.coolc.processors.coolfrontend.lexer.Lexer;
 
 public class ParserFactory {
     public static Parser createParserForFile(String path) throws FileNotFoundException {
