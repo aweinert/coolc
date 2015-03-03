@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Feature;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.Program;
@@ -23,8 +23,8 @@ class OverridingChecker extends ASTVisitor {
      */
     public static Program checkOverriding(Program program, ClassHierarchy hierarchy,
             Map<IdSymbol, DeclaredClassSignature> declaredSignatures, SemanticErrorReporter err) {
-        final List<Class> newClasses = new LinkedList<>();
-        for (Class classNode : program.getClasses()) {
+        final List<ClassNode> newClasses = new LinkedList<>();
+        for (ClassNode classNode : program.getClasses()) {
             final OverridingChecker checker = new OverridingChecker(program, classNode, hierarchy, declaredSignatures,
                     err);
             classNode.acceptVisitor(checker);
@@ -35,14 +35,14 @@ class OverridingChecker extends ASTVisitor {
     }
 
     final private Program containingProgram;
-    final private Class containingClass;
+    final private ClassNode containingClass;
     final private ClassHierarchy classHierarchy;
     final private Map<IdSymbol, DeclaredClassSignature> declaredSignatures;
     final private SemanticErrorReporter err;
 
     final private List<Feature> features = new LinkedList<>();
 
-    private OverridingChecker(Program containingProgram, Class containingClass, ClassHierarchy classHierarchy,
+    private OverridingChecker(Program containingProgram, ClassNode containingClass, ClassHierarchy classHierarchy,
             Map<IdSymbol, DeclaredClassSignature> declaredSignatures, SemanticErrorReporter err) {
         this.containingProgram = containingProgram;
         this.containingClass = containingClass;

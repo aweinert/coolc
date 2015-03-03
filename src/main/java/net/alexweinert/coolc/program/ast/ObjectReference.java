@@ -52,7 +52,7 @@ public class ObjectReference extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         Map<IdSymbol, IdSymbol> attributeTypes = featureTable.getAttributeTypes(enclosingClass
                 .getIdentifier());
         if (!attributeTypes.containsKey(this.name)) {

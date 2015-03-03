@@ -4,7 +4,7 @@ import java.net.URI;
 import java.nio.file.Paths;
 import java.util.Collections;
 
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Classes;
 import net.alexweinert.coolc.program.ast.Features;
 import net.alexweinert.coolc.program.ast.Program;
@@ -23,7 +23,7 @@ public class ParserTest {
             final Parser parser = ParserFactory.createParserForFile(path);
             final Program actualProgram = (Program) parser.parse().value;
             final Program expectedProgram = new Program(path, 1, new Classes(path, 1,
-                    Collections.singletonList(new Class(path, 1, IdTable.getInstance().addString("A"), IdTable
+                    Collections.singletonList(new ClassNode(path, 1, IdTable.getInstance().addString("A"), IdTable
                             .getInstance().addString("Object"), new Features(path, 1, Collections.EMPTY_LIST)))));
             Assert.assertEquals(expectedProgram, actualProgram);
         } catch (Throwable t) {

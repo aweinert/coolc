@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Classes;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
@@ -20,7 +20,7 @@ class CircularInheritanceRemover {
         Classes returnClasses = program.getClasses();
         final IdSymbol objectId = IdTable.getInstance().getObjectSymbol();
         final Collection<IdSymbol> alreadyVisited = new HashSet<>();
-        for (Class classNode : program.getClasses()) {
+        for (ClassNode classNode : program.getClasses()) {
             if (alreadyVisited.contains(classNode.getIdentifier())) {
                 continue;
             }
@@ -29,7 +29,7 @@ class CircularInheritanceRemover {
             if (!ancestorIds.contains(objectId)) {
                 final IdSymbol tieBreakerId = findTieBreaker(program, ancestorIds);
                 err.reportCircularInheritance(getClasses(program, ancestorIds), program.getClass(tieBreakerId));
-                final Class tieBreaker = program.getClass(tieBreakerId);
+                final ClassNode tieBreaker = program.getClass(tieBreakerId);
                 returnClasses = returnClasses.replace(tieBreaker, tieBreaker.setParent(objectId));
             }
         }
@@ -61,9 +61,9 @@ class CircularInheritanceRemover {
      *            The set of id's of classes that form an inheritance circle. Must not be empty!
      */
     private static IdSymbol findTieBreaker(Program program, Set<IdSymbol> circularInheritance) {
-        final Set<Class> classes = getClasses(program, circularInheritance);
-        Class tieBreaker = null;
-        for (Class classNode : classes) {
+        final Set<ClassNode> classes = getClasses(program, circularInheritance);
+        ClassNode tieBreaker = null;
+        for (ClassNode classNode : classes) {
             if (tieBreaker == null || classNode.getLineNumber() < tieBreaker.getLineNumber()) {
                 tieBreaker = classNode;
             }
@@ -75,8 +75,8 @@ class CircularInheritanceRemover {
      * Converts a set of id's of classes into a set of classes with the given id, using program.getClass(id) on each.
      * TODO: Replace by identifiers.map, when/if possible
      */
-    private static Set<Class> getClasses(Program program, Set<IdSymbol> identifiers) {
-        final Set<Class> returnValue = new HashSet<>();
+    private static Set<ClassNode> getClasses(Program program, Set<IdSymbol> identifiers) {
+        final Set<ClassNode> returnValue = new HashSet<>();
         for (IdSymbol id : identifiers) {
             returnValue.add(program.getClass(id));
         }

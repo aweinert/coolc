@@ -3,7 +3,7 @@ package net.alexweinert.coolc.semantic_check;
 import java.util.Arrays;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Classes;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
@@ -46,8 +46,8 @@ public class BuiltinRedefinitionRemoverTest {
 
         final ASTFactory factory = new ASTFactory();
 
-        final Class classOne = factory.classNode("ClassOne", "Object");
-        final Class classTwo = factory.classNode("ClassTwo", "Object");
+        final ClassNode classOne = factory.classNode("ClassOne", "Object");
+        final ClassNode classTwo = factory.classNode("ClassTwo", "Object");
         final Program testProgram = factory.program(classOne, classTwo);
 
         final Program resultProgram = BuiltinRedefinitionRemover.removeBuiltinRedefinition(testProgram, err);
@@ -61,8 +61,8 @@ public class BuiltinRedefinitionRemoverTest {
         final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
         final ASTFactory factory = new ASTFactory();
 
-        final Class intRedefinition = factory.classNode(builtinIdString, "Object");
-        final Class otherClass = factory.classNode("Other", "Object");
+        final ClassNode intRedefinition = factory.classNode(builtinIdString, "Object");
+        final ClassNode otherClass = factory.classNode("Other", "Object");
 
         final Program testProgram = new Program("test.cl", 1, new Classes("test.cl", 1, Arrays.asList(intRedefinition,
                 otherClass)));

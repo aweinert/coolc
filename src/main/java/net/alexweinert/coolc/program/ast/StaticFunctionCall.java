@@ -60,7 +60,7 @@ public class StaticFunctionCall extends FunctionCall {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         IdSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
         if (!classTable.conformsTo(enclosingClass.getIdentifier(), expressionType, this.type_name)) {
             String errorString = String.format(

@@ -12,9 +12,9 @@ import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
  * <p>
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
-public class Classes extends ListNode<Class> {
+public class Classes extends ListNode<ClassNode> {
 
-    public Classes(String filename, int lineNumber, Collection<Class> elements) {
+    public Classes(String filename, int lineNumber, Collection<ClassNode> elements) {
         super(filename, lineNumber, elements);
     }
 
@@ -24,15 +24,15 @@ public class Classes extends ListNode<Class> {
     }
 
     @Override
-    public Classes add(Class node) {
-        final Collection<Class> newElements = this.copyElements();
+    public Classes add(ClassNode node) {
+        final Collection<ClassNode> newElements = this.copyElements();
         newElements.add(node);
         return new Classes(this.getFilename(), this.getLineNumber(), newElements);
     }
 
     @Override
-    public Classes remove(Class node) {
-        final Collection<Class> newElements = this.copyElements();
+    public Classes remove(ClassNode node) {
+        final Collection<ClassNode> newElements = this.copyElements();
         newElements.remove(node);
         return new Classes(this.getFilename(), this.getLineNumber(), newElements);
     }
@@ -41,8 +41,8 @@ public class Classes extends ListNode<Class> {
      * Returns a new list in which the first occurrence of oldNode is replaced with newNode. If oldNode does not occur
      * in this list, the list is returned
      */
-    public Classes replace(Class oldNode, Class newNode) {
-        final List<Class> newElements = this.copyElements();
+    public Classes replace(ClassNode oldNode, ClassNode newNode) {
+        final List<ClassNode> newElements = this.copyElements();
         for (int i = 0; i < newElements.size(); ++i) {
             if (newElements.get(i).equals(oldNode)) {
                 newElements.set(i, newNode);
@@ -55,7 +55,7 @@ public class Classes extends ListNode<Class> {
     @Override
     public void acceptVisitor(ASTVisitor visitor) {
         visitor.visitClassesPreorder(this);
-        final Iterator<Class> iterator = this.iterator();
+        final Iterator<ClassNode> iterator = this.iterator();
         while (iterator.hasNext()) {
             iterator.next().acceptVisitor(visitor);
             if (iterator.hasNext()) {

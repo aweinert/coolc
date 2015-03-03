@@ -40,7 +40,7 @@ public class Program extends TreeNode {
     public void dump_with_types(PrintStream out, int n) {
         dump_line(out, n);
         out.println(Utilities.pad(n) + "_program");
-        for (Class currentClass : this.classes) {
+        for (ClassNode currentClass : this.classes) {
             currentClass.dump_with_types(out, n + 2);
         }
     }
@@ -51,8 +51,8 @@ public class Program extends TreeNode {
      * @return The node of the first defined class with the given name, if there exists at least one. Null if none
      *         exists.
      */
-    public Class getClass(IdSymbol identifier) {
-        for (Class classNode : this.classes) {
+    public ClassNode getClass(IdSymbol identifier) {
+        for (ClassNode classNode : this.classes) {
             if (classNode.getIdentifier().equals(identifier)) {
                 return classNode;
             }
@@ -82,26 +82,26 @@ public class Program extends TreeNode {
     }
 
     private void checkBasicClasses(ClassTable classTable) {
-        for (Class currentClass : classTable.getClasses()) {
+        for (ClassNode currentClass : classTable.getClasses()) {
             IdSymbol inheritedBaseClass = null;
-            if (((Class) currentClass).getParent().equals(TreeConstants.Int)) {
+            if (((ClassNode) currentClass).getParent().equals(TreeConstants.Int)) {
                 inheritedBaseClass = TreeConstants.Int;
-            } else if (((Class) currentClass).getParent().equals(TreeConstants.Bool)) {
+            } else if (((ClassNode) currentClass).getParent().equals(TreeConstants.Bool)) {
                 inheritedBaseClass = TreeConstants.Bool;
-            } else if (((Class) currentClass).getParent().equals(TreeConstants.Str)) {
+            } else if (((ClassNode) currentClass).getParent().equals(TreeConstants.Str)) {
                 inheritedBaseClass = TreeConstants.Str;
             }
 
             if (inheritedBaseClass != null) {
                 String errorString = String.format("Class %s cannot inherit class %s", currentClass.getIdentifier(),
                         TreeConstants.Int);
-                classTable.semantError((Class) currentClass).println(errorString);
+                classTable.semantError((ClassNode) currentClass).println(errorString);
             }
         }
     }
 
     private void checkParentExistence(ClassTable classTable) {
-        for (Class currentClass : classTable.getClasses()) {
+        for (ClassNode currentClass : classTable.getClasses()) {
             /* Skip the object-class, since this one is allowed to have a non existing parent */
             if (currentClass.getIdentifier().equals(TreeConstants.Object_)) {
                 continue;
@@ -110,7 +110,7 @@ public class Program extends TreeNode {
             if (!classTable.classExists(currentClass.getParent())) {
                 String errorString = String.format("Class %s inherits from an undefined class %s",
                         currentClass.getIdentifier(), currentClass.getParent());
-                classTable.semantError((Class) currentClass).println(errorString);
+                classTable.semantError((ClassNode) currentClass).println(errorString);
             }
         }
     }
@@ -131,12 +131,12 @@ public class Program extends TreeNode {
      */
     private void checkReachability(ClassTable classTable, Collection<IdSymbol> reachable) {
         // Check that all defined classes are reachable from Object
-        for (Class definedClass : classTable.getClasses()) {
+        for (ClassNode definedClass : classTable.getClasses()) {
             if (!reachable.contains(definedClass.getIdentifier())) {
                 String errorString = String.format(
                         "Class %s, or an ancestor of %s, is involved in an inheritance cycle.",
                         definedClass.getIdentifier(), definedClass.getIdentifier());
-                classTable.semantError((Class) definedClass).println(errorString);
+                classTable.semantError((ClassNode) definedClass).println(errorString);
             }
         }
     }
@@ -159,13 +159,13 @@ public class Program extends TreeNode {
             IdSymbol currentToCheck = toCheck.poll();
             if (visited.contains(currentToCheck)) {
                 String errorString = String.format("%s is reachable from two parents", currentToCheck);
-                classTable.semantError((Class) classTable.getClass(currentToCheck)).println(errorString);
+                classTable.semantError((ClassNode) classTable.getClass(currentToCheck)).println(errorString);
             } else {
                 visited.add(currentToCheck);
 
                 // Add all of currentToCheck's children
                 // TODO Cache the children of all classes for performance reasons
-                for (Class potentialChild : classTable.getClasses()) {
+                for (ClassNode potentialChild : classTable.getClasses()) {
                     if (potentialChild.getParent().equals(currentToCheck)) {
                         toCheck.add(potentialChild.getIdentifier());
                     }
@@ -182,7 +182,7 @@ public class Program extends TreeNode {
         checkForMainMethod(classTable, featureTable);
 
         // Typecheck each class on its own
-        for (final Class currentClass : this.classes) {
+        for (final ClassNode currentClass : this.classes) {
             currentClass.typecheck(classTable, featureTable);
         }
     }
@@ -198,14 +198,14 @@ public class Program extends TreeNode {
             // Check that class Main has method 'main'
             if (!featureTable.getMethodSignatures(TreeConstants.Main).containsKey(TreeConstants.main_meth)) {
                 String errorString = "No 'main' method in class Main";
-                classTable.semantError((Class) classTable.getClass(TreeConstants.Main)).println(errorString);
+                classTable.semantError((ClassNode) classTable.getClass(TreeConstants.Main)).println(errorString);
             } else {
                 FeatureTable.MethodSignature mainSignature = featureTable.getMethodSignatures(TreeConstants.Main).get(
                         TreeConstants.main_meth);
                 // Check that Main.main takes no arguments
                 if (mainSignature.getArgumentTypes().size() != 0) {
                     String errorString = "'main' method in class Main should have no arguments.";
-                    classTable.semantError((Class) classTable.getClass(TreeConstants.Main)).println(errorString);
+                    classTable.semantError((ClassNode) classTable.getClass(TreeConstants.Main)).println(errorString);
                 }
             }
         }
@@ -263,14 +263,14 @@ public class Program extends TreeNode {
         return new Program(this.getFilename(), this.getLineNumber(), newClasses);
     }
 
-    public Program setClasses(List<Class> newClasses) {
+    public Program setClasses(List<ClassNode> newClasses) {
         return this.setClasses(new Classes(this.classes.getFilename(), this.classes.getLineNumber(), newClasses));
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        Iterator<Class> it = this.classes.iterator();
+        Iterator<ClassNode> it = this.classes.iterator();
         while (it.hasNext()) {
             builder.append(it.next().toString());
             if (it.hasNext()) {

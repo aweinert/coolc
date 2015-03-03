@@ -49,7 +49,7 @@ public class LessThanOrEquals extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         IdSymbol leftHandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
         IdSymbol rightHandType = this.e2.typecheck(enclosingClass, classTable, featureTable);
 

@@ -49,7 +49,7 @@ public class Loop extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         IdSymbol conditionType = this.pred.typecheck(enclosingClass, classTable, featureTable);
         // Unused, but needed to annotate the tree with the correct type information
         IdSymbol bodyType = this.body.typecheck(enclosingClass, classTable, featureTable);

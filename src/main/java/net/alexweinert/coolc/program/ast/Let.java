@@ -61,7 +61,7 @@ public class Let extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         // Make sure that we do not try to bindlet
         if (this.identifier.equals(TreeConstants.self)) {
             String errorString = "'self' cannot be bound in a 'let' expression.";

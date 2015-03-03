@@ -2,7 +2,7 @@ package net.alexweinert.coolc.semantic_check;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
 import net.alexweinert.coolc.program.ast.Program;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -50,8 +50,8 @@ public class BuiltinInheritanceCheckerTest {
 
         final ASTFactory factory = new ASTFactory();
 
-        final Class builtinInheritedClass = factory.classNode("ClassOne", builtinId);
-        final Class otherClass = factory.classNode("ClassTwo", "Object");
+        final ClassNode builtinInheritedClass = factory.classNode("ClassOne", builtinId);
+        final ClassNode otherClass = factory.classNode("ClassTwo", "Object");
 
         final Program testProgram = factory.program(builtinInheritedClass, otherClass);
 

@@ -36,7 +36,7 @@ public class NoExpression extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         return TreeConstants.No_type;
     }
 

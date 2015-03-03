@@ -43,7 +43,7 @@ public class New extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         if (classTable.classExists(this.type_name)) {
             return this.type_name;
         } else {

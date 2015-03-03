@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.alexweinert.coolc.Output;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.information.ClassHierarchy;
 import net.alexweinert.coolc.program.information.DeclaredClassSignature;
@@ -44,7 +44,7 @@ public class SemanticChecker {
         declaredSignatures.put(IdTable.getInstance().getStringSymbol(), DeclaredClassSignature.createStringSignature());
         declaredSignatures.put(IdTable.getInstance().getIOSymbol(), DeclaredClassSignature.createIOSignature());
 
-        for (Class classNode : program.getClasses()) {
+        for (ClassNode classNode : program.getClasses()) {
             declaredSignatures.put(classNode.getIdentifier(), DeclaredClassSignature.create(classNode));
         }
         return declaredSignatures;
@@ -69,7 +69,7 @@ public class SemanticChecker {
         final IdSymbol ioSymbol = IdTable.getInstance().getIOSymbol();
         definedSignatures.put(ioSymbol, DefinedClassSignature.create(ioSymbol, hierarchy, declaredSignatures));
 
-        for (Class classNode : program.getClasses()) {
+        for (ClassNode classNode : program.getClasses()) {
             definedSignatures.put(classNode.getIdentifier(),
                     DefinedClassSignature.create(classNode.getIdentifier(), hierarchy, declaredSignatures));
         }

@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.program.information;
 
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.ast.TreeNode;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
@@ -24,7 +24,7 @@ public class ClassHierarchyFactory extends ASTVisitor {
         this.builder.addInheritance(IdTable.getInstance().getBoolSymbol(), IdTable.getInstance().getObjectSymbol());
     }
 
-    public void visitClassPreorder(Class classNode) {
+    public void visitClassPreorder(ClassNode classNode) {
         this.builder.addInheritance(classNode.getIdentifier(), classNode.getParent());
     }
 }

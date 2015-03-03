@@ -60,7 +60,7 @@ public class FunctionCall extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         IdSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
         final IdSymbol dispatchTargetClass;
         if (expressionType.equals(TreeConstants.SELF_TYPE)) {

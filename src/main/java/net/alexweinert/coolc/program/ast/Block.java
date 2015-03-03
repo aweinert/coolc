@@ -46,7 +46,7 @@ public class Block extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         IdSymbol blockType = TreeConstants.No_type;
         for (final Expression currentExpression : this.body) {
             blockType = currentExpression.typecheck(enclosingClass, classTable, featureTable);

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Classes;
 import net.alexweinert.coolc.program.ast.Feature;
 import net.alexweinert.coolc.program.ast.Features;
@@ -16,7 +16,7 @@ import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 
 class InterfaceChecker extends ASTVisitor {
-    private List<Class> classes = new LinkedList<>();
+    private List<ClassNode> classes = new LinkedList<>();
     private Map<IdSymbol, List<Attribute>> attributes = new HashMap<>();
     private Map<IdSymbol, List<Method>> methods = new HashMap<>();
     private Program containingProgram;
@@ -27,7 +27,7 @@ class InterfaceChecker extends ASTVisitor {
         this.error = error;
     }
 
-    InterfaceChecker(List<Class> classes, Map<IdSymbol, List<Attribute>> attributes,
+    InterfaceChecker(List<ClassNode> classes, Map<IdSymbol, List<Attribute>> attributes,
             Map<IdSymbol, List<Method>> methods, Program containingProgram, SemanticErrorReporter error) {
         this.classes = classes;
         this.attributes = attributes;
@@ -49,7 +49,7 @@ class InterfaceChecker extends ASTVisitor {
     }
 
     @Override
-    public void visitClassPostorder(Class classNode) {
+    public void visitClassPostorder(ClassNode classNode) {
 
         final List<Feature> featuresList = new LinkedList<>();
         for (List<Attribute> attributes : this.attributes.values()) {
@@ -68,7 +68,7 @@ class InterfaceChecker extends ASTVisitor {
         this.methods.clear();
 
         final Features features = new Features(classNode.getFilename(), classNode.getLineNumber(), featuresList);
-        this.classes.add(new Class(classNode.getFilename(), classNode.getLineNumber(), classNode.getIdentifier(),
+        this.classes.add(new ClassNode(classNode.getFilename(), classNode.getLineNumber(), classNode.getIdentifier(),
                 classNode.getParent(), features));
         this.attributes.clear();
         this.methods.clear();

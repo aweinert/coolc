@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.Class;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Feature;
 import net.alexweinert.coolc.program.ast.Formal;
 import net.alexweinert.coolc.program.ast.Method;
@@ -80,7 +80,7 @@ public class FeatureTable {
     private Map<IdSymbol, Map<IdSymbol, IdSymbol>> attributeTypes = new HashMap<>();
 
     public FeatureTable(ClassTable classTable) {
-        for (Class currentClass : classTable.getClasses()) {
+        for (ClassNode currentClass : classTable.getClasses()) {
             Map<IdSymbol, MethodSignature> currentMethodSignatures = new HashMap<>();
             Map<IdSymbol, IdSymbol> currentAttributeTypes = new HashMap<>();
 
@@ -90,10 +90,10 @@ public class FeatureTable {
             // Walk through all the features and gather their declared types
             for (final Feature currentFeature : currentClass.getFeatures()) {
                 if (currentFeature instanceof Attribute) {
-                    currentAttributeTypes = addAttributeType(classTable, (Class) currentClass, currentAttributeTypes,
+                    currentAttributeTypes = addAttributeType(classTable, (ClassNode) currentClass, currentAttributeTypes,
                             currentFeature);
                 } else if (currentFeature instanceof Method) {
-                    currentMethodSignatures = addMethodSignature(classTable, (Class) currentClass,
+                    currentMethodSignatures = addMethodSignature(classTable, (ClassNode) currentClass,
                             currentMethodSignatures, currentFeature);
                 }
             }
@@ -102,10 +102,10 @@ public class FeatureTable {
             this.attributeTypes.put(currentClass.getIdentifier(), currentAttributeTypes);
         }
 
-        for (Class childClass : classTable.getClasses()) {
+        for (ClassNode childClass : classTable.getClasses()) {
             /* Walk through all the parents' features, make sure that the child-definitions fit the parents' definitions
              * and add the unconflicting parents' definitions */
-            for (Class parentClass : classTable.getAncestors(childClass)) {
+            for (ClassNode parentClass : classTable.getAncestors(childClass)) {
                 // Add all the parents' attributes to the child
                 for (IdSymbol parentAttribute : this.getAttributeTypes(parentClass.getIdentifier()).keySet()) {
                     if (parentAttribute.equals(TreeConstants.self)) {
@@ -202,7 +202,7 @@ public class FeatureTable {
      * @return The attr-node that defines the attribute of the given name, if the given class has an attribute of this
      *         name
      */
-    public Attribute findAttributeDefinition(Class currentClass, IdSymbol attributeName) {
+    public Attribute findAttributeDefinition(ClassNode currentClass, IdSymbol attributeName) {
         for (final Feature currentFeature : currentClass.getFeatures()) {
             if (currentFeature instanceof Attribute && ((Attribute) currentFeature).getName().equals(attributeName)) {
                 return (Attribute) currentFeature;
@@ -222,7 +222,7 @@ public class FeatureTable {
      * @return The method-node that defines the attribute of the given name, if the given class has an attribute of this
      *         name
      */
-    public Method findMethodDefinition(Class currentClass, IdSymbol methodName) {
+    public Method findMethodDefinition(ClassNode currentClass, IdSymbol methodName) {
         for (final Feature currentFeature : currentClass.getFeatures()) {
             if (currentFeature instanceof Method && ((Method) currentFeature).getName().equals(methodName)) {
                 return (Method) currentFeature;
@@ -299,7 +299,7 @@ public class FeatureTable {
      * 
      * @return The inputmap augmented with the information given by the current feature.
      */
-    private Map<IdSymbol, IdSymbol> addAttributeType(ClassTable classTable, Class enclosingClass,
+    private Map<IdSymbol, IdSymbol> addAttributeType(ClassTable classTable, ClassNode enclosingClass,
             Map<IdSymbol, IdSymbol> attributeTypes, Feature currentFeature) {
         Attribute currentAttribute = (Attribute) currentFeature;
 
@@ -327,7 +327,7 @@ public class FeatureTable {
      * 
      * @return The inputmap augmented with the information given by the current feature.
      */
-    private Map<IdSymbol, MethodSignature> addMethodSignature(ClassTable classTable, Class enclosingClass,
+    private Map<IdSymbol, MethodSignature> addMethodSignature(ClassTable classTable, ClassNode enclosingClass,
             Map<IdSymbol, MethodSignature> methodSignatures, Feature currentFeature) {
         Method currentMethod = (Method) currentFeature;
 

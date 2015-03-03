@@ -66,7 +66,7 @@ public class Method extends Feature {
     }
 
     @Override
-    public void typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    public void typecheck(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         FeatureTable extendedFeatureTable = featureTable.copyAndExtend(enclosingClass.getIdentifier(),
                 TreeConstants.self, TreeConstants.SELF_TYPE);
 

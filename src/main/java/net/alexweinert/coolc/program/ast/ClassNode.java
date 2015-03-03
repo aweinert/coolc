@@ -15,7 +15,7 @@ import net.alexweinert.coolc.program.symboltables.FeatureTable;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Class extends TreeNode {
+public class ClassNode extends TreeNode {
     final protected IdSymbol name;
     final protected IdSymbol parent;
     final protected Features features;
@@ -32,7 +32,7 @@ public class Class extends TreeNode {
      * @param a2
      *            initial value for features
      */
-    public Class(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, Features a3) {
+    public ClassNode(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, Features a3) {
         super(filename, lineNumber);
         name = a1;
         parent = a2;
@@ -127,7 +127,7 @@ public class Class extends TreeNode {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Class other = (Class) obj;
+        ClassNode other = (ClassNode) obj;
         if (features == null) {
             if (other.features != null) {
                 return false;
@@ -152,8 +152,8 @@ public class Class extends TreeNode {
         return true;
     }
 
-    public Class setParent(IdSymbol newParent) {
-        return new Class(this.getFilename(), this.getLineNumber(), this.name, newParent, this.features);
+    public ClassNode setParent(IdSymbol newParent) {
+        return new ClassNode(this.getFilename(), this.getLineNumber(), this.name, newParent, this.features);
     }
 
     public String toString() {
@@ -172,8 +172,8 @@ public class Class extends TreeNode {
         return builder.toString();
     }
 
-    public Class setFeatures(List<Feature> features2) {
-        return new Class(this.getFilename(), this.getLineNumber(), this.name, this.parent, new Features(
+    public ClassNode setFeatures(List<Feature> features2) {
+        return new ClassNode(this.getFilename(), this.getLineNumber(), this.name, this.parent, new Features(
                 this.features.getFilename(), this.features.getLineNumber(), features2));
     }
 }

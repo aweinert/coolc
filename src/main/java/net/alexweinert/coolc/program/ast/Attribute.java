@@ -45,7 +45,7 @@ public class Attribute extends Feature {
     }
 
     @Override
-    public void typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    public void typecheck(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         if (this.init instanceof NoExpression) {
             // If we have no initializer, we simply believe whatever the declaration tells us
             return;

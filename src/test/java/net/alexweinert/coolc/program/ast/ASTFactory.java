@@ -26,15 +26,15 @@ public class ASTFactory {
         this.lineNumber = lineNumber;
     }
 
-    public Program program(Class... classes) {
+    public Program program(ClassNode... classes) {
         return new Program(this.filename, this.lineNumber, new Classes(this.filename, this.lineNumber,
                 Arrays.asList(classes)));
     }
 
-    public Class classNode(String identifier, String parent, Feature... features) {
+    public ClassNode classNode(String identifier, String parent, Feature... features) {
         final IdSymbol identifierSymbol = IdTable.getInstance().addString(identifier);
         final IdSymbol parentSymbol = IdTable.getInstance().addString(parent);
-        return new Class(this.filename, this.lineNumber, identifierSymbol, parentSymbol, new Features(this.filename,
+        return new ClassNode(this.filename, this.lineNumber, identifierSymbol, parentSymbol, new Features(this.filename,
                 this.lineNumber, Arrays.asList(features)));
     }
 

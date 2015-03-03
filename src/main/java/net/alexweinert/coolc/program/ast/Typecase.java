@@ -52,7 +52,7 @@ public class Typecase extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         // We do not need the static type of the expression anywhere, but we need to typecheck it anyways
         IdSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
 

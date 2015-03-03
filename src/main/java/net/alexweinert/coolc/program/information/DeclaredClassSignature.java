@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
@@ -32,7 +32,7 @@ public class DeclaredClassSignature extends ClassSignature {
     /**
      * The given class may not contain any two attributes of the same name and no two methods of the same name
      */
-    public static DeclaredClassSignature create(Class classNode) {
+    public static DeclaredClassSignature create(ClassNode classNode) {
         final SignatureBuilder signatureBuilder = new SignatureBuilder();
         classNode.acceptVisitor(signatureBuilder);
 

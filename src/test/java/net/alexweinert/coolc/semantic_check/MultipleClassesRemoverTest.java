@@ -3,7 +3,7 @@ package net.alexweinert.coolc.semantic_check;
 import java.util.Collections;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Feature;
 import net.alexweinert.coolc.program.ast.Features;
 import net.alexweinert.coolc.program.ast.Program;
@@ -34,9 +34,9 @@ public class MultipleClassesRemoverTest {
     public void testRedefinitionRemoval() {
         final IdSymbol classOneSymbol = IdTable.getInstance().addString("ClassOne");
         final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
-        final Class definitionOne = new Class("", 1, classOneSymbol, objectSymbol, new Features("", 1,
+        final ClassNode definitionOne = new ClassNode("", 1, classOneSymbol, objectSymbol, new Features("", 1,
                 Collections.<Feature> emptyList()));
-        final Class definitionTwo = new Class("", 2, classOneSymbol, objectSymbol, new Features("", 2,
+        final ClassNode definitionTwo = new ClassNode("", 2, classOneSymbol, objectSymbol, new Features("", 2,
                 Collections.<Feature> emptyList()));
 
         final ASTFactory factory = new ASTFactory();

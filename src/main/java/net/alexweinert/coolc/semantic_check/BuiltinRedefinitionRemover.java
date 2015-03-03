@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.semantic_check;
 
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
 import net.alexweinert.coolc.program.symboltables.IdTable;
@@ -23,7 +23,7 @@ class BuiltinRedefinitionRemover {
     }
 
     private static Program removeBuiltinClass(Program program, IdSymbol identifier, SemanticErrorReporter out) {
-        final Class classNode = program.getClass(identifier);
+        final ClassNode classNode = program.getClass(identifier);
         if (classNode != null) {
             out.reportRedefinitionOfBuiltInClass(identifier, classNode);
             return new Program(program.getFilename(), program.getLineNumber(), program.getClasses().remove(classNode));

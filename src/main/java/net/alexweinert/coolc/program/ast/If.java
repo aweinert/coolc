@@ -55,7 +55,7 @@ public class If extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         IdSymbol conditionType = this.pred.typecheck(enclosingClass, classTable, featureTable);
         IdSymbol thenBranchType = this.then_exp.typecheck(enclosingClass, classTable, featureTable);
         IdSymbol elseBranchType = this.else_exp.typecheck(enclosingClass, classTable, featureTable);

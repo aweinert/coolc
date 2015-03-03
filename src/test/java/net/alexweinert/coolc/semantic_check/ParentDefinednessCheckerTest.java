@@ -1,7 +1,7 @@
 package net.alexweinert.coolc.semantic_check;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Program;
 
 import org.junit.Assert;
@@ -13,8 +13,8 @@ public class ParentDefinednessCheckerTest {
     @Test
     public void testCheckParentDefinedness() {
         final ASTFactory factory = new ASTFactory();
-        final Class undefParentClass = factory.classNode("ClassOne", "UndefClass");
-        final Class defParentClass = factory.classNode("ClassTwo", "Object");
+        final ClassNode undefParentClass = factory.classNode("ClassOne", "UndefClass");
+        final ClassNode defParentClass = factory.classNode("ClassTwo", "Object");
 
         final Program testProgram = factory.program(undefParentClass, defParentClass);
 

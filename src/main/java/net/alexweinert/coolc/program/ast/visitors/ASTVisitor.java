@@ -1,7 +1,7 @@
 package net.alexweinert.coolc.program.ast.visitors;
 
 import net.alexweinert.coolc.program.ast.*;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 
 public abstract class ASTVisitor {
 
@@ -55,9 +55,9 @@ public abstract class ASTVisitor {
 
     public void visitCasesPostorder(Cases cases) {}
 
-    public void visitClassPreorder(Class classNode) {}
+    public void visitClassPreorder(ClassNode classNode) {}
 
-    public void visitClassPostorder(Class classNode) {}
+    public void visitClassPostorder(ClassNode classNode) {}
 
     public void visitClassesPreorder(Classes classes) {}
 

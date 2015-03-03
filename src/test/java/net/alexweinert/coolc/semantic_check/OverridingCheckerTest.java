@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.information.ClassHierarchy;
@@ -23,8 +23,8 @@ public class OverridingCheckerTest {
     public void testNoOverridingMethods() {
         final ASTFactory factory = new ASTFactory();
 
-        final Class classOne = factory.classNode("ClassOne", "Object", factory.method("methodOne", "String"));
-        final Class classTwo = factory.classNode("ClassTwo", "ClassOne", factory.method("methodTwo", "Int"));
+        final ClassNode classOne = factory.classNode("ClassOne", "Object", factory.method("methodOne", "String"));
+        final ClassNode classTwo = factory.classNode("ClassTwo", "ClassOne", factory.method("methodTwo", "Int"));
 
         final Program testProgram = factory.program(classOne, classTwo);
 
@@ -47,8 +47,8 @@ public class OverridingCheckerTest {
     public void testNoOverridingAttributes() {
         final ASTFactory factory = new ASTFactory();
 
-        final Class classOne = factory.classNode("ClassOne", "Object", factory.attribute("attributeOne", "String"));
-        final Class classTwo = factory.classNode("ClassTwo", "ClassOne", factory.attribute("attributeTwo", "Int"));
+        final ClassNode classOne = factory.classNode("ClassOne", "Object", factory.attribute("attributeOne", "String"));
+        final ClassNode classTwo = factory.classNode("ClassTwo", "ClassOne", factory.attribute("attributeTwo", "Int"));
 
         final Program testProgram = factory.program(classOne, classTwo);
 
@@ -72,8 +72,8 @@ public class OverridingCheckerTest {
     public void testCorrectOverriding() {
         final ASTFactory factory = new ASTFactory();
 
-        final Class classOne = factory.classNode("ClassOne", "Object", factory.method("methodOne", "String"));
-        final Class classTwo = factory.classNode("ClassTwo", "ClassOne", factory.method("methodOne", "String"));
+        final ClassNode classOne = factory.classNode("ClassOne", "Object", factory.method("methodOne", "String"));
+        final ClassNode classTwo = factory.classNode("ClassTwo", "ClassOne", factory.method("methodOne", "String"));
 
         final Program testProgram = factory.program(classOne, classTwo);
 
@@ -96,9 +96,9 @@ public class OverridingCheckerTest {
         final ASTFactory factory = new ASTFactory();
 
         final Method methodDefOne = factory.method("methodOne", "String");
-        final Class classOne = factory.classNode("ClassOne", "Object", methodDefOne);
+        final ClassNode classOne = factory.classNode("ClassOne", "Object", methodDefOne);
         final Method methodDefTwo = factory.method("methodOne", "Int");
-        final Class classTwo = factory.classNode("ClassTwo", "ClassOne", methodDefTwo);
+        final ClassNode classTwo = factory.classNode("ClassTwo", "ClassOne", methodDefTwo);
 
         final Program testProgram = factory.program(classOne, classTwo);
 

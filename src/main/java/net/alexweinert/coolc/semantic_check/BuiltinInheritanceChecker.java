@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.semantic_check;
 
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Classes;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.ast.visitors.ASTVisitor;
@@ -26,7 +26,7 @@ class BuiltinInheritanceChecker extends ASTVisitor {
     }
 
     @Override
-    public void visitClassPostorder(Class classNode) {
+    public void visitClassPostorder(ClassNode classNode) {
         final boolean inheritsInt = classNode.getParent().equals(IdTable.getInstance().getIntSymbol());
         final boolean inheritsBool = classNode.getParent().equals(IdTable.getInstance().getBoolSymbol());
         final boolean inheritsString = classNode.getParent().equals(IdTable.getInstance().getStringSymbol());

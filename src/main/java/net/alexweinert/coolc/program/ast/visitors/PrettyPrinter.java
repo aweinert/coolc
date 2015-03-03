@@ -11,7 +11,7 @@ import net.alexweinert.coolc.program.ast.BoolConst;
 import net.alexweinert.coolc.program.ast.BooleanNegation;
 import net.alexweinert.coolc.program.ast.Case;
 import net.alexweinert.coolc.program.ast.Cases;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Classes;
 import net.alexweinert.coolc.program.ast.Division;
 import net.alexweinert.coolc.program.ast.Equality;
@@ -143,7 +143,7 @@ public class PrettyPrinter extends ASTVisitor {
     public void visitCasesPostorder(Cases cases) {}
 
     @Override
-    public void visitClassPreorder(Class classNode) {
+    public void visitClassPreorder(ClassNode classNode) {
         stringBuilder.append("class ");
         stringBuilder.append(classNode.getIdentifier());
         stringBuilder.append(" inherits ");
@@ -152,7 +152,7 @@ public class PrettyPrinter extends ASTVisitor {
     }
 
     @Override
-    public void visitClassPostorder(Class classNode) {
+    public void visitClassPostorder(ClassNode classNode) {
         stringBuilder.append("}");
     }
 

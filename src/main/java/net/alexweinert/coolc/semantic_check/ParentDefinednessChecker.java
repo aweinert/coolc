@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.semantic_check;
 
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Classes;
 import net.alexweinert.coolc.program.ast.Program;
 import net.alexweinert.coolc.program.symboltables.IdSymbol;
@@ -16,7 +16,7 @@ class ParentDefinednessChecker {
     public static Program checkParentDefinedness(Program program, SemanticErrorReporter err) {
         Classes returnClasses = program.getClasses();
         final IdSymbol objectId = IdTable.getInstance().getObjectSymbol();
-        for (Class classNode : program.getClasses()) {
+        for (ClassNode classNode : program.getClasses()) {
             // We need only check for inheritance from Object here, due to the precondition of the method
             final boolean inheritsFromObject = classNode.getParent().equals(objectId);
             final boolean parentDefined = program.getClass(classNode.getParent()) != null;

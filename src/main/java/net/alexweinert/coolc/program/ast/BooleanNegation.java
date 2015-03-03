@@ -43,7 +43,7 @@ public class BooleanNegation extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         IdSymbol operandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
 
         if (!classTable.conformsTo(enclosingClass.getIdentifier(), operandType, TreeConstants.Bool)) {

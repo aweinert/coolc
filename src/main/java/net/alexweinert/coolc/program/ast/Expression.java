@@ -33,12 +33,12 @@ public abstract class Expression extends TreeNode {
         }
     }
 
-    public IdSymbol typecheck(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    public IdSymbol typecheck(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         IdSymbol checkedType = this.inferType(enclosingClass, classTable, featureTable);
         return checkedType;
     }
 
-    protected abstract IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable);
+    protected abstract IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable);
 
     @Override
     public int hashCode() {

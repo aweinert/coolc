@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Classes;
 import net.alexweinert.coolc.program.ast.Features;
 import net.alexweinert.coolc.program.ast.Formal;
@@ -43,7 +43,7 @@ public class ClassTable {
     private int semantErrors = 0;
     private PrintStream errorStream = System.err;
 
-    private Map<IdSymbol, Class> classes = new HashMap<>();
+    private Map<IdSymbol, ClassNode> classes = new HashMap<>();
 
     /**
      * Creates data structures representing basic Cool classes (Object, IO, Int, Bool, String). Please note: as is this
@@ -52,23 +52,23 @@ public class ClassTable {
     private void installBasicClasses() {
         StringSymbol filename = StringTable.getInstance().addString("<basic class>");
 
-        Class objectClass = createObjectClass(filename);
+        ClassNode objectClass = createObjectClass(filename);
         this.classes.put(objectClass.getIdentifier(), objectClass);
 
-        Class ioClass = createIoClass(filename);
+        ClassNode ioClass = createIoClass(filename);
         this.classes.put(ioClass.getIdentifier(), ioClass);
 
-        Class intClass = createIntClass(filename);
+        ClassNode intClass = createIntClass(filename);
         this.classes.put(intClass.getIdentifier(), intClass);
 
-        Class boolClass = createBoolClass(filename);
+        ClassNode boolClass = createBoolClass(filename);
         this.classes.put(boolClass.getIdentifier(), boolClass);
 
-        Class strClass = createStringClass(filename);
+        ClassNode strClass = createStringClass(filename);
         this.classes.put(strClass.getIdentifier(), strClass);
     }
 
-    private Class createStringClass(StringSymbol filename) {
+    private ClassNode createStringClass(StringSymbol filename) {
         // The class Str has a number of slots and operations:
         // val the length of the string
         // str_field the string itself
@@ -76,7 +76,7 @@ public class ClassTable {
         // concat(arg: Str) : Str performs string concatenation
         // substr(arg: Int, arg2: Int): Str substring selection
 
-        Class Str_class = new Class("builtin", 0, TreeConstants.Str, TreeConstants.Object_, new Features("builtin", 0)
+        ClassNode Str_class = new ClassNode("builtin", 0, TreeConstants.Str, TreeConstants.Object_, new Features("builtin", 0)
                 .add(new Attribute("builtin", 0, TreeConstants.val, TreeConstants.Int, new NoExpression("builtin", 0)))
                 .add(new Attribute("builtin", 0, TreeConstants.str_field, TreeConstants.prim_slot, new NoExpression(
                         "builtin", 0)))
@@ -91,32 +91,32 @@ public class ClassTable {
         return Str_class;
     }
 
-    private Class createBoolClass(StringSymbol filename) {
+    private ClassNode createBoolClass(StringSymbol filename) {
         // Bool also has only the "val" slot.
-        Class Bool_class = new Class("builtin", 0, TreeConstants.Bool, TreeConstants.Object_,
+        ClassNode Bool_class = new ClassNode("builtin", 0, TreeConstants.Bool, TreeConstants.Object_,
                 new Features("builtin", 0).add(new Attribute("builtin", 0, TreeConstants.val, TreeConstants.prim_slot,
                         new NoExpression("builtin", 0))));
         return Bool_class;
     }
 
-    private Class createIntClass(StringSymbol filename) {
+    private ClassNode createIntClass(StringSymbol filename) {
         // The Int class has no methods and only a single attribute, the
         // "val" for the integer.
 
-        Class Int_class = new Class("builtin", 0, TreeConstants.Int, TreeConstants.Object_,
+        ClassNode Int_class = new ClassNode("builtin", 0, TreeConstants.Int, TreeConstants.Object_,
                 new Features("builtin", 0).add(new Attribute("builtin", 0, TreeConstants.val, TreeConstants.prim_slot,
                         new NoExpression("builtin", 0))));
         return Int_class;
     }
 
-    private Class createIoClass(StringSymbol filename) {
+    private ClassNode createIoClass(StringSymbol filename) {
         // The IO class inherits from Object. Its methods are
         // out_string(Str) : SELF_TYPE writes a string to the output
         // out_int(Int) : SELF_TYPE "    an int    " "     "
         // in_string() : Str reads a string from the input
         // in_int() : Int "   an int     " "     "
 
-        Class IO_class = new Class("builtin", 0, TreeConstants.IO, TreeConstants.Object_, new Features("builtin", 0)
+        ClassNode IO_class = new ClassNode("builtin", 0, TreeConstants.IO, TreeConstants.Object_, new Features("builtin", 0)
                 .add(new Method("builtin", 0, TreeConstants.out_string, new Formals("builtin", 0).add(new Formal(
                         "builtin", 0, TreeConstants.arg, TreeConstants.Str)), TreeConstants.SELF_TYPE,
                         new NoExpression("builtin", 0)))
@@ -130,7 +130,7 @@ public class ClassTable {
         return IO_class;
     }
 
-    private Class createObjectClass(StringSymbol filename) {
+    private ClassNode createObjectClass(StringSymbol filename) {
         // The following demonstrates how to create dummy parse trees to
         // refer to basic Cool classes. There's no need for method
         // bodies -- these are already built into the runtime system.
@@ -146,7 +146,7 @@ public class ClassTable {
         // of class name
         // copy() : SELF_TYPE returns a copy of the object
 
-        Class Object_class = new Class("builtin", 0, TreeConstants.Object_, TreeConstants.No_class, new Features(
+        ClassNode Object_class = new ClassNode("builtin", 0, TreeConstants.Object_, TreeConstants.No_class, new Features(
                 "builtin", 0)
                 .add(new Method("builtin", 0, TreeConstants.cool_abort, new Formals("builtin", 0),
                         TreeConstants.Object_, new NoExpression("builtin", 0)))
@@ -169,11 +169,11 @@ public class ClassTable {
         this.installBasicClasses();
 
         // Walk through all the classes, add them one by one
-        for (Class currentClass : cls) {
+        for (ClassNode currentClass : cls) {
             if (this.classes.containsKey(currentClass.getIdentifier())) {
                 // If this is a redefinition, report the error and ignore the redefinition
                 String errorString = String.format("Redefinition of class %s.", currentClass.getIdentifier());
-                PrintStream errorStream = this.semantError((Class) currentClass);
+                PrintStream errorStream = this.semantError((ClassNode) currentClass);
                 errorStream.println(errorString);
 
             } else {
@@ -182,7 +182,7 @@ public class ClassTable {
         }
     }
 
-    public Class getClass(IdSymbol symbol) {
+    public ClassNode getClass(IdSymbol symbol) {
         return this.classes.get(symbol);
     }
 
@@ -196,7 +196,7 @@ public class ClassTable {
     /**
      * @return All the classes defined in the program, including the basic classes
      */
-    public Iterable<Class> getClasses() {
+    public Iterable<ClassNode> getClasses() {
         return this.classes.values();
     }
 
@@ -219,7 +219,7 @@ public class ClassTable {
 
         Collection<IdSymbol> visited = new HashSet<>();
 
-        Class currentAncestor = (Class) this.getClass(child);
+        ClassNode currentAncestor = (ClassNode) this.getClass(child);
 
         // Continue until we either find the parent or get stuck in a loop
         // TODO: Do not need to check for loop, if this takes too long
@@ -230,7 +230,7 @@ public class ClassTable {
                 // Stop if we are at object, going further would lead us into null-pointer-dereferences
                 break;
             }
-            currentAncestor = (Class) this.getClass(currentAncestor.getParent());
+            currentAncestor = (ClassNode) this.getClass(currentAncestor.getParent());
         }
 
         if (currentAncestor.getIdentifier().equals(parent)) {
@@ -239,7 +239,7 @@ public class ClassTable {
         return false;
     }
 
-    private boolean isNoClass(Class candidateClass) {
+    private boolean isNoClass(ClassNode candidateClass) {
         return candidateClass.getIdentifier().equals(TreeConstants.No_class);
     }
 
@@ -253,7 +253,7 @@ public class ClassTable {
      * @return a print stream to which the rest of the error message is to be printed.
      * 
      * */
-    public PrintStream semantError(Class c) {
+    public PrintStream semantError(ClassNode c) {
         return semantError(c.getFilename(), c);
     }
 
@@ -318,15 +318,15 @@ public class ClassTable {
      * @return An Iterable that iterates over all the given class' parents, excluding the given class, but up to and
      *         including the Object-class
      */
-    public Iterable<Class> getAncestors(Class currentClass) {
+    public Iterable<ClassNode> getAncestors(ClassNode currentClass) {
         // TODO This value should be cached. Could then also be used in other contexts
-        List<Class> returnValue = new LinkedList<>();
+        List<ClassNode> returnValue = new LinkedList<>();
 
         if (currentClass.getIdentifier().equals(TreeConstants.Object_)) {
             return returnValue;
         }
 
-        Class currentAncestor = currentClass;
+        ClassNode currentAncestor = currentClass;
 
         do {
             currentAncestor = this.getClass(currentAncestor.getParent());

@@ -43,7 +43,7 @@ public class IsVoid extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         // We do not use the expression type, but we need to typecheck the expression anyways to annotate the tree
         // correctly
         IdSymbol expressionType = this.e1.typecheck(enclosingClass, classTable, featureTable);

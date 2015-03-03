@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.alexweinert.coolc.program.ast.ASTFactory;
 import net.alexweinert.coolc.program.ast.Attribute;
-import net.alexweinert.coolc.program.ast.Class;
+import net.alexweinert.coolc.program.ast.ClassNode;
 import net.alexweinert.coolc.program.ast.Formal;
 import net.alexweinert.coolc.program.ast.Method;
 import net.alexweinert.coolc.program.ast.Program;
@@ -26,7 +26,7 @@ public class InterfaceCheckerTest {
         final Attribute attributeDefTwo = factory.attribute("attributeOne", "String");
 
         factory.setLineNumber(1);
-        final Class containingClass = factory.classNode("Class", "Object", attributeDefOne, attributeDefTwo);
+        final ClassNode containingClass = factory.classNode("Class", "Object", attributeDefOne, attributeDefTwo);
 
         final Program testProgram = factory.program(containingClass);
 
@@ -54,7 +54,7 @@ public class InterfaceCheckerTest {
         final Method methodDefTwo = factory.method("methodOne", "String", formalOne);
 
         factory.setLineNumber(1);
-        final Class containingClass = factory.classNode("Class", "Object", methodDefOne, methodDefTwo);
+        final ClassNode containingClass = factory.classNode("Class", "Object", methodDefOne, methodDefTwo);
 
         final Program testProgram = factory.program(containingClass);
 
@@ -83,7 +83,7 @@ public class InterfaceCheckerTest {
         final Method methodDefTwo = factory.method("methodOne", "Int", formalOne);
 
         factory.setLineNumber(1);
-        final Class containingClass = factory.classNode("Class", "Object", methodDefOne, methodDefTwo);
+        final ClassNode containingClass = factory.classNode("Class", "Object", methodDefOne, methodDefTwo);
 
         final Program testProgram = factory.program(containingClass);
 

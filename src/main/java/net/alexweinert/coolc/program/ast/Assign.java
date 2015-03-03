@@ -50,7 +50,7 @@ public class Assign extends Expression {
     }
 
     @Override
-    protected IdSymbol inferType(Class enclosingClass, ClassTable classTable, FeatureTable featureTable) {
+    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
         IdSymbol leftHandType = featureTable.getAttributeTypes(enclosingClass.getIdentifier()).get(this.name);
         IdSymbol rightHandType = this.expr.typecheck(enclosingClass, classTable, featureTable);
 
