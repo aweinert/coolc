@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.semantic_check;
+package net.alexweinert.coolc.processors.coolfrontend.semantic_check;
 
 import java.util.Iterator;
 import java.util.LinkedList;

@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.semantic_check;
+package net.alexweinert.coolc.processors.coolfrontend.semantic_check;
 
 import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;

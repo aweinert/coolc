@@ -2,8 +2,8 @@ package net.alexweinert.coolc;
 
 import net.alexweinert.coolc.processors.coolfrontend.parser.Parser;
 import net.alexweinert.coolc.processors.coolfrontend.parser.ParserFactory;
+import net.alexweinert.coolc.processors.coolfrontend.semantic_check.SemanticChecker;
 import net.alexweinert.coolc.representations.cool.ast.Program;
-import net.alexweinert.coolc.semantic_check.SemanticChecker;
 
 public class Main {
     public static void main(String[] args) {
