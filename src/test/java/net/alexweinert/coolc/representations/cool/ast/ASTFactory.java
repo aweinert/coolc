@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.program.ast;
+package net.alexweinert.coolc.representations.cool.ast;
 
 import java.util.Arrays;
 import java.util.LinkedList;

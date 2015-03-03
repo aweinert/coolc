@@ -1,6 +1,8 @@
-package net.alexweinert.coolc.semantic_check;
+package net.alexweinert.coolc.processors.coolfrontend.semantic_check;
 
-import net.alexweinert.coolc.program.ast.ASTFactory;
+import net.alexweinert.coolc.processors.coolfrontend.semantic_check.ParentDefinednessChecker;
+import net.alexweinert.coolc.processors.coolfrontend.semantic_check.SemanticErrorReporter;
+import net.alexweinert.coolc.representations.cool.ast.ASTFactory;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 
