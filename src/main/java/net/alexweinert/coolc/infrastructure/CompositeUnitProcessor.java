@@ -16,7 +16,10 @@ class CompositeUnitProcessor<T, U> implements UnitProcessor<T> {
 
     @Override
     public void process(T input) {
-        finalProcessor.process(previousProcessor.process(input));
+        final U intermediate = previousProcessor.process(input);
+        if (intermediate != null) {
+            finalProcessor.process(intermediate);
+        }
     }
 
 }

@@ -15,6 +15,11 @@ class CompositeProcessor<T, U, V> extends Processor<T, V> {
     }
 
     public V process(T input) {
-        return secondProcessor.process(firstProcessor.process(input));
+        final U intermediate = firstProcessor.process(input);
+        if (intermediate == null) {
+            return null;
+        } else {
+            return secondProcessor.process(intermediate);
+        }
     }
 }
