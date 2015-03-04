@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+import net.alexweinert.coolc.processors.coolfrontend.PrettyPrinter;
 import net.alexweinert.coolc.processors.coolfrontend.lexer.Lexer;
 import net.alexweinert.coolc.processors.coolfrontend.parser.Parser;
 import net.alexweinert.coolc.representations.cool.ast.Program;
-import net.alexweinert.coolc.representations.cool.ast.visitors.PrettyPrinter;
 
 public class IdentityCompiler {
     public static void main(String[] args) {
