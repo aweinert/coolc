@@ -7,7 +7,7 @@ public class CoolUnparser implements UnitProcessor<Program> {
 
     @Override
     public void process(Program input) {
-        PrettyPrinter.printAst(input);
+        System.out.println(PrettyPrinter.printAst(input));
     }
 
 }
