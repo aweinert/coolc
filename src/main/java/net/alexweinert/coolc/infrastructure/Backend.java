@@ -1,5 +1,5 @@
 package net.alexweinert.coolc.infrastructure;
 
-public interface UnitProcessor<T> {
+public interface Backend<T> {
     void process(T input);
 }

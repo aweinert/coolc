@@ -7,7 +7,7 @@ public abstract class Processor<T, U> {
         return CompositeProcessor.create(this, appendix);
     }
 
-    public UnitProcessor<T> append(UnitProcessor<U> unitProcessor) {
-        return CompositeUnitProcessor.create(this, unitProcessor);
+    public Backend<T> append(Backend<U> unitProcessor) {
+        return CompositeBackend.create(this, unitProcessor);
     }
 }
