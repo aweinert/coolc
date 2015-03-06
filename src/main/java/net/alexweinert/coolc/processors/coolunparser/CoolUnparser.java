@@ -1,13 +1,13 @@
 package net.alexweinert.coolc.processors.coolunparser;
 
-import net.alexweinert.coolc.infrastructure.Backend;
+import net.alexweinert.coolc.infrastructure.Processor;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 
-public class CoolUnparser implements Backend<Program> {
+public class CoolUnparser extends Processor<Program, String> {
 
     @Override
-    public void process(Program input) {
-        System.out.println(PrettyPrinter.printAst(input));
+    public String process(Program input) {
+        return PrettyPrinter.printAst(input);
     }
 
 }
