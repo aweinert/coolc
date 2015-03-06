@@ -1,12 +1,13 @@
 package net.alexweinert.coolc;
 
-import net.alexweinert.coolc.infrastructure.Backend;
+import net.alexweinert.coolc.infrastructure.Compiler;
 import net.alexweinert.coolc.processors.coolfrontend.CoolFrontend;
 import net.alexweinert.coolc.processors.coolfrontend.CoolUnparser;
+import net.alexweinert.coolc.representations.cool.ast.Program;
 
 public class Main {
     public static void main(String[] args) {
-        final Backend<String> toolchain = new CoolFrontend().append(new CoolUnparser());
-        toolchain.process(args[0]);
+        final Compiler<Program> compiler = new CoolFrontend(args[0]).append(new CoolUnparser());
+        compiler.compile();
     }
 }
