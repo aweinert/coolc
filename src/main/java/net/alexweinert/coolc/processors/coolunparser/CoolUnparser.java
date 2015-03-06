@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.processors.coolfrontend;
+package net.alexweinert.coolc.processors.coolunparser;
 
 import net.alexweinert.coolc.infrastructure.Backend;
 import net.alexweinert.coolc.representations.cool.ast.Program;

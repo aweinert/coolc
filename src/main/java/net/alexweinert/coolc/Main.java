@@ -2,7 +2,7 @@ package net.alexweinert.coolc;
 
 import net.alexweinert.coolc.infrastructure.Compiler;
 import net.alexweinert.coolc.processors.coolfrontend.CoolParser;
-import net.alexweinert.coolc.processors.coolfrontend.CoolUnparser;
+import net.alexweinert.coolc.processors.coolunparser.CoolUnparser;
 import net.alexweinert.coolc.processors.fileopener.FileOpener;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 

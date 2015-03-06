@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
-import net.alexweinert.coolc.processors.coolfrontend.PrettyPrinter;
 import net.alexweinert.coolc.processors.coolfrontend.lexer.Lexer;
 import net.alexweinert.coolc.processors.coolfrontend.parser.Parser;
+import net.alexweinert.coolc.processors.coolunparser.PrettyPrinter;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 
 public class IdentityCompiler {
