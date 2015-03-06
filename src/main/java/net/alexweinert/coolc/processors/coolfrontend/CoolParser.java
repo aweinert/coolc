@@ -1,29 +1,23 @@
 package net.alexweinert.coolc.processors.coolfrontend;
 
+import java.io.Reader;
+
 import net.alexweinert.coolc.Output;
-import net.alexweinert.coolc.infrastructure.Frontend;
+import net.alexweinert.coolc.infrastructure.Processor;
 import net.alexweinert.coolc.processors.coolfrontend.parser.Parser;
 import net.alexweinert.coolc.processors.coolfrontend.parser.ParserFactory;
 import net.alexweinert.coolc.processors.coolfrontend.semantic_check.SemanticChecker;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 
-public class CoolFrontend extends Frontend<Program> {
-
-    private final String path;
-
-    public CoolFrontend(String path) {
-        this.path = path;
-    }
+public class CoolParser extends Processor<Reader, Program> {
 
     @Override
-    public Program process() {
+    public Program process(final Reader reader) {
         final Program program;
         try {
-            final Parser parser = ParserFactory.createParserForFile(this.path);
+            final Parser parser = ParserFactory.createParserFromReader(reader);
             program = (Program) parser.parse().value;
         } catch (Throwable e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
             return null;
         }
 
