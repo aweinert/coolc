@@ -1,13 +1,7 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'new_'.
@@ -28,29 +22,6 @@ public class New extends Expression {
     public New(String filename, int lineNumber, IdSymbol a1) {
         super(filename, lineNumber);
         type_name = a1;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "new_\n");
-        dump_IdSymbol(out, n + 2, type_name);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_new");
-        dump_IdSymbol(out, n + 2, type_name);
-        dump_type(out, n);
-    }
-
-    @Override
-    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        if (classTable.classExists(this.type_name)) {
-            return this.type_name;
-        } else {
-            String errorString = String.format("'new' used with undefined class %s.", this.type_name);
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-            return TreeConstants.Object_;
-        }
     }
 
     @Override

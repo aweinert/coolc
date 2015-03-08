@@ -54,16 +54,6 @@ public abstract class TreeNode {
     }
 
     /**
-     * Pretty-prints this node to this output stream.
-     *
-     * @param out
-     *            the output stream
-     * @param n
-     *            the number of spaces to indent the output
-     * */
-    public abstract void dump(PrintStream out, int n);
-
-    /**
      * Dumps a printable representation of a boolean value.
      * 
      * This method is used internally by the generated AST classes

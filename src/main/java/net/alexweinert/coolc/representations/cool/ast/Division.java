@@ -1,13 +1,6 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
-import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'divide'.
@@ -32,34 +25,6 @@ public class Division extends Expression {
         super(filename, lineNumber);
         e1 = a1;
         e2 = a2;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "divide\n");
-        e1.dump(out, n + 2);
-        e2.dump(out, n + 2);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_divide");
-        e1.dump_with_types(out, n + 2);
-        e2.dump_with_types(out, n + 2);
-        dump_type(out, n);
-    }
-
-    @Override
-    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        IdSymbol leftHandType = this.e1.typecheck(enclosingClass, classTable, featureTable);
-        IdSymbol rightHandType = this.e2.typecheck(enclosingClass, classTable, featureTable);
-
-        if (!(classTable.conformsTo(enclosingClass.getIdentifier(), leftHandType, TreeConstants.Int) && classTable
-                .conformsTo(enclosingClass.getIdentifier(), rightHandType, TreeConstants.Int))) {
-            String errorString = String.format("non-Int arguments: %s / %s", leftHandType, rightHandType);
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-        }
-
-        return TreeConstants.Int;
     }
 
     @Override

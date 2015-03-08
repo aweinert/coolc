@@ -1,14 +1,7 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-import java.util.Enumeration;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'dispatch'.
@@ -37,77 +30,6 @@ public class FunctionCall extends Expression {
         expr = a1;
         name = a2;
         actual = a3;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "dispatch\n");
-        expr.dump(out, n + 2);
-        dump_IdSymbol(out, n + 2, name);
-        actual.dump(out, n + 2);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_dispatch");
-        expr.dump_with_types(out, n + 2);
-        dump_IdSymbol(out, n + 2, name);
-        out.println(Utilities.pad(n + 2) + "(");
-        for (final Expression parameter : this.actual) {
-            parameter.dump_with_types(out, n + 2);
-        }
-        out.println(Utilities.pad(n + 2) + ")");
-        dump_type(out, n);
-    }
-
-    @Override
-    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        IdSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
-        final IdSymbol dispatchTargetClass;
-        if (expressionType.equals(TreeConstants.SELF_TYPE)) {
-            dispatchTargetClass = enclosingClass.getIdentifier();
-        } else {
-            dispatchTargetClass = expressionType;
-        }
-
-        if (!featureTable.getMethodSignatures(dispatchTargetClass).containsKey(this.name)) {
-            String errorString = String.format("Dispatch to undefined method %s.", this.name);
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-            return TreeConstants.Object_;
-        }
-
-        FeatureTable.MethodSignature targetSignature = featureTable.getMethodSignatures(dispatchTargetClass).get(
-                this.name);
-
-        // Check that the number of arguments is the same in the definition and the call
-        if (this.actual.size() != targetSignature.getArgumentTypes().size()) {
-            String errorString = String.format("Method %s called with wrong number of arguments.", this.name);
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-            return targetSignature.getReturnType();
-        }
-
-        // Check that all the actual parameters conform to the formal parameters
-        for (int actualIndex = 0; actualIndex < this.actual.size(); ++actualIndex) {
-            IdSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass, classTable,
-                    featureTable);
-            IdSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
-
-            if (!classTable.conformsTo(enclosingClass.getIdentifier(), actualType, formalType)) {
-                Method targetMethodDef = featureTable.findMethodDefinition(classTable.getClass(dispatchTargetClass),
-                        this.name);
-                IdSymbol formalName = ((Formal) targetMethodDef.formals.get(actualIndex)).name;
-                String errorString = String.format(
-                        "In call of method %s, type %s of parameter %s does not conform to declared type %s.",
-                        this.name, actualType, formalName, formalType);
-                classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-            }
-        }
-
-        if (targetSignature.getReturnType().equals(TreeConstants.SELF_TYPE)) {
-            return expressionType;
-        } else {
-            return targetSignature.getReturnType();
-        }
-
     }
 
     @Override

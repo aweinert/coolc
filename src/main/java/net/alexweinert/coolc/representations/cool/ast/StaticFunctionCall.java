@@ -1,13 +1,7 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'static_dispatch'.
@@ -35,76 +29,6 @@ public class StaticFunctionCall extends FunctionCall {
             ArgumentExpressions a4) {
         super(filename, lineNumber, a1, a3, a4);
         type_name = a2;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "static_dispatch\n");
-        expr.dump(out, n + 2);
-        dump_IdSymbol(out, n + 2, type_name);
-        dump_IdSymbol(out, n + 2, name);
-        actual.dump(out, n + 2);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_static_dispatch");
-        expr.dump_with_types(out, n + 2);
-        dump_IdSymbol(out, n + 2, type_name);
-        dump_IdSymbol(out, n + 2, name);
-        out.println(Utilities.pad(n + 2) + "(");
-        for (final Expression actual : this.actual) {
-            actual.dump_with_types(out, n + 2);
-        }
-        out.println(Utilities.pad(n + 2) + ")");
-        dump_type(out, n);
-    }
-
-    @Override
-    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        IdSymbol expressionType = this.expr.typecheck(enclosingClass, classTable, featureTable);
-        if (!classTable.conformsTo(enclosingClass.getIdentifier(), expressionType, this.type_name)) {
-            String errorString = String.format(
-                    "Expression type %s does not conform to declared static dispatch type %s.", expressionType,
-                    this.type_name);
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-        }
-
-        if (!featureTable.getMethodSignatures(this.type_name).containsKey(this.name)) {
-            String errorString = String.format("Dispatch to undefined method %s.", this.name);
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-            return TreeConstants.Object_;
-        }
-
-        // Check that the number of arguments is the same in the definition and the call
-        FeatureTable.MethodSignature targetSignature = featureTable.getMethodSignatures(this.type_name).get(this.name);
-        if (this.actual.size() != targetSignature.getArgumentTypes().size()) {
-            String errorString = String.format("Method %s called with wrong number of arguments.", this.name);
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-            return targetSignature.getReturnType();
-        }
-
-        // Check that all the actual parameters conform to the formal parameters
-        for (int actualIndex = 0; actualIndex < this.actual.size(); ++actualIndex) {
-            IdSymbol actualType = ((Expression) this.actual.get(actualIndex)).typecheck(enclosingClass, classTable,
-                    featureTable);
-            IdSymbol formalType = targetSignature.getArgumentTypes().get(actualIndex);
-
-            if (!classTable.conformsTo(enclosingClass.getIdentifier(), actualType, formalType)) {
-                Method targetMethodDef = featureTable.findMethodDefinition(classTable.getClass(this.type_name),
-                        this.name);
-                IdSymbol formalName = ((Formal) targetMethodDef.formals.get(actualIndex)).name;
-                String errorString = String.format(
-                        "In call of method %s, type %s of parameter %s does not conform to declared type %s.",
-                        this.name, actualType, formalName, formalType);
-                classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-            }
-        }
-
-        if (targetSignature.getReturnType().equals(TreeConstants.SELF_TYPE)) {
-            return expressionType;
-        } else {
-            return targetSignature.getReturnType();
-        }
     }
 
     @Override

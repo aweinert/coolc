@@ -8,15 +8,8 @@ package net.alexweinert.coolc.representations.cool.ast;
 //
 // ////////////////////////////////////////////////////////
 
-import java.io.PrintStream;
-import java.util.Map;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'object'.
@@ -37,30 +30,6 @@ public class ObjectReference extends Expression {
     public ObjectReference(String filename, int lineNumber, IdSymbol a1) {
         super(filename, lineNumber);
         name = a1;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "object\n");
-        dump_IdSymbol(out, n + 2, name);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_object");
-        dump_IdSymbol(out, n + 2, name);
-        dump_type(out, n);
-    }
-
-    @Override
-    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        Map<IdSymbol, IdSymbol> attributeTypes = featureTable.getAttributeTypes(enclosingClass
-                .getIdentifier());
-        if (!attributeTypes.containsKey(this.name)) {
-            String errorString = String.format("Undeclared identifier %s.", this.name);
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-            return TreeConstants.Object_;
-        }
-        return attributeTypes.get(this.name);
     }
 
     @Override

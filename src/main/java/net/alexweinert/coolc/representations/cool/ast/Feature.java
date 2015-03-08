@@ -1,9 +1,5 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /** Defines simple phylum Feature */
@@ -18,10 +14,6 @@ public abstract class Feature extends TreeNode {
     public IdSymbol getName() {
         return this.name;
     }
-
-    public abstract void dump_with_types(PrintStream out, int n);
-
-    public abstract void typecheck(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable);
 
     @Override
     public int hashCode() {

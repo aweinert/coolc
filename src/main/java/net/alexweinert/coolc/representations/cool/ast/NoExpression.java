@@ -1,13 +1,6 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
-import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'no_expr'.
@@ -23,21 +16,6 @@ public class NoExpression extends Expression {
      */
     public NoExpression(String filename, int lineNumber) {
         super(filename, lineNumber);
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "no_expr\n");
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_no_expr");
-        dump_type(out, n);
-    }
-
-    @Override
-    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        return TreeConstants.No_type;
     }
 
     @Override

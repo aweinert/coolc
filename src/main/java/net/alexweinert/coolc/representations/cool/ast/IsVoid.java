@@ -1,13 +1,6 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
-import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'isvoid'.
@@ -28,26 +21,6 @@ public class IsVoid extends Expression {
     public IsVoid(String filename, int lineNumber, Expression a1) {
         super(filename, lineNumber);
         e1 = a1;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "isvoid\n");
-        e1.dump(out, n + 2);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_isvoid");
-        e1.dump_with_types(out, n + 2);
-        dump_type(out, n);
-    }
-
-    @Override
-    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        // We do not use the expression type, but we need to typecheck the expression anyways to annotate the tree
-        // correctly
-        IdSymbol expressionType = this.e1.typecheck(enclosingClass, classTable, featureTable);
-        return TreeConstants.Bool;
     }
 
     @Override

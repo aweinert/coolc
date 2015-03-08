@@ -1,8 +1,5 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
@@ -33,21 +30,6 @@ public class Case extends TreeNode {
         this.name = a1;
         this.type_decl = a2;
         this.expr = a3;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "branch\n");
-        dump_IdSymbol(out, n + 2, name);
-        dump_IdSymbol(out, n + 2, type_decl);
-        expr.dump(out, n + 2);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_branch");
-        dump_IdSymbol(out, n + 2, name);
-        dump_IdSymbol(out, n + 2, type_decl);
-        expr.dump_with_types(out, n + 2);
     }
 
     @Override

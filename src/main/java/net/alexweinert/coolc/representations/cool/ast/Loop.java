@@ -1,13 +1,6 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
-import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'loop'.
@@ -32,34 +25,6 @@ public class Loop extends Expression {
         super(filename, lineNumber);
         pred = a1;
         body = a2;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "loop\n");
-        pred.dump(out, n + 2);
-        body.dump(out, n + 2);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_loop");
-        pred.dump_with_types(out, n + 2);
-        body.dump_with_types(out, n + 2);
-        dump_type(out, n);
-    }
-
-    @Override
-    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        IdSymbol conditionType = this.pred.typecheck(enclosingClass, classTable, featureTable);
-        // Unused, but needed to annotate the tree with the correct type information
-        IdSymbol bodyType = this.body.typecheck(enclosingClass, classTable, featureTable);
-
-        if (!classTable.conformsTo(enclosingClass.getIdentifier(), conditionType, TreeConstants.Bool)) {
-            String errorString = "Loop condition does not have type Bool.";
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-        }
-
-        return TreeConstants.Object_;
     }
 
     @Override

@@ -1,13 +1,6 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
-import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'cond'.
@@ -36,36 +29,6 @@ public class If extends Expression {
         pred = a1;
         then_exp = a2;
         else_exp = a3;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "cond\n");
-        pred.dump(out, n + 2);
-        then_exp.dump(out, n + 2);
-        else_exp.dump(out, n + 2);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_cond");
-        pred.dump_with_types(out, n + 2);
-        then_exp.dump_with_types(out, n + 2);
-        else_exp.dump_with_types(out, n + 2);
-        dump_type(out, n);
-    }
-
-    @Override
-    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        IdSymbol conditionType = this.pred.typecheck(enclosingClass, classTable, featureTable);
-        IdSymbol thenBranchType = this.then_exp.typecheck(enclosingClass, classTable, featureTable);
-        IdSymbol elseBranchType = this.else_exp.typecheck(enclosingClass, classTable, featureTable);
-
-        if (!classTable.conformsTo(enclosingClass.getIdentifier(), conditionType, TreeConstants.Bool)) {
-            String errorString = "Predicate of 'if' does not have type Bool.";
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-        }
-
-        return classTable.getLeastUpperBound(thenBranchType, elseBranchType);
     }
 
     @Override

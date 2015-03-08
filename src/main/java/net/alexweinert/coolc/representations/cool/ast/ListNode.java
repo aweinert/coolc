@@ -15,14 +15,11 @@ package net.alexweinert.coolc.representations.cool.ast;
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
 
-import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 
 abstract class ListNode<T extends TreeNode> extends TreeNode implements Iterable<T> {
     /**
@@ -69,24 +66,6 @@ abstract class ListNode<T extends TreeNode> extends TreeNode implements Iterable
 
     public T get(int index) {
         return this.elements.get(index);
-    }
-
-    /**
-     * Pretty-prints this list to this output stream.
-     * 
-     * @param out
-     *            the output stream
-     * @param n
-     *            the number of spaces to indent the output
-     * */
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n));
-        out.print("list\n");
-        for (T currentElement : this.elements) {
-            currentElement.dump(out, n + 2);
-        }
-        out.print(Utilities.pad(n));
-        out.print("(end_of_list)\n");
     }
 
     /**

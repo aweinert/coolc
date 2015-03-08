@@ -1,13 +1,7 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'let'.
@@ -40,47 +34,6 @@ public class Let extends Expression {
         type_decl = a2;
         init = a3;
         body = a4;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "let\n");
-        dump_IdSymbol(out, n + 2, identifier);
-        dump_IdSymbol(out, n + 2, type_decl);
-        init.dump(out, n + 2);
-        body.dump(out, n + 2);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_let");
-        dump_IdSymbol(out, n + 2, identifier);
-        dump_IdSymbol(out, n + 2, type_decl);
-        init.dump_with_types(out, n + 2);
-        body.dump_with_types(out, n + 2);
-        dump_type(out, n);
-    }
-
-    @Override
-    protected IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        // Make sure that we do not try to bindlet
-        if (this.identifier.equals(TreeConstants.self)) {
-            String errorString = "'self' cannot be bound in a 'let' expression.";
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-        }
-
-        // Typecheck the initializer with the current environment
-        IdSymbol initializerType = this.init.typecheck(enclosingClass, classTable, featureTable);
-
-        if (!classTable.conformsTo(enclosingClass.getIdentifier(), initializerType, this.type_decl)) {
-            String errorString = String.format(
-                    "Inferred type %s of initialization of %s does not conform to identifier's declared type %s.",
-                    initializerType, this.identifier, this.type_decl);
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-        }
-
-        FeatureTable extendedTable = featureTable.copyAndExtend(enclosingClass.getIdentifier(), this.identifier,
-                this.type_decl);
-        return this.body.typecheck(enclosingClass, classTable, extendedTable);
     }
 
     @Override

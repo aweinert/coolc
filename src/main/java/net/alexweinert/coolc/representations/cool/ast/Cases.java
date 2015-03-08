@@ -1,7 +1,6 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;

@@ -1,15 +1,9 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-import java.util.Enumeration;
 import java.util.Iterator;
 
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
  * Defines AST constructor 'method'.
@@ -44,45 +38,6 @@ public class Method extends Feature {
 
     public Expression getBody() {
         return this.expr;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "method\n");
-        dump_IdSymbol(out, n + 2, name);
-        formals.dump(out, n + 2);
-        dump_IdSymbol(out, n + 2, return_type);
-        expr.dump(out, n + 2);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_method");
-        dump_IdSymbol(out, n + 2, name);
-        for (final Formal formal : this.formals) {
-            formal.dump_with_types(out, n + 2);
-        }
-        dump_IdSymbol(out, n + 2, return_type);
-        expr.dump_with_types(out, n + 2);
-    }
-
-    @Override
-    public void typecheck(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        FeatureTable extendedFeatureTable = featureTable.copyAndExtend(enclosingClass.getIdentifier(),
-                TreeConstants.self, TreeConstants.SELF_TYPE);
-
-        for (final Formal currentFormal : this.formals) {
-            extendedFeatureTable = extendedFeatureTable.copyAndExtend(enclosingClass.getIdentifier(),
-                    currentFormal.name, currentFormal.type_decl);
-        }
-
-        IdSymbol bodyType = this.expr.typecheck(enclosingClass, classTable, extendedFeatureTable);
-
-        if (!classTable.conformsTo(enclosingClass.getIdentifier(), bodyType, this.return_type)) {
-            String errorString = String.format(
-                    "Inferred return type %s of method %s does not conform to declared return type %s.", bodyType,
-                    this.name, this.return_type);
-            classTable.semantError(enclosingClass.getFilename(), this).println(errorString);
-        }
     }
 
     public Formals getFormals() {

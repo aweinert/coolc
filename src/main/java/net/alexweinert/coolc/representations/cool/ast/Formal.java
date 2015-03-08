@@ -1,8 +1,5 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
 import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
@@ -29,19 +26,6 @@ public class Formal extends TreeNode {
         super(filename, lineNumber);
         name = a1;
         type_decl = a2;
-    }
-
-    public void dump(PrintStream out, int n) {
-        out.print(Utilities.pad(n) + "formalc\n");
-        dump_IdSymbol(out, n + 2, name);
-        dump_IdSymbol(out, n + 2, type_decl);
-    }
-
-    public void dump_with_types(PrintStream out, int n) {
-        dump_line(out, n);
-        out.println(Utilities.pad(n) + "_formal");
-        dump_IdSymbol(out, n + 2, name);
-        dump_IdSymbol(out, n + 2, type_decl);
     }
 
     @Override

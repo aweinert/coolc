@@ -1,10 +1,5 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
-import net.alexweinert.coolc.representations.cool.symboltables.ClassTable;
-import net.alexweinert.coolc.representations.cool.symboltables.FeatureTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /** Defines simple phylum Expression */
@@ -14,7 +9,7 @@ public abstract class Expression extends TreeNode {
     protected Expression(String filename, int lineNumber) {
         super(filename, lineNumber);
     }
-    
+
     public IdSymbol getType() {
         return this.type;
     }
@@ -22,23 +17,6 @@ public abstract class Expression extends TreeNode {
     public void setType(IdSymbol type) {
         this.type = type;
     }
-
-    public abstract void dump_with_types(PrintStream out, int n);
-
-    public void dump_type(PrintStream out, int n) {
-        if (type != null) {
-            out.println(Utilities.pad(n) + ": " + type.getString());
-        } else {
-            out.println(Utilities.pad(n) + ": _no_type");
-        }
-    }
-
-    public IdSymbol typecheck(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable) {
-        IdSymbol checkedType = this.inferType(enclosingClass, classTable, featureTable);
-        return checkedType;
-    }
-
-    protected abstract IdSymbol inferType(ClassNode enclosingClass, ClassTable classTable, FeatureTable featureTable);
 
     @Override
     public int hashCode() {
