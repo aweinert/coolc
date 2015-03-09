@@ -9,8 +9,8 @@
 package net.alexweinert.coolc.processors.coolfrontend.lexer;
 
 import java_cup.runtime.Symbol;
-import net.alexweinert.coolc.parser.Tokens;
-import net.alexweinert.coolc.program.symboltables.*;
+import net.alexweinert.coolc.processors.coolfrontend.parser.Tokens;
+import net.alexweinert.coolc.representations.cool.symboltables.*;
 
 %%
 
@@ -20,6 +20,22 @@ import net.alexweinert.coolc.program.symboltables.*;
  * All extra variables/methods you want to use in the lexer actions go
  * here.  Don't remove anything that was here initially.  */
 %{
+	private IdTable idTable;
+	private StringTable stringTable;
+	private IntTable intTable;
+	
+	public void setIdTable(final IdTable idTable) {
+		this.idTable = idTable;
+	}
+	
+	public void setStringTable(final StringTable stringTable) {
+		this.stringTable = stringTable;
+	}
+	
+	public void setIntTable(final IntTable intTable) {
+		this.intTable = intTable;
+	}
+	
     // Max size of string constants
     final static int MAX_STR_CONST = 1024;
 
@@ -47,12 +63,12 @@ import net.alexweinert.coolc.program.symboltables.*;
 	private int commentDepth = 0;
 
 	private Symbol createStringToken(int type, String value) {
-		StringSymbol symbol = StringTable.getInstance().addString(value);
+		StringSymbol symbol = this.stringTable.addString(value);
 		return new Symbol(type, symbol);
 	}
 
 	private Symbol createIdToken(int type, String value) {
-		IdSymbol symbol = IdTable.getInstance().addString(value);
+		IdSymbol symbol = this.idTable.addString(value);
 		return new Symbol(type, symbol);
 	}
 %}
