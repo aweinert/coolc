@@ -45,7 +45,7 @@
 						<configuration>
 							<outputDirectory>src/main/java</outputDirectory>
 							<lexDefinitions>
-								<lexDefinition>src/main/java/net/alexweinert/coolc/processors/coolfrontend/cool.lex</lexDefinition>
+								<lexDefinition>src/main/java/net/alexweinert/coolc/processors/coolfrontend/lexer/cool.lex</lexDefinition>
 							</lexDefinitions>
 						</configuration>
 					</execution>
