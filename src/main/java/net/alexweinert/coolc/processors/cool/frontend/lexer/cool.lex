@@ -6,10 +6,10 @@
  *
  */
 
-package net.alexweinert.coolc.processors.coolfrontend.lexer;
+package net.alexweinert.coolc.processors.cool.frontend.lexer;
 
 import java_cup.runtime.Symbol;
-import net.alexweinert.coolc.processors.coolfrontend.parser.Tokens;
+import net.alexweinert.coolc.processors.cool.frontend.parser.Tokens;
 import net.alexweinert.coolc.representations.cool.symboltables.*;
 
 %%
