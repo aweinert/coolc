@@ -9,11 +9,10 @@
  */
 
 import java_cup.runtime.*;
-import net.alexweinert.coolc.lexer.Lexer;
-import net.alexweinert.coolc.program.symboltables.*;
-import net.alexweinert.coolc.program.ast.*;
-import net.alexweinert.coolc.program.ast.Class;
-import net.alexweinert.coolc.program.Utilities;
+import net.alexweinert.coolc.processors.cool.frontend.lexer.Lexer;
+import net.alexweinert.coolc.representations.cool.symboltables.*;
+import net.alexweinert.coolc.representations.cool.ast.*;
+import net.alexweinert.coolc.representations.cool.Utilities;
 
 /* Code enclosed in {: :} is copied verbatim to the class containing
 all parser actions.  All the extra variables/functions you want to use
@@ -80,7 +79,7 @@ terminal IdSymbol TYPEID, OBJECTID;
  */
 nonterminal Program program;
 nonterminal Classes class_list;
-nonterminal Class class;
+nonterminal ClassNode class;
 nonterminal Features feature_list;
 nonterminal Feature feature;
 nonterminal Expression expr, opt_init, nested_let, let_expression;
@@ -140,7 +139,7 @@ class_list
 /* Class declarations */
 class
 	::= CLASS TYPEID:n opt_inherits:inherits LBRACE feature_list:def RBRACE
-	    {: RESULT = new Class(curr_filename(), curr_lineno(), n, inherits, def); :}
+	    {: RESULT = new ClassNode(curr_filename(), curr_lineno(), n, inherits, def); :}
 	;
 
 /* Optional inherits-declaration */
