@@ -1,13 +1,8 @@
-package net.alexweinert.coolc.processors.cool.frontend.semantic_check;
+package net.alexweinert.coolc.processors.cool.typechecking;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.alexweinert.coolc.processors.cool.frontend.semantic_check.ExpressionType;
-import net.alexweinert.coolc.processors.cool.frontend.semantic_check.ExpressionTypeChecker;
-import net.alexweinert.coolc.processors.cool.frontend.semantic_check.SemanticErrorReporter;
-import net.alexweinert.coolc.processors.cool.frontend.semantic_check.VariablesScope;
 import net.alexweinert.coolc.representations.cool.ast.ASTFactory;
 import net.alexweinert.coolc.representations.cool.ast.Expression;
 import net.alexweinert.coolc.representations.cool.ast.FunctionCall;
@@ -25,7 +20,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 public class ExpressionTypeCheckerTest {
 
@@ -155,7 +149,7 @@ public class ExpressionTypeCheckerTest {
 
         final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
 
-        final SemanticErrorReporter err = this.testIlltypedExpression(objectSymbol, testExpression, scope);
+        final TypeErrorReporter err = this.testIlltypedExpression(objectSymbol, testExpression, scope);
 
         Mockito.verify(err).reportVariableOutOfScope(testExpression);
         Mockito.verifyNoMoreInteractions(err);
@@ -219,7 +213,7 @@ public class ExpressionTypeCheckerTest {
 
         Mockito.when(this.hierarchy.conformsTo(classBSymbol, classASymbol)).thenReturn(false);
 
-        SemanticErrorReporter err = this.testIlltypedExpression(classASymbol, testExpression, scope);
+        TypeErrorReporter err = this.testIlltypedExpression(classASymbol, testExpression, scope);
 
         Mockito.verify(err).reportTypeMismatch(testExpression, classBSymbol, classASymbol);
         Mockito.verifyNoMoreInteractions(err);
@@ -294,7 +288,7 @@ public class ExpressionTypeCheckerTest {
         final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
 
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
-        final SemanticErrorReporter err = this.testIlltypedExpression(boolSymbol, testExpression, initialScope);
+        final TypeErrorReporter err = this.testIlltypedExpression(boolSymbol, testExpression, initialScope);
 
         Mockito.verify(err).reportTypeMismatch(testExpression.getCondition(), intSymbol, boolSymbol);
         Mockito.verifyNoMoreInteractions(err);
@@ -319,7 +313,7 @@ public class ExpressionTypeCheckerTest {
         final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
         final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
 
-        SemanticErrorReporter err = this.testIlltypedVariableFreeExpression(objectSymbol, testExpression);
+        TypeErrorReporter err = this.testIlltypedVariableFreeExpression(objectSymbol, testExpression);
         Mockito.verify(err).reportTypeMismatch(testExpression.getCondition(), intSymbol, boolSymbol);
         Mockito.verifyNoMoreInteractions(err);
     }
@@ -385,7 +379,7 @@ public class ExpressionTypeCheckerTest {
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
         Mockito.when(initialScope.addVariable(variableSymbol, boolSymbol)).thenReturn(innerScope);
 
-        final SemanticErrorReporter err = this.testIlltypedExpression(boolSymbol, testExpression, initialScope);
+        final TypeErrorReporter err = this.testIlltypedExpression(boolSymbol, testExpression, initialScope);
 
         Mockito.verify(err).reportTypeMismatch(testExpression.getInitializer(), intSymbol, boolSymbol);
         Mockito.verifyNoMoreInteractions(err);
@@ -416,7 +410,7 @@ public class ExpressionTypeCheckerTest {
 
         final IdSymbol classId = IdTable.getInstance().addString("TestClass");
 
-        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
+        final TypeErrorReporter err = Mockito.mock(TypeErrorReporter.class);
 
         final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, initialScope, hierarchy,
                 definedSignatures, err);
@@ -453,7 +447,7 @@ public class ExpressionTypeCheckerTest {
 
         final IdSymbol classId = IdTable.getInstance().addString("TestClass");
 
-        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
+        final TypeErrorReporter err = Mockito.mock(TypeErrorReporter.class);
 
         final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, initialScope, hierarchy,
                 definedSignatures, err);
@@ -491,7 +485,7 @@ public class ExpressionTypeCheckerTest {
 
         final IdSymbol classId = IdTable.getInstance().addString("TestClass");
 
-        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
+        final TypeErrorReporter err = Mockito.mock(TypeErrorReporter.class);
 
         final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, initialScope, hierarchy,
                 definedSignatures, err);
@@ -521,7 +515,7 @@ public class ExpressionTypeCheckerTest {
 
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
 
-        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
+        final TypeErrorReporter err = Mockito.mock(TypeErrorReporter.class);
 
         final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, initialScope, hierarchy,
                 definedSignatures, err);
@@ -532,7 +526,7 @@ public class ExpressionTypeCheckerTest {
         Mockito.verifyZeroInteractions(err);
     }
 
-    private SemanticErrorReporter testIlltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
+    private TypeErrorReporter testIlltypedVariableFreeExpression(IdSymbol expectedType, Expression testExpression) {
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
 
         return this.testIlltypedExpression(expectedType, testExpression, initialScope);
@@ -541,13 +535,13 @@ public class ExpressionTypeCheckerTest {
     /**
      * @return A mock of SemanticErrorReporter used during typechecking of testExpression.
      */
-    private SemanticErrorReporter testIlltypedExpression(IdSymbol expectedType, Expression testExpression,
+    private TypeErrorReporter testIlltypedExpression(IdSymbol expectedType, Expression testExpression,
             VariablesScope initialScope) {
         final IdSymbol classId = IdTable.getInstance().addString("TestClass");
 
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
 
-        final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
+        final TypeErrorReporter err = Mockito.mock(TypeErrorReporter.class);
 
         final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, initialScope, hierarchy,
                 definedSignatures, err);
