@@ -3,8 +3,6 @@ package net.alexweinert.coolc.representations.cool.ast;
 import java.util.Collection;
 import java.util.Iterator;
 
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-
 /**
  * Defines list phylum Formals
  * <p>
@@ -35,7 +33,7 @@ public class Formals extends ListNode<Formal> {
     }
 
     @Override
-    public void acceptVisitor(ASTVisitor visitor) {
+    public void acceptVisitor(Visitor visitor) {
         visitor.visitFormalsPreorder(this);
         final Iterator<Formal> iterator = this.iterator();
         while (iterator.hasNext()) {

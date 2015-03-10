@@ -1,6 +1,5 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
@@ -35,7 +34,7 @@ public class Equality extends Expression {
     }
 
     @Override
-    public void acceptVisitor(ASTVisitor visitor) {
+    public void acceptVisitor(Visitor visitor) {
         visitor.visitEqualityPreorder(this);
         this.e1.acceptVisitor(visitor);
         visitor.visitEqualityInorder(this);

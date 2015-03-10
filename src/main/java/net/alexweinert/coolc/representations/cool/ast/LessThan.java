@@ -1,6 +1,5 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 
 /**
  * Defines AST constructor 'lt'.
@@ -28,7 +27,7 @@ public class LessThan extends Expression {
     }
 
     @Override
-    public void acceptVisitor(ASTVisitor visitor) {
+    public void acceptVisitor(Visitor visitor) {
         visitor.visitLessThanPreorder(this);
         this.e1.acceptVisitor(visitor);
         visitor.visitLessThanInorder(this);

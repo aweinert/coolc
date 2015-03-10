@@ -1,6 +1,5 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
@@ -29,7 +28,7 @@ public class Formal extends TreeNode {
     }
 
     @Override
-    public void acceptVisitor(ASTVisitor visitor) {
+    public void acceptVisitor(Visitor visitor) {
         visitor.visitFormal(this);
     }
 

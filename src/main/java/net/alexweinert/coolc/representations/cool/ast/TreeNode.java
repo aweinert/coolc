@@ -18,7 +18,6 @@ package net.alexweinert.coolc.representations.cool.ast;
 import java.io.PrintStream;
 
 import net.alexweinert.coolc.representations.cool.Utilities;
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.StringSymbol;
@@ -102,7 +101,7 @@ public abstract class TreeNode {
         out.println(Utilities.pad(n) + "#" + lineNumber);
     }
 
-    public abstract void acceptVisitor(ASTVisitor visitor);
+    public abstract void acceptVisitor(Visitor visitor);
 
     @Override
     public int hashCode() {

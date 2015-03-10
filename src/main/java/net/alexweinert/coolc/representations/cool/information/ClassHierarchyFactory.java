@@ -1,12 +1,12 @@
 package net.alexweinert.coolc.representations.cool.information;
 
+import net.alexweinert.coolc.representations.cool.ast.Visitor;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.ast.TreeNode;
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
-public class ClassHierarchyFactory extends ASTVisitor {
+public class ClassHierarchyFactory extends Visitor {
     final private ClassHierarchyBuilder builder = new ClassHierarchyBuilder();
 
     public static ClassHierarchy buildHierarchy(TreeNode ast) {

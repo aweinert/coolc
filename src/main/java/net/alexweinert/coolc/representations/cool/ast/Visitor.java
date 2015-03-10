@@ -1,8 +1,8 @@
-package net.alexweinert.coolc.representations.cool.ast.visitors;
+package net.alexweinert.coolc.representations.cool.ast;
 
 import net.alexweinert.coolc.representations.cool.ast.*;
 
-public abstract class ASTVisitor {
+public abstract class Visitor {
 
     public void visitAdditionPreorder(Addition addition) {}
 

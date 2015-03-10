@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import net.alexweinert.coolc.representations.cool.ast.Visitor;
 import net.alexweinert.coolc.representations.cool.ast.Attribute;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Classes;
@@ -12,10 +13,9 @@ import net.alexweinert.coolc.representations.cool.ast.Feature;
 import net.alexweinert.coolc.representations.cool.ast.Features;
 import net.alexweinert.coolc.representations.cool.ast.Method;
 import net.alexweinert.coolc.representations.cool.ast.Program;
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
-class InterfaceChecker extends ASTVisitor {
+class InterfaceChecker extends Visitor {
     private List<ClassNode> classes = new LinkedList<>();
     private Map<IdSymbol, List<Attribute>> attributes = new HashMap<>();
     private Map<IdSymbol, List<Method>> methods = new HashMap<>();

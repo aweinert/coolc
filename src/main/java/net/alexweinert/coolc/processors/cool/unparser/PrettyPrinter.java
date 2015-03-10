@@ -1,5 +1,6 @@
 package net.alexweinert.coolc.processors.cool.unparser;
 
+import net.alexweinert.coolc.representations.cool.ast.Visitor;
 import net.alexweinert.coolc.representations.cool.ast.Addition;
 import net.alexweinert.coolc.representations.cool.ast.ArgumentExpressions;
 import net.alexweinert.coolc.representations.cool.ast.ArithmeticNegation;
@@ -37,9 +38,8 @@ import net.alexweinert.coolc.representations.cool.ast.StringConst;
 import net.alexweinert.coolc.representations.cool.ast.Subtraction;
 import net.alexweinert.coolc.representations.cool.ast.TreeNode;
 import net.alexweinert.coolc.representations.cool.ast.Typecase;
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 
-public class PrettyPrinter extends ASTVisitor {
+public class PrettyPrinter extends Visitor {
 
     final private StringBuilder stringBuilder = new StringBuilder();
 

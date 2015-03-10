@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
+import net.alexweinert.coolc.representations.cool.ast.Visitor;
 import net.alexweinert.coolc.representations.cool.ast.Addition;
 import net.alexweinert.coolc.representations.cool.ast.ArgumentExpressions;
 import net.alexweinert.coolc.representations.cool.ast.ArithmeticNegation;
@@ -33,14 +34,13 @@ import net.alexweinert.coolc.representations.cool.ast.StaticFunctionCall;
 import net.alexweinert.coolc.representations.cool.ast.StringConst;
 import net.alexweinert.coolc.representations.cool.ast.Subtraction;
 import net.alexweinert.coolc.representations.cool.ast.Typecase;
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
 import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
 import net.alexweinert.coolc.representations.cool.information.MethodSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
-class ExpressionTypeChecker extends ASTVisitor {
+class ExpressionTypeChecker extends Visitor {
 
     final private Stack<ExpressionType> argumentTypes = new Stack<>();
     final private Stack<List<ExpressionType>> methodSignatures = new Stack<>();

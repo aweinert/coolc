@@ -3,8 +3,6 @@ package net.alexweinert.coolc.representations.cool.ast;
 import java.util.Collection;
 import java.util.Iterator;
 
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-
 public class ArgumentExpressions extends ListNode<Expression> {
     public ArgumentExpressions(String filename, int lineNumber) {
         super(filename, lineNumber);
@@ -29,7 +27,7 @@ public class ArgumentExpressions extends ListNode<Expression> {
     }
 
     @Override
-    public void acceptVisitor(ASTVisitor visitor) {
+    public void acceptVisitor(Visitor visitor) {
         visitor.visitArgumentExpressionsPreorder(this);
         final Iterator<Expression> iterator = this.iterator();
         while (iterator.hasNext()) {

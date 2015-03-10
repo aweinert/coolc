@@ -1,6 +1,5 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 
 /**
  * Defines AST constructor 'bool_const'.
@@ -24,7 +23,7 @@ public class BoolConst extends Expression {
     }
 
     @Override
-    public void acceptVisitor(ASTVisitor visitor) {
+    public void acceptVisitor(Visitor visitor) {
         visitor.visitBoolConst(this);
     }
 

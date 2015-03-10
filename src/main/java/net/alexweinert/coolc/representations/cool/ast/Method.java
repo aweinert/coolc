@@ -2,7 +2,6 @@ package net.alexweinert.coolc.representations.cool.ast;
 
 import java.util.Iterator;
 
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
@@ -49,7 +48,7 @@ public class Method extends Feature {
     }
 
     @Override
-    public void acceptVisitor(ASTVisitor visitor) {
+    public void acceptVisitor(Visitor visitor) {
         visitor.visitMethodPreorder(this);
         this.formals.acceptVisitor(visitor);
         visitor.visitMethodInorder(this);

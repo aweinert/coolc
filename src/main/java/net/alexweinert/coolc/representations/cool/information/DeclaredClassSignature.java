@@ -6,15 +6,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import net.alexweinert.coolc.representations.cool.ast.Visitor;
 import net.alexweinert.coolc.representations.cool.ast.Attribute;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Method;
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 public class DeclaredClassSignature extends ClassSignature {
-    private static class SignatureBuilder extends ASTVisitor {
+    private static class SignatureBuilder extends Visitor {
         private final List<Attribute> attributes = new LinkedList<>();
         private final List<MethodSignature> methodSignatures = new LinkedList<>();
 

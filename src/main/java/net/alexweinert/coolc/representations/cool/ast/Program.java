@@ -3,7 +3,6 @@ package net.alexweinert.coolc.representations.cool.ast;
 import java.util.Iterator;
 import java.util.List;
 
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
@@ -39,7 +38,7 @@ public class Program extends TreeNode {
     }
 
     @Override
-    public void acceptVisitor(ASTVisitor visitor) {
+    public void acceptVisitor(Visitor visitor) {
         visitor.visitProgramPreorder(this);
         this.classes.acceptVisitor(visitor);
         visitor.visitProgramPostorder(this);

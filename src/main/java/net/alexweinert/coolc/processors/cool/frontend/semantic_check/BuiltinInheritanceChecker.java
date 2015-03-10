@@ -1,12 +1,12 @@
 package net.alexweinert.coolc.processors.cool.frontend.semantic_check;
 
+import net.alexweinert.coolc.representations.cool.ast.Visitor;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Classes;
 import net.alexweinert.coolc.representations.cool.ast.Program;
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
-class BuiltinInheritanceChecker extends ASTVisitor {
+class BuiltinInheritanceChecker extends Visitor {
 
     private final SemanticErrorReporter out;
     private Program program;

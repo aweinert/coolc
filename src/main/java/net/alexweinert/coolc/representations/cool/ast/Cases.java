@@ -3,8 +3,6 @@ package net.alexweinert.coolc.representations.cool.ast;
 import java.util.Collection;
 import java.util.Iterator;
 
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-
 /**
  * Defines list phylum Cases
  * <p>
@@ -35,7 +33,7 @@ public class Cases extends ListNode<Case> {
     }
 
     @Override
-    public void acceptVisitor(ASTVisitor visitor) {
+    public void acceptVisitor(Visitor visitor) {
         visitor.visitCasesPreorder(this);
         final Iterator<Case> iterator = this.iterator();
         while (iterator.hasNext()) {

@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
-
 /**
  * Defines list phylum Classes
  * <p>
@@ -52,7 +50,7 @@ public class Classes extends ListNode<ClassNode> {
     }
 
     @Override
-    public void acceptVisitor(ASTVisitor visitor) {
+    public void acceptVisitor(Visitor visitor) {
         visitor.visitClassesPreorder(this);
         final Iterator<ClassNode> iterator = this.iterator();
         while (iterator.hasNext()) {

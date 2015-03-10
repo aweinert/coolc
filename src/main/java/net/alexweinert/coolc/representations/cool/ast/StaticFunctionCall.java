@@ -1,6 +1,5 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import net.alexweinert.coolc.representations.cool.ast.visitors.ASTVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
@@ -32,7 +31,7 @@ public class StaticFunctionCall extends FunctionCall {
     }
 
     @Override
-    public void acceptVisitor(ASTVisitor visitor) {
+    public void acceptVisitor(Visitor visitor) {
         visitor.visitStaticFunctionCallPreorder(this);
         this.expr.acceptVisitor(visitor);
         visitor.visitStaticFunctionCallInorder(this);
