@@ -1,10 +1,10 @@
-package net.alexweinert.coolc.processors.cool.frontend.semantic_check;
+package net.alexweinert.coolc.processors.cool.typechecking;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import net.alexweinert.coolc.Output;
-import net.alexweinert.coolc.processors.cool.typechecking.CoolTypeChecker;
+import net.alexweinert.coolc.infrastructure.Processor;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
@@ -13,23 +13,32 @@ import net.alexweinert.coolc.representations.cool.information.DefinedClassSignat
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
-public class SemanticChecker {
-    public static Program checkSemantics(Program program, Output out) {
-        final SemanticErrorReporter error = new SemanticErrorReporter(out);
+public class CoolTypeChecker extends Processor<Program, Program> {
 
-        program = MultipleClassesRemover.removeMultipleClassDefinitions(program, error);
-        program = BuiltinRedefinitionRemover.removeBuiltinRedefinition(program, error);
-        program = BuiltinInheritanceChecker.checkBuiltinInheritance(program, error);
-        program = ParentDefinednessChecker.checkParentDefinedness(program, error);
-        program = CircularInheritanceRemover.removeCircularInheritance(program, error);
+    private final TypeErrorReporter err;
 
-        final ClassHierarchy hierarchy = ClassHierarchy.create(program);
-        program = InterfaceChecker.checkInterfaces(program, error);
+    public CoolTypeChecker(Output err) {
+        this.err = new TypeErrorReporter(err);
+    }
 
-        final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = createDeclaredSignatures(program);
-        program = OverridingChecker.checkOverriding(program, hierarchy, declaredSignatures, error);
+    @Override
+    public Program process(Program input) {
+        final ClassHierarchy hierarchy = ClassHierarchy.create(input);
+        final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = CoolTypeChecker
+                .createDeclaredSignatures(input);
+        final Map<IdSymbol, DefinedClassSignature> definedSignatures = CoolTypeChecker.createDefinedSignatures(input,
+                hierarchy, declaredSignatures);
 
-        return program;
+        CoolTypeChecker.typecheck(input, hierarchy, definedSignatures, this.err);
+
+        return input;
+    }
+
+    private static void typecheck(Program program, ClassHierarchy hierarchy,
+            Map<IdSymbol, DefinedClassSignature> definedSignatures, TypeErrorReporter err) {
+        for (ClassNode classNode : program.getClasses()) {
+            classNode.acceptVisitor(new ClassTypeChecker(classNode.getIdentifier(), definedSignatures, hierarchy, err));
+        }
     }
 
     private static Map<IdSymbol, DeclaredClassSignature> createDeclaredSignatures(Program program) {
@@ -71,4 +80,5 @@ public class SemanticChecker {
         }
         return definedSignatures;
     }
+
 }

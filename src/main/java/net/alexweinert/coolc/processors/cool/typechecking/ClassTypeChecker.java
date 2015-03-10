@@ -1,11 +1,11 @@
-package net.alexweinert.coolc.processors.cool.frontend.semantic_check;
+package net.alexweinert.coolc.processors.cool.typechecking;
 
 import java.util.Map;
 
-import net.alexweinert.coolc.representations.cool.ast.Visitor;
 import net.alexweinert.coolc.representations.cool.ast.Attribute;
 import net.alexweinert.coolc.representations.cool.ast.Method;
 import net.alexweinert.coolc.representations.cool.ast.NoExpression;
+import net.alexweinert.coolc.representations.cool.ast.Visitor;
 import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
 import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
@@ -15,10 +15,10 @@ class ClassTypeChecker extends Visitor {
     final private VariablesScope classScope;
     final private Map<IdSymbol, DefinedClassSignature> definedSignatures;
     final private ClassHierarchy hierarchy;
-    final private SemanticErrorReporter err;
+    final private TypeErrorReporter err;
 
     ClassTypeChecker(IdSymbol classId, Map<IdSymbol, DefinedClassSignature> definedSignatures,
-            ClassHierarchy hierarchy, SemanticErrorReporter err) {
+            ClassHierarchy hierarchy, TypeErrorReporter err) {
         this.classId = classId;
         this.classScope = VariablesScope.createFromClassSignature(classId, definedSignatures.get(classId));
         this.definedSignatures = definedSignatures;

@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.processors.cool.frontend.semantic_check;
+package net.alexweinert.coolc.processors.cool.typechecking;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import net.alexweinert.coolc.representations.cool.ast.Visitor;
 import net.alexweinert.coolc.representations.cool.ast.Addition;
 import net.alexweinert.coolc.representations.cool.ast.ArgumentExpressions;
 import net.alexweinert.coolc.representations.cool.ast.ArithmeticNegation;
@@ -15,7 +14,6 @@ import net.alexweinert.coolc.representations.cool.ast.BlockExpressions;
 import net.alexweinert.coolc.representations.cool.ast.BoolConst;
 import net.alexweinert.coolc.representations.cool.ast.BooleanNegation;
 import net.alexweinert.coolc.representations.cool.ast.Case;
-import net.alexweinert.coolc.representations.cool.ast.Cases;
 import net.alexweinert.coolc.representations.cool.ast.Division;
 import net.alexweinert.coolc.representations.cool.ast.Equality;
 import net.alexweinert.coolc.representations.cool.ast.Expression;
@@ -34,6 +32,7 @@ import net.alexweinert.coolc.representations.cool.ast.StaticFunctionCall;
 import net.alexweinert.coolc.representations.cool.ast.StringConst;
 import net.alexweinert.coolc.representations.cool.ast.Subtraction;
 import net.alexweinert.coolc.representations.cool.ast.Typecase;
+import net.alexweinert.coolc.representations.cool.ast.Visitor;
 import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
 import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
 import net.alexweinert.coolc.representations.cool.information.MethodSignature;
@@ -51,10 +50,10 @@ class ExpressionTypeChecker extends Visitor {
     final private Stack<VariablesScope> variablesScopes;
     final private ClassHierarchy hierarchy;
     final private Map<IdSymbol, DefinedClassSignature> definedSignatures;
-    final private SemanticErrorReporter err;
+    final private TypeErrorReporter err;
 
     public ExpressionTypeChecker(IdSymbol classId, VariablesScope initialScope, ClassHierarchy hierarchy,
-            Map<IdSymbol, DefinedClassSignature> definedSignatures, SemanticErrorReporter err) {
+            Map<IdSymbol, DefinedClassSignature> definedSignatures, TypeErrorReporter err) {
         this.classId = classId;
         this.variablesScopes = new Stack<>();
         this.variablesScopes.add(initialScope);
