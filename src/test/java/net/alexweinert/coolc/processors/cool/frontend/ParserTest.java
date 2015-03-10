@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.parser;
+package net.alexweinert.coolc.processors.cool.frontend;
 
 import java.io.FileNotFoundException;
 import java.net.URI;
