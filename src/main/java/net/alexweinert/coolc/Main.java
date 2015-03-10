@@ -1,10 +1,10 @@
 package net.alexweinert.coolc;
 
 import net.alexweinert.coolc.infrastructure.Compiler;
-import net.alexweinert.coolc.processors.coolfrontend.CoolParser;
-import net.alexweinert.coolc.processors.coolunparser.CoolUnparser;
-import net.alexweinert.coolc.processors.fileopener.FileOpener;
-import net.alexweinert.coolc.processors.stringdumper.StringDumper;
+import net.alexweinert.coolc.processors.cool.frontend.CoolParser;
+import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
+import net.alexweinert.coolc.processors.io.fileopener.FileOpener;
+import net.alexweinert.coolc.processors.io.stringdumper.StringDumper;
 
 public class Main {
     public static void main(String[] args) {
