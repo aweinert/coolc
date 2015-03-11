@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.processors.cool.frontend.semantic_check;
+package net.alexweinert.coolc.processors.cool.hierarchycheck;
 
 import java.util.Collection;
 import java.util.HashSet;

@@ -1,10 +1,9 @@
-package net.alexweinert.coolc.processors.cool.frontend.semantic_check;
+package net.alexweinert.coolc.processors.cool.hierarchycheck;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import net.alexweinert.coolc.Output;
-import net.alexweinert.coolc.processors.cool.typechecking.CoolTypeChecker;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
@@ -13,7 +12,7 @@ import net.alexweinert.coolc.representations.cool.information.DefinedClassSignat
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
-public class SemanticChecker {
+class SemanticChecker {
     public static Program checkSemantics(Program program, Output out) {
         final SemanticErrorReporter error = new SemanticErrorReporter(out);
 

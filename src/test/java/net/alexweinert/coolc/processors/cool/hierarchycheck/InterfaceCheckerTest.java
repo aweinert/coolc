@@ -1,10 +1,10 @@
-package net.alexweinert.coolc.processors.cool.frontend.semantic_check;
+package net.alexweinert.coolc.processors.cool.hierarchycheck;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import net.alexweinert.coolc.processors.cool.frontend.semantic_check.InterfaceChecker;
-import net.alexweinert.coolc.processors.cool.frontend.semantic_check.SemanticErrorReporter;
+import net.alexweinert.coolc.processors.cool.hierarchycheck.InterfaceChecker;
+import net.alexweinert.coolc.processors.cool.hierarchycheck.SemanticErrorReporter;
 import net.alexweinert.coolc.representations.cool.ast.ASTFactory;
 import net.alexweinert.coolc.representations.cool.ast.Attribute;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
