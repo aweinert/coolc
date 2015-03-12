@@ -9,22 +9,22 @@ import java.util.Map;
 import net.alexweinert.coolc.representations.cool.program.parsed.Attribute;
 import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
 import net.alexweinert.coolc.representations.cool.program.parsed.Method;
+import net.alexweinert.coolc.representations.cool.program.parsed.ParsedProgramVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 public class DeclaredClassSignature extends ClassSignature {
-    private static class SignatureBuilder extends Visitor {
+    private static class SignatureBuilder extends ParsedProgramVisitor {
         private final List<Attribute> attributes = new LinkedList<>();
         private final List<MethodSignature> methodSignatures = new LinkedList<>();
 
         @Override
-        public void visitAttributePostorder(Attribute attribute) {
+        public void visitAttribute(Attribute attribute) {
             this.attributes.add(attribute);
         }
 
         @Override
-        public void visitMethodPostorder(Method method) {
+        public void visitMethod(Method method) {
             this.methodSignatures.add(MethodSignature.getFactory().create(method));
         }
     }
