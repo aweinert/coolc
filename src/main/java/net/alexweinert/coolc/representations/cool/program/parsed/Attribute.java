@@ -1,8 +1,8 @@
 package net.alexweinert.coolc.representations.cool.program.parsed;
 
 import net.alexweinert.coolc.representations.cool.expressions.untyped.Expression;
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * Defines AST constructor 'attr'.
@@ -44,10 +44,8 @@ public class Attribute extends Feature {
     }
 
     @Override
-    public void acceptVisitor(Visitor visitor) {
-        visitor.visitAttributePreorder(this);
-        this.init.acceptVisitor(visitor);
-        visitor.visitAttributePostorder(this);
+    public void acceptVisitor(ParsedProgramVisitor visitor) {
+        visitor.visitAttribute(this);
     }
 
     public IdSymbol getDeclaredType() {

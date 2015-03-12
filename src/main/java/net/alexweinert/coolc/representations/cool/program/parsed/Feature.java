@@ -16,6 +16,8 @@ public abstract class Feature extends TreeNode {
         return this.name;
     }
 
+    public abstract void acceptVisitor(ParsedProgramVisitor visitor);
+
     @Override
     public int hashCode() {
         final int prime = 31;

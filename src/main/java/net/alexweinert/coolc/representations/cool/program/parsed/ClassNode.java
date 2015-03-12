@@ -3,9 +3,9 @@ package net.alexweinert.coolc.representations.cool.program.parsed;
 import java.util.Iterator;
 import java.util.List;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.util.TreeNode;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * Defines AST constructor 'class_c'.
@@ -36,8 +36,7 @@ public class ClassNode extends TreeNode {
         features = a3;
     }
 
-    @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ParsedProgramVisitor visitor) {
         visitor.visitClassPreorder(this);
         this.features.acceptVisitor(visitor);
         visitor.visitClassPostorder(this);

@@ -3,9 +3,9 @@ package net.alexweinert.coolc.representations.cool.program.parsed;
 import java.util.Iterator;
 import java.util.List;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.util.TreeNode;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * The complete program. Root node of a well-formed AST
@@ -39,8 +39,7 @@ public class Program extends TreeNode {
         return null;
     }
 
-    @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ParsedProgramVisitor visitor) {
         visitor.visitProgramPreorder(this);
         this.classes.acceptVisitor(visitor);
         visitor.visitProgramPostorder(this);

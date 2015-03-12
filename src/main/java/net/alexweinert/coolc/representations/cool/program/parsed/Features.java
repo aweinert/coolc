@@ -3,8 +3,8 @@ package net.alexweinert.coolc.representations.cool.program.parsed;
 import java.util.Collection;
 import java.util.Iterator;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.util.ListNode;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * Defines list phylum Features
@@ -35,8 +35,7 @@ public class Features extends ListNode<Feature> {
         return new Features(this.getFilename(), this.getLineNumber(), newElements);
     }
 
-    @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ParsedProgramVisitor visitor) {
         visitor.visitFeaturesPreorder(this);
         final Iterator<Feature> iterator = this.iterator();
         while (iterator.hasNext()) {

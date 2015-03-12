@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.util.ListNode;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * Defines list phylum Classes
@@ -52,8 +52,7 @@ public class Classes extends ListNode<ClassNode> {
         return this;
     }
 
-    @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ParsedProgramVisitor visitor) {
         visitor.visitClassesPreorder(this);
         final Iterator<ClassNode> iterator = this.iterator();
         while (iterator.hasNext()) {

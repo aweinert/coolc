@@ -3,8 +3,8 @@ package net.alexweinert.coolc.representations.cool.program.parsed;
 import java.util.Collection;
 import java.util.Iterator;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.util.ListNode;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * Defines list phylum Formals
@@ -33,18 +33,5 @@ public class Formals extends ListNode<Formal> {
         final Collection<Formal> newElements = this.copyElements();
         newElements.remove(node);
         return new Formals(this.getFilename(), this.getLineNumber(), newElements);
-    }
-
-    @Override
-    public void acceptVisitor(Visitor visitor) {
-        visitor.visitFormalsPreorder(this);
-        final Iterator<Formal> iterator = this.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().acceptVisitor(visitor);
-            if (iterator.hasNext()) {
-                visitor.visitFormalsInorder(this);
-            }
-        }
-        visitor.visitFormalsPostorder(this);
     }
 }

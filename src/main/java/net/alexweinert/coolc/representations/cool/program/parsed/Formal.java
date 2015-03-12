@@ -1,8 +1,8 @@
 package net.alexweinert.coolc.representations.cool.program.parsed;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.util.TreeNode;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * Defines AST constructor 'formalc'.
@@ -27,11 +27,6 @@ public class Formal extends TreeNode {
         super(filename, lineNumber);
         name = a1;
         type_decl = a2;
-    }
-
-    @Override
-    public void acceptVisitor(Visitor visitor) {
-        visitor.visitFormal(this);
     }
 
     public IdSymbol getIdentifier() {

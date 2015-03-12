@@ -3,8 +3,8 @@ package net.alexweinert.coolc.representations.cool.program.parsed;
 import java.util.Iterator;
 
 import net.alexweinert.coolc.representations.cool.expressions.untyped.Expression;
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * Defines AST constructor 'method'.
@@ -49,13 +49,8 @@ public class Method extends Feature {
         return this.return_type;
     }
 
-    @Override
-    public void acceptVisitor(Visitor visitor) {
-        visitor.visitMethodPreorder(this);
-        this.formals.acceptVisitor(visitor);
-        visitor.visitMethodInorder(this);
-        this.expr.acceptVisitor(visitor);
-        visitor.visitMethodPostorder(this);
+    public void acceptVisitor(ParsedProgramVisitor visitor) {
+        visitor.visitMethod(this);
     }
 
     @Override
