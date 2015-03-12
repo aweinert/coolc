@@ -70,19 +70,16 @@ class ExpressionTypeChecker extends Visitor {
     @Override
     public void visitBoolConst(BoolConst boolConst) {
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
-        boolConst.setType(IdTable.getInstance().getBoolSymbol());
     }
 
     @Override
     public void visitIntConst(IntConst intConst) {
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getIntSymbol()));
-        intConst.setType(IdTable.getInstance().getIntSymbol());
     }
 
     @Override
     public void visitStringConstant(StringConst stringConst) {
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getStringSymbol()));
-        stringConst.setType(IdTable.getInstance().getStringSymbol());
     }
 
     @Override
@@ -96,7 +93,6 @@ class ExpressionTypeChecker extends Visitor {
             referenceType = ExpressionType.create(IdTable.getInstance().getObjectSymbol());
         }
         this.argumentTypes.push(referenceType);
-        objectReference.setType(referenceType.getTypeId(this.classId));
     }
 
     @Override
@@ -129,7 +125,6 @@ class ExpressionTypeChecker extends Visitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(intSymbol));
-        arithmeticNegation.setType(intSymbol);
     }
 
     private void visitBinaryArithmeticOperation(Expression operation) {
@@ -146,7 +141,6 @@ class ExpressionTypeChecker extends Visitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(intSymbol));
-        operation.setType(intSymbol);
     }
 
     @Override
@@ -179,7 +173,6 @@ class ExpressionTypeChecker extends Visitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
-        equality.setType(IdTable.getInstance().getBoolSymbol());
 
     }
 
@@ -197,7 +190,6 @@ class ExpressionTypeChecker extends Visitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
-        operation.setType(IdTable.getInstance().getBoolSymbol());
     }
 
     @Override
@@ -210,7 +202,6 @@ class ExpressionTypeChecker extends Visitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(boolSymbol));
-        booleanNegation.setType(boolSymbol);
     }
 
     @Override
@@ -223,13 +214,11 @@ class ExpressionTypeChecker extends Visitor {
 
         if (this.hierarchy.conformsTo(rhsTypeId, lhsTypeId)) {
             this.argumentTypes.push(rhsType);
-            assign.setType(rhsTypeId);
         } else {
             err.reportTypeMismatch(assign, rhsTypeId, lhsTypeId);
             final IdSymbol lhsDeclaredType = this.variablesScopes.peek().getVariableType(assignedVariable)
                     .getTypeId(this.classId);
             this.argumentTypes.push(ExpressionType.create(lhsDeclaredType));
-            assign.setType(lhsDeclaredType);
         }
     }
 
@@ -251,7 +240,6 @@ class ExpressionTypeChecker extends Visitor {
                 this.hierarchy);
 
         this.argumentTypes.push(leastUpperBound);
-        ifNode.setType(leastUpperBound.getTypeId(this.classId));
     }
 
     @Override
@@ -297,7 +285,6 @@ class ExpressionTypeChecker extends Visitor {
     @Override
     public void visitLetPostorder(Let let) {
         this.variablesScopes.pop();
-        let.setType(this.argumentTypes.peek().getTypeId(this.classId));
     }
 
     @Override
@@ -311,7 +298,6 @@ class ExpressionTypeChecker extends Visitor {
         this.methodSignatures.pop();
         this.methodDefiningClasses.pop();
         this.argumentTypes.push(this.methodReturnTypes.pop());
-        call.setType(this.argumentTypes.peek().getTypeId(this.classId));
     }
 
     @Override
@@ -330,13 +316,11 @@ class ExpressionTypeChecker extends Visitor {
         this.methodSignatures.pop();
         this.methodDefiningClasses.pop();
         this.argumentTypes.push(this.methodReturnTypes.pop());
-        call.setType(this.argumentTypes.peek().getTypeId(this.classId));
     }
 
     @Override
     public void visitNew(New newNode) {
         this.argumentTypes.push(ExpressionType.create(newNode.getTypeIdentifier()));
-        newNode.setType(newNode.getTypeIdentifier());
     }
 
     /**
@@ -416,7 +400,6 @@ class ExpressionTypeChecker extends Visitor {
             leastUpperBound = leastUpperBound.computeLeastUpperBound(typeIterator.next(), this.classId, this.hierarchy);
         }
         this.argumentTypes.push(leastUpperBound);
-        typecase.setType(leastUpperBound.getTypeId(this.classId));
     }
 
     @Override
