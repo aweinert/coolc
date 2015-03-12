@@ -1,5 +1,6 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
@@ -7,10 +8,10 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class FunctionCall extends Expression {
-    final protected Expression expr;
+public class TypedFunctionCall extends TypedExpression {
+    final protected TypedExpression expr;
     final protected IdSymbol name;
-    final protected ArgumentExpressions actual;
+    final protected TypedArgumentExpressions actual;
 
     /**
      * Creates "dispatch" AST node.
@@ -24,15 +25,16 @@ public class FunctionCall extends Expression {
      * @param a2
      *            initial value for actual
      */
-    public FunctionCall(String filename, int lineNumber, Expression a1, IdSymbol a2, ArgumentExpressions a3) {
-        super(filename, lineNumber);
+    public TypedFunctionCall(String filename, int lineNumber, IdSymbol type, TypedExpression a1, IdSymbol a2,
+            TypedArgumentExpressions a3) {
+        super(filename, lineNumber, type);
         expr = a1;
         name = a2;
         actual = a3;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitFunctionCallPreorder(this);
         this.expr.acceptVisitor(visitor);
         visitor.visitFunctionCallInorder(this);
@@ -65,7 +67,7 @@ public class FunctionCall extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        FunctionCall other = (FunctionCall) obj;
+        TypedFunctionCall other = (TypedFunctionCall) obj;
         if (actual == null) {
             if (other.actual != null) {
                 return false;
@@ -90,7 +92,7 @@ public class FunctionCall extends Expression {
         return true;
     }
 
-    public ArgumentExpressions getArguments() {
+    public TypedArgumentExpressions getArguments() {
         return this.actual;
     }
 

@@ -1,13 +1,14 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
-
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
  * Defines AST constructor 'bool_const'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class BoolConst extends Expression {
+public class TypedBoolConst extends TypedExpression {
     final protected Boolean val;
 
     /**
@@ -18,13 +19,13 @@ public class BoolConst extends Expression {
      * @param a0
      *            initial value for val
      */
-    public BoolConst(String filename, int lineNumber, Boolean a1) {
-        super(filename, lineNumber);
+    public TypedBoolConst(String filename, int lineNumber, IdSymbol type, Boolean a1) {
+        super(filename, lineNumber, type);
         this.val = a1;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitBoolConst(this);
     }
 
@@ -51,7 +52,7 @@ public class BoolConst extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        BoolConst other = (BoolConst) obj;
+        TypedBoolConst other = (TypedBoolConst) obj;
         if (val == null) {
             if (other.val != null) {
                 return false;

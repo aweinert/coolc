@@ -1,7 +1,6 @@
 package net.alexweinert.coolc.representations.cool.expressions.untyped;
 
 import net.alexweinert.coolc.representations.cool.symboltables.StringSymbol;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * Defines AST constructor 'string_const'.
@@ -25,7 +24,7 @@ public class StringConst extends Expression {
     }
 
     @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ExpressionVisitor visitor) {
         visitor.visitStringConstant(this);
     }
 

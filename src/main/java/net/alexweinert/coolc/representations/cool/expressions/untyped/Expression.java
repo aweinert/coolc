@@ -7,4 +7,6 @@ public abstract class Expression extends TreeNode {
     protected Expression(String filename, int lineNumber) {
         super(filename, lineNumber);
     }
+
+    public abstract void acceptVisitor(ExpressionVisitor visitor);
 }

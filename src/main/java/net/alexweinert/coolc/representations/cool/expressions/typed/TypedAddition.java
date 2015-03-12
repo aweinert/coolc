@@ -1,45 +1,40 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
- * Defines AST constructor 'eq'.
+ * Defines AST constructor 'plus'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Equality extends Expression {
-    final protected Expression e1;
-    final protected Expression e2;
+public class TypedAddition extends TypedExpression {
+    final private TypedExpression e1;
+    final private TypedExpression e2;
 
     /**
-     * Creates "eq" AST node.
+     * Creates "plus" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
-     * @param a0
-     *            initial value for e1
      * @param a1
+     *            initial value for e1
+     * @param a2
      *            initial value for e2
      */
-    public Equality(String filename, int lineNumber, Expression a1, Expression a2) {
-        super(filename, lineNumber);
-        e1 = a1;
-        e2 = a2;
-    }
-
-    private boolean isBasicType(IdSymbol candidate) {
-        return candidate.equals(TreeConstants.Int) || candidate.equals(TreeConstants.Bool)
-                || candidate.equals(TreeConstants.Str);
+    public TypedAddition(String filename, int lineNumber, IdSymbol type, TypedExpression a1, TypedExpression a2) {
+        super(filename, lineNumber, type);
+        this.e1 = a1;
+        this.e2 = a2;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
-        visitor.visitEqualityPreorder(this);
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
+        visitor.visitAdditionPreorder(this);
         this.e1.acceptVisitor(visitor);
-        visitor.visitEqualityInorder(this);
+        visitor.visitAdditionInorder(this);
         this.e2.acceptVisitor(visitor);
-        visitor.visitEqualityPostorder(this);
+        visitor.visitAdditionPostorder(this);
     }
 
     @Override
@@ -62,7 +57,7 @@ public class Equality extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Equality other = (Equality) obj;
+        TypedAddition other = (TypedAddition) obj;
         if (e1 == null) {
             if (other.e1 != null) {
                 return false;

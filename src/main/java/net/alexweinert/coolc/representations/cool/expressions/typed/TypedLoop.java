@@ -1,15 +1,15 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
-
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
  * Defines AST constructor 'loop'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Loop extends Expression {
-    final protected Expression pred;
-    final protected Expression body;
+public class TypedLoop extends TypedExpression {
+    final protected TypedExpression pred;
+    final protected TypedExpression body;
 
     /**
      * Creates "loop" AST node.
@@ -21,14 +21,14 @@ public class Loop extends Expression {
      * @param a1
      *            initial value for body
      */
-    public Loop(String filename, int lineNumber, Expression a1, Expression a2) {
-        super(filename, lineNumber);
+    public TypedLoop(String filename, int lineNumber, IdSymbol type, TypedExpression a1, TypedExpression a2) {
+        super(filename, lineNumber, type);
         pred = a1;
         body = a2;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitLoopPreorder(this);
         this.pred.acceptVisitor(visitor);
         visitor.visitLoopInorder(this);
@@ -56,7 +56,7 @@ public class Loop extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Loop other = (Loop) obj;
+        TypedLoop other = (TypedLoop) obj;
         if (body == null) {
             if (other.body != null) {
                 return false;
@@ -74,7 +74,7 @@ public class Loop extends Expression {
         return true;
     }
 
-    public Expression getCondition() {
+    public TypedExpression getCondition() {
         return this.pred;
     }
 

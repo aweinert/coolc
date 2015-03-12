@@ -1,5 +1,6 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
@@ -7,11 +8,11 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Let extends Expression {
+public class TypedLet extends TypedExpression {
     final protected IdSymbol identifier;
     final protected IdSymbol type_decl;
-    final protected Expression init;
-    final protected Expression body;
+    final protected TypedExpression init;
+    final protected TypedExpression body;
 
     /**
      * Creates "let" AST node.
@@ -27,8 +28,9 @@ public class Let extends Expression {
      * @param a3
      *            initial value for body
      */
-    public Let(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, Expression a3, Expression a4) {
-        super(filename, lineNumber);
+    public TypedLet(String filename, int lineNumber, IdSymbol type, IdSymbol a1, IdSymbol a2, TypedExpression a3,
+            TypedExpression a4) {
+        super(filename, lineNumber, type);
         identifier = a1;
         type_decl = a2;
         init = a3;
@@ -36,7 +38,7 @@ public class Let extends Expression {
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitLetPreorder(this);
         this.init.acceptVisitor(visitor);
         visitor.visitLetInorder(this);
@@ -74,7 +76,7 @@ public class Let extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Let other = (Let) obj;
+        TypedLet other = (TypedLet) obj;
         if (body == null) {
             if (other.body != null) {
                 return false;
@@ -106,7 +108,7 @@ public class Let extends Expression {
         return true;
     }
 
-    public Expression getInitializer() {
+    public TypedExpression getInitializer() {
         return this.init;
     }
 

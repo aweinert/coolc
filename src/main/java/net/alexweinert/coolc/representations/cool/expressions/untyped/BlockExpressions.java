@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import net.alexweinert.coolc.representations.cool.util.ListNode;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 public class BlockExpressions extends ListNode<Expression> {
 
@@ -30,8 +29,7 @@ public class BlockExpressions extends ListNode<Expression> {
         return new BlockExpressions(this.getFilename(), this.getLineNumber(), newElements);
     }
 
-    @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ExpressionVisitor visitor) {
         visitor.visitBlockExpressionsPreorder(this);
         final Iterator<Expression> iterator = this.iterator();
         while (iterator.hasNext()) {

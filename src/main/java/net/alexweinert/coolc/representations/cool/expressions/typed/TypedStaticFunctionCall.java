@@ -1,47 +1,47 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
- * Defines AST constructor 'dispatch'.
+ * Defines AST constructor 'static_dispatch'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class FunctionCall extends Expression {
-    final protected Expression expr;
-    final protected IdSymbol name;
-    final protected ArgumentExpressions actual;
+public class TypedStaticFunctionCall extends TypedFunctionCall {
+    final protected IdSymbol type_name;
 
     /**
-     * Creates "dispatch" AST node.
+     * Creates "static_dispatch" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
-     * @param a0
-     *            initial value for expr
      * @param a1
-     *            initial value for name
+     *            initial value for expr
      * @param a2
+     *            initial value for type_name
+     * @param a3
+     *            initial value for name
+     * @param a4
      *            initial value for actual
      */
-    public FunctionCall(String filename, int lineNumber, Expression a1, IdSymbol a2, ArgumentExpressions a3) {
-        super(filename, lineNumber);
-        expr = a1;
-        name = a2;
-        actual = a3;
+    public TypedStaticFunctionCall(String filename, int lineNumber, IdSymbol type, TypedExpression a1, IdSymbol a2,
+            IdSymbol a3, TypedArgumentExpressions a4) {
+        super(filename, lineNumber, type, a1, a3, a4);
+        type_name = a2;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
-        visitor.visitFunctionCallPreorder(this);
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
+        visitor.visitStaticFunctionCallPreorder(this);
         this.expr.acceptVisitor(visitor);
-        visitor.visitFunctionCallInorder(this);
+        visitor.visitStaticFunctionCallInorder(this);
         this.actual.acceptVisitor(visitor);
-        visitor.visitFunctionCallPostorder(this);
+        visitor.visitStaticFunctionCallPostorder(this);
     }
 
-    public IdSymbol getFunctionIdentifier() {
-        return name;
+    public IdSymbol getStaticType() {
+        return type_name;
     }
 
     @Override
@@ -51,6 +51,7 @@ public class FunctionCall extends Expression {
         result = prime * result + ((actual == null) ? 0 : actual.hashCode());
         result = prime * result + ((expr == null) ? 0 : expr.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((type_name == null) ? 0 : type_name.hashCode());
         return result;
     }
 
@@ -65,7 +66,7 @@ public class FunctionCall extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        FunctionCall other = (FunctionCall) obj;
+        TypedStaticFunctionCall other = (TypedStaticFunctionCall) obj;
         if (actual == null) {
             if (other.actual != null) {
                 return false;
@@ -87,11 +88,18 @@ public class FunctionCall extends Expression {
         } else if (!name.equals(other.name)) {
             return false;
         }
+        if (type_name == null) {
+            if (other.type_name != null) {
+                return false;
+            }
+        } else if (!type_name.equals(other.type_name)) {
+            return false;
+        }
         return true;
     }
 
-    public ArgumentExpressions getArguments() {
-        return this.actual;
+    public TypedExpression getCallee() {
+        return this.expr;
     }
 
 }

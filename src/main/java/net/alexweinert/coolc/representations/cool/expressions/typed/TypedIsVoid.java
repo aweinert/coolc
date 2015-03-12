@@ -1,42 +1,41 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
- * Defines AST constructor 'new_'.
+ * Defines AST constructor 'isvoid'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class New extends Expression {
-    final protected IdSymbol type_name;
+public class TypedIsVoid extends TypedExpression {
+    final protected TypedExpression e1;
 
     /**
-     * Creates "new_" AST node.
+     * Creates "isvoid" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
      * @param a0
-     *            initial value for type_name
+     *            initial value for e1
      */
-    public New(String filename, int lineNumber, IdSymbol a1) {
-        super(filename, lineNumber);
-        type_name = a1;
+    public TypedIsVoid(String filename, int lineNumber, IdSymbol type, TypedExpression a1) {
+        super(filename, lineNumber, type);
+        e1 = a1;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
-        visitor.visitNew(this);
-    }
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
+        visitor.visitIsVoidPreorder(this);
+        this.e1.acceptVisitor(visitor);
+        visitor.visitIsVoidPostorder(this);
 
-    public IdSymbol getTypeIdentifier() {
-        return type_name;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + ((type_name == null) ? 0 : type_name.hashCode());
+        result = prime * result + ((e1 == null) ? 0 : e1.hashCode());
         return result;
     }
 
@@ -51,12 +50,12 @@ public class New extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        New other = (New) obj;
-        if (type_name == null) {
-            if (other.type_name != null) {
+        TypedIsVoid other = (TypedIsVoid) obj;
+        if (e1 == null) {
+            if (other.e1 != null) {
                 return false;
             }
-        } else if (!type_name.equals(other.type_name)) {
+        } else if (!e1.equals(other.e1)) {
             return false;
         }
         return true;

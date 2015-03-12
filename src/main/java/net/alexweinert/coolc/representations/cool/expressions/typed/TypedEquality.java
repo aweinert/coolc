@@ -1,5 +1,6 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
@@ -8,9 +9,9 @@ import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Equality extends Expression {
-    final protected Expression e1;
-    final protected Expression e2;
+public class TypedEquality extends TypedExpression {
+    final protected TypedExpression e1;
+    final protected TypedExpression e2;
 
     /**
      * Creates "eq" AST node.
@@ -22,8 +23,8 @@ public class Equality extends Expression {
      * @param a1
      *            initial value for e2
      */
-    public Equality(String filename, int lineNumber, Expression a1, Expression a2) {
-        super(filename, lineNumber);
+    public TypedEquality(String filename, int lineNumber, IdSymbol type, TypedExpression a1, TypedExpression a2) {
+        super(filename, lineNumber, type);
         e1 = a1;
         e2 = a2;
     }
@@ -34,7 +35,7 @@ public class Equality extends Expression {
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitEqualityPreorder(this);
         this.e1.acceptVisitor(visitor);
         visitor.visitEqualityInorder(this);
@@ -62,7 +63,7 @@ public class Equality extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Equality other = (Equality) obj;
+        TypedEquality other = (TypedEquality) obj;
         if (e1 == null) {
             if (other.e1 != null) {
                 return false;

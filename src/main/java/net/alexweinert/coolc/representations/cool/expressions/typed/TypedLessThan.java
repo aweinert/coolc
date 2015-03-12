@@ -1,19 +1,18 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
 
 /**
- * Defines AST constructor 'eq'.
+ * Defines AST constructor 'lt'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Equality extends Expression {
-    final protected Expression e1;
-    final protected Expression e2;
+public class TypedLessThan extends TypedExpression {
+    final protected TypedExpression e1;
+    final protected TypedExpression e2;
 
     /**
-     * Creates "eq" AST node.
+     * Creates "lt" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
@@ -22,30 +21,25 @@ public class Equality extends Expression {
      * @param a1
      *            initial value for e2
      */
-    public Equality(String filename, int lineNumber, Expression a1, Expression a2) {
-        super(filename, lineNumber);
+    public TypedLessThan(String filename, int lineNumber, IdSymbol type, TypedExpression a1, TypedExpression a2) {
+        super(filename, lineNumber, type);
         e1 = a1;
         e2 = a2;
     }
 
-    private boolean isBasicType(IdSymbol candidate) {
-        return candidate.equals(TreeConstants.Int) || candidate.equals(TreeConstants.Bool)
-                || candidate.equals(TreeConstants.Str);
-    }
-
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
-        visitor.visitEqualityPreorder(this);
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
+        visitor.visitLessThanPreorder(this);
         this.e1.acceptVisitor(visitor);
-        visitor.visitEqualityInorder(this);
+        visitor.visitLessThanInorder(this);
         this.e2.acceptVisitor(visitor);
-        visitor.visitEqualityPostorder(this);
+        visitor.visitLessThanPostorder(this);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + ((e1 == null) ? 0 : e1.hashCode());
         result = prime * result + ((e2 == null) ? 0 : e2.hashCode());
         return result;
@@ -56,13 +50,13 @@ public class Equality extends Expression {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (!super.equals(obj)) {
             return false;
         }
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Equality other = (Equality) obj;
+        TypedLessThan other = (TypedLessThan) obj;
         if (e1 == null) {
             if (other.e1 != null) {
                 return false;

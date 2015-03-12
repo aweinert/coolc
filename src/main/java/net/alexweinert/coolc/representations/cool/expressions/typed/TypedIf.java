@@ -1,16 +1,16 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
-
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
  * Defines AST constructor 'cond'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class If extends Expression {
-    final protected Expression pred;
-    final protected Expression then_exp;
-    final protected Expression else_exp;
+public class TypedIf extends TypedExpression {
+    final protected TypedExpression pred;
+    final protected TypedExpression then_exp;
+    final protected TypedExpression else_exp;
 
     /**
      * Creates "cond" AST node.
@@ -24,15 +24,16 @@ public class If extends Expression {
      * @param a2
      *            initial value for else_exp
      */
-    public If(String filename, int lineNumber, Expression a1, Expression a2, Expression a3) {
-        super(filename, lineNumber);
+    public TypedIf(String filename, int lineNumber, IdSymbol type, TypedExpression a1, TypedExpression a2,
+            TypedExpression a3) {
+        super(filename, lineNumber, type);
         pred = a1;
         then_exp = a2;
         else_exp = a3;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitIfPreorder(this);
         this.pred.acceptVisitor(visitor);
         visitor.visitIfPreorderOne(this);
@@ -63,7 +64,7 @@ public class If extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        If other = (If) obj;
+        TypedIf other = (TypedIf) obj;
         if (else_exp == null) {
             if (other.else_exp != null) {
                 return false;
@@ -88,7 +89,7 @@ public class If extends Expression {
         return true;
     }
 
-    public Expression getCondition() {
+    public TypedExpression getCondition() {
         return this.pred;
     }
 

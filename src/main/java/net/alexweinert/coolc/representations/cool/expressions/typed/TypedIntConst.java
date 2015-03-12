@@ -1,5 +1,6 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;
 
 /**
@@ -7,7 +8,7 @@ import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class IntConst extends Expression {
+public class TypedIntConst extends TypedExpression {
     final protected IntSymbol token;
 
     /**
@@ -18,13 +19,13 @@ public class IntConst extends Expression {
      * @param a0
      *            initial value for token
      */
-    public IntConst(String filename, int lineNumber, IntSymbol a1) {
-        super(filename, lineNumber);
+    public TypedIntConst(String filename, int lineNumber, IdSymbol type, IntSymbol a1) {
+        super(filename, lineNumber, type);
         token = a1;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitIntConst(this);
     }
 
@@ -51,7 +52,7 @@ public class IntConst extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        IntConst other = (IntConst) obj;
+        TypedIntConst other = (TypedIntConst) obj;
         if (token == null) {
             if (other.token != null) {
                 return false;

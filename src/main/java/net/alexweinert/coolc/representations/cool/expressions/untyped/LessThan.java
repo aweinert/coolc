@@ -1,6 +1,5 @@
 package net.alexweinert.coolc.representations.cool.expressions.untyped;
 
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 
 /**
@@ -29,7 +28,7 @@ public class LessThan extends Expression {
     }
 
     @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ExpressionVisitor visitor) {
         visitor.visitLessThanPreorder(this);
         this.e1.acceptVisitor(visitor);
         visitor.visitLessThanInorder(this);

@@ -2,7 +2,6 @@ package net.alexweinert.coolc.representations.cool.expressions.untyped;
 
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.util.TreeNode;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * Defines AST constructor 'branch'.
@@ -33,8 +32,7 @@ public class Case extends TreeNode {
         this.expr = a3;
     }
 
-    @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ExpressionVisitor visitor) {
         visitor.visitCasePreorder(this);
         this.expr.acceptVisitor(visitor);
         visitor.visitCasePostorder(this);

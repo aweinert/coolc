@@ -1,6 +1,5 @@
 package net.alexweinert.coolc.representations.cool.expressions.untyped;
 
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 
 /**
@@ -20,7 +19,7 @@ public class NoExpression extends Expression {
     }
 
     @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ExpressionVisitor visitor) {
         visitor.visitNoExpression(this);
     }
 

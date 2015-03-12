@@ -1,5 +1,6 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
@@ -7,10 +8,10 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Assign extends Expression {
+public class TypedAssign extends TypedExpression {
     final protected IdSymbol name;
 
-    final protected Expression expr;
+    final protected TypedExpression expr;
 
     /**
      * Creates "assign" AST node.
@@ -22,14 +23,14 @@ public class Assign extends Expression {
      * @param a1
      *            initial value for expr
      */
-    public Assign(String filename, int lineNumber, IdSymbol a1, Expression a2) {
-        super(filename, lineNumber);
+    public TypedAssign(String filename, int lineNumber, IdSymbol type, IdSymbol a1, TypedExpression a2) {
+        super(filename, lineNumber, type);
         this.name = a1;
         this.expr = a2;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitAssignPreorder(this);
         this.expr.acceptVisitor(visitor);
         visitor.visitAssignPostorder(this);
@@ -59,7 +60,7 @@ public class Assign extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Assign other = (Assign) obj;
+        TypedAssign other = (TypedAssign) obj;
         if (expr == null) {
             if (other.expr != null) {
                 return false;

@@ -1,6 +1,5 @@
 package net.alexweinert.coolc.representations.cool.expressions.untyped;
 
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 
 /**
@@ -25,7 +24,7 @@ public class ArithmeticNegation extends Expression {
     }
 
     @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ExpressionVisitor visitor) {
         visitor.visitArithmeticNegationPreorder(this);
         this.e1.acceptVisitor(visitor);
         visitor.visitArithmeticNegationPostOrder(this);

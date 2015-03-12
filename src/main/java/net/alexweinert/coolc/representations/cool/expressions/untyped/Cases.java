@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import net.alexweinert.coolc.representations.cool.util.ListNode;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * Defines list phylum Cases
@@ -35,8 +34,7 @@ public class Cases extends ListNode<Case> {
         return new Cases(this.getFilename(), this.getLineNumber(), newElements);
     }
 
-    @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ExpressionVisitor visitor) {
         visitor.visitCasesPreorder(this);
         final Iterator<Case> iterator = this.iterator();
         while (iterator.hasNext()) {

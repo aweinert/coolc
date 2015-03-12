@@ -1,15 +1,15 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
-
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
  * Defines AST constructor 'typcase'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Typecase extends Expression {
-    final protected Expression expr;
-    final protected Cases cases;
+public class TypedTypecase extends TypedExpression {
+    final protected TypedExpression expr;
+    final protected TypedCases cases;
 
     /**
      * Creates "typcase" AST node.
@@ -21,14 +21,14 @@ public class Typecase extends Expression {
      * @param a1
      *            initial value for cases
      */
-    public Typecase(String filename, int lineNumber, Expression a1, Cases a2) {
-        super(filename, lineNumber);
+    public TypedTypecase(String filename, int lineNumber, IdSymbol type, TypedExpression a1, TypedCases a2) {
+        super(filename, lineNumber, type);
         expr = a1;
         cases = a2;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitTypecasePreorder(this);
         this.expr.acceptVisitor(visitor);
         visitor.visitTypecaseInorder(this);
@@ -56,7 +56,7 @@ public class Typecase extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Typecase other = (Typecase) obj;
+        TypedTypecase other = (TypedTypecase) obj;
         if (cases == null) {
             if (other.cases != null) {
                 return false;
@@ -74,7 +74,7 @@ public class Typecase extends Expression {
         return true;
     }
 
-    public Cases getCases() {
+    public TypedCases getCases() {
         return this.cases;
     }
 

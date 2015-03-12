@@ -1,14 +1,14 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
-
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
  * Defines AST constructor 'block'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Block extends Expression {
-    final protected BlockExpressions body;
+public class TypedBlock extends TypedExpression {
+    final protected TypedBlockExpressions body;
 
     /**
      * Creates "block" AST node.
@@ -18,13 +18,13 @@ public class Block extends Expression {
      * @param a0
      *            initial value for body
      */
-    public Block(String filename, int lineNumber, BlockExpressions a1) {
-        super(filename, lineNumber);
+    public TypedBlock(String filename, int lineNumber, IdSymbol type, TypedBlockExpressions a1) {
+        super(filename, lineNumber, type);
         this.body = a1;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitBlockPreorder(this);
         this.body.acceptVisitor(visitor);
         visitor.visitBlockPostorder(this);
@@ -49,7 +49,7 @@ public class Block extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Block other = (Block) obj;
+        TypedBlock other = (TypedBlock) obj;
         if (body == null) {
             if (other.body != null) {
                 return false;

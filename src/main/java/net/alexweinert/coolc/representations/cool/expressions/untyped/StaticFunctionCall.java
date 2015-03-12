@@ -1,7 +1,6 @@
 package net.alexweinert.coolc.representations.cool.expressions.untyped;
 
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 /**
  * Defines AST constructor 'static_dispatch'.
@@ -32,7 +31,7 @@ public class StaticFunctionCall extends FunctionCall {
     }
 
     @Override
-    public void acceptVisitor(Visitor visitor) {
+    public void acceptVisitor(ExpressionVisitor visitor) {
         visitor.visitStaticFunctionCallPreorder(this);
         this.expr.acceptVisitor(visitor);
         visitor.visitStaticFunctionCallInorder(this);

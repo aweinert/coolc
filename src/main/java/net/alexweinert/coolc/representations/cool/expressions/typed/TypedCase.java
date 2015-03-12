@@ -1,56 +1,59 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.util.TreeNode;
 
 /**
- * Defines AST constructor 'dispatch'.
+ * Defines AST constructor 'branch'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class FunctionCall extends Expression {
-    final protected Expression expr;
+public class TypedCase extends TreeNode {
     final protected IdSymbol name;
-    final protected ArgumentExpressions actual;
+    final protected IdSymbol type_decl;
+    final protected TypedExpression expr;
 
     /**
-     * Creates "dispatch" AST node.
+     * Creates "branch" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
      * @param a0
-     *            initial value for expr
-     * @param a1
      *            initial value for name
+     * @param a1
+     *            initial value for type_decl
      * @param a2
-     *            initial value for actual
+     *            initial value for expr
      */
-    public FunctionCall(String filename, int lineNumber, Expression a1, IdSymbol a2, ArgumentExpressions a3) {
+    public TypedCase(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, TypedExpression a3) {
         super(filename, lineNumber);
-        expr = a1;
-        name = a2;
-        actual = a3;
+        this.name = a1;
+        this.type_decl = a2;
+        this.expr = a3;
     }
 
-    @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
-        visitor.visitFunctionCallPreorder(this);
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
+        visitor.visitCasePreorder(this);
         this.expr.acceptVisitor(visitor);
-        visitor.visitFunctionCallInorder(this);
-        this.actual.acceptVisitor(visitor);
-        visitor.visitFunctionCallPostorder(this);
+        visitor.visitCasePostorder(this);
     }
 
-    public IdSymbol getFunctionIdentifier() {
+    public IdSymbol getVariableIdentifier() {
         return name;
+    }
+
+    public IdSymbol getDeclaredType() {
+        return type_decl;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = super.hashCode();
-        result = prime * result + ((actual == null) ? 0 : actual.hashCode());
+        int result = 1;
         result = prime * result + ((expr == null) ? 0 : expr.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((type_decl == null) ? 0 : type_decl.hashCode());
         return result;
     }
 
@@ -59,20 +62,13 @@ public class FunctionCall extends Expression {
         if (this == obj) {
             return true;
         }
-        if (!super.equals(obj)) {
+        if (obj == null) {
             return false;
         }
         if (getClass() != obj.getClass()) {
             return false;
         }
-        FunctionCall other = (FunctionCall) obj;
-        if (actual == null) {
-            if (other.actual != null) {
-                return false;
-            }
-        } else if (!actual.equals(other.actual)) {
-            return false;
-        }
+        TypedCase other = (TypedCase) obj;
         if (expr == null) {
             if (other.expr != null) {
                 return false;
@@ -87,11 +83,14 @@ public class FunctionCall extends Expression {
         } else if (!name.equals(other.name)) {
             return false;
         }
+        if (type_decl == null) {
+            if (other.type_decl != null) {
+                return false;
+            }
+        } else if (!type_decl.equals(other.type_decl)) {
+            return false;
+        }
         return true;
-    }
-
-    public ArgumentExpressions getArguments() {
-        return this.actual;
     }
 
 }

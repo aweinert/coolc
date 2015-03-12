@@ -1,40 +1,40 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
-
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
- * Defines AST constructor 'isvoid'.
+ * Defines AST constructor 'neg'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class IsVoid extends Expression {
-    final protected Expression e1;
+public class TypedArithmeticNegation extends TypedExpression {
+    final protected TypedExpression e1;
 
     /**
-     * Creates "isvoid" AST node.
+     * Creates "neg" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
      * @param a0
      *            initial value for e1
      */
-    public IsVoid(String filename, int lineNumber, Expression a1) {
-        super(filename, lineNumber);
+    public TypedArithmeticNegation(String filename, int lineNumber, IdSymbol type, TypedExpression a1) {
+        super(filename, lineNumber, type);
         e1 = a1;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
-        visitor.visitIsVoidPreorder(this);
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
+        visitor.visitArithmeticNegationPreorder(this);
         this.e1.acceptVisitor(visitor);
-        visitor.visitIsVoidPostorder(this);
-
+        visitor.visitArithmeticNegationPostOrder(this);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = super.hashCode();
+        int result = 1;
         result = prime * result + ((e1 == null) ? 0 : e1.hashCode());
         return result;
     }
@@ -44,13 +44,13 @@ public class IsVoid extends Expression {
         if (this == obj) {
             return true;
         }
-        if (!super.equals(obj)) {
+        if (obj == null) {
             return false;
         }
         if (getClass() != obj.getClass()) {
             return false;
         }
-        IsVoid other = (IsVoid) obj;
+        TypedArithmeticNegation other = (TypedArithmeticNegation) obj;
         if (e1 == null) {
             if (other.e1 != null) {
                 return false;

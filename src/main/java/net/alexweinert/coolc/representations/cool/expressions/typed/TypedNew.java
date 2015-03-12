@@ -1,5 +1,6 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
@@ -7,7 +8,7 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class New extends Expression {
+public class TypedNew extends TypedExpression {
     final protected IdSymbol type_name;
 
     /**
@@ -18,13 +19,13 @@ public class New extends Expression {
      * @param a0
      *            initial value for type_name
      */
-    public New(String filename, int lineNumber, IdSymbol a1) {
-        super(filename, lineNumber);
+    public TypedNew(String filename, int lineNumber, IdSymbol type, IdSymbol a1) {
+        super(filename, lineNumber, type);
         type_name = a1;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitNew(this);
     }
 
@@ -51,7 +52,7 @@ public class New extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        New other = (New) obj;
+        TypedNew other = (TypedNew) obj;
         if (type_name == null) {
             if (other.type_name != null) {
                 return false;

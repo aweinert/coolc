@@ -1,34 +1,35 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
-import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.StringSymbol;
 
 /**
- * Defines AST constructor 'int_const'.
+ * Defines AST constructor 'string_const'.
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class IntConst extends Expression {
-    final protected IntSymbol token;
+public class TypedStringConst extends TypedExpression {
+    final protected StringSymbol token;
 
     /**
-     * Creates "int_const" AST node.
+     * Creates "string_const" AST node.
      * 
      * @param lineNumber
      *            the line in the source file from which this node came.
      * @param a0
      *            initial value for token
      */
-    public IntConst(String filename, int lineNumber, IntSymbol a1) {
-        super(filename, lineNumber);
+    public TypedStringConst(String filename, int lineNumber, IdSymbol type, StringSymbol a1) {
+        super(filename, lineNumber, type);
         token = a1;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
-        visitor.visitIntConst(this);
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
+        visitor.visitStringConstant(this);
     }
 
-    public IntSymbol getValue() {
+    public StringSymbol getValue() {
         return token;
     }
 
@@ -51,7 +52,7 @@ public class IntConst extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        IntConst other = (IntConst) obj;
+        TypedStringConst other = (TypedStringConst) obj;
         if (token == null) {
             if (other.token != null) {
                 return false;
@@ -61,5 +62,4 @@ public class IntConst extends Expression {
         }
         return true;
     }
-
 }

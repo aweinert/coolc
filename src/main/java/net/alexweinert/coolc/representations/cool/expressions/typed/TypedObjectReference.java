@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.representations.cool.expressions.untyped;
+package net.alexweinert.coolc.representations.cool.expressions.typed;
 
 // -*- mode: java -*-
 //
@@ -8,6 +8,7 @@ package net.alexweinert.coolc.representations.cool.expressions.untyped;
 //
 // ////////////////////////////////////////////////////////
 
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
@@ -15,7 +16,7 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class ObjectReference extends Expression {
+public class TypedObjectReference extends TypedExpression {
     final protected IdSymbol name;
 
     /**
@@ -26,13 +27,13 @@ public class ObjectReference extends Expression {
      * @param a0
      *            initial value for name
      */
-    public ObjectReference(String filename, int lineNumber, IdSymbol a1) {
-        super(filename, lineNumber);
+    public TypedObjectReference(String filename, int lineNumber, IdSymbol type, IdSymbol a1) {
+        super(filename, lineNumber, type);
         name = a1;
     }
 
     @Override
-    public void acceptVisitor(ExpressionVisitor visitor) {
+    public void acceptVisitor(TypedExpressionVisitor visitor) {
         visitor.visitObjectReference(this);
     }
 
@@ -59,7 +60,7 @@ public class ObjectReference extends Expression {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ObjectReference other = (ObjectReference) obj;
+        TypedObjectReference other = (TypedObjectReference) obj;
         if (name == null) {
             if (other.name != null) {
                 return false;
