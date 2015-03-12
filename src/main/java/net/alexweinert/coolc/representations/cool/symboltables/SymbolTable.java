@@ -18,7 +18,7 @@ package net.alexweinert.coolc.representations.cool.symboltables;
 import java.util.Hashtable;
 import java.util.Stack;
 
-import net.alexweinert.coolc.representations.cool.Utilities;
+import net.alexweinert.coolc.representations.cool.util.Utilities;
 
 /**
  * Implements the symbol table data abstraction.

@@ -17,7 +17,7 @@ package net.alexweinert.coolc.representations.cool.symboltables;
 
 import java.io.PrintStream;
 
-import net.alexweinert.coolc.representations.cool.Utilities;
+import net.alexweinert.coolc.representations.cool.util.Utilities;
 
 public class StringTable extends AbstractTable<String> {
 

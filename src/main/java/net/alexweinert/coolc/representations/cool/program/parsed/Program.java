@@ -1,16 +1,19 @@
 package net.alexweinert.coolc.representations.cool.program.parsed;
 
 import java.util.Iterator;
-import java.util.List;
 
-import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
+import net.alexweinert.coolc.representations.cool.symboltables.IntTable;
+import net.alexweinert.coolc.representations.cool.symboltables.StringTable;
+import net.alexweinert.coolc.representations.cool.symboltables.SymbolTables;
 import net.alexweinert.coolc.representations.cool.util.TreeNode;
 
 /**
  * The complete program. Root node of a well-formed AST
  */
 public class Program extends TreeNode {
+    private final SymbolTables symbolTables;
     protected final Classes classes;
 
     /**
@@ -19,9 +22,10 @@ public class Program extends TreeNode {
      * @param classes
      *            initial value for classes
      */
-    public Program(String filename, int lineNumber, Classes classes) {
+    public Program(String filename, int lineNumber, Classes classes, SymbolTables symbolTables) {
         super(filename, lineNumber);
         this.classes = classes;
+        this.symbolTables = symbolTables;
     }
 
     /**
@@ -39,14 +43,30 @@ public class Program extends TreeNode {
         return null;
     }
 
+    public Classes getClasses() {
+        return this.classes;
+    }
+
+    public SymbolTables getSymbolTables() {
+        return this.symbolTables;
+    }
+
+    public IdTable getIdTable() {
+        return symbolTables.getIdTable();
+    }
+
+    public StringTable getStringTable() {
+        return this.symbolTables.getStringTable();
+    }
+
+    public IntTable getIntTable() {
+        return this.symbolTables.getIntTable();
+    }
+
     public void acceptVisitor(ParsedProgramVisitor visitor) {
         visitor.visitProgramPreorder(this);
         this.classes.acceptVisitor(visitor);
         visitor.visitProgramPostorder(this);
-    }
-
-    public Classes getClasses() {
-        return this.classes;
     }
 
     @Override
@@ -77,14 +97,6 @@ public class Program extends TreeNode {
             return false;
         }
         return true;
-    }
-
-    public Program setClasses(Classes newClasses) {
-        return new Program(this.getFilename(), this.getLineNumber(), newClasses);
-    }
-
-    public Program setClasses(List<ClassNode> newClasses) {
-        return this.setClasses(new Classes(this.classes.getFilename(), this.classes.getLineNumber(), newClasses));
     }
 
     @Override
