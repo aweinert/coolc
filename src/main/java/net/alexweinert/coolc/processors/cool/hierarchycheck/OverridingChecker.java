@@ -4,17 +4,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.representations.cool.ast.Visitor;
-import net.alexweinert.coolc.representations.cool.ast.Attribute;
-import net.alexweinert.coolc.representations.cool.ast.ClassNode;
-import net.alexweinert.coolc.representations.cool.ast.Feature;
-import net.alexweinert.coolc.representations.cool.ast.Method;
-import net.alexweinert.coolc.representations.cool.ast.Program;
-import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
-import net.alexweinert.coolc.representations.cool.information.DeclaredClassSignature;
-import net.alexweinert.coolc.representations.cool.information.MethodSignature;
+import net.alexweinert.coolc.representations.cool.program.hierarchichal.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.program.hierarchichal.DeclaredClassSignature;
+import net.alexweinert.coolc.representations.cool.program.hierarchichal.MethodSignature;
+import net.alexweinert.coolc.representations.cool.program.parsed.Attribute;
+import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
+import net.alexweinert.coolc.representations.cool.program.parsed.Feature;
+import net.alexweinert.coolc.representations.cool.program.parsed.Method;
+import net.alexweinert.coolc.representations.cool.program.parsed.Program;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
+import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 class OverridingChecker extends Visitor {
     /**

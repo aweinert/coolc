@@ -2,13 +2,13 @@ package net.alexweinert.coolc.processors.cool.typecheck;
 
 import java.util.Map;
 
-import net.alexweinert.coolc.representations.cool.ast.Attribute;
-import net.alexweinert.coolc.representations.cool.ast.Method;
-import net.alexweinert.coolc.representations.cool.ast.NoExpression;
-import net.alexweinert.coolc.representations.cool.ast.Visitor;
-import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
-import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
+import net.alexweinert.coolc.representations.cool.expressions.untyped.NoExpression;
+import net.alexweinert.coolc.representations.cool.program.hierarchichal.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.program.hierarchichal.DefinedClassSignature;
+import net.alexweinert.coolc.representations.cool.program.parsed.Attribute;
+import net.alexweinert.coolc.representations.cool.program.parsed.Method;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 class ClassTypeChecker extends Visitor {
     final private IdSymbol classId;

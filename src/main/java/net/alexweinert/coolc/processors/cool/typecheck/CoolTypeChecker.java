@@ -5,11 +5,11 @@ import java.util.Map;
 
 import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.infrastructure.Processor;
-import net.alexweinert.coolc.representations.cool.ast.ClassNode;
-import net.alexweinert.coolc.representations.cool.ast.Program;
-import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
-import net.alexweinert.coolc.representations.cool.information.DeclaredClassSignature;
-import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
+import net.alexweinert.coolc.representations.cool.program.hierarchichal.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.program.hierarchichal.DeclaredClassSignature;
+import net.alexweinert.coolc.representations.cool.program.hierarchichal.DefinedClassSignature;
+import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
+import net.alexweinert.coolc.representations.cool.program.parsed.Program;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 

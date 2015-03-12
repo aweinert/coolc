@@ -7,8 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
-import net.alexweinert.coolc.representations.cool.information.MethodSignature;
+import net.alexweinert.coolc.representations.cool.program.hierarchichal.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.program.hierarchichal.MethodSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 class ClassInterfaceBuilder {

@@ -3,9 +3,9 @@ package net.alexweinert.coolc.processors.cool.hierarchycheck;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import net.alexweinert.coolc.representations.cool.ast.ClassNode;
-import net.alexweinert.coolc.representations.cool.ast.Classes;
-import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
+import net.alexweinert.coolc.representations.cool.program.parsed.Classes;
+import net.alexweinert.coolc.representations.cool.program.parsed.Program;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 class MultipleClassesRemover {

@@ -1,10 +1,10 @@
 package net.alexweinert.coolc.processors.cool.hierarchycheck;
 
-import net.alexweinert.coolc.representations.cool.ast.Visitor;
-import net.alexweinert.coolc.representations.cool.ast.ClassNode;
-import net.alexweinert.coolc.representations.cool.ast.Classes;
-import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
+import net.alexweinert.coolc.representations.cool.program.parsed.Classes;
+import net.alexweinert.coolc.representations.cool.program.parsed.Program;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
+import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 class BuiltinInheritanceChecker extends Visitor {
 
