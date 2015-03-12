@@ -5,8 +5,7 @@ import net.alexweinert.coolc.processors.ProcessorBuilder;
 
 public class Main {
     public static void main(String[] args) {
-        final Compiler<String> compiler = new ProcessorBuilder().openFile(args[0]).parseCool().hierarchyCheck()
-                .typeCheck().dumpToConsole();
+        final Compiler<String> compiler = new ProcessorBuilder().openFile(args[0]).parseAndCheckCool().dumpToConsole();
         compiler.compile();
     }
 }

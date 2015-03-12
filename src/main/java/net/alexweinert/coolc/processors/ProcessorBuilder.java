@@ -34,6 +34,11 @@ public class ProcessorBuilder {
         return this;
     }
 
+    public ProcessorBuilder parseAndCheckCool() {
+        this.parseCool().hierarchyCheck().typeCheck();
+        return this;
+    }
+
     public Compiler<String> dumpToConsole() {
         this.frontend = this.frontend.append(new CoolUnparser());
         return this.frontend.append(new StringDumper());
