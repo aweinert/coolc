@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.processors.cool.typechecking;
+package net.alexweinert.coolc.processors.cool.typecheck;
 
 import java.util.Iterator;
 import java.util.LinkedList;

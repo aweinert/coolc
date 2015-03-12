@@ -5,7 +5,7 @@ import net.alexweinert.coolc.infrastructure.Frontend;
 import net.alexweinert.coolc.infrastructure.Compiler;
 import net.alexweinert.coolc.processors.cool.frontend.CoolParser;
 import net.alexweinert.coolc.processors.cool.hierarchycheck.CoolHierarchyChecker;
-import net.alexweinert.coolc.processors.cool.typechecking.CoolTypeChecker;
+import net.alexweinert.coolc.processors.cool.typecheck.CoolTypeChecker;
 import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
 import net.alexweinert.coolc.processors.io.fileopener.FileOpener;
 import net.alexweinert.coolc.processors.io.stringdumper.StringDumper;

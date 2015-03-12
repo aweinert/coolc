@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.processors.cool.typechecking;
+package net.alexweinert.coolc.processors.cool.typecheck;
 
 import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.representations.cool.ast.Attribute;

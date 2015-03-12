@@ -3,6 +3,10 @@ package net.alexweinert.coolc.processors.cool.typechecking;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.alexweinert.coolc.processors.cool.typecheck.ExpressionType;
+import net.alexweinert.coolc.processors.cool.typecheck.ExpressionTypeChecker;
+import net.alexweinert.coolc.processors.cool.typecheck.TypeErrorReporter;
+import net.alexweinert.coolc.processors.cool.typecheck.VariablesScope;
 import net.alexweinert.coolc.representations.cool.ast.ASTFactory;
 import net.alexweinert.coolc.representations.cool.ast.Expression;
 import net.alexweinert.coolc.representations.cool.ast.FunctionCall;
