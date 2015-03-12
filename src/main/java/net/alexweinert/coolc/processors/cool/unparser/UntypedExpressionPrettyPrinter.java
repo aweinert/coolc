@@ -12,6 +12,7 @@ import net.alexweinert.coolc.representations.cool.expressions.untyped.Case;
 import net.alexweinert.coolc.representations.cool.expressions.untyped.Cases;
 import net.alexweinert.coolc.representations.cool.expressions.untyped.Division;
 import net.alexweinert.coolc.representations.cool.expressions.untyped.Equality;
+import net.alexweinert.coolc.representations.cool.expressions.untyped.ExpressionVisitor;
 import net.alexweinert.coolc.representations.cool.expressions.untyped.FunctionCall;
 import net.alexweinert.coolc.representations.cool.expressions.untyped.If;
 import net.alexweinert.coolc.representations.cool.expressions.untyped.IntConst;
@@ -28,25 +29,12 @@ import net.alexweinert.coolc.representations.cool.expressions.untyped.StaticFunc
 import net.alexweinert.coolc.representations.cool.expressions.untyped.StringConst;
 import net.alexweinert.coolc.representations.cool.expressions.untyped.Subtraction;
 import net.alexweinert.coolc.representations.cool.expressions.untyped.Typecase;
-import net.alexweinert.coolc.representations.cool.program.parsed.Attribute;
-import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
-import net.alexweinert.coolc.representations.cool.program.parsed.Classes;
-import net.alexweinert.coolc.representations.cool.program.parsed.Features;
-import net.alexweinert.coolc.representations.cool.program.parsed.Formal;
-import net.alexweinert.coolc.representations.cool.program.parsed.Formals;
-import net.alexweinert.coolc.representations.cool.program.parsed.Method;
-import net.alexweinert.coolc.representations.cool.program.parsed.Program;
-import net.alexweinert.coolc.representations.cool.util.TreeNode;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
-public class PrettyPrinter extends Visitor {
+class UntypedExpressionPrettyPrinter extends ExpressionVisitor {
+    final private StringBuilder stringBuilder;
 
-    final private StringBuilder stringBuilder = new StringBuilder();
-
-    public static String printAst(TreeNode tree) {
-        final PrettyPrinter printer = new PrettyPrinter();
-        tree.acceptVisitor(printer);
-        return printer.stringBuilder.toString();
+    public UntypedExpressionPrettyPrinter(StringBuilder stringBuilder) {
+        this.stringBuilder = stringBuilder;
     }
 
     @Override
@@ -82,17 +70,6 @@ public class PrettyPrinter extends Visitor {
 
     @Override
     public void visitAssignPostorder(Assign assign) {}
-
-    @Override
-    public void visitAttributePreorder(Attribute attribute) {
-        stringBuilder.append(attribute.getName());
-        stringBuilder.append(": ");
-        stringBuilder.append(attribute.getDeclaredType());
-        stringBuilder.append(" <- ");
-    }
-
-    @Override
-    public void visitAttributePostorder(Attribute attribute) {}
 
     @Override
     public void visitBlockPreorder(Block block) {
@@ -144,31 +121,6 @@ public class PrettyPrinter extends Visitor {
     public void visitCasesPostorder(Cases cases) {}
 
     @Override
-    public void visitClassPreorder(ClassNode classNode) {
-        stringBuilder.append("class ");
-        stringBuilder.append(classNode.getIdentifier());
-        stringBuilder.append(" inherits ");
-        stringBuilder.append(classNode.getParent());
-        stringBuilder.append(" {\n");
-    }
-
-    @Override
-    public void visitClassPostorder(ClassNode classNode) {
-        stringBuilder.append("}");
-    }
-
-    @Override
-    public void visitClassesPreorder(Classes classes) {}
-
-    @Override
-    public void visitClassesInorder(Classes classes) {
-        stringBuilder.append(";\n\n");
-    }
-
-    @Override
-    public void visitClassesPostorder(Classes classes) {}
-
-    @Override
     public void visitDivisionPreorder(Division division) {
         stringBuilder.append("(");
     }
@@ -212,38 +164,6 @@ public class PrettyPrinter extends Visitor {
     public void visitBlockExpressionsPostorder(BlockExpressions expressions) {
         stringBuilder.append(";\n");
     }
-
-    @Override
-    public void visitFeaturesPreorder(Features features) {}
-
-    @Override
-    public void visitFeaturesInorder(Features features) {
-        stringBuilder.append(";\n\n");
-    }
-
-    @Override
-    public void visitFeaturesPostorder(Features features) {
-        // Finish the last feature with a ; as well
-        stringBuilder.append(";");
-    }
-
-    @Override
-    public void visitFormal(Formal formal) {
-        stringBuilder.append(formal.getIdentifier());
-        stringBuilder.append(": ");
-        stringBuilder.append(formal.getDeclaredType());
-    }
-
-    @Override
-    public void visitFormalsPreorder(Formals formals) {}
-
-    @Override
-    public void visitFormalsInorder(Formals formals) {
-        stringBuilder.append(", ");
-    }
-
-    @Override
-    public void visitFormalsPostorder(Formals formals) {}
 
     @Override
     public void visitFunctionCallPreorder(FunctionCall functionCall) {}
@@ -356,24 +276,6 @@ public class PrettyPrinter extends Visitor {
     }
 
     @Override
-    public void visitMethodPreorder(Method method) {
-        stringBuilder.append(method.getName());
-        stringBuilder.append("(");
-    }
-
-    @Override
-    public void visitMethodInorder(Method method) {
-        stringBuilder.append("): ");
-        stringBuilder.append(method.getReturnType());
-        stringBuilder.append(" {\n");
-    }
-
-    @Override
-    public void visitMethodPostorder(Method method) {
-        stringBuilder.append("}");
-    }
-
-    @Override
     public void visitMultiplicationPreorder(Multiplication multiplication) {
         stringBuilder.append("(");
     }
@@ -403,12 +305,6 @@ public class PrettyPrinter extends Visitor {
     public void visitObjectReference(ObjectReference objectReference) {
         stringBuilder.append(objectReference.getVariableIdentifier());
     }
-
-    @Override
-    public void visitProgramPreorder(Program program) {}
-
-    @Override
-    public void visitProgramPostorder(Program program) {}
 
     @Override
     public void visitStaticFunctionCallPreorder(StaticFunctionCall staticFunctionCall) {}
