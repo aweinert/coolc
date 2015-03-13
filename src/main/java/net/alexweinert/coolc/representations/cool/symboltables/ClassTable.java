@@ -25,15 +25,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.representations.cool.expressions.untyped.NoExpression;
-import net.alexweinert.coolc.representations.cool.program.parsed.Attribute;
-import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
-import net.alexweinert.coolc.representations.cool.program.parsed.Classes;
-import net.alexweinert.coolc.representations.cool.program.parsed.Features;
-import net.alexweinert.coolc.representations.cool.program.parsed.Formal;
-import net.alexweinert.coolc.representations.cool.program.parsed.Formals;
-import net.alexweinert.coolc.representations.cool.program.parsed.Method;
-import net.alexweinert.coolc.representations.cool.util.TreeNode;
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Classes;
+import net.alexweinert.coolc.representations.cool.ast.Features;
+import net.alexweinert.coolc.representations.cool.ast.Formal;
+import net.alexweinert.coolc.representations.cool.ast.Formals;
+import net.alexweinert.coolc.representations.cool.ast.Method;
+import net.alexweinert.coolc.representations.cool.ast.NoExpression;
+import net.alexweinert.coolc.representations.cool.ast.TreeNode;
 
 /**
  * This class may be used to contain the semantic information such as the inheritance graph. You may use it or not as

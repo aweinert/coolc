@@ -6,38 +6,38 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import net.alexweinert.coolc.representations.cool.expressions.untyped.Addition;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.ArgumentExpressions;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.ArithmeticNegation;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.Assign;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.BlockExpressions;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.BoolConst;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.BooleanNegation;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.Case;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.Division;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.Equality;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.Expression;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.FunctionCall;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.If;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.IntConst;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.IsVoid;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.LessThan;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.LessThanOrEquals;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.Let;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.Loop;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.Multiplication;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.New;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.ObjectReference;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.StaticFunctionCall;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.StringConst;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.Subtraction;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.Typecase;
-import net.alexweinert.coolc.representations.cool.program.hierarchichal.ClassHierarchy;
-import net.alexweinert.coolc.representations.cool.program.hierarchichal.DefinedClassSignature;
-import net.alexweinert.coolc.representations.cool.program.hierarchichal.MethodSignature;
+import net.alexweinert.coolc.representations.cool.ast.Addition;
+import net.alexweinert.coolc.representations.cool.ast.ArgumentExpressions;
+import net.alexweinert.coolc.representations.cool.ast.ArithmeticNegation;
+import net.alexweinert.coolc.representations.cool.ast.Assign;
+import net.alexweinert.coolc.representations.cool.ast.BlockExpressions;
+import net.alexweinert.coolc.representations.cool.ast.BoolConst;
+import net.alexweinert.coolc.representations.cool.ast.BooleanNegation;
+import net.alexweinert.coolc.representations.cool.ast.Case;
+import net.alexweinert.coolc.representations.cool.ast.Division;
+import net.alexweinert.coolc.representations.cool.ast.Equality;
+import net.alexweinert.coolc.representations.cool.ast.Expression;
+import net.alexweinert.coolc.representations.cool.ast.FunctionCall;
+import net.alexweinert.coolc.representations.cool.ast.If;
+import net.alexweinert.coolc.representations.cool.ast.IntConst;
+import net.alexweinert.coolc.representations.cool.ast.IsVoid;
+import net.alexweinert.coolc.representations.cool.ast.LessThan;
+import net.alexweinert.coolc.representations.cool.ast.LessThanOrEquals;
+import net.alexweinert.coolc.representations.cool.ast.Let;
+import net.alexweinert.coolc.representations.cool.ast.Loop;
+import net.alexweinert.coolc.representations.cool.ast.Multiplication;
+import net.alexweinert.coolc.representations.cool.ast.New;
+import net.alexweinert.coolc.representations.cool.ast.ObjectReference;
+import net.alexweinert.coolc.representations.cool.ast.StaticFunctionCall;
+import net.alexweinert.coolc.representations.cool.ast.StringConst;
+import net.alexweinert.coolc.representations.cool.ast.Subtraction;
+import net.alexweinert.coolc.representations.cool.ast.Typecase;
+import net.alexweinert.coolc.representations.cool.ast.Visitor;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
+import net.alexweinert.coolc.representations.cool.information.MethodSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
 class ExpressionTypeChecker extends Visitor {
 
@@ -70,16 +70,19 @@ class ExpressionTypeChecker extends Visitor {
     @Override
     public void visitBoolConst(BoolConst boolConst) {
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
+        boolConst.setType(IdTable.getInstance().getBoolSymbol());
     }
 
     @Override
     public void visitIntConst(IntConst intConst) {
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getIntSymbol()));
+        intConst.setType(IdTable.getInstance().getIntSymbol());
     }
 
     @Override
     public void visitStringConstant(StringConst stringConst) {
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getStringSymbol()));
+        stringConst.setType(IdTable.getInstance().getStringSymbol());
     }
 
     @Override
@@ -93,6 +96,7 @@ class ExpressionTypeChecker extends Visitor {
             referenceType = ExpressionType.create(IdTable.getInstance().getObjectSymbol());
         }
         this.argumentTypes.push(referenceType);
+        objectReference.setType(referenceType.getTypeId(this.classId));
     }
 
     @Override
@@ -125,6 +129,7 @@ class ExpressionTypeChecker extends Visitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(intSymbol));
+        arithmeticNegation.setType(intSymbol);
     }
 
     private void visitBinaryArithmeticOperation(Expression operation) {
@@ -141,6 +146,7 @@ class ExpressionTypeChecker extends Visitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(intSymbol));
+        operation.setType(intSymbol);
     }
 
     @Override
@@ -173,6 +179,7 @@ class ExpressionTypeChecker extends Visitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
+        equality.setType(IdTable.getInstance().getBoolSymbol());
 
     }
 
@@ -190,6 +197,7 @@ class ExpressionTypeChecker extends Visitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol()));
+        operation.setType(IdTable.getInstance().getBoolSymbol());
     }
 
     @Override
@@ -202,6 +210,7 @@ class ExpressionTypeChecker extends Visitor {
         }
 
         this.argumentTypes.push(ExpressionType.create(boolSymbol));
+        booleanNegation.setType(boolSymbol);
     }
 
     @Override
@@ -214,11 +223,13 @@ class ExpressionTypeChecker extends Visitor {
 
         if (this.hierarchy.conformsTo(rhsTypeId, lhsTypeId)) {
             this.argumentTypes.push(rhsType);
+            assign.setType(rhsTypeId);
         } else {
             err.reportTypeMismatch(assign, rhsTypeId, lhsTypeId);
             final IdSymbol lhsDeclaredType = this.variablesScopes.peek().getVariableType(assignedVariable)
                     .getTypeId(this.classId);
             this.argumentTypes.push(ExpressionType.create(lhsDeclaredType));
+            assign.setType(lhsDeclaredType);
         }
     }
 
@@ -240,6 +251,7 @@ class ExpressionTypeChecker extends Visitor {
                 this.hierarchy);
 
         this.argumentTypes.push(leastUpperBound);
+        ifNode.setType(leastUpperBound.getTypeId(this.classId));
     }
 
     @Override
@@ -285,6 +297,7 @@ class ExpressionTypeChecker extends Visitor {
     @Override
     public void visitLetPostorder(Let let) {
         this.variablesScopes.pop();
+        let.setType(this.argumentTypes.peek().getTypeId(this.classId));
     }
 
     @Override
@@ -298,6 +311,7 @@ class ExpressionTypeChecker extends Visitor {
         this.methodSignatures.pop();
         this.methodDefiningClasses.pop();
         this.argumentTypes.push(this.methodReturnTypes.pop());
+        call.setType(this.argumentTypes.peek().getTypeId(this.classId));
     }
 
     @Override
@@ -316,11 +330,13 @@ class ExpressionTypeChecker extends Visitor {
         this.methodSignatures.pop();
         this.methodDefiningClasses.pop();
         this.argumentTypes.push(this.methodReturnTypes.pop());
+        call.setType(this.argumentTypes.peek().getTypeId(this.classId));
     }
 
     @Override
     public void visitNew(New newNode) {
         this.argumentTypes.push(ExpressionType.create(newNode.getTypeIdentifier()));
+        newNode.setType(newNode.getTypeIdentifier());
     }
 
     /**
@@ -400,6 +416,7 @@ class ExpressionTypeChecker extends Visitor {
             leastUpperBound = leastUpperBound.computeLeastUpperBound(typeIterator.next(), this.classId, this.hierarchy);
         }
         this.argumentTypes.push(leastUpperBound);
+        typecase.setType(leastUpperBound.getTypeId(this.classId));
     }
 
     @Override

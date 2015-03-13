@@ -3,7 +3,7 @@ package net.alexweinert.coolc.processors.cool.hierarchycheck;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.alexweinert.coolc.representations.cool.program.hierarchichal.MethodSignature;
+import net.alexweinert.coolc.representations.cool.information.MethodSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 class ClassInterface {

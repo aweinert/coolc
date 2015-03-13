@@ -4,24 +4,24 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.representations.cool.program.hierarchichal.ClassHierarchy;
-import net.alexweinert.coolc.representations.cool.program.hierarchichal.DeclaredClassSignature;
-import net.alexweinert.coolc.representations.cool.program.hierarchichal.MethodSignature;
-import net.alexweinert.coolc.representations.cool.program.parsed.Attribute;
-import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
-import net.alexweinert.coolc.representations.cool.program.parsed.Feature;
-import net.alexweinert.coolc.representations.cool.program.parsed.Method;
-import net.alexweinert.coolc.representations.cool.program.parsed.ParsedProgram;
-import net.alexweinert.coolc.representations.cool.program.parsed.ParsedProgramVisitor;
+import net.alexweinert.coolc.representations.cool.ast.Visitor;
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Feature;
+import net.alexweinert.coolc.representations.cool.ast.Method;
+import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.information.DeclaredClassSignature;
+import net.alexweinert.coolc.representations.cool.information.MethodSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
-class OverridingChecker extends ParsedProgramVisitor {
+class OverridingChecker extends Visitor {
     /**
      * Checks that no class overrides its parent's attributes and that each class only overrides its parent's methods in
      * the allowed way (i.e., argument and return types match)
      */
-    public static ParsedProgram checkOverriding(ParsedProgram program, ClassHierarchy hierarchy,
+    public static Program checkOverriding(Program program, ClassHierarchy hierarchy,
             Map<IdSymbol, DeclaredClassSignature> declaredSignatures, SemanticErrorReporter err) {
         final List<ClassNode> newClasses = new LinkedList<>();
         for (ClassNode classNode : program.getClasses()) {
@@ -34,7 +34,7 @@ class OverridingChecker extends ParsedProgramVisitor {
         return program.setClasses(newClasses);
     }
 
-    final private ParsedProgram containingProgram;
+    final private Program containingProgram;
     final private ClassNode containingClass;
     final private ClassHierarchy classHierarchy;
     final private Map<IdSymbol, DeclaredClassSignature> declaredSignatures;
@@ -42,9 +42,8 @@ class OverridingChecker extends ParsedProgramVisitor {
 
     final private List<Feature> features = new LinkedList<>();
 
-    private OverridingChecker(ParsedProgram containingProgram, ClassNode containingClass,
-            ClassHierarchy classHierarchy, Map<IdSymbol, DeclaredClassSignature> declaredSignatures,
-            SemanticErrorReporter err) {
+    private OverridingChecker(Program containingProgram, ClassNode containingClass, ClassHierarchy classHierarchy,
+            Map<IdSymbol, DeclaredClassSignature> declaredSignatures, SemanticErrorReporter err) {
         this.containingProgram = containingProgram;
         this.containingClass = containingClass;
         this.classHierarchy = classHierarchy;
@@ -53,7 +52,7 @@ class OverridingChecker extends ParsedProgramVisitor {
     }
 
     @Override
-    public void visitAttribute(Attribute attribute) {
+    public void visitAttributePostorder(Attribute attribute) {
         boolean existingAttributeFound = false;
         for (IdSymbol ancestor : this.classHierarchy.getStrictAncestors(this.containingClass.getIdentifier())) {
             if (declaredSignatures.get(ancestor).getAttribute(attribute.getName()) != null) {
@@ -68,7 +67,7 @@ class OverridingChecker extends ParsedProgramVisitor {
     }
 
     @Override
-    public void visitMethod(Method method) {
+    public void visitMethodPostorder(Method method) {
         boolean existingMethodFound = false;
         for (IdSymbol ancestor : this.classHierarchy.getStrictAncestors(this.containingClass.getIdentifier())) {
             if (ancestor.equals(IdTable.getInstance().getObjectSymbol())) {

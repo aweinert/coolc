@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.processors.cool.typecheck;
 
-import net.alexweinert.coolc.representations.cool.program.hierarchichal.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 

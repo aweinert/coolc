@@ -6,11 +6,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.representations.cool.program.parsed.Attribute;
-import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
-import net.alexweinert.coolc.representations.cool.program.parsed.Feature;
-import net.alexweinert.coolc.representations.cool.program.parsed.Formal;
-import net.alexweinert.coolc.representations.cool.program.parsed.Method;
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Feature;
+import net.alexweinert.coolc.representations.cool.ast.Formal;
+import net.alexweinert.coolc.representations.cool.ast.Method;
 
 public class FeatureTable {
     /**

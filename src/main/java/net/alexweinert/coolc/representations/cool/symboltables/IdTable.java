@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.representations.cool.symboltables;
 
-import net.alexweinert.coolc.representations.cool.util.Utilities;
+import net.alexweinert.coolc.representations.cool.Utilities;
 
 /* Copyright (c) 2000 The Regents of the University of California. All rights reserved.
  * 

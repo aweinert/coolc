@@ -1,12 +1,12 @@
 package net.alexweinert.coolc.processors.cool.typecheck;
 
 import net.alexweinert.coolc.Output;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.FunctionCall;
-import net.alexweinert.coolc.representations.cool.expressions.untyped.ObjectReference;
-import net.alexweinert.coolc.representations.cool.program.parsed.Attribute;
-import net.alexweinert.coolc.representations.cool.program.parsed.Method;
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.FunctionCall;
+import net.alexweinert.coolc.representations.cool.ast.Method;
+import net.alexweinert.coolc.representations.cool.ast.ObjectReference;
+import net.alexweinert.coolc.representations.cool.ast.TreeNode;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.util.TreeNode;
 
 class TypeErrorReporter {
     private final Output out;

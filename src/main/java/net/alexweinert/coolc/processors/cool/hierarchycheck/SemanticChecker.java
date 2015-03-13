@@ -4,16 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.alexweinert.coolc.Output;
-import net.alexweinert.coolc.representations.cool.program.hierarchichal.ClassHierarchy;
-import net.alexweinert.coolc.representations.cool.program.hierarchichal.DeclaredClassSignature;
-import net.alexweinert.coolc.representations.cool.program.hierarchichal.DefinedClassSignature;
-import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
-import net.alexweinert.coolc.representations.cool.program.parsed.ParsedProgram;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.information.DeclaredClassSignature;
+import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 class SemanticChecker {
-    public static ParsedProgram checkSemantics(ParsedProgram program, Output out) {
+    public static Program checkSemantics(Program program, Output out) {
         final SemanticErrorReporter error = new SemanticErrorReporter(out);
 
         program = MultipleClassesRemover.removeMultipleClassDefinitions(program, error);
@@ -31,7 +31,7 @@ class SemanticChecker {
         return program;
     }
 
-    private static Map<IdSymbol, DeclaredClassSignature> createDeclaredSignatures(ParsedProgram program) {
+    private static Map<IdSymbol, DeclaredClassSignature> createDeclaredSignatures(Program program) {
         final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
         declaredSignatures.put(IdTable.getInstance().getObjectSymbol(), DeclaredClassSignature.createObjectSignature());
         declaredSignatures.put(IdTable.getInstance().getIntSymbol(), DeclaredClassSignature.createIntSignature());
@@ -45,7 +45,7 @@ class SemanticChecker {
         return declaredSignatures;
     }
 
-    private static Map<IdSymbol, DefinedClassSignature> createDefinedSignatures(ParsedProgram program,
+    private static Map<IdSymbol, DefinedClassSignature> createDefinedSignatures(Program program,
             ClassHierarchy hierarchy, Map<IdSymbol, DeclaredClassSignature> declaredSignatures) {
 
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();

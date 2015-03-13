@@ -18,7 +18,7 @@ package net.alexweinert.coolc.representations.cool.symboltables;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.alexweinert.coolc.representations.cool.util.Utilities;
+import net.alexweinert.coolc.representations.cool.Utilities;
 
 /**
  * Abstract string table implementation.

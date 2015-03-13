@@ -5,21 +5,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import net.alexweinert.coolc.representations.cool.program.parsed.Attribute;
-import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
-import net.alexweinert.coolc.representations.cool.program.parsed.Classes;
-import net.alexweinert.coolc.representations.cool.program.parsed.Feature;
-import net.alexweinert.coolc.representations.cool.program.parsed.Features;
-import net.alexweinert.coolc.representations.cool.program.parsed.Method;
-import net.alexweinert.coolc.representations.cool.program.parsed.ParsedProgram;
-import net.alexweinert.coolc.representations.cool.program.parsed.ParsedProgramVisitor;
+import net.alexweinert.coolc.representations.cool.ast.Visitor;
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Classes;
+import net.alexweinert.coolc.representations.cool.ast.Feature;
+import net.alexweinert.coolc.representations.cool.ast.Features;
+import net.alexweinert.coolc.representations.cool.ast.Method;
+import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
-class InterfaceChecker extends ParsedProgramVisitor {
+class InterfaceChecker extends Visitor {
     private List<ClassNode> classes = new LinkedList<>();
     private Map<IdSymbol, List<Attribute>> attributes = new HashMap<>();
     private Map<IdSymbol, List<Method>> methods = new HashMap<>();
-    private ParsedProgram containingProgram;
+    private Program containingProgram;
 
     private final SemanticErrorReporter error;
 
@@ -28,7 +28,7 @@ class InterfaceChecker extends ParsedProgramVisitor {
     }
 
     InterfaceChecker(List<ClassNode> classes, Map<IdSymbol, List<Attribute>> attributes,
-            Map<IdSymbol, List<Method>> methods, ParsedProgram containingProgram, SemanticErrorReporter error) {
+            Map<IdSymbol, List<Method>> methods, Program containingProgram, SemanticErrorReporter error) {
         this.classes = classes;
         this.attributes = attributes;
         this.methods = methods;
@@ -36,17 +36,16 @@ class InterfaceChecker extends ParsedProgramVisitor {
         this.error = error;
     }
 
-    public static ParsedProgram checkInterfaces(ParsedProgram program, SemanticErrorReporter error) {
+    public static Program checkInterfaces(Program program, SemanticErrorReporter error) {
         final InterfaceChecker remover = new InterfaceChecker(error);
         program.acceptVisitor(remover);
         return remover.containingProgram;
     }
 
     @Override
-    public void visitProgramPostorder(ParsedProgram program) {
+    public void visitProgramPostorder(Program program) {
         final Classes classes = new Classes(program.getFilename(), program.getLineNumber(), this.classes);
-        this.containingProgram = new ParsedProgram(program.getFilename(), program.getLineNumber(), classes,
-                program.getSymbolTables());
+        this.containingProgram = new Program(program.getFilename(), program.getLineNumber(), classes);
     }
 
     @Override
@@ -76,7 +75,7 @@ class InterfaceChecker extends ParsedProgramVisitor {
     }
 
     @Override
-    public void visitAttribute(Attribute attribute) {
+    public void visitAttributePostorder(Attribute attribute) {
         if (!this.attributes.containsKey(attribute.getName())) {
             this.attributes.put(attribute.getName(), new LinkedList<Attribute>());
         }
@@ -84,7 +83,7 @@ class InterfaceChecker extends ParsedProgramVisitor {
     }
 
     @Override
-    public void visitMethod(Method method) {
+    public void visitMethodPostorder(Method method) {
         if (!this.methods.containsKey(method.getName())) {
             this.methods.put(method.getName(), new LinkedList<Method>());
         }

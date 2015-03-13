@@ -23,9 +23,6 @@ public class ParserFactory {
         lexer.setIntTable(IntTable.getInstance());
         lexer.setStringTable(StringTable.getInstance());
         final Parser parser = new Parser(lexer);
-        parser.setIdTable(IdTable.getInstance());
-        parser.setIntTable(IntTable.getInstance());
-        parser.setStringTable(StringTable.getInstance());
         return parser;
     }
 }
