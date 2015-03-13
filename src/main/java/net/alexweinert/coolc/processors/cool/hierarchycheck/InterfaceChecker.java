@@ -45,7 +45,7 @@ class InterfaceChecker extends Visitor {
     @Override
     public void visitProgramPostorder(Program program) {
         final Classes classes = new Classes(program.getFilename(), program.getLineNumber(), this.classes);
-        this.containingProgram = new Program(program.getFilename(), program.getLineNumber(), classes);
+        this.containingProgram = program.setClasses(classes);
     }
 
     @Override

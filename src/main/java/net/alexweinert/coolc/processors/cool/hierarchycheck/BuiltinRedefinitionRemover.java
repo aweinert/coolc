@@ -26,7 +26,8 @@ class BuiltinRedefinitionRemover {
         final ClassNode classNode = program.getClass(identifier);
         if (classNode != null) {
             out.reportRedefinitionOfBuiltInClass(identifier, classNode);
-            return new Program(program.getFilename(), program.getLineNumber(), program.getClasses().remove(classNode));
+            final Program returnProgram = program.setClasses(program.getClasses().remove(classNode));
+            return returnProgram;
         }
         return program;
     }
