@@ -2,6 +2,7 @@ package net.alexweinert.coolc.representations.cool.ast;
 
 import java.util.Iterator;
 
+import net.alexweinert.coolc.representations.cool.information.MethodSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
@@ -45,6 +46,10 @@ public class Method extends Feature {
 
     public IdSymbol getReturnType() {
         return this.return_type;
+    }
+
+    public MethodSignature getSignature() {
+        return (new MethodSignature.Factory()).create(this);
     }
 
     @Override
