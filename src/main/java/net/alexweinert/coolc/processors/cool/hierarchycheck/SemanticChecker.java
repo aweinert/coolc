@@ -22,11 +22,11 @@ class SemanticChecker {
         program = ParentDefinednessChecker.checkParentDefinedness(program, error);
         program = CircularInheritanceRemover.removeCircularInheritance(program, error);
 
-        final ClassHierarchy hierarchy = ClassHierarchy.create(program);
+        program.setHierarchy(ClassHierarchy.create(program));
         program = InterfaceChecker.checkInterfaces(program, error);
 
         final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = createDeclaredSignatures(program);
-        program = OverridingChecker.checkOverriding(program, hierarchy, declaredSignatures, error);
+        program = OverridingChecker.checkOverriding(program, declaredSignatures, error);
 
         return program;
     }

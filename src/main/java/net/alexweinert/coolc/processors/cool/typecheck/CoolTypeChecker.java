@@ -23,19 +23,20 @@ public class CoolTypeChecker extends Processor<Program, Program> {
 
     @Override
     public Program process(Program input) {
-        final ClassHierarchy hierarchy = ClassHierarchy.create(input);
+        final ClassHierarchy hierarchy = input.getHierarchy();
         final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = CoolTypeChecker
                 .createDeclaredSignatures(input);
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = CoolTypeChecker.createDefinedSignatures(input,
                 hierarchy, declaredSignatures);
 
-        CoolTypeChecker.typecheck(input, hierarchy, definedSignatures, this.err);
+        CoolTypeChecker.typecheck(input, definedSignatures, this.err);
 
         return input;
     }
 
-    private static void typecheck(Program program, ClassHierarchy hierarchy,
-            Map<IdSymbol, DefinedClassSignature> definedSignatures, TypeErrorReporter err) {
+    private static void typecheck(Program program, Map<IdSymbol, DefinedClassSignature> definedSignatures,
+            TypeErrorReporter err) {
+        final ClassHierarchy hierarchy = program.getHierarchy();
         for (ClassNode classNode : program.getClasses()) {
             classNode.acceptVisitor(new ClassTypeChecker(classNode.getIdentifier(), definedSignatures, hierarchy, err));
         }

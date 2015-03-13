@@ -21,8 +21,9 @@ class OverridingChecker extends Visitor {
      * Checks that no class overrides its parent's attributes and that each class only overrides its parent's methods in
      * the allowed way (i.e., argument and return types match)
      */
-    public static Program checkOverriding(Program program, ClassHierarchy hierarchy,
-            Map<IdSymbol, DeclaredClassSignature> declaredSignatures, SemanticErrorReporter err) {
+    public static Program checkOverriding(Program program, Map<IdSymbol, DeclaredClassSignature> declaredSignatures,
+            SemanticErrorReporter err) {
+        final ClassHierarchy hierarchy = program.getHierarchy();
         final List<ClassNode> newClasses = new LinkedList<>();
         for (ClassNode classNode : program.getClasses()) {
             final OverridingChecker checker = new OverridingChecker(program, classNode, hierarchy, declaredSignatures,

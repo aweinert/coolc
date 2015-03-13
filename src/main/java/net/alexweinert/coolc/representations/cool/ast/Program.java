@@ -3,12 +3,14 @@ package net.alexweinert.coolc.representations.cool.ast;
 import java.util.Iterator;
 import java.util.List;
 
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
  * The complete program. Root node of a well-formed AST
  */
 public class Program extends TreeNode {
+    private ClassHierarchy hierarchy = null;
     protected final Classes classes;
 
     /**
@@ -46,6 +48,14 @@ public class Program extends TreeNode {
 
     public Classes getClasses() {
         return this.classes;
+    }
+
+    public ClassHierarchy getHierarchy() {
+        return hierarchy;
+    }
+
+    public void setHierarchy(ClassHierarchy hierarchy) {
+        this.hierarchy = hierarchy;
     }
 
     @Override
