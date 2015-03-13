@@ -89,7 +89,9 @@ public class Program extends TreeNode {
     }
 
     public Program setClasses(Classes newClasses) {
-        return new Program(this.getFilename(), this.getLineNumber(), newClasses);
+        final Program returnValue = new Program(this.getFilename(), this.getLineNumber(), newClasses);
+        returnValue.setHierarchy(this.hierarchy);
+        return returnValue;
     }
 
     public Program setClasses(List<ClassNode> newClasses) {
