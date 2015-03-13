@@ -2,9 +2,9 @@ package net.alexweinert.coolc.representations.cool.program.parsed;
 
 public class ParsedProgramVisitor {
 
-    public void visitProgramPreorder(Program program) {}
+    public void visitProgramPreorder(ParsedProgram program) {}
 
-    public void visitProgramPostorder(Program program) {}
+    public void visitProgramPostorder(ParsedProgram program) {}
 
     public void visitClassesPreorder(Classes classes) {}
 

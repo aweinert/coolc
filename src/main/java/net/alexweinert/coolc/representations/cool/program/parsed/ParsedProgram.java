@@ -12,7 +12,7 @@ import net.alexweinert.coolc.representations.cool.util.TreeNode;
 /**
  * The complete program. Root node of a well-formed AST
  */
-public class Program extends TreeNode {
+public class ParsedProgram extends TreeNode {
     private final SymbolTables symbolTables;
     protected final Classes classes;
 
@@ -22,7 +22,7 @@ public class Program extends TreeNode {
      * @param classes
      *            initial value for classes
      */
-    public Program(String filename, int lineNumber, Classes classes, SymbolTables symbolTables) {
+    public ParsedProgram(String filename, int lineNumber, Classes classes, SymbolTables symbolTables) {
         super(filename, lineNumber);
         this.classes = classes;
         this.symbolTables = symbolTables;
@@ -88,7 +88,7 @@ public class Program extends TreeNode {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Program other = (Program) obj;
+        ParsedProgram other = (ParsedProgram) obj;
         if (classes == null) {
             if (other.classes != null) {
                 return false;
