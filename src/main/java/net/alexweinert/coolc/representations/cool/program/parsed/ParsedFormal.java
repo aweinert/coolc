@@ -9,7 +9,7 @@ import net.alexweinert.coolc.representations.cool.util.TreeNode;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Formal extends TreeNode {
+public class ParsedFormal extends TreeNode {
     final protected IdSymbol name;
     final protected IdSymbol type_decl;
 
@@ -23,7 +23,7 @@ public class Formal extends TreeNode {
      * @param a1
      *            initial value for type_decl
      */
-    public Formal(String filename, int lineNumber, IdSymbol a1, IdSymbol a2) {
+    public ParsedFormal(String filename, int lineNumber, IdSymbol a1, IdSymbol a2) {
         super(filename, lineNumber);
         name = a1;
         type_decl = a2;
@@ -57,7 +57,7 @@ public class Formal extends TreeNode {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Formal other = (Formal) obj;
+        ParsedFormal other = (ParsedFormal) obj;
         if (name == null) {
             if (other.name != null) {
                 return false;

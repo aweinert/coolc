@@ -12,10 +12,10 @@ import net.alexweinert.coolc.representations.cool.util.TreeNode;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class ClassNode extends TreeNode {
+public class ParsedClass extends TreeNode {
     final protected IdSymbol name;
     final protected IdSymbol parent;
-    final protected Features features;
+    final protected ParsedFeatures features;
 
     /**
      * Creates "class_c" AST node.
@@ -29,7 +29,7 @@ public class ClassNode extends TreeNode {
      * @param a2
      *            initial value for features
      */
-    public ClassNode(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, Features a3) {
+    public ParsedClass(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, ParsedFeatures a3) {
         super(filename, lineNumber);
         name = a1;
         parent = a2;
@@ -51,23 +51,23 @@ public class ClassNode extends TreeNode {
         return parent;
     }
 
-    public Features getFeatures() {
+    public ParsedFeatures getFeatures() {
         return features;
     }
 
-    public Attribute getAttribute(IdSymbol identifier) {
-        for (Feature feature : this.features) {
-            if (feature.getName().equals(identifier) && feature instanceof Attribute) {
-                return (Attribute) feature;
+    public ParsedAttribute getAttribute(IdSymbol identifier) {
+        for (ParsedFeature feature : this.features) {
+            if (feature.getName().equals(identifier) && feature instanceof ParsedAttribute) {
+                return (ParsedAttribute) feature;
             }
         }
         return null;
     }
 
-    public Method getMethod(IdSymbol identifier) {
-        for (Feature feature : this.features) {
-            if (feature.getName().equals(identifier) && feature instanceof Method) {
-                return (Method) feature;
+    public ParsedMethod getMethod(IdSymbol identifier) {
+        for (ParsedFeature feature : this.features) {
+            if (feature.getName().equals(identifier) && feature instanceof ParsedMethod) {
+                return (ParsedMethod) feature;
             }
         }
         return null;
@@ -94,7 +94,7 @@ public class ClassNode extends TreeNode {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        ClassNode other = (ClassNode) obj;
+        ParsedClass other = (ParsedClass) obj;
         if (features == null) {
             if (other.features != null) {
                 return false;
@@ -119,8 +119,8 @@ public class ClassNode extends TreeNode {
         return true;
     }
 
-    public ClassNode setParent(IdSymbol newParent) {
-        return new ClassNode(this.getFilename(), this.getLineNumber(), this.name, newParent, this.features);
+    public ParsedClass setParent(IdSymbol newParent) {
+        return new ParsedClass(this.getFilename(), this.getLineNumber(), this.name, newParent, this.features);
     }
 
     public String toString() {
@@ -129,7 +129,7 @@ public class ClassNode extends TreeNode {
         builder.append(" inherits ");
         builder.append(this.getParent());
         builder.append(" {\n");
-        final Iterator<Feature> it = this.features.iterator();
+        final Iterator<ParsedFeature> it = this.features.iterator();
         while (it.hasNext()) {
             builder.append("\t");
             builder.append(it.next().toString());
@@ -139,8 +139,8 @@ public class ClassNode extends TreeNode {
         return builder.toString();
     }
 
-    public ClassNode setFeatures(List<Feature> features2) {
-        return new ClassNode(this.getFilename(), this.getLineNumber(), this.name, this.parent, new Features(
+    public ParsedClass setFeatures(List<ParsedFeature> features2) {
+        return new ParsedClass(this.getFilename(), this.getLineNumber(), this.name, this.parent, new ParsedFeatures(
                 this.features.getFilename(), this.features.getLineNumber(), features2));
     }
 }

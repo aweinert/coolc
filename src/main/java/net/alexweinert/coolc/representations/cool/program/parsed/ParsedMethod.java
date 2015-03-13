@@ -11,8 +11,8 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Method extends Feature {
-    final protected Formals formals;
+public class ParsedMethod extends ParsedFeature {
+    final protected ParsedFormals formals;
     final protected IdSymbol return_type;
     final protected Expression expr;
 
@@ -30,7 +30,7 @@ public class Method extends Feature {
      * @param a3
      *            initial value for expr
      */
-    public Method(String filename, int lineNumber, IdSymbol a1, Formals a2, IdSymbol a3, Expression a4) {
+    public ParsedMethod(String filename, int lineNumber, IdSymbol a1, ParsedFormals a2, IdSymbol a3, Expression a4) {
         super(filename, lineNumber, a1);
         formals = a2;
         return_type = a3;
@@ -41,7 +41,7 @@ public class Method extends Feature {
         return this.expr;
     }
 
-    public Formals getFormals() {
+    public ParsedFormals getFormals() {
         return this.formals;
     }
 
@@ -74,7 +74,7 @@ public class Method extends Feature {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Method other = (Method) obj;
+        ParsedMethod other = (ParsedMethod) obj;
         if (expr == null) {
             if (other.expr != null) {
                 return false;
@@ -106,7 +106,7 @@ public class Method extends Feature {
         builder.append(" : ");
         builder.append(this.getReturnType());
         builder.append(" (");
-        final Iterator<Formal> it = this.formals.iterator();
+        final Iterator<ParsedFormal> it = this.formals.iterator();
         while (it.hasNext()) {
             builder.append(it.next().toString());
             if (it.hasNext()) {

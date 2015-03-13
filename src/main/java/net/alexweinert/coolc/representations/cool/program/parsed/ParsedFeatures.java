@@ -11,33 +11,33 @@ import net.alexweinert.coolc.representations.cool.util.ListNode;
  * <p>
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
-public class Features extends ListNode<Feature> {
-    public Features(String filename, int lineNumber, Collection<Feature> elements) {
+public class ParsedFeatures extends ListNode<ParsedFeature> {
+    public ParsedFeatures(String filename, int lineNumber, Collection<ParsedFeature> elements) {
         super(filename, lineNumber, elements);
     }
 
     /** Creates an empty "Features" list */
-    public Features(String filename, int lineNumber) {
+    public ParsedFeatures(String filename, int lineNumber) {
         super(filename, lineNumber);
     }
 
     @Override
-    public Features add(Feature node) {
-        final Collection<Feature> newElements = this.copyElements();
+    public ParsedFeatures add(ParsedFeature node) {
+        final Collection<ParsedFeature> newElements = this.copyElements();
         newElements.add(node);
-        return new Features(this.getFilename(), this.getLineNumber(), newElements);
+        return new ParsedFeatures(this.getFilename(), this.getLineNumber(), newElements);
     }
 
     @Override
-    public Features remove(Feature node) {
-        final Collection<Feature> newElements = this.copyElements();
+    public ParsedFeatures remove(ParsedFeature node) {
+        final Collection<ParsedFeature> newElements = this.copyElements();
         newElements.remove(node);
-        return new Features(this.getFilename(), this.getLineNumber(), newElements);
+        return new ParsedFeatures(this.getFilename(), this.getLineNumber(), newElements);
     }
 
     public void acceptVisitor(ParsedProgramVisitor visitor) {
         visitor.visitFeaturesPreorder(this);
-        final Iterator<Feature> iterator = this.iterator();
+        final Iterator<ParsedFeature> iterator = this.iterator();
         while (iterator.hasNext()) {
             iterator.next().acceptVisitor(visitor);
             if (iterator.hasNext()) {

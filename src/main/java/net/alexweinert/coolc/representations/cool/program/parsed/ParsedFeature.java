@@ -4,10 +4,10 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.util.TreeNode;
 
 /** Defines simple phylum Feature */
-public abstract class Feature extends TreeNode {
+public abstract class ParsedFeature extends TreeNode {
     final protected IdSymbol name;
 
-    protected Feature(String filename, int lineNumber, IdSymbol name) {
+    protected ParsedFeature(String filename, int lineNumber, IdSymbol name) {
         super(filename, lineNumber);
         this.name = name;
     }
@@ -37,7 +37,7 @@ public abstract class Feature extends TreeNode {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Feature other = (Feature) obj;
+        ParsedFeature other = (ParsedFeature) obj;
         if (name == null) {
             if (other.name != null) {
                 return false;

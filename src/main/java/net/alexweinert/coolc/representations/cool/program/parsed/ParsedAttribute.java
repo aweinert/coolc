@@ -9,7 +9,7 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
  * <p>
  * See <a href="TreeNode.html">TreeNode</a> for full documentation.
  */
-public class Attribute extends Feature {
+public class ParsedAttribute extends ParsedFeature {
     final protected IdSymbol type_decl;
     final protected Expression init;
 
@@ -25,7 +25,7 @@ public class Attribute extends Feature {
      * @param a2
      *            initial value for init
      */
-    public Attribute(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, Expression a3) {
+    public ParsedAttribute(String filename, int lineNumber, IdSymbol a1, IdSymbol a2, Expression a3) {
         super(filename, lineNumber, a1);
         this.type_decl = a2;
         this.init = a3;
@@ -72,7 +72,7 @@ public class Attribute extends Feature {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Attribute other = (Attribute) obj;
+        ParsedAttribute other = (ParsedAttribute) obj;
         if (init == null) {
             if (other.init != null) {
                 return false;

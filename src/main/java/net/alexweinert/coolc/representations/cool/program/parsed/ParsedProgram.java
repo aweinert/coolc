@@ -1,6 +1,7 @@
 package net.alexweinert.coolc.representations.cool.program.parsed;
 
 import java.util.Iterator;
+import java.util.List;
 
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
@@ -14,7 +15,7 @@ import net.alexweinert.coolc.representations.cool.util.TreeNode;
  */
 public class ParsedProgram extends TreeNode {
     private final SymbolTables symbolTables;
-    protected final Classes classes;
+    protected final ParsedClasses classes;
 
     /**
      * @param lineNumber
@@ -22,7 +23,7 @@ public class ParsedProgram extends TreeNode {
      * @param classes
      *            initial value for classes
      */
-    public ParsedProgram(String filename, int lineNumber, Classes classes, SymbolTables symbolTables) {
+    public ParsedProgram(String filename, int lineNumber, ParsedClasses classes, SymbolTables symbolTables) {
         super(filename, lineNumber);
         this.classes = classes;
         this.symbolTables = symbolTables;
@@ -34,8 +35,8 @@ public class ParsedProgram extends TreeNode {
      * @return The node of the first defined class with the given name, if there exists at least one. Null if none
      *         exists.
      */
-    public ClassNode getClass(IdSymbol identifier) {
-        for (ClassNode classNode : this.classes) {
+    public ParsedClass getClass(IdSymbol identifier) {
+        for (ParsedClass classNode : this.classes) {
             if (classNode.getIdentifier().equals(identifier)) {
                 return classNode;
             }
@@ -43,7 +44,7 @@ public class ParsedProgram extends TreeNode {
         return null;
     }
 
-    public Classes getClasses() {
+    public ParsedClasses getClasses() {
         return this.classes;
     }
 
@@ -61,6 +62,21 @@ public class ParsedProgram extends TreeNode {
 
     public IntTable getIntTable() {
         return this.symbolTables.getIntTable();
+    }
+
+    public ParsedProgram removeClass(ParsedClass toRemove) {
+        final ParsedClasses newClasses = this.classes.remove(toRemove);
+        return new ParsedProgram(this.getFilename(), this.getLineNumber(), newClasses, this.symbolTables);
+    }
+
+    public ParsedProgram replaceClass(ParsedClass existing, ParsedClass replacement) {
+        final ParsedClasses newClasses = this.classes.replace(existing, replacement);
+        return new ParsedProgram(this.getFilename(), this.getLineNumber(), newClasses, this.symbolTables);
+    }
+
+    public ParsedProgram setClasses(List<ParsedClass> newClasses) {
+        return new ParsedProgram(this.getFilename(), this.getLineNumber(), new ParsedClasses(this.getFilename(),
+                this.getLineNumber(), newClasses), this.symbolTables);
     }
 
     public void acceptVisitor(ParsedProgramVisitor visitor) {
@@ -102,7 +118,7 @@ public class ParsedProgram extends TreeNode {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        Iterator<ClassNode> it = this.classes.iterator();
+        Iterator<ParsedClass> it = this.classes.iterator();
         while (it.hasNext()) {
             builder.append(it.next().toString());
             if (it.hasNext()) {
