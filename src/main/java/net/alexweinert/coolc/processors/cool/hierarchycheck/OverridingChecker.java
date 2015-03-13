@@ -21,69 +21,62 @@ class OverridingChecker extends Visitor {
      * Checks that no class overrides its parent's attributes and that each class only overrides its parent's methods in
      * the allowed way (i.e., argument and return types match)
      */
-    public static Program checkOverriding(Program program, Map<IdSymbol, DeclaredClassSignature> declaredSignatures,
-            SemanticErrorReporter err) {
-        final ClassHierarchy hierarchy = program.getHierarchy();
-        final List<ClassNode> newClasses = new LinkedList<>();
-        for (ClassNode classNode : program.getClasses()) {
-            final OverridingChecker checker = new OverridingChecker(program, classNode, hierarchy, declaredSignatures,
-                    err);
-            classNode.acceptVisitor(checker);
-            newClasses.add(classNode.setFeatures(checker.features));
-        }
-
-        return program.setClasses(newClasses);
+    public static Program checkOverriding(Program program, SemanticErrorReporter err) {
+        final OverridingChecker checker = new OverridingChecker(err);
+        program.acceptVisitor(checker);
+        return program;
     }
 
-    final private Program containingProgram;
-    final private ClassNode containingClass;
-    final private ClassHierarchy classHierarchy;
-    final private Map<IdSymbol, DeclaredClassSignature> declaredSignatures;
     final private SemanticErrorReporter err;
 
-    final private List<Feature> features = new LinkedList<>();
+    private Program containingProgram;
+    private ClassNode containingClass;
 
-    private OverridingChecker(Program containingProgram, ClassNode containingClass, ClassHierarchy classHierarchy,
-            Map<IdSymbol, DeclaredClassSignature> declaredSignatures, SemanticErrorReporter err) {
-        this.containingProgram = containingProgram;
-        this.containingClass = containingClass;
-        this.classHierarchy = classHierarchy;
-        this.declaredSignatures = declaredSignatures;
+    private OverridingChecker(SemanticErrorReporter err) {
         this.err = err;
     }
 
     @Override
+    public void visitProgramPreorder(Program program) {
+        this.containingProgram = program;
+    }
+
+    @Override
+    public void visitProgramPostorder(Program program) {
+        this.containingProgram = null;
+    }
+
+    @Override
+    public void visitClassPreorder(ClassNode classNode) {
+        this.containingClass = classNode;
+    }
+
+    @Override
+    public void visitClassPostorder(ClassNode classNode) {
+        this.containingClass = classNode;
+    }
+
+    @Override
     public void visitAttributePostorder(Attribute attribute) {
-        boolean existingAttributeFound = false;
-        for (IdSymbol ancestor : this.classHierarchy.getStrictAncestors(this.containingClass.getIdentifier())) {
-            if (declaredSignatures.get(ancestor).getAttribute(attribute.getName()) != null) {
-                err.reportOverriddenAttribute(containingProgram.getClass(ancestor).getAttribute(attribute.getName()),
-                        attribute);
-                existingAttributeFound = true;
+        ClassNode currentClass = this.containingClass;
+        while (!currentClass.getParent().equals(IdTable.getInstance().getObjectSymbol())) {
+            currentClass = this.containingProgram.getClass(currentClass.getParent());
+            final Attribute ancestorAttribute = currentClass.getAttribute(attribute.getName());
+            if (ancestorAttribute != null) {
+                err.reportOverriddenAttribute(ancestorAttribute, attribute);
             }
-        }
-        if (!existingAttributeFound) {
-            this.features.add(attribute);
         }
     }
 
     @Override
     public void visitMethodPostorder(Method method) {
-        boolean existingMethodFound = false;
-        for (IdSymbol ancestor : this.classHierarchy.getStrictAncestors(this.containingClass.getIdentifier())) {
-            if (ancestor.equals(IdTable.getInstance().getObjectSymbol())) {
-                continue;
+        ClassNode currentClass = this.containingClass;
+        while (!currentClass.getParent().equals(IdTable.getInstance().getObjectSymbol())) {
+            currentClass = this.containingProgram.getClass(currentClass.getParent());
+            final Method ancestorMethod = currentClass.getMethod(method.getName());
+            if (ancestorMethod != null && !(method.getSignature().equals(ancestorMethod.getSignature()))) {
+                err.reportWronglyOverriddenMethod(ancestorMethod, method);
             }
-            final MethodSignature parentSignature = declaredSignatures.get(ancestor).getMethodSignature(
-                    method.getName());
-            if (parentSignature != null && !parentSignature.equals(MethodSignature.getFactory().create(method))) {
-                final Method existingMethod = containingProgram.getClass(ancestor).getMethod(method.getName());
-                err.reportWronglyOverriddenMethod(existingMethod, method);
-                existingMethodFound = true;
-            }
-        }
-        if (!existingMethodFound) {
-            this.features.add(method);
         }
     }
 }

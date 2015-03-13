@@ -21,12 +21,10 @@ class SemanticChecker {
         program = BuiltinInheritanceChecker.checkBuiltinInheritance(program, error);
         program = ParentDefinednessChecker.checkParentDefinedness(program, error);
         program = CircularInheritanceRemover.removeCircularInheritance(program, error);
+        program = InterfaceChecker.checkInterfaces(program, error);
+        program = OverridingChecker.checkOverriding(program, error);
 
         program.setHierarchy(ClassHierarchy.create(program));
-        program = InterfaceChecker.checkInterfaces(program, error);
-
-        final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = createDeclaredSignatures(program);
-        program = OverridingChecker.checkOverriding(program, declaredSignatures, error);
 
         return program;
     }
