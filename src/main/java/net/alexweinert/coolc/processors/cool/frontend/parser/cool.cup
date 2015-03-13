@@ -22,22 +22,6 @@ that was there initially.  */
 
 action code {: 
 
-	private IdTable idTable;
-	private IntTable intTable;
-	private StringTable stringTable;
-	
-	public void setIdTable(final IdTable idTable) {
-		this.idTable = idTable;
-	}
-	
-	public void setIntTable(final IntTable intTable) {
-		this.intTable = intTable;
-	}
-	
-	public void setStringTable(final StringTable stringTable) {
-		this.stringTable = stringTable;
-	}
-
     int curr_lineno() {
 		return ((Lexer)parser.getScanner()).get_curr_lineno();
     }
@@ -52,6 +36,34 @@ action code {:
 /*                DON'T CHANGE ANYTHING IN THIS SECTION                 */
 
 parser code {:
+	private IdTable idTable;
+	private IntTable intTable;
+	private StringTable stringTable;
+	
+	public void setIdTable(final IdTable idTable) {
+		this.idTable = idTable;
+	}
+	
+	public IdTable getIdTable() {
+		return this.idTable;
+	}
+	
+	public void setIntTable(final IntTable intTable) {
+		this.intTable = intTable;
+	}
+	
+	public IntTable getIntTable() {
+		return this.intTable;
+	}
+	
+	public void setStringTable(final StringTable stringTable) {
+		this.stringTable = stringTable;
+	}
+	
+	public StringTable getStringTable() {
+		return this.stringTable;
+	}
+
     int omerrs = 0;
 
     public void syntax_error(Symbol cur_token) {
@@ -69,18 +81,6 @@ parser code {:
 
     public void unrecovered_syntax_error(Symbol cur_token) {
     }
-
-	public void setIdTable(final IdTable idTable) {
-		this.action_obj.setIdTable(idTable);
-	}
-
-	public void setIntTable(final IntTable intTable) {
-		this.action_obj.setIntTable(intTable);
-	}
-	
-	public void setStringTable(final StringTable stringTable) {
-		this.action_obj.setStringTable(stringTable);
-	}
 :}
 
 
@@ -148,7 +148,7 @@ program
 	/* A program is nothing but a list of classes. Errors are handled in the 
 	 * class_list nonterminal */
 	::= class_list:cl
-	    {: RESULT = new Program(curr_filename(), curr_lineno(), cl, new SymbolTables(this.idTable, this.stringTable, this.intTable)); :}
+	    {: RESULT = new Program(curr_filename(), curr_lineno(), cl, new SymbolTables(this.parser.getIdTable(), this.parser.getStringTable(), this.parser.getIntTable())); :}
 	;
 
 
@@ -174,7 +174,7 @@ class
 /* Optional inherits-declaration */
 opt_inherits
 	::= /* No inherits declaration */
-		{: RESULT = this.idTable.getObjectSymbol(); :}
+		{: RESULT = this.parser.getIdTable().getObjectSymbol(); :}
 	/* Actual inherits declaration */
 	| INHERITS TYPEID:typeid
 		{: RESULT = typeid; :}
@@ -279,7 +279,7 @@ expr
 
 	/* Method calls */
 	| OBJECTID:n actuals:a /* Call on self */
-	    {: RESULT = new FunctionCall(curr_filename(), curr_lineno(), new ObjectReference(curr_filename(), curr_lineno(), this.idTable.addString("self")), n, a); :}
+	    {: RESULT = new FunctionCall(curr_filename(), curr_lineno(), new ObjectReference(curr_filename(), curr_lineno(), this.parser.getIdTable().addString("self")), n, a); :}
 	| expr:expr DOT OBJECTID:objid actuals:actuals /* Call on variable */
 		{: RESULT = new FunctionCall(curr_filename(), curr_lineno(), expr, objid, actuals); :}
 	| expr:expr AT TYPEID:type DOT OBJECTID:objid actuals:actuals /* Call on casted variable */
