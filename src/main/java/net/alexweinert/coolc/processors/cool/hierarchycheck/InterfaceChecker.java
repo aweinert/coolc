@@ -11,15 +11,15 @@ import net.alexweinert.coolc.representations.cool.program.parsed.Classes;
 import net.alexweinert.coolc.representations.cool.program.parsed.Feature;
 import net.alexweinert.coolc.representations.cool.program.parsed.Features;
 import net.alexweinert.coolc.representations.cool.program.parsed.Method;
-import net.alexweinert.coolc.representations.cool.program.parsed.Program;
+import net.alexweinert.coolc.representations.cool.program.parsed.ParsedProgram;
+import net.alexweinert.coolc.representations.cool.program.parsed.ParsedProgramVisitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.util.Visitor;
 
-class InterfaceChecker extends Visitor {
+class InterfaceChecker extends ParsedProgramVisitor {
     private List<ClassNode> classes = new LinkedList<>();
     private Map<IdSymbol, List<Attribute>> attributes = new HashMap<>();
     private Map<IdSymbol, List<Method>> methods = new HashMap<>();
-    private Program containingProgram;
+    private ParsedProgram containingProgram;
 
     private final SemanticErrorReporter error;
 
@@ -28,7 +28,7 @@ class InterfaceChecker extends Visitor {
     }
 
     InterfaceChecker(List<ClassNode> classes, Map<IdSymbol, List<Attribute>> attributes,
-            Map<IdSymbol, List<Method>> methods, Program containingProgram, SemanticErrorReporter error) {
+            Map<IdSymbol, List<Method>> methods, ParsedProgram containingProgram, SemanticErrorReporter error) {
         this.classes = classes;
         this.attributes = attributes;
         this.methods = methods;
@@ -36,16 +36,17 @@ class InterfaceChecker extends Visitor {
         this.error = error;
     }
 
-    public static Program checkInterfaces(Program program, SemanticErrorReporter error) {
+    public static ParsedProgram checkInterfaces(ParsedProgram program, SemanticErrorReporter error) {
         final InterfaceChecker remover = new InterfaceChecker(error);
         program.acceptVisitor(remover);
         return remover.containingProgram;
     }
 
     @Override
-    public void visitProgramPostorder(Program program) {
+    public void visitProgramPostorder(ParsedProgram program) {
         final Classes classes = new Classes(program.getFilename(), program.getLineNumber(), this.classes);
-        this.containingProgram = new Program(program.getFilename(), program.getLineNumber(), classes);
+        this.containingProgram = new ParsedProgram(program.getFilename(), program.getLineNumber(), classes,
+                program.getSymbolTables());
     }
 
     @Override
@@ -75,7 +76,7 @@ class InterfaceChecker extends Visitor {
     }
 
     @Override
-    public void visitAttributePostorder(Attribute attribute) {
+    public void visitAttribute(Attribute attribute) {
         if (!this.attributes.containsKey(attribute.getName())) {
             this.attributes.put(attribute.getName(), new LinkedList<Attribute>());
         }
@@ -83,7 +84,7 @@ class InterfaceChecker extends Visitor {
     }
 
     @Override
-    public void visitMethodPostorder(Method method) {
+    public void visitMethod(Method method) {
         if (!this.methods.containsKey(method.getName())) {
             this.methods.put(method.getName(), new LinkedList<Method>());
         }

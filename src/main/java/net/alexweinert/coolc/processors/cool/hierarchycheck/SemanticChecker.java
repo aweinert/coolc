@@ -8,12 +8,12 @@ import net.alexweinert.coolc.representations.cool.program.hierarchichal.ClassHie
 import net.alexweinert.coolc.representations.cool.program.hierarchichal.DeclaredClassSignature;
 import net.alexweinert.coolc.representations.cool.program.hierarchichal.DefinedClassSignature;
 import net.alexweinert.coolc.representations.cool.program.parsed.ClassNode;
-import net.alexweinert.coolc.representations.cool.program.parsed.Program;
+import net.alexweinert.coolc.representations.cool.program.parsed.ParsedProgram;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 class SemanticChecker {
-    public static Program checkSemantics(Program program, Output out) {
+    public static ParsedProgram checkSemantics(ParsedProgram program, Output out) {
         final SemanticErrorReporter error = new SemanticErrorReporter(out);
 
         program = MultipleClassesRemover.removeMultipleClassDefinitions(program, error);
@@ -31,7 +31,7 @@ class SemanticChecker {
         return program;
     }
 
-    private static Map<IdSymbol, DeclaredClassSignature> createDeclaredSignatures(Program program) {
+    private static Map<IdSymbol, DeclaredClassSignature> createDeclaredSignatures(ParsedProgram program) {
         final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
         declaredSignatures.put(IdTable.getInstance().getObjectSymbol(), DeclaredClassSignature.createObjectSignature());
         declaredSignatures.put(IdTable.getInstance().getIntSymbol(), DeclaredClassSignature.createIntSignature());
@@ -45,7 +45,7 @@ class SemanticChecker {
         return declaredSignatures;
     }
 
-    private static Map<IdSymbol, DefinedClassSignature> createDefinedSignatures(Program program,
+    private static Map<IdSymbol, DefinedClassSignature> createDefinedSignatures(ParsedProgram program,
             ClassHierarchy hierarchy, Map<IdSymbol, DeclaredClassSignature> declaredSignatures) {
 
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
