@@ -8,8 +8,7 @@ public class CoolHierarchyChecker extends Processor<Program, Program> {
 
     @Override
     public Program process(Program input) {
-        SemanticChecker.checkSemantics(input, new Output());
-        return input;
+        return SemanticChecker.checkSemantics(input, new Output());
     }
 
 }
