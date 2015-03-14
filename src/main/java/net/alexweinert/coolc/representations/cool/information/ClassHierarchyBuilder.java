@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
@@ -22,7 +23,12 @@ class ClassHierarchyBuilder {
         }
     }
 
+    final private Program program;
     final private Collection<Pair<IdSymbol, IdSymbol>> inheritanceInfo = new HashSet<>();
+
+    public ClassHierarchyBuilder(Program program) {
+        this.program = program;
+    }
 
     void addInheritance(IdSymbol childClass, IdSymbol parentClass) {
         this.inheritanceInfo.add(new Pair<>(childClass, parentClass));
@@ -36,7 +42,7 @@ class ClassHierarchyBuilder {
             final List<IdSymbol> ancestors = this.computeAncestors(singleInheritance.x);
             hierarchy.put(singleInheritance.x, ancestors);
         }
-        return new ClassHierarchy(hierarchy);
+        return new ClassHierarchy(this.program, hierarchy);
     }
 
     private List<IdSymbol> computeAncestors(IdSymbol root) {

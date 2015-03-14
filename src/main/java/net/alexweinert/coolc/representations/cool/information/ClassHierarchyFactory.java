@@ -7,10 +7,14 @@ import net.alexweinert.coolc.representations.cool.ast.TreeNode;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 public class ClassHierarchyFactory extends Visitor {
-    final private ClassHierarchyBuilder builder = new ClassHierarchyBuilder();
+    final private ClassHierarchyBuilder builder;
 
-    public static ClassHierarchy buildHierarchy(TreeNode ast) {
-        final ClassHierarchyFactory visitor = new ClassHierarchyFactory();
+    public ClassHierarchyFactory(final Program program) {
+        this.builder = new ClassHierarchyBuilder(program);
+    }
+
+    public static ClassHierarchy buildHierarchy(Program ast) {
+        final ClassHierarchyFactory visitor = new ClassHierarchyFactory(ast);
         ast.acceptVisitor(visitor);
         return visitor.builder.buildHierarchy();
     }

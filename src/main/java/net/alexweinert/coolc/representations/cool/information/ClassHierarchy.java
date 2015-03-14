@@ -10,6 +10,7 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 public class ClassHierarchy {
 
+    final private Program program;
     final private Map<IdSymbol, List<IdSymbol>> parentClasses;
 
     /**
@@ -25,7 +26,8 @@ public class ClassHierarchy {
      *            Contains a mapping of classes to all classes that they conform to, in order. The list must contain the
      *            class itself.
      */
-    ClassHierarchy(Map<IdSymbol, List<IdSymbol>> parentClasses) {
+    ClassHierarchy(final Program program, Map<IdSymbol, List<IdSymbol>> parentClasses) {
+        this.program = program;
         this.parentClasses = new HashMap<>(parentClasses);
     }
 
