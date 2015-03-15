@@ -14,6 +14,10 @@ public class NameGenerator {
         return "cool" + name;
     }
 
+    public String getJavaNameForMethod(IdSymbol method) {
+        return "cool" + method.toString();
+    }
+
     public String getFreshVariableName() {
         return "tempVar" + (variableCounter++);
     }

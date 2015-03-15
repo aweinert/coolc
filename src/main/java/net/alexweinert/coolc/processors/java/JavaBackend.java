@@ -19,17 +19,20 @@ import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Division;
 import net.alexweinert.coolc.representations.cool.ast.Equality;
 import net.alexweinert.coolc.representations.cool.ast.Formal;
+import net.alexweinert.coolc.representations.cool.ast.FunctionCall;
 import net.alexweinert.coolc.representations.cool.ast.If;
 import net.alexweinert.coolc.representations.cool.ast.IntConst;
 import net.alexweinert.coolc.representations.cool.ast.IsVoid;
 import net.alexweinert.coolc.representations.cool.ast.LessThan;
 import net.alexweinert.coolc.representations.cool.ast.LessThanOrEquals;
+import net.alexweinert.coolc.representations.cool.ast.Let;
 import net.alexweinert.coolc.representations.cool.ast.Loop;
 import net.alexweinert.coolc.representations.cool.ast.Method;
 import net.alexweinert.coolc.representations.cool.ast.Multiplication;
 import net.alexweinert.coolc.representations.cool.ast.New;
 import net.alexweinert.coolc.representations.cool.ast.ObjectReference;
 import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.ast.StaticFunctionCall;
 import net.alexweinert.coolc.representations.cool.ast.StringConst;
 import net.alexweinert.coolc.representations.cool.ast.Subtraction;
 import net.alexweinert.coolc.representations.cool.ast.Typecase;
@@ -312,4 +315,59 @@ public class JavaBackend extends Visitor implements Backend<Program> {
     public void visitNew(New newNode) {
         writer.write("new " + this.nameGen.getJavaNameForClass(newNode.getTypeIdentifier()));
     }
+
+    @Override
+    public void visitFunctionCallPostorder(FunctionCall functionCall) {
+        final Stack<String> arguments = new Stack<>();
+        for (int argIndex = 0; argIndex < functionCall.getArguments().size(); ++argIndex) {
+            arguments.push(this.variables.pop());
+        }
+
+        final String dispatchVariable = this.variables.pop();
+        final String resultVariable = this.nameGen.getFreshVariableName();
+        writer.write(this.nameGen.getJavaNameForClass(functionCall.getType()) + " " + resultVariable + " = "
+                + dispatchVariable + "(");
+        while (!arguments.isEmpty()) {
+            writer.write(arguments.pop());
+            if (!arguments.isEmpty()) {
+                writer.write(", ");
+            }
+        }
+        writer.write(");");
+        this.variables.push(resultVariable);
+    }
+
+    @Override
+    public void visitStaticFunctionCallPostorder(StaticFunctionCall staticFunctionCall) {
+        final Stack<String> arguments = new Stack<>();
+        for (int argIndex = 0; argIndex < staticFunctionCall.getArguments().size(); ++argIndex) {
+            arguments.push(this.variables.pop());
+        }
+
+        final String dispatchVariable = this.variables.pop();
+        final String resultVariable = this.nameGen.getFreshVariableName();
+        writer.write(this.nameGen.getJavaNameForClass(staticFunctionCall.getType()) + " " + resultVariable + " = "
+                + dispatchVariable + "(");
+        while (!arguments.isEmpty()) {
+            writer.write(arguments.pop());
+            if (!arguments.isEmpty()) {
+                writer.write(", ");
+            }
+        }
+        writer.write(");");
+        this.variables.push(resultVariable);
+    }
+
+    @Override
+    public void visitLetInorder(Let let) {
+        // TODO Auto-generated method stub
+        super.visitLetInorder(let);
+    }
+
+    @Override
+    public void visitLetPostorder(Let let) {
+        // TODO Auto-generated method stub
+        super.visitLetPostorder(let);
+    }
+
 }
