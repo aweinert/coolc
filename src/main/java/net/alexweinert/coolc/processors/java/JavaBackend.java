@@ -9,9 +9,12 @@ import java.util.Stack;
 import net.alexweinert.coolc.infrastructure.Backend;
 import net.alexweinert.coolc.representations.cool.ast.Addition;
 import net.alexweinert.coolc.representations.cool.ast.ArithmeticNegation;
+import net.alexweinert.coolc.representations.cool.ast.Assign;
 import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.BlockExpressions;
 import net.alexweinert.coolc.representations.cool.ast.BoolConst;
 import net.alexweinert.coolc.representations.cool.ast.BooleanNegation;
+import net.alexweinert.coolc.representations.cool.ast.Case;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Division;
 import net.alexweinert.coolc.representations.cool.ast.Equality;
@@ -26,6 +29,7 @@ import net.alexweinert.coolc.representations.cool.ast.ObjectReference;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.ast.StringConst;
 import net.alexweinert.coolc.representations.cool.ast.Subtraction;
+import net.alexweinert.coolc.representations.cool.ast.Typecase;
 import net.alexweinert.coolc.representations.cool.ast.Visitor;
 
 public class JavaBackend extends Visitor implements Backend<Program> {
@@ -208,4 +212,53 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         writer.write("CoolInt " + resultVariable + " = " + argVariable + ".negate();");
         this.variables.push(resultVariable);
     }
+
+    @Override
+    public void visitAssignPostorder(Assign assign) {
+        final String expressionVariable = this.variables.pop();
+        final String assigneeVariable = this.nameGen.getJavaNameForVariable(assign.getVariableIdentifier());
+        writer.write(assigneeVariable + " = " + expressionVariable + ";\n");
+        this.variables.push(assigneeVariable);
+    }
+
+    @Override
+    public void visitBlockExpressionsInorder(BlockExpressions expressions) {
+        this.variables.pop();
+    }
+
+    @Override
+    public void visitTypecaseInorder(Typecase typecase) {
+        final String resultVariable = this.nameGen.getFreshVariableName();
+        writer.write(this.nameGen.getJavaNameForClass(typecase.getType()) + " " + resultVariable + ";\n");
+        this.variables.push(resultVariable);
+        writer.write("{\n");
+    }
+
+    @Override
+    public void visitTypecasePostorder(Typecase typecase) {
+        writer.write("}\n");
+        final String resultVariable = this.variables.pop();
+        // Pop the expression variable
+        this.variables.pop();
+        this.variables.push(resultVariable);
+    }
+
+    @Override
+    public void visitCasePreorder(Case caseNode) {
+        final String expressionVariable = this.variables.get(this.variables.size() - 2);
+        writer.write("if (" + expressionVariable + " instanceof "
+                + this.nameGen.getJavaNameForClass(caseNode.getDeclaredType()) + ") {\n");
+        writer.write(this.nameGen.getJavaNameForClass(caseNode.getDeclaredType()) + " "
+                + this.nameGen.getJavaNameForVariable(caseNode.getVariableIdentifier()) + " = ("
+                + this.nameGen.getJavaNameForClass(caseNode.getDeclaredType()) + ")" + expressionVariable + ";\n");
+    }
+
+    @Override
+    public void visitCasePostorder(Case caseNode) {
+        final String expressionVariable = this.variables.pop();
+        final String resultVariable = this.variables.peek();
+        writer.write(resultVariable + " = " + expressionVariable + ";\n");
+        writer.write("}\n");
+    }
+
 }
