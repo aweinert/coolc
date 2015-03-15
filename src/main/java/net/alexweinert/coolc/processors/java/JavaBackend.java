@@ -27,6 +27,7 @@ import net.alexweinert.coolc.representations.cool.ast.LessThanOrEquals;
 import net.alexweinert.coolc.representations.cool.ast.Loop;
 import net.alexweinert.coolc.representations.cool.ast.Method;
 import net.alexweinert.coolc.representations.cool.ast.Multiplication;
+import net.alexweinert.coolc.representations.cool.ast.New;
 import net.alexweinert.coolc.representations.cool.ast.ObjectReference;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.ast.StringConst;
@@ -307,4 +308,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         writer.write(this.variables.peek() + " = null;\n");
     }
 
+    @Override
+    public void visitNew(New newNode) {
+        writer.write("new " + this.nameGen.getJavaNameForClass(newNode.getTypeIdentifier()));
+    }
 }
