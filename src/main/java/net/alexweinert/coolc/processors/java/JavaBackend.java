@@ -99,6 +99,7 @@ public class JavaBackend extends Visitor implements Backend<Program> {
 
     @Override
     public void visitMethodPostorder(Method method) {
+        writer.write("return " + this.variables.pop());
         writer.write("}\n\n");
     }
 
@@ -303,7 +304,7 @@ public class JavaBackend extends Visitor implements Backend<Program> {
     public void visitLoopPostorder(Loop loop) {
         writer.write("}\n");
         // According to the manual, loops return void, i.e., null
-        writer.write(this.variables.peek() + " = null;");
+        writer.write(this.variables.peek() + " = null;\n");
     }
 
 }
