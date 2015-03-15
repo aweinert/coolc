@@ -1,10 +1,15 @@
 package net.alexweinert.coolc.representations.cool.information;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import net.alexweinert.coolc.representations.cool.ast.Attribute;
+import net.alexweinert.coolc.representations.cool.ast.ClassNode;
+import net.alexweinert.coolc.representations.cool.ast.Method;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
@@ -56,5 +61,39 @@ public class ClassHierarchy {
         final List<IdSymbol> weakAncestors = this.getWeakAncestors(classIdentifier);
         weakAncestors.remove(0);
         return weakAncestors;
+    }
+
+    public Collection<Attribute> getDefinedAttributes(IdSymbol classIdentifier) {
+        final Collection<Attribute> returnValue = new HashSet<>();
+        for (IdSymbol ancestor : this.getWeakAncestors(classIdentifier)) {
+            final ClassNode classNode = this.program.getClass(ancestor);
+            if (classNode == null) {
+                continue;
+            }
+            for (Attribute attribute : classNode.getAttributes()) {
+                returnValue.add(attribute);
+            }
+        }
+        return returnValue;
+    }
+
+    public Collection<Method> getDefinedMethods(IdSymbol classIdentifier) {
+        final Collection<Method> returnValue = new HashSet<>();
+        for (IdSymbol ancestor : this.getWeakAncestors(classIdentifier)) {
+            final ClassNode classNode = this.program.getClass(ancestor);
+            if (classNode == null) {
+                continue;
+            }
+            for (Method method : classNode.getMethods()) {
+                boolean methodAlreadyExists = false;
+                for (Method existingMethod : returnValue) {
+                    methodAlreadyExists |= existingMethod.getName().equals(method.getName());
+                }
+                if (!methodAlreadyExists) {
+                    returnValue.add(method);
+                }
+            }
+        }
+        return returnValue;
     }
 }
