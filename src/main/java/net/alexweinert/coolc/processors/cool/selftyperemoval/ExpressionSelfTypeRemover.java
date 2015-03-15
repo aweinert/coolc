@@ -38,7 +38,9 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 class ExpressionSelfTypeRemover extends Visitor {
     public static Expression removeSelfType(IdSymbol containingClass, Expression expression) {
-        return null;
+        final ExpressionSelfTypeRemover remover = new ExpressionSelfTypeRemover(containingClass);
+        expression.acceptVisitor(remover);
+        return remover.arguments.pop();
     }
 
     private final IdSymbol classId;
