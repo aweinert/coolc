@@ -218,7 +218,7 @@ class ExpressionSelfTypeRemover extends Visitor {
         final Expression body = this.arguments.pop();
         final Expression condition = this.arguments.pop();
 
-        this.arguments.push(new Loop(loop.getFilename(), loop.getLineNumber(), body, condition));
+        this.arguments.push(new Loop(loop.getFilename(), loop.getLineNumber(), condition, body));
     }
 
     @Override
