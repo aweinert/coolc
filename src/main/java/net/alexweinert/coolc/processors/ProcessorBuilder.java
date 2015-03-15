@@ -5,6 +5,7 @@ import net.alexweinert.coolc.infrastructure.Frontend;
 import net.alexweinert.coolc.infrastructure.Compiler;
 import net.alexweinert.coolc.processors.cool.frontend.CoolParser;
 import net.alexweinert.coolc.processors.cool.hierarchycheck.CoolHierarchyChecker;
+import net.alexweinert.coolc.processors.cool.selftyperemoval.SelfTypeRemover;
 import net.alexweinert.coolc.processors.cool.typecheck.CoolTypeChecker;
 import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
 import net.alexweinert.coolc.processors.io.fileopener.FileOpener;
@@ -31,6 +32,11 @@ public class ProcessorBuilder {
 
     public ProcessorBuilder typeCheck() {
         this.frontend = this.frontend.append(new CoolTypeChecker(this.output));
+        return this;
+    }
+
+    public ProcessorBuilder removeSelfType() {
+        this.frontend = this.frontend.append(new SelfTypeRemover());
         return this;
     }
 
