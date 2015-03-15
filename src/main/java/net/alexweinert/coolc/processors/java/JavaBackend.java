@@ -19,10 +19,12 @@ import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Division;
 import net.alexweinert.coolc.representations.cool.ast.Equality;
 import net.alexweinert.coolc.representations.cool.ast.Formal;
+import net.alexweinert.coolc.representations.cool.ast.If;
 import net.alexweinert.coolc.representations.cool.ast.IntConst;
 import net.alexweinert.coolc.representations.cool.ast.IsVoid;
 import net.alexweinert.coolc.representations.cool.ast.LessThan;
 import net.alexweinert.coolc.representations.cool.ast.LessThanOrEquals;
+import net.alexweinert.coolc.representations.cool.ast.Loop;
 import net.alexweinert.coolc.representations.cool.ast.Method;
 import net.alexweinert.coolc.representations.cool.ast.Multiplication;
 import net.alexweinert.coolc.representations.cool.ast.ObjectReference;
@@ -259,6 +261,49 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         final String resultVariable = this.variables.peek();
         writer.write(resultVariable + " = " + expressionVariable + ";\n");
         writer.write("}\n");
+    }
+
+    @Override
+    public void visitIfPreorderOne(If ifNode) {
+        final String conditionVariable = this.variables.pop();
+        final String resultVariable = this.nameGen.getFreshVariableName();
+        writer.write(this.nameGen.getJavaNameForClass(ifNode.getType()) + " " + resultVariable + ";\n");
+        this.variables.push(resultVariable);
+        writer.write("if (" + conditionVariable + ".isTrue()) {\n");
+    }
+
+    @Override
+    public void visitIfPreorderTwo(If ifNode) {
+        final String thenVariable = this.variables.pop();
+        final String resultVariable = this.variables.peek();
+        writer.write(resultVariable + " = " + thenVariable + ";\n");
+        writer.write("} else {\n");
+    }
+
+    @Override
+    public void visitIfPostorder(If ifNode) {
+        final String elseVariable = this.variables.pop();
+        final String resultVariable = this.variables.peek();
+        writer.write(resultVariable + " = " + elseVariable + ";\n");
+        writer.write("}");
+    }
+
+    @Override
+    public void visitLoopPreorder(Loop loop) {
+        writer.write("while(true) {");
+    }
+
+    @Override
+    public void visitLoopInorder(Loop loop) {
+        final String conditionVariable = this.variables.pop();
+        writer.write("if(!" + conditionVariable + ".isTrue()) { break; }\n");
+    }
+
+    @Override
+    public void visitLoopPostorder(Loop loop) {
+        writer.write("}\n");
+        // According to the manual, loops return void, i.e., null
+        writer.write(this.variables.peek() + " = null;");
     }
 
 }
