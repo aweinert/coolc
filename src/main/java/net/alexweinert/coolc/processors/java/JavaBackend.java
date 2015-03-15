@@ -47,29 +47,33 @@ public class JavaBackend extends Visitor implements Backend<Program> {
 
     @Override
     public void visitClassPreorder(ClassNode classNode) {
-        final Path pathToFile = pathToFolder.resolve(this.nameGen.getJavaNameForClass(classNode.getIdentifier()));
+        final Path pathToFile = pathToFolder.resolve(this.nameGen.getJavaNameForClass(classNode.getIdentifier())
+                + ".java");
         try {
             this.writer = new ExceptionCatchingFileWriter(new FileWriter(pathToFile.toFile()));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.writer.write("public class " + this.nameGen.getJavaNameForClass(classNode.getIdentifier()) + " {\n");
     }
 
     @Override
     public void visitClassPostorder(ClassNode classNode) {
+        this.writer.write("}");
         this.writer.close();
     }
 
     @Override
     public void visitAttributePreorder(Attribute attribute) {
-        writer.write("protected " + this.nameGen.getJavaNameForClass(attribute.getDeclaredType()) + ";\n");
+        writer.write("protected " + this.nameGen.getJavaNameForClass(attribute.getDeclaredType()) + " "
+                + this.nameGen.getJavaNameForVariable(attribute.getName()) + ";\n");
         writer.write("{");
     }
 
     @Override
     public void visitAttributePostorder(Attribute attribute) {
         writer.write(this.nameGen.getJavaNameForVariable(attribute.getName()) + " = " + this.variables.pop() + ";");
-        writer.write("}");
+        writer.write("}\n\n");
     }
 
     @Override

@@ -1,8 +1,10 @@
 package net.alexweinert.coolc.processors;
 
+import java.nio.file.Paths;
+
 import net.alexweinert.coolc.Output;
-import net.alexweinert.coolc.infrastructure.Frontend;
 import net.alexweinert.coolc.infrastructure.Compiler;
+import net.alexweinert.coolc.infrastructure.Frontend;
 import net.alexweinert.coolc.processors.cool.frontend.CoolParser;
 import net.alexweinert.coolc.processors.cool.hierarchycheck.CoolHierarchyChecker;
 import net.alexweinert.coolc.processors.cool.selftyperemoval.SelfTypeRemover;
@@ -10,6 +12,8 @@ import net.alexweinert.coolc.processors.cool.typecheck.CoolTypeChecker;
 import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
 import net.alexweinert.coolc.processors.io.fileopener.FileOpener;
 import net.alexweinert.coolc.processors.io.stringdumper.StringDumper;
+import net.alexweinert.coolc.processors.java.JavaBackend;
+import net.alexweinert.coolc.representations.cool.ast.Program;
 
 public class ProcessorBuilder {
     private Frontend frontend = null;
@@ -43,6 +47,10 @@ public class ProcessorBuilder {
     public ProcessorBuilder parseAndCheckCool() {
         this.parseCool().hierarchyCheck().typeCheck();
         return this;
+    }
+
+    public Compiler<Program> unparseToJava(String folder) {
+        return this.frontend.append(new JavaBackend(Paths.get(folder)));
     }
 
     public Compiler<String> dumpToConsole() {
