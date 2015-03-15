@@ -1,6 +1,7 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
@@ -141,5 +142,25 @@ public class ClassNode extends TreeNode {
     public ClassNode setFeatures(List<Feature> features2) {
         return new ClassNode(this.getFilename(), this.getLineNumber(), this.name, this.parent, new Features(
                 this.features.getFilename(), this.features.getLineNumber(), features2));
+    }
+
+    public List<Attribute> getAttributes() {
+        final List<Attribute> returnValue = new LinkedList<>();
+        for (Feature feature : this.features) {
+            if (feature instanceof Attribute) {
+                returnValue.add((Attribute) feature);
+            }
+        }
+        return returnValue;
+    }
+
+    public List<Method> getMethods() {
+        final List<Method> returnValue = new LinkedList<>();
+        for (Feature feature : this.features) {
+            if (feature instanceof Method) {
+                returnValue.add((Method) feature);
+            }
+        }
+        return returnValue;
     }
 }
