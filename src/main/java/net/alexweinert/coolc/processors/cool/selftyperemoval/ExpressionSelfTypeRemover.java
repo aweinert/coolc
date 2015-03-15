@@ -69,7 +69,9 @@ class ExpressionSelfTypeRemover extends Visitor {
 
     @Override
     public void visitArgumentExpressionsPostorder(ArgumentExpressions expressions) {
-        this.argumentExpressions.peek().add(this.arguments.pop());
+        if (expressions.size() > 0) {
+            this.argumentExpressions.peek().add(this.arguments.pop());
+        }
     }
 
     @Override
@@ -105,7 +107,9 @@ class ExpressionSelfTypeRemover extends Visitor {
 
     @Override
     public void visitBlockExpressionsPostorder(BlockExpressions expressions) {
-        this.blockExpressions.peek().add(this.arguments.pop());
+        if (expressions.size() > 0) {
+            this.blockExpressions.peek().add(this.arguments.pop());
+        }
     }
 
     @Override
@@ -145,6 +149,11 @@ class ExpressionSelfTypeRemover extends Visitor {
 
         this.arguments
                 .push(new Equality(equality.getFilename(), equality.getLineNumber(), lhsExpression, rhsExpression));
+    }
+
+    @Override
+    public void visitFunctionCallInorder(FunctionCall functionCall) {
+        this.argumentExpressions.push(new LinkedList<Expression>());
     }
 
     @Override
