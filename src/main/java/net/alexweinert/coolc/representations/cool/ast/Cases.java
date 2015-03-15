@@ -9,7 +9,7 @@ import java.util.Iterator;
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
 public class Cases extends ListNode<Case> {
-    protected Cases(String filename, int lineNumber, Collection<Case> elements) {
+    public Cases(String filename, int lineNumber, Collection<Case> elements) {
         super(filename, lineNumber, elements);
     }
 
