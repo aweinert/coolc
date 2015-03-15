@@ -360,14 +360,9 @@ public class JavaBackend extends Visitor implements Backend<Program> {
 
     @Override
     public void visitLetInorder(Let let) {
-        // TODO Auto-generated method stub
-        super.visitLetInorder(let);
-    }
-
-    @Override
-    public void visitLetPostorder(Let let) {
-        // TODO Auto-generated method stub
-        super.visitLetPostorder(let);
+        final String initializerVariable = this.variables.pop();
+        writer.write(this.nameGen.getJavaNameForVariable(let.getVariableIdentifier()) + " = " + initializerVariable
+                + ";\n");
     }
 
 }
