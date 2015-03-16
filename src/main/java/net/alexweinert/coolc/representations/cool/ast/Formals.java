@@ -9,7 +9,7 @@ import java.util.Iterator;
  * See <a href="ListNode.html">ListNode</a> for full documentation.
  */
 public class Formals extends ListNode<Formal> {
-    protected Formals(String filename, int lineNumber, Collection<Formal> elements) {
+    public Formals(String filename, int lineNumber, Collection<Formal> elements) {
         super(filename, lineNumber, elements);
     }
 
