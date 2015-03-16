@@ -24,6 +24,7 @@ import net.alexweinert.coolc.representations.cool.ast.Equality;
 import net.alexweinert.coolc.representations.cool.ast.Expression;
 import net.alexweinert.coolc.representations.cool.ast.ExpressionBuilder;
 import net.alexweinert.coolc.representations.cool.ast.Feature;
+import net.alexweinert.coolc.representations.cool.ast.Features;
 import net.alexweinert.coolc.representations.cool.ast.Formal;
 import net.alexweinert.coolc.representations.cool.ast.Formals;
 import net.alexweinert.coolc.representations.cool.ast.FunctionCall;
@@ -78,6 +79,10 @@ class VariableRenamingVisitor extends Visitor {
     @Override
     public void visitClassPostorder(ClassNode classNode) {
         this.renamings.pop();
+        final Features features = new Features(classNode.getFilename(), classNode.getLineNumber(), this.features);
+        this.features.clear();
+        this.classes.add(new ClassNode(classNode.getFilename(), classNode.getLineNumber(), classNode.getIdentifier(),
+                classNode.getParent(), features));
     }
 
     @Override
