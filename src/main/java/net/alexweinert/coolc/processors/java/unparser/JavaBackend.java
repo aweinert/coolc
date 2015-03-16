@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.processors.java;
+package net.alexweinert.coolc.processors.java.unparser;
 
 import java.io.FileWriter;
 import java.io.IOException;
