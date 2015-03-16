@@ -7,7 +7,7 @@ import net.alexweinert.coolc.representations.cool.ast.Program;
 public class Main {
     public static void main(String[] args) {
         final Compiler<Program> compiler = new ProcessorBuilder().openFile(args[0]).parseAndCheckCool()
-                .removeSelfType().unparseToJava("output");
+                .unparseToJava("output");
         compiler.compile();
     }
 }

@@ -13,6 +13,7 @@ import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
 import net.alexweinert.coolc.processors.io.fileopener.FileOpener;
 import net.alexweinert.coolc.processors.io.stringdumper.StringDumper;
 import net.alexweinert.coolc.processors.java.unparser.JavaBackend;
+import net.alexweinert.coolc.processors.java.variablerenaming.VariableRenamer;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 
 public class ProcessorBuilder {
@@ -44,13 +45,21 @@ public class ProcessorBuilder {
         return this;
     }
 
-    public ProcessorBuilder parseAndCheckCool() {
-        this.parseCool().hierarchyCheck().typeCheck();
+    public ProcessorBuilder removeShadowing() {
+        this.frontend = this.frontend.append(new VariableRenamer());
         return this;
     }
 
-    public Compiler<Program> unparseToJava(String folder) {
+    public Compiler<Program> dumpJava(String folder) {
         return this.frontend.append(new JavaBackend(Paths.get(folder)));
+    }
+
+    public ProcessorBuilder parseAndCheckCool() {
+        return this.parseCool().hierarchyCheck().typeCheck();
+    }
+
+    public Compiler<Program> unparseToJava(String folder) {
+        return this.removeSelfType().removeShadowing().dumpJava(folder);
     }
 
     public Compiler<String> dumpToConsole() {
