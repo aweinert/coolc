@@ -67,6 +67,10 @@ public class ExpressionBuilder {
         this.expressions.push(new BooleanNegation(filename, lineNumber, arg));
     }
 
+    public void startCases() {
+        this.cases.push(new LinkedList<Case>());
+    }
+
     public void makeCase(String filename, int lineNumber, IdSymbol varId, IdSymbol typeId) {
         final Expression arg = this.expressions.pop();
         this.cases.peek().add(new Case(filename, lineNumber, varId, typeId, arg));
