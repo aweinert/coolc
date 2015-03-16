@@ -17,8 +17,6 @@ The resulting compiler can be run using the `run`-script in the base directory.
   If the given expression is of the given type, then the branch is executed.
   *This means that multiple branches of the case-statement may be executed.*
   This does not happen if the types of the case-branches are disjoint.
-- Let-statements do not open a new scope.
-  This means that it is not possible to shadow existing variables with let-statements.
 
 # TODO
 - Right now, the base-classes are not implemented.
