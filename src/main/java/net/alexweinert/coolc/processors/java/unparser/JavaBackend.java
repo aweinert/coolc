@@ -98,7 +98,7 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         this.writer.write("public class " + this.nameGen.getJavaNameForClass(classNode.getIdentifier()) + " {\n");
         if (classNode.getIdentifier().equals(IdTable.getInstance().getMainSymbol())) {
             this.writer.write("public static void main(String[] args) {\n");
-            this.writer.write("final Main main = new Main();\n");
+            this.writer.write("final CoolMain main = new CoolMain();\n");
             this.writer.write("main.coolmain();\n");
             this.writer.write("}\n");
         }
@@ -363,7 +363,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
     @Override
     public void visitNew(New newNode) {
         final String returnVariable = this.nameGen.getFreshVariableName();
-        writer.write(returnVariable + " = new " + this.nameGen.getJavaNameForClass(newNode.getTypeIdentifier()) + ";\n");
+        writer.write(returnVariable + " = new " + this.nameGen.getJavaNameForClass(newNode.getTypeIdentifier())
+                + "();\n");
         this.variables.push(returnVariable);
     }
 
