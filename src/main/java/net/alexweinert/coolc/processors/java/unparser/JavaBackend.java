@@ -95,7 +95,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.writer.write("public class " + this.nameGen.getJavaNameForClass(classNode.getIdentifier()) + " {\n");
+        this.writer.write("public class " + this.nameGen.getJavaNameForClass(classNode.getIdentifier()) + " extends "
+                + this.nameGen.getJavaNameForClass(classNode.getParent()) + "{\n");
         if (classNode.getIdentifier().equals(IdTable.getInstance().getMainSymbol())) {
             this.writer.write("public static void main(String[] args) {\n");
             this.writer.write("final CoolMain main = new CoolMain();\n");
@@ -125,8 +126,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
 
     @Override
     public void visitMethodPreorder(Method method) {
-        writer.write("public " + this.nameGen.getJavaNameForClass(method.getReturnType()) + " " + method.getName()
-                + "(");
+        writer.write("public " + this.nameGen.getJavaNameForClass(method.getReturnType()) + " "
+                + this.nameGen.getJavaNameForMethod(method.getName()) + "(");
         final Iterator<Formal> iterator = method.getFormals().iterator();
         while (iterator.hasNext()) {
             final Formal formal = iterator.next();
