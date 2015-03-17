@@ -76,6 +76,7 @@ public class CoolToJavaVisitor extends Visitor {
 
         while (currentLine != null) {
             builder.write(currentLine + "\n");
+            currentLine = sourceFileReader.readLine();
         }
         sourceFileReader.close();
         this.javaClasses.add(builder.build());
