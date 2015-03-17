@@ -17,7 +17,4 @@ The resulting compiler can be run using the `run`-script in the base directory.
   If the given expression is of the given type, then the branch is executed.
   *This means that multiple branches of the case-statement may be executed.*
   This does not happen if the types of the case-branches are disjoint.
-
-# TODO
-- Right now, the base-classes are not implemented.
-  This leads to compilation errors.
+- Static function call is not implemented and works like a normal function call
