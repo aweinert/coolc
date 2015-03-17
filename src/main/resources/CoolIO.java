@@ -4,12 +4,12 @@ import java.io.InputStreamReader;
 
 public class CoolIO extends CoolObject {
     public CoolIO coolout_string(CoolString message) {
-        System.out.println(message);
+        System.out.println(message.getValue());
         return this;
     }
 
     public CoolIO coolout_int(CoolInt message) {
-        System.out.println(message);
+        System.out.println(message.getValue());
         return this;
     }
 
