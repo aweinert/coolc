@@ -59,7 +59,7 @@ public class ProcessorBuilder {
     }
 
     public Compiler<Program> unparseToJava(String folder) {
-        return this.removeSelfType().removeShadowing().dumpJava(folder);
+        return this.removeSelfType().removeShadowing().hierarchyCheck().typeCheck().dumpJava(folder);
     }
 
     public Compiler<String> dumpToConsole() {
