@@ -12,9 +12,10 @@ import net.alexweinert.coolc.processors.cool.typecheck.CoolTypeChecker;
 import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
 import net.alexweinert.coolc.processors.io.fileopener.FileOpener;
 import net.alexweinert.coolc.processors.io.stringdumper.StringDumper;
-import net.alexweinert.coolc.processors.java.fromcool.JavaBackend;
+import net.alexweinert.coolc.processors.java.dump.JavaDumper;
+import net.alexweinert.coolc.processors.java.fromcool.CoolToJavaProcessor;
 import net.alexweinert.coolc.processors.java.variablerenaming.VariableRenamer;
-import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.java.JavaProgram;
 
 public class ProcessorBuilder {
     private Frontend frontend = null;
@@ -50,16 +51,21 @@ public class ProcessorBuilder {
         return this;
     }
 
-    public Compiler<Program> dumpJava(String folder) {
-        return this.frontend.append(new JavaBackend(Paths.get(folder)));
+    public ProcessorBuilder coolToJava() {
+        this.frontend = this.frontend.append(new CoolToJavaProcessor());
+        return this;
+    }
+
+    public Compiler<JavaProgram> dumpJava(String folder) {
+        return this.frontend.append(new JavaDumper(Paths.get(folder)));
     }
 
     public ProcessorBuilder parseAndCheckCool() {
         return this.parseCool().hierarchyCheck().typeCheck();
     }
 
-    public Compiler<Program> unparseToJava(String folder) {
-        return this.removeSelfType().removeShadowing().hierarchyCheck().typeCheck().dumpJava(folder);
+    public ProcessorBuilder compileToJava() {
+        return this.removeSelfType().removeShadowing().hierarchyCheck().typeCheck().coolToJava();
     }
 
     public Compiler<String> dumpToConsole() {
