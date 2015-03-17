@@ -379,7 +379,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         final String dispatchVariable = this.variables.pop();
         final String resultVariable = this.nameGen.getFreshVariableName();
         writer.write(this.nameGen.getJavaNameForClass(functionCall.getType()) + " " + resultVariable + " = "
-                + dispatchVariable + "(");
+                + dispatchVariable + "." + this.nameGen.getJavaNameForMethod(functionCall.getFunctionIdentifier())
+                + "(");
         while (!arguments.isEmpty()) {
             writer.write(arguments.pop());
             if (!arguments.isEmpty()) {
@@ -400,7 +401,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         final String dispatchVariable = this.variables.pop();
         final String resultVariable = this.nameGen.getFreshVariableName();
         writer.write(this.nameGen.getJavaNameForClass(staticFunctionCall.getType()) + " " + resultVariable + " = "
-                + dispatchVariable + "(");
+                + dispatchVariable + "."
+                + this.nameGen.getJavaNameForMethod(staticFunctionCall.getFunctionIdentifier()) + "(");
         while (!arguments.isEmpty()) {
             writer.write(arguments.pop());
             if (!arguments.isEmpty()) {
