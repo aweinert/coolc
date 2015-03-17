@@ -162,7 +162,11 @@ public class JavaBackend extends Visitor implements Backend<Program> {
 
     @Override
     public void visitObjectReference(ObjectReference objectReference) {
-        this.variables.push(this.nameGen.getJavaNameForVariable(objectReference.getVariableIdentifier()));
+        if (objectReference.getVariableIdentifier().equals(IdTable.getInstance().getSelfSymbol())) {
+            this.variables.push("this");
+        } else {
+            this.variables.push(this.nameGen.getJavaNameForVariable(objectReference.getVariableIdentifier()));
+        }
     }
 
     @Override

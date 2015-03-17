@@ -74,4 +74,8 @@ public class IdTable extends AbstractTable<String> {
     public IdSymbol getSelfSymbol() {
         return this.addString("self");
     }
+
+    public IdSymbol getMainSymbol() {
+        return this.addString("Main");
+    }
 }
