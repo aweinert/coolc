@@ -364,8 +364,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
     @Override
     public void visitNew(New newNode) {
         final String returnVariable = this.nameGen.getFreshVariableName();
-        writer.write(returnVariable + " = new " + this.nameGen.getJavaNameForClass(newNode.getTypeIdentifier())
-                + "();\n");
+        writer.write(this.nameGen.getJavaNameForClass(newNode.getTypeIdentifier()) + " " + returnVariable + " = new "
+                + this.nameGen.getJavaNameForClass(newNode.getTypeIdentifier()) + "();\n");
         this.variables.push(returnVariable);
     }
 
