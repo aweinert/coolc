@@ -1,16 +1,16 @@
 package net.alexweinert.coolc.processors.java.fromcool;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
-import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
-import net.alexweinert.coolc.infrastructure.Backend;
+import net.alexweinert.coolc.infrastructure.ProcessorException;
 import net.alexweinert.coolc.representations.cool.ast.Addition;
 import net.alexweinert.coolc.representations.cool.ast.ArithmeticNegation;
 import net.alexweinert.coolc.representations.cool.ast.Assign;
@@ -42,59 +42,49 @@ import net.alexweinert.coolc.representations.cool.ast.Subtraction;
 import net.alexweinert.coolc.representations.cool.ast.Typecase;
 import net.alexweinert.coolc.representations.cool.ast.Visitor;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
+import net.alexweinert.coolc.representations.java.JavaClass;
+import net.alexweinert.coolc.representations.java.JavaProgram;
 
-public class JavaBackend extends Visitor implements Backend<Program> {
+public class CoolToJavaVisitor extends Visitor {
 
-    private final Path pathToFolder;
     private final NameGenerator nameGen = new NameGenerator();
     private final Stack<String> variables = new Stack<>();
 
-    private ExceptionCatchingFileWriter writer;
+    private JavaClassBuilder writer;
 
-    public JavaBackend(Path pathToFolder) {
-        this.pathToFolder = pathToFolder;
-    }
+    private List<JavaClass> javaClasses = new LinkedList<>();
 
-    @Override
-    public void process(Program input) {
-        this.copyResource("CoolObject.java");
-        this.copyResource("CoolBool.java");
-        this.copyResource("CoolInt.java");
-        this.copyResource("CoolString.java");
-        this.copyResource("CoolIO.java");
-        input.acceptVisitor(this);
-    }
-
-    private void copyResource(String fileName) {
-        File sourceFile = new File(this.getClass().getClassLoader().getResource(fileName).getFile());
-        File destFile = new File(this.pathToFolder.resolve(fileName).toString());
-        FileChannel source = null;
-        FileChannel destination = null;
-
+    public JavaProgram process(Program input) throws ProcessorException {
         try {
-            source = new FileInputStream(sourceFile).getChannel();
-            destination = new FileOutputStream(destFile).getChannel();
-            destination.transferFrom(source, 0, source.size());
-            if (source != null) {
-                source.close();
-            }
-            if (destination != null) {
-                destination.close();
-            }
+            this.copyResource("CoolObject");
+            this.copyResource("CoolBool");
+            this.copyResource("CoolInt");
+            this.copyResource("CoolString");
+            this.copyResource("CoolIO");
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ProcessorException(e);
         }
+        input.acceptVisitor(this);
+        return new JavaProgram(this.javaClasses);
+    }
+
+    private void copyResource(String fileName) throws IOException {
+        BufferedReader sourceFileReader = new BufferedReader(new FileReader(new File(this.getClass().getClassLoader()
+                .getResource(fileName + ".java").getFile())));
+        final JavaClassBuilder builder = new JavaClassBuilder(fileName);
+        String currentLine = sourceFileReader.readLine();
+
+        while (currentLine != null) {
+            builder.write(currentLine + "\n");
+        }
+        sourceFileReader.close();
+        this.javaClasses.add(builder.build());
     }
 
     @Override
     public void visitClassPreorder(ClassNode classNode) {
-        final Path pathToFile = pathToFolder.resolve(this.nameGen.getJavaNameForClass(classNode.getIdentifier())
-                + ".java");
-        try {
-            this.writer = new ExceptionCatchingFileWriter(new FileWriter(pathToFile.toFile()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.writer = new JavaClassBuilder(this.nameGen.getJavaNameForClass(classNode.getIdentifier()));
+
         this.writer.write("public class " + this.nameGen.getJavaNameForClass(classNode.getIdentifier()) + " extends "
                 + this.nameGen.getJavaNameForClass(classNode.getParent()) + "{\n");
         if (classNode.getIdentifier().equals(IdTable.getInstance().getMainSymbol())) {
@@ -108,7 +98,7 @@ public class JavaBackend extends Visitor implements Backend<Program> {
     @Override
     public void visitClassPostorder(ClassNode classNode) {
         this.writer.write("}");
-        this.writer.close();
+        this.javaClasses.add(this.writer.build());
     }
 
     @Override
