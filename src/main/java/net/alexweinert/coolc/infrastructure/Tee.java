@@ -8,7 +8,7 @@ public class Tee<T> extends Processor<T, T> {
     }
 
     @Override
-    public T process(T input) {
+    public T process(T input) throws ProcessorException {
         this.backend.process(input);
         return input;
     }

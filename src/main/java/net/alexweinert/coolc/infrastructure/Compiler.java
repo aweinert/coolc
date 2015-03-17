@@ -9,10 +9,9 @@ public class Compiler<T> {
         this.backend = backend;
     }
 
-    public void compile() {
+    public void compile() throws ProcessorException {
         final T frontendResult = frontend.process();
-        if (frontendResult != null) {
-            this.backend.process(frontendResult);
-        }
+        assert frontendResult != null;
+        this.backend.process(frontendResult);
     }
 }

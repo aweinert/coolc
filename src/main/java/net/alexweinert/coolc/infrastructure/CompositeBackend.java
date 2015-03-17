@@ -4,8 +4,7 @@ class CompositeBackend<T, U> implements Backend<T> {
     final private Processor<T, U> previousProcessor;
     final private Backend<U> finalProcessor;
 
-    public static <T, U> CompositeBackend<T, U> create(Processor<T, U> previousProcessor,
-            Backend<U> finalProcessor) {
+    public static <T, U> CompositeBackend<T, U> create(Processor<T, U> previousProcessor, Backend<U> finalProcessor) {
         return new CompositeBackend<>(previousProcessor, finalProcessor);
     }
 
@@ -15,11 +14,10 @@ class CompositeBackend<T, U> implements Backend<T> {
     }
 
     @Override
-    public void process(T input) {
+    public void process(T input) throws ProcessorException {
         final U intermediate = previousProcessor.process(input);
-        if (intermediate != null) {
-            finalProcessor.process(intermediate);
-        }
+        assert intermediate != null;
+        finalProcessor.process(intermediate);
     }
 
 }
