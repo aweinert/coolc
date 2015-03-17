@@ -169,7 +169,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolInt " + resultVariable + " = " + lhsVariable + ".add(" + rhsVariable + ");");
+        writer.write("CoolInt " + resultVariable + " = new CoolInt(" + lhsVariable + ".getValue() + " + rhsVariable
+                + ".getValue());");
         this.variables.push(resultVariable);
     }
 
@@ -177,7 +178,7 @@ public class JavaBackend extends Visitor implements Backend<Program> {
     public void visitBooleanNegationPostorder(BooleanNegation booleanNegation) {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String argVariable = this.variables.pop();
-        writer.write("CoolBool " + resultVariable + " = " + argVariable + ".not();");
+        writer.write("CoolBool " + resultVariable + " = new CoolBool(!" + argVariable + ");");
         this.variables.push(resultVariable);
     }
 
@@ -186,7 +187,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolInt " + resultVariable + " = " + lhsVariable + ".div(" + rhsVariable + ");");
+        writer.write("CoolInt " + resultVariable + " = new CoolInt(" + lhsVariable + ".getValue() / " + rhsVariable
+                + ".getValue());");
         this.variables.push(resultVariable);
     }
 
@@ -212,7 +214,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolBool " + resultVariable + " = (" + lhsVariable + ".lt(" + rhsVariable + "));");
+        writer.write("CoolBool " + resultVariable + " = new CoolBool(" + lhsVariable + ".getValue() < " + rhsVariable
+                + ".getValue());");
         this.variables.push(resultVariable);
     }
 
@@ -221,7 +224,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolBool " + resultVariable + " = (" + lhsVariable + ".lte(" + rhsVariable + "));");
+        writer.write("CoolBool " + resultVariable + " = new CoolBool(" + lhsVariable + ".getValue() <= " + rhsVariable
+                + ".getValue());");
         this.variables.push(resultVariable);
     }
 
@@ -230,7 +234,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolInt " + resultVariable + " = (" + lhsVariable + ".mul(" + rhsVariable + "));");
+        writer.write("CoolInt " + resultVariable + " = new CoolInt(" + lhsVariable + ".getValue() * " + rhsVariable
+                + ".getValue());");
         this.variables.push(resultVariable);
     }
 
@@ -239,7 +244,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolInt " + resultVariable + " = (" + lhsVariable + ".sub(" + rhsVariable + "));");
+        writer.write("CoolInt " + resultVariable + " = new CoolInt(" + lhsVariable + ".getValue() - " + rhsVariable
+                + ".getValue());");
         this.variables.push(resultVariable);
     }
 
@@ -247,7 +253,7 @@ public class JavaBackend extends Visitor implements Backend<Program> {
     public void visitArithmeticNegationPostOrder(ArithmeticNegation arithmeticNegation) {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String argVariable = this.variables.pop();
-        writer.write("CoolInt " + resultVariable + " = " + argVariable + ".negate();");
+        writer.write("CoolInt " + resultVariable + " = new CoolInt(-" + argVariable + ".getValue());");
         this.variables.push(resultVariable);
     }
 
@@ -305,7 +311,7 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         final String resultVariable = this.nameGen.getFreshVariableName();
         writer.write(this.nameGen.getJavaNameForClass(ifNode.getType()) + " " + resultVariable + ";\n");
         this.variables.push(resultVariable);
-        writer.write("if (" + conditionVariable + ".isTrue()) {\n");
+        writer.write("if (" + conditionVariable + ".getValue()) {\n");
     }
 
     @Override
@@ -332,7 +338,7 @@ public class JavaBackend extends Visitor implements Backend<Program> {
     @Override
     public void visitLoopInorder(Loop loop) {
         final String conditionVariable = this.variables.pop();
-        writer.write("if(!" + conditionVariable + ".isTrue()) { break; }\n");
+        writer.write("if(!" + conditionVariable + ".getValue()) { break; }\n");
     }
 
     @Override
