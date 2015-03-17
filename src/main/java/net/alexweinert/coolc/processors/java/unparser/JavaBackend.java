@@ -124,7 +124,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
         final Iterator<Formal> iterator = method.getFormals().iterator();
         while (iterator.hasNext()) {
             final Formal formal = iterator.next();
-            writer.write(this.nameGen.getJavaNameForClass(formal.getDeclaredType()) + " " + formal.getIdentifier());
+            writer.write(this.nameGen.getJavaNameForClass(formal.getDeclaredType()) + " "
+                    + this.nameGen.getJavaNameForVariable(formal.getIdentifier()));
             if (iterator.hasNext()) {
                 writer.write(", ");
             }
