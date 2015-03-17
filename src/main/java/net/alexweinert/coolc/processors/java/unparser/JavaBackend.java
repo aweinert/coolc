@@ -2,7 +2,6 @@ package net.alexweinert.coolc.processors.java.unparser;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -362,7 +361,9 @@ public class JavaBackend extends Visitor implements Backend<Program> {
 
     @Override
     public void visitNew(New newNode) {
-        writer.write("new " + this.nameGen.getJavaNameForClass(newNode.getTypeIdentifier()));
+        final String returnVariable = this.nameGen.getFreshVariableName();
+        writer.write(returnVariable + " = new " + this.nameGen.getJavaNameForClass(newNode.getTypeIdentifier()) + ";\n");
+        this.variables.push(returnVariable);
     }
 
     @Override
