@@ -171,7 +171,8 @@ public class JavaBackend extends Visitor implements Backend<Program> {
     @Override
     public void visitStringConstant(StringConst stringConst) {
         final String varName = this.nameGen.getFreshVariableName();
-        this.writer.write("CoolString " + varName + " = new CoolString(" + stringConst.getValue().toString() + ");\n");
+        this.writer.write("CoolString " + varName + " = new CoolString(\"" + stringConst.getValue().toString()
+                + "\");\n");
         this.variables.push(varName);
     }
 
