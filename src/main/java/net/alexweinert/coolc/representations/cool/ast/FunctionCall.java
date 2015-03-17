@@ -94,4 +94,8 @@ public class FunctionCall extends Expression {
         return this.actual;
     }
 
+    public Expression getDispatchExpression() {
+        return this.expr;
+    }
+
 }

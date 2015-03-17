@@ -311,7 +311,7 @@ class ExpressionTypeChecker extends Visitor {
         this.methodSignatures.pop();
         this.methodDefiningClasses.pop();
         this.argumentTypes.push(this.methodReturnTypes.pop());
-        call.setType(this.argumentTypes.peek().getTypeId(this.classId));
+        call.setType(this.argumentTypes.peek().getTypeId(call.getDispatchExpression().getType()));
     }
 
     @Override
@@ -330,7 +330,7 @@ class ExpressionTypeChecker extends Visitor {
         this.methodSignatures.pop();
         this.methodDefiningClasses.pop();
         this.argumentTypes.push(this.methodReturnTypes.pop());
-        call.setType(this.argumentTypes.peek().getTypeId(this.classId));
+        call.setType(this.argumentTypes.peek().getTypeId(call.getDispatchExpression().getType()));
     }
 
     @Override
