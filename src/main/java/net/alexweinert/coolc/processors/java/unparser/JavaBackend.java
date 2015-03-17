@@ -42,6 +42,7 @@ import net.alexweinert.coolc.representations.cool.ast.StringConst;
 import net.alexweinert.coolc.representations.cool.ast.Subtraction;
 import net.alexweinert.coolc.representations.cool.ast.Typecase;
 import net.alexweinert.coolc.representations.cool.ast.Visitor;
+import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 public class JavaBackend extends Visitor implements Backend<Program> {
 
@@ -96,6 +97,12 @@ public class JavaBackend extends Visitor implements Backend<Program> {
             e.printStackTrace();
         }
         this.writer.write("public class " + this.nameGen.getJavaNameForClass(classNode.getIdentifier()) + " {\n");
+        if (classNode.getIdentifier().equals(IdTable.getInstance().getMainSymbol())) {
+            this.writer.write("public static void main(String[] args) {\n");
+            this.writer.write("final Main main = new Main();\n");
+            this.writer.write("main.coolmain();\n");
+            this.writer.write("}\n");
+        }
     }
 
     @Override
