@@ -1,7 +1,12 @@
 package net.alexweinert.coolc.processors.java.unparser;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Stack;
@@ -52,7 +57,33 @@ public class JavaBackend extends Visitor implements Backend<Program> {
 
     @Override
     public void process(Program input) {
+        this.copyResource("CoolObject.java");
+        this.copyResource("CoolBool.java");
+        this.copyResource("CoolInt.java");
+        this.copyResource("CoolString.java");
+        this.copyResource("CoolIO.java");
         input.acceptVisitor(this);
+    }
+
+    private void copyResource(String fileName) {
+        File sourceFile = new File(this.getClass().getClassLoader().getResource(fileName).getFile());
+        File destFile = new File(this.pathToFolder.resolve(fileName).toString());
+        FileChannel source = null;
+        FileChannel destination = null;
+
+        try {
+            source = new FileInputStream(sourceFile).getChannel();
+            destination = new FileOutputStream(destFile).getChannel();
+            destination.transferFrom(source, 0, source.size());
+            if (source != null) {
+                source.close();
+            }
+            if (destination != null) {
+                destination.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
