@@ -38,8 +38,7 @@ public class OverridingCheckerTest {
         declaredSignatures.put(classOne.getIdentifier(), DeclaredClassSignature.create(classOne));
         declaredSignatures.put(classTwo.getIdentifier(), DeclaredClassSignature.create(classTwo));
 
-        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, declaredSignatures,
-                err);
+        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, err);
 
         Assert.assertEquals(testProgram, receivedProgram);
         Mockito.verifyZeroInteractions(err);
@@ -63,8 +62,7 @@ public class OverridingCheckerTest {
         declaredSignatures.put(classTwo.getIdentifier(), DeclaredClassSignature.create(classTwo));
         declaredSignatures.put(IdTable.getInstance().getObjectSymbol(), DeclaredClassSignature.createObjectSignature());
 
-        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, declaredSignatures,
-                err);
+        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, err);
 
         Assert.assertEquals(testProgram, receivedProgram);
         Mockito.verifyZeroInteractions(err);
@@ -86,8 +84,7 @@ public class OverridingCheckerTest {
         final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
         declaredSignatures.put(classOne.getIdentifier(), DeclaredClassSignature.create(classOne));
         declaredSignatures.put(classTwo.getIdentifier(), DeclaredClassSignature.create(classTwo));
-        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, declaredSignatures,
-                err);
+        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, err);
 
         Assert.assertEquals(testProgram, receivedProgram);
         Mockito.verifyZeroInteractions(err);
@@ -111,8 +108,7 @@ public class OverridingCheckerTest {
         final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
         declaredSignatures.put(classOne.getIdentifier(), DeclaredClassSignature.create(classOne));
         declaredSignatures.put(classTwo.getIdentifier(), DeclaredClassSignature.create(classTwo));
-        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, hierarchy, declaredSignatures,
-                err);
+        final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, err);
 
         final Program expectedProgram = factory.program(classOne, factory.classNode("ClassTwo", "ClassOne"));
 
