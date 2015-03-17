@@ -12,7 +12,7 @@ import net.alexweinert.coolc.processors.cool.typecheck.CoolTypeChecker;
 import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
 import net.alexweinert.coolc.processors.io.fileopener.FileOpener;
 import net.alexweinert.coolc.processors.io.stringdumper.StringDumper;
-import net.alexweinert.coolc.processors.java.unparser.JavaBackend;
+import net.alexweinert.coolc.processors.java.fromcool.JavaBackend;
 import net.alexweinert.coolc.processors.java.variablerenaming.VariableRenamer;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 

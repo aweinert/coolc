@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.processors.java.unparser;
+package net.alexweinert.coolc.processors.java.fromcool;
 
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
