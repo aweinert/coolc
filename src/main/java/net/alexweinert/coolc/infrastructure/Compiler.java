@@ -11,7 +11,7 @@ public class Compiler<T> {
 
     public void compile() throws ProcessorException {
         final T frontendResult = frontend.process();
-        assert frontendResult != null;
+        assert frontendResult != null : this.frontend.getClass().getSimpleName() + " returned null";
         this.backend.process(frontendResult);
     }
 }

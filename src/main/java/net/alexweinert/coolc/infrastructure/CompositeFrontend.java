@@ -12,7 +12,9 @@ class CompositeFrontend<T, U> extends Frontend<U> {
     @Override
     public U process() throws ProcessorException {
         final T frontendResult = this.frontend.process();
-        assert frontendResult != null;
-        return this.processor.process(frontendResult);
+        assert frontendResult != null : this.frontend.getClass().getSimpleName() + " returned null";
+        final U processorResult = this.processor.process(frontendResult);
+        assert processorResult != null : this.processor.getClass().getSimpleName() + " returned null";
+        return processorResult;
     }
 }
