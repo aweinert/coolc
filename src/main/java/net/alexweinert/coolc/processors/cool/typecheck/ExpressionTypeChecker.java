@@ -410,6 +410,8 @@ class ExpressionTypeChecker extends Visitor {
             branchTypes.add(this.argumentTypes.pop());
         }
 
+        final ExpressionType switchExpressionType = this.argumentTypes.pop();
+
         final Iterator<ExpressionType> typeIterator = branchTypes.iterator();
         ExpressionType leastUpperBound = typeIterator.next();
         while (typeIterator.hasNext()) {
