@@ -71,8 +71,8 @@ public class ProcessorBuilder {
     }
 
     public ProcessorBuilder compileToJava() {
-        return this.hierarchyCheck().sortTypecase().removeSelfType().removeShadowing().hierarchyCheck().typeCheck()
-                .coolToJava();
+        return this.hierarchyCheck().sortTypecase().hierarchyCheck().removeSelfType().removeShadowing()
+                .hierarchyCheck().typeCheck().coolToJava();
     }
 
     public Compiler<String> dumpToConsole() {
