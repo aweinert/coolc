@@ -8,7 +8,7 @@ import net.alexweinert.coolc.representations.java.JavaProgram;
 public class Main {
     public static void main(String[] args) {
         final Compiler<JavaProgram> compiler = new ProcessorBuilder().openFile(args[0]).parseAndCheckCool()
-                .compileToJava().dumpJava("output");
+                .compileToJava().compileJar("out.jar");
         try {
             compiler.compile();
         } catch (ProcessorException e) {

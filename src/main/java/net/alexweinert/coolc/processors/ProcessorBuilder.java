@@ -14,6 +14,7 @@ import net.alexweinert.coolc.processors.io.fileopener.FileOpener;
 import net.alexweinert.coolc.processors.io.stringdumper.StringDumper;
 import net.alexweinert.coolc.processors.java.dump.JavaDumper;
 import net.alexweinert.coolc.processors.java.fromcool.CoolToJavaProcessor;
+import net.alexweinert.coolc.processors.java.jarcompile.JarCompiler;
 import net.alexweinert.coolc.processors.java.typecasesort.TypecaseSortProcessor;
 import net.alexweinert.coolc.processors.java.variablerenaming.VariableRenamer;
 import net.alexweinert.coolc.representations.java.JavaProgram;
@@ -64,6 +65,10 @@ public class ProcessorBuilder {
 
     public Compiler<JavaProgram> dumpJava(String folder) {
         return this.frontend.append(new JavaDumper(Paths.get(folder)));
+    }
+
+    public Compiler<JavaProgram> compileJar(String jarFile) {
+        return this.frontend.append(new JarCompiler(jarFile));
     }
 
     public ProcessorBuilder parseAndCheckCool() {
