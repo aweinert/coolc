@@ -9,10 +9,10 @@ public class Transformer extends Visitor {
     private List<ClassNode> classes;
     private Program program;
 
-    private Stack<Expression> expressions;
-    private Stack<List<Expression>> blockExpressions;
-    private Stack<List<Expression>> argumentExpressions;
-    private Stack<List<Case>> cases;
+    private Stack<Expression> expressions = new Stack<>();
+    private Stack<List<Expression>> blockExpressions = new Stack<>();
+    private Stack<List<Expression>> argumentExpressions = new Stack<>();
+    private Stack<List<Case>> cases = new Stack<>();
 
     public Program transform(final Program program) {
         program.acceptVisitor(this);
