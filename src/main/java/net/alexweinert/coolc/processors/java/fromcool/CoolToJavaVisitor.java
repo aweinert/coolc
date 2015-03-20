@@ -277,14 +277,20 @@ public class CoolToJavaVisitor extends Visitor {
     @Override
     public void visitTypecaseInorder(Typecase typecase) {
         final String resultVariable = this.nameGen.getFreshVariableName();
-        writer.write(this.nameGen.getJavaNameForClass(typecase.getType()) + " " + resultVariable + ";\n");
+        final String controlVariable = this.nameGen.getFreshVariableName();
+        writer.write(this.nameGen.getJavaNameForClass(typecase.getType()) + " " + resultVariable + " = null;\n");
+        writer.write("boolean " + controlVariable + " = false;");
         this.variables.push(resultVariable);
+        this.variables.push(controlVariable);
         writer.write("{\n");
     }
 
     @Override
     public void visitTypecasePostorder(Typecase typecase) {
         writer.write("}\n");
+        // Pop the control variable
+        this.variables.pop();
+
         final String resultVariable = this.variables.pop();
         // Pop the expression variable
         this.variables.pop();
@@ -293,8 +299,10 @@ public class CoolToJavaVisitor extends Visitor {
 
     @Override
     public void visitCasePreorder(Case caseNode) {
-        final String expressionVariable = this.variables.get(this.variables.size() - 2);
-        writer.write("if (" + expressionVariable + " instanceof "
+        // Current layout of the stack: [..., expressionVar, resultVariable, controlVariable]
+        final String expressionVariable = this.variables.get(this.variables.size() - 3);
+        final String controlVariable = this.variables.peek();
+        writer.write("if (!" + controlVariable + " && " + expressionVariable + " instanceof "
                 + this.nameGen.getJavaNameForClass(caseNode.getDeclaredType()) + ") {\n");
         writer.write(this.nameGen.getJavaNameForClass(caseNode.getDeclaredType()) + " "
                 + this.nameGen.getJavaNameForVariable(caseNode.getVariableIdentifier()) + " = ("
@@ -304,8 +312,10 @@ public class CoolToJavaVisitor extends Visitor {
     @Override
     public void visitCasePostorder(Case caseNode) {
         final String expressionVariable = this.variables.pop();
-        final String resultVariable = this.variables.peek();
+        final String controlVariable = this.variables.peek();
+        final String resultVariable = this.variables.get(this.variables.size() - 2);
         writer.write(resultVariable + " = " + expressionVariable + ";\n");
+        writer.write(controlVariable + " = true;\n");
         writer.write("}\n");
     }
 
