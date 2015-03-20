@@ -7,6 +7,6 @@ class NameGenerator {
     private int index;
 
     public IdSymbol getNewSymbol() {
-        return IdTable.getInstance().addString("genVar" + index);
+        return IdTable.getInstance().addString("genVar" + index++);
     }
 }
