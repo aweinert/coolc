@@ -15,10 +15,6 @@ package net.alexweinert.coolc.representations.cool.symboltables;
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
-
 public class IntTable extends AbstractTable<Integer> {
     private static final IntTable instance = new IntTable();
 
@@ -51,19 +47,5 @@ public class IntTable extends AbstractTable<Integer> {
 
     public IntSymbol addInt(String s) {
         return this.addInt(Integer.parseInt(s));
-    }
-
-    /**
-     * Generates code for all int constants in the int table.
-     * 
-     * @param intclasstag
-     *            the class tag for Int
-     * @param s
-     *            the output stream
-     * */
-    public void codeStringTable(int intclasstag, PrintStream s) {
-        for (AbstractSymbol<Integer> sym : this.tbl.values()) {
-            ((IntSymbol) sym).codeDef(intclasstag, s);
-        }
     }
 }

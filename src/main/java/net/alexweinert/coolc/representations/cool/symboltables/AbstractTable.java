@@ -18,7 +18,7 @@ package net.alexweinert.coolc.representations.cool.symboltables;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.alexweinert.coolc.representations.cool.Utilities;
+import javax.swing.text.Utilities;
 
 /**
  * Abstract string table implementation.
@@ -80,12 +80,7 @@ abstract class AbstractTable<T> {
      * */
     public AbstractSymbol<T> lookup(String s) {
         AbstractSymbol<T> sym = null;
-        if (this.tbl.containsKey(s)) {
-            return this.tbl.get(s);
-        } else {
-            Utilities.fatalError("String table lookup failed on string: " + s);
-            return null;
-        }
+        return this.tbl.get(s);
     }
 
     /** Produces a printable representation of the string table */

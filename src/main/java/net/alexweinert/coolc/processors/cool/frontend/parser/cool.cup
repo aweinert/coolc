@@ -12,7 +12,6 @@ import java_cup.runtime.*;
 import net.alexweinert.coolc.processors.cool.frontend.lexer.Lexer;
 import net.alexweinert.coolc.representations.cool.symboltables.*;
 import net.alexweinert.coolc.representations.cool.ast.*;
-import net.alexweinert.coolc.representations.cool.Utilities;
 
 /* Code enclosed in {: :} is copied verbatim to the class containing
 all parser actions.  All the extra variables/functions you want to use
@@ -40,9 +39,8 @@ parser code {:
     public void syntax_error(Symbol cur_token) {
         int lineno = action_obj.curr_lineno();
 	String filename = action_obj.curr_filename();
-        System.err.print("\"" + filename + "\", line " + lineno + 
-		         ": parse error at or near ");
-        Utilities.printToken(cur_token);
+	System.err.println("\"" + filename + "\", line " + lineno + 
+		         ": parse error at or near " + cur_token.toString());
 	omerrs++;
 	if (omerrs>50) {
 	   System.err.println("More than 50 errors");

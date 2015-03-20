@@ -15,10 +15,6 @@ package net.alexweinert.coolc.representations.cool.symboltables;
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
-
 public class StringTable extends AbstractTable<String> {
 
     private static final StringTable instance = new StringTable();
@@ -48,19 +44,5 @@ public class StringTable extends AbstractTable<String> {
             this.tbl.put(s, getNewSymbol(s, tbl.size()));
         }
         return (StringSymbol) this.tbl.get(s);
-    }
-
-    /**
-     * Generates code for all string constants in the string table.
-     * 
-     * @param stringclasstag
-     *            the class tag for String
-     * @param s
-     *            the output stream
-     * */
-    public void codeStringTable(int stringclasstag, PrintStream s) {
-        for (AbstractSymbol<String> sym : this.tbl.values()) {
-            ((StringSymbol) sym).codeDef(stringclasstag, s);
-        }
     }
 }

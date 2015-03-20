@@ -15,13 +15,6 @@ package net.alexweinert.coolc.representations.cool.ast;
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
 
-import java.io.PrintStream;
-
-import net.alexweinert.coolc.representations.cool.Utilities;
-import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.StringSymbol;
-
 public abstract class TreeNode {
     /** the name of the file this node came from */
     private final String filename;
@@ -50,55 +43,6 @@ public abstract class TreeNode {
 
     public String getFilename() {
         return this.filename;
-    }
-
-    /**
-     * Dumps a printable representation of a boolean value.
-     * 
-     * This method is used internally by the generated AST classes
-     * */
-    protected void dump_Boolean(PrintStream out, int n, Boolean b) {
-        out.print(Utilities.pad(n));
-        out.println(b.booleanValue() ? "1" : "0");
-    }
-
-    /**
-     * Dumps a printable representation of an AbstactSymbol value.
-     * 
-     * This method is used internally by the generated AST classes
-     * */
-    protected void dump_IdSymbol(PrintStream out, int n, IdSymbol sym) {
-        out.print(Utilities.pad(n));
-        out.println(sym.getString());
-    }
-
-    /**
-     * Dumps a printable representation of an AbstactSymbol value.
-     * 
-     * This method is used internally by the generated AST classes
-     * */
-    protected void dump_IntSymbol(PrintStream out, int n, IntSymbol sym) {
-        out.print(Utilities.pad(n));
-        out.println(sym.getString());
-    }
-
-    /**
-     * Dumps a printable representation of an AbstactSymbol value.
-     * 
-     * This method is used internally by the generated AST classes
-     * */
-    protected void dump_StringSymbol(PrintStream out, int n, StringSymbol sym) {
-        out.print(Utilities.pad(n));
-        out.println(sym.getString());
-    }
-
-    /**
-     * Dumps a printable representation of current line number
-     * 
-     * This method is used internally by the generated AST classes
-     * */
-    protected void dump_line(PrintStream out, int n) {
-        out.println(Utilities.pad(n) + "#" + lineNumber);
     }
 
     public abstract void acceptVisitor(Visitor visitor);

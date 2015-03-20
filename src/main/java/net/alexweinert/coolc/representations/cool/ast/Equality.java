@@ -1,8 +1,5 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
-import net.alexweinert.coolc.representations.cool.symboltables.TreeConstants;
-
 /**
  * Defines AST constructor 'eq'.
  * <p>
@@ -26,11 +23,6 @@ public class Equality extends Expression {
         super(filename, lineNumber);
         e1 = a1;
         e2 = a2;
-    }
-
-    private boolean isBasicType(IdSymbol candidate) {
-        return candidate.equals(TreeConstants.Int) || candidate.equals(TreeConstants.Bool)
-                || candidate.equals(TreeConstants.Str);
     }
 
     @Override
