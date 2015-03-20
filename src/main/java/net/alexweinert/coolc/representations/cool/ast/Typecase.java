@@ -1,6 +1,5 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
-
 /**
  * Defines AST constructor 'typcase'.
  * <p>
@@ -75,6 +74,10 @@ public class Typecase extends Expression {
 
     public Cases getCases() {
         return this.cases;
+    }
+
+    public Expression getExpression() {
+        return this.expr;
     }
 
 }
