@@ -34,6 +34,7 @@ import net.alexweinert.coolc.representations.cool.ast.Loop;
 import net.alexweinert.coolc.representations.cool.ast.Method;
 import net.alexweinert.coolc.representations.cool.ast.Multiplication;
 import net.alexweinert.coolc.representations.cool.ast.New;
+import net.alexweinert.coolc.representations.cool.ast.NoExpression;
 import net.alexweinert.coolc.representations.cool.ast.ObjectReference;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.ast.StaticFunctionCall;
@@ -107,6 +108,17 @@ public class CoolToJavaVisitor extends Visitor {
         writer.write("protected " + this.nameGen.getJavaNameForClass(attribute.getDeclaredType()) + " "
                 + this.nameGen.getJavaNameForVariable(attribute.getName()) + ";\n");
         writer.write("{");
+        if (attribute.getInitializer() instanceof NoExpression) {
+            if (attribute.getTypeDecl().equals(IdTable.getInstance().getBoolSymbol())) {
+                this.variables.push("new CoolBool(false)");
+            } else if (attribute.getTypeDecl().equals(IdTable.getInstance().getIntSymbol())) {
+                this.variables.push("new CoolInt(0)");
+            } else if (attribute.getTypeDecl().equals(IdTable.getInstance().getStringSymbol())) {
+                this.variables.push("new CoolString(\"\")");
+            } else {
+                this.variables.push("null");
+            }
+        }
     }
 
     @Override
