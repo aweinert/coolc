@@ -213,7 +213,11 @@ public class CoolToJavaVisitor extends Visitor {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolBool " + resultVariable + " = new CoolBool(" + lhsVariable + " == " + rhsVariable + ");");
+        final String bothNull = "(" + lhsVariable + " == null && " + rhsVariable + " == null)";
+        final String lhsNotNull = "(" + lhsVariable + "!= null)";
+        final String lhsEqualRhs = "(" + lhsVariable + ".equals(" + rhsVariable + "))";
+        final String condition = bothNull + " || (" + lhsNotNull + " && " + lhsEqualRhs + ")";
+        writer.write("CoolBool " + resultVariable + " = new CoolBool(" + condition + ");");
         this.variables.push(resultVariable);
     }
 

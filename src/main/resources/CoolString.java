@@ -9,4 +9,8 @@ public class CoolString extends CoolObject {
         return this.value;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof CoolString && this.value.equals(((CoolString) other).value);
+    }
 }

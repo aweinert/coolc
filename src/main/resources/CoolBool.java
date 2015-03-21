@@ -8,4 +8,9 @@ public class CoolBool extends CoolObject {
     public boolean getValue() {
         return this.value;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof CoolBool && this.value == ((CoolBool) other).value;
+    }
 }

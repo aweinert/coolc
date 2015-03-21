@@ -8,4 +8,9 @@ public class CoolObject {
         final String simpleName = this.getClass().getSimpleName();
         return new CoolString(simpleName.substring(4, simpleName.length() - 1));
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return this == other;
+    }
 }
