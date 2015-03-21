@@ -17,4 +17,8 @@ public class JavaClass {
         return definition;
     }
 
+    public String toString() {
+        return this.identifier;
+    }
+
 }
