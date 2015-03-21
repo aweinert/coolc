@@ -429,8 +429,8 @@ public class CoolToJavaVisitor extends Visitor {
     @Override
     public void visitLetInorder(Let let) {
         final String initializerVariable = this.variables.pop();
-        writer.write(this.nameGen.getJavaNameForVariable(let.getVariableIdentifier()) + " = " + initializerVariable
+        writer.write(this.nameGen.getJavaNameForClass(let.getDeclaredType()) + " "
+                + this.nameGen.getJavaNameForVariable(let.getVariableIdentifier()) + " = " + initializerVariable
                 + ";\n");
     }
-
 }
