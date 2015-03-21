@@ -46,11 +46,17 @@ public class JarCompiler implements Backend<JavaProgram> {
             final ProcessBuilder compilerBuilder = new ProcessBuilder(compilerArgs);
             final Process compiler = compilerBuilder.start();
             compiler.waitFor();
+            if (compiler.exitValue() != 0) {
+                throw new ProcessorException(new Exception("Error during compilation of generated Java files"));
+            }
 
             final ProcessBuilder jarBuilder = new ProcessBuilder(jarArgs);
             jarBuilder.directory(tempFolder.toFile());
             final Process jar = jarBuilder.start();
             jar.waitFor();
+            if (jar.exitValue() != 0) {
+                throw new ProcessorException(new Exception("Error during packing of compiled Java classes"));
+            }
 
             for (JavaClass javaClass : input.getClasses()) {
                 Files.delete(tempFolder.resolve(javaClass.getIdentifier() + ".java"));
