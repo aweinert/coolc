@@ -221,7 +221,7 @@ public class CoolToJavaVisitor extends Visitor {
     public void visitIsVoidPostorder(IsVoid isVoid) {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String argVariable = this.variables.pop();
-        writer.write("CoolBool " + resultVariable + " = (" + argVariable + " == null);");
+        writer.write("CoolBool " + resultVariable + " = new CoolBool(" + argVariable + " == null);");
         this.variables.push(resultVariable);
     }
 
