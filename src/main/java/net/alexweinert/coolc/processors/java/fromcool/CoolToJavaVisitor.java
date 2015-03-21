@@ -194,7 +194,7 @@ public class CoolToJavaVisitor extends Visitor {
     public void visitBooleanNegationPostorder(BooleanNegation booleanNegation) {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String argVariable = this.variables.pop();
-        writer.write("CoolBool " + resultVariable + " = new CoolBool(!" + argVariable + ");");
+        writer.write("CoolBool " + resultVariable + " = new CoolBool(!" + argVariable + ".getValue());");
         this.variables.push(resultVariable);
     }
 
@@ -213,7 +213,7 @@ public class CoolToJavaVisitor extends Visitor {
         final String resultVariable = this.nameGen.getFreshVariableName();
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolBool " + resultVariable + " = (" + lhsVariable + " == " + rhsVariable + ");");
+        writer.write("CoolBool " + resultVariable + " = new CoolBool(" + lhsVariable + " == " + rhsVariable + ");");
         this.variables.push(resultVariable);
     }
 
