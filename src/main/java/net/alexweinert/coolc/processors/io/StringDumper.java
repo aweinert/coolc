@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.processors.io.stringdumper;
+package net.alexweinert.coolc.processors.io;
 
 import net.alexweinert.coolc.infrastructure.Backend;
 

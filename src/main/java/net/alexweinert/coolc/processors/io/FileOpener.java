@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.processors.io.fileopener;
+package net.alexweinert.coolc.processors.io;
 
 import java.io.FileReader;
 import java.io.Reader;

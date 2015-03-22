@@ -10,8 +10,8 @@ import net.alexweinert.coolc.processors.cool.hierarchycheck.CoolHierarchyChecker
 import net.alexweinert.coolc.processors.cool.selftyperemoval.SelfTypeRemover;
 import net.alexweinert.coolc.processors.cool.typecheck.CoolTypeChecker;
 import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
-import net.alexweinert.coolc.processors.io.fileopener.FileOpener;
-import net.alexweinert.coolc.processors.io.stringdumper.StringDumper;
+import net.alexweinert.coolc.processors.io.FileOpener;
+import net.alexweinert.coolc.processors.io.StringDumper;
 import net.alexweinert.coolc.processors.java.dump.JavaDumper;
 import net.alexweinert.coolc.processors.java.fromcool.CoolToJavaProcessor;
 import net.alexweinert.coolc.processors.java.jarcompile.JarCompiler;
