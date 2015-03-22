@@ -17,7 +17,10 @@ import net.alexweinert.coolc.processors.java.fromcool.CoolToJavaProcessor;
 import net.alexweinert.coolc.processors.java.jarcompile.JarCompiler;
 import net.alexweinert.coolc.processors.java.typecasesort.TypecaseSortProcessor;
 import net.alexweinert.coolc.processors.java.variablerenaming.VariableRenamer;
+import net.alexweinert.coolc.processors.util.UsageFrontend;
 import net.alexweinert.coolc.representations.java.JavaProgram;
+
+import com.beust.jcommander.JCommander;
 
 public class ProcessorBuilder {
     private Frontend frontend = null;
@@ -83,5 +86,9 @@ public class ProcessorBuilder {
     public Compiler<String> dumpToConsole() {
         this.frontend = this.frontend.append(new CoolUnparser());
         return this.frontend.append(new StringDumper());
+    }
+
+    public Compiler<?> showHelp(JCommander jCommander) {
+        return new UsageFrontend(jCommander).append(new StringDumper());
     }
 }

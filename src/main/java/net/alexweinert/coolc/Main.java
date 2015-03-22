@@ -26,13 +26,20 @@ public class Main {
     }
 
     private static Commandline parseCommandline(String[] args) {
-        Commandline commandline = new Commandline();
-        new JCommander(commandline, args);
+        final JCommander parser = new JCommander();
+        parser.setProgramName("coolc");
+        Commandline commandline = new Commandline(parser);
+        parser.addObject(commandline);
+        parser.parse(args);
         return commandline;
     }
 
     private static Compiler<?> buildCompiler(Commandline commandline) {
-        return new ProcessorBuilder().openFile(commandline.inputFiles.get(0)).parseAndCheckCool().compileToJava()
-                .compileJar("out.jar");
+        if (commandline.showHelp()) {
+            return new ProcessorBuilder().showHelp(commandline.getParser());
+        } else {
+            return new ProcessorBuilder().openFile(commandline.inputFiles.get(0)).parseAndCheckCool().compileToJava()
+                    .compileJar("out.jar");
+        }
     }
 }
