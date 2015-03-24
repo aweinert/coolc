@@ -44,6 +44,6 @@ public class BoolSymbol extends AbstractSymbol<Boolean> {
         this(val.booleanValue());
     }
 
-    final static BoolSymbol truebool = new BoolSymbol(true);
-    final static BoolSymbol falsebool = new BoolSymbol(false);
+    public final static BoolSymbol truebool = new BoolSymbol(true);
+    public final static BoolSymbol falsebool = new BoolSymbol(false);
 }

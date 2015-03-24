@@ -2,10 +2,8 @@ package net.alexweinert.coolc.processors.java.fromcool;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -22,7 +20,6 @@ import net.alexweinert.coolc.representations.cool.ast.Case;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Division;
 import net.alexweinert.coolc.representations.cool.ast.Equality;
-import net.alexweinert.coolc.representations.cool.ast.Formal;
 import net.alexweinert.coolc.representations.cool.ast.FunctionCall;
 import net.alexweinert.coolc.representations.cool.ast.If;
 import net.alexweinert.coolc.representations.cool.ast.IntConst;
@@ -42,7 +39,11 @@ import net.alexweinert.coolc.representations.cool.ast.StringConst;
 import net.alexweinert.coolc.representations.cool.ast.Subtraction;
 import net.alexweinert.coolc.representations.cool.ast.Typecase;
 import net.alexweinert.coolc.representations.cool.ast.Visitor;
+import net.alexweinert.coolc.representations.cool.symboltables.BoolSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
+import net.alexweinert.coolc.representations.cool.symboltables.IntTable;
+import net.alexweinert.coolc.representations.cool.symboltables.StringTable;
 import net.alexweinert.coolc.representations.java.JavaClass;
 import net.alexweinert.coolc.representations.java.JavaProgram;
 
@@ -72,217 +73,192 @@ public class CoolToJavaVisitor extends Visitor {
     private void copyResource(String fileName) throws IOException {
         BufferedReader sourceFileReader = new BufferedReader(new FileReader(new File(this.getClass().getClassLoader()
                 .getResource(fileName + ".java").getFile())));
-        final JavaClassBuilder builder = new JavaClassBuilder(fileName);
+        final StringBuilder builder = new StringBuilder();
         String currentLine = sourceFileReader.readLine();
 
         while (currentLine != null) {
-            builder.write(currentLine + "\n");
+            builder.append(currentLine + "\n");
             currentLine = sourceFileReader.readLine();
         }
         sourceFileReader.close();
-        this.javaClasses.add(builder.build());
+        this.javaClasses.add(new JavaClass(fileName, builder.toString()));
     }
 
     @Override
     public void visitClassPreorder(ClassNode classNode) {
         this.writer = new JavaClassBuilder(this.nameGen.getJavaNameForClass(classNode.getIdentifier()));
 
-        this.writer.write("public class " + this.nameGen.getJavaNameForClass(classNode.getIdentifier()) + " extends "
-                + this.nameGen.getJavaNameForClass(classNode.getParent()) + "{\n");
-        if (classNode.getIdentifier().equals(IdTable.getInstance().getMainSymbol())) {
-            this.writer.write("public static void main(String[] args) {\n");
-            this.writer.write("final CoolMain main = new CoolMain();\n");
-            this.writer.write("main.coolmain();\n");
-            this.writer.write("}\n");
-        }
+        this.writer.beginClass(classNode.getIdentifier(), classNode.getParent());
+
     }
 
     @Override
     public void visitClassPostorder(ClassNode classNode) {
-        this.writer.write("}");
+        this.writer.endClass();
         this.javaClasses.add(this.writer.build());
     }
 
     @Override
     public void visitAttributePreorder(Attribute attribute) {
-        writer.write("protected " + this.nameGen.getJavaNameForClass(attribute.getDeclaredType()) + " "
-                + this.nameGen.getJavaNameForVariable(attribute.getName()) + ";\n");
-        writer.write("{");
+        this.writer.beginAttributeDefinition(attribute.getDeclaredType(), attribute.getName());
         if (attribute.getInitializer() instanceof NoExpression) {
+            final String initializer = this.writer.declareVariable(attribute.getDeclaredType());
             if (attribute.getTypeDecl().equals(IdTable.getInstance().getBoolSymbol())) {
-                this.variables.push("new CoolBool(false)");
+                this.writer.loadBoolean(initializer, BoolSymbol.falsebool);
             } else if (attribute.getTypeDecl().equals(IdTable.getInstance().getIntSymbol())) {
-                this.variables.push("new CoolInt(0)");
+                this.writer.loadInt(initializer, IntTable.getInstance().addInt(0));
             } else if (attribute.getTypeDecl().equals(IdTable.getInstance().getStringSymbol())) {
-                this.variables.push("new CoolString(\"\")");
+                this.writer.loadString(initializer, StringTable.getInstance().addString(""));
             } else {
-                this.variables.push("null");
+                this.writer.loadVoid(initializer);
             }
+            this.variables.push(initializer);
         }
     }
 
     @Override
     public void visitAttributePostorder(Attribute attribute) {
-        writer.write(this.nameGen.getJavaNameForVariable(attribute.getName()) + " = " + this.variables.pop() + ";");
-        writer.write("}\n\n");
+        this.writer.endAttributeDefinition(this.variables.pop());
     }
 
     @Override
     public void visitMethodPreorder(Method method) {
-        writer.write("public " + this.nameGen.getJavaNameForClass(method.getReturnType()) + " "
-                + this.nameGen.getJavaNameForMethod(method.getName()) + "(");
-        final Iterator<Formal> iterator = method.getFormals().iterator();
-        while (iterator.hasNext()) {
-            final Formal formal = iterator.next();
-            writer.write(this.nameGen.getJavaNameForClass(formal.getDeclaredType()) + " "
-                    + this.nameGen.getJavaNameForVariable(formal.getIdentifier()));
-            if (iterator.hasNext()) {
-                writer.write(", ");
-            }
-        }
-        writer.write(") {\n");
+        this.writer.startMethodDefinition(method.getReturnType(), method.getName(), method.getFormals());
     }
 
     @Override
     public void visitMethodPostorder(Method method) {
-        writer.write("return " + this.variables.pop() + ";");
-        writer.write("}\n\n");
+        this.writer.endMethodDefinition(this.variables.pop());
     }
 
     @Override
     public void visitBoolConst(BoolConst boolConst) {
-        final String varName = this.nameGen.getFreshVariableName();
-        this.writer.write("CoolBool " + varName + " = new CoolBool(" + boolConst.getValue().toString() + ");\n");
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
+        this.writer.loadBoolean(varName, boolConst.getValue() ? BoolSymbol.truebool : BoolSymbol.falsebool);
         this.variables.push(varName);
     }
 
     @Override
     public void visitIntConst(IntConst intConst) {
-        final String varName = this.nameGen.getFreshVariableName();
-        this.writer.write("CoolInt " + varName + " = new CoolInt(" + intConst.getValue().toString() + ");\n");
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
+        this.writer.loadInt(varName, intConst.getValue());
+        this.variables.push(varName);
+    }
+
+    @Override
+    public void visitStringConstant(StringConst stringConst) {
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getStringSymbol());
+        this.writer.loadString(varName, stringConst.getValue());
         this.variables.push(varName);
     }
 
     @Override
     public void visitObjectReference(ObjectReference objectReference) {
-        if (objectReference.getVariableIdentifier().equals(IdTable.getInstance().getSelfSymbol())) {
-            this.variables.push("this");
-        } else {
-            this.variables.push(this.nameGen.getJavaNameForVariable(objectReference.getVariableIdentifier()));
-        }
-    }
-
-    @Override
-    public void visitStringConstant(StringConst stringConst) {
-        final String varName = this.nameGen.getFreshVariableName();
-        this.writer.write("CoolString " + varName + " = new CoolString(\"" + stringConst.getValue().toString()
-                + "\");\n");
+        final String varName = this.writer.declareVariable(objectReference.getType());
+        this.writer.loadVariable(varName, objectReference.getVariableIdentifier());
         this.variables.push(varName);
     }
 
     @Override
     public void visitAdditionPostorder(Addition addition) {
-        final String resultVariable = this.nameGen.getFreshVariableName();
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolInt " + resultVariable + " = new CoolInt(" + lhsVariable + ".getValue() + " + rhsVariable
-                + ".getValue());");
-        this.variables.push(resultVariable);
+        this.writer.add(varName, lhsVariable, rhsVariable);
+        this.variables.push(varName);
     }
 
     @Override
     public void visitBooleanNegationPostorder(BooleanNegation booleanNegation) {
-        final String resultVariable = this.nameGen.getFreshVariableName();
+        final String resultVariable = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
         final String argVariable = this.variables.pop();
-        writer.write("CoolBool " + resultVariable + " = new CoolBool(!" + argVariable + ".getValue());");
+        this.writer.boolNeg(resultVariable, argVariable);
         this.variables.push(resultVariable);
     }
 
     @Override
     public void visitDivisionPostorder(Division division) {
-        final String resultVariable = this.nameGen.getFreshVariableName();
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolInt " + resultVariable + " = new CoolInt(" + lhsVariable + ".getValue() / " + rhsVariable
-                + ".getValue());");
-        this.variables.push(resultVariable);
+        this.writer.div(varName, lhsVariable, rhsVariable);
+        this.variables.push(varName);
     }
 
     @Override
     public void visitEqualityPostorder(Equality equality) {
-        final String resultVariable = this.nameGen.getFreshVariableName();
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        final String bothNull = "(" + lhsVariable + " == null && " + rhsVariable + " == null)";
-        final String lhsNotNull = "(" + lhsVariable + "!= null)";
-        final String lhsEqualRhs = "(" + lhsVariable + ".equals(" + rhsVariable + "))";
-        final String condition = bothNull + " || (" + lhsNotNull + " && " + lhsEqualRhs + ")";
-        writer.write("CoolBool " + resultVariable + " = new CoolBool(" + condition + ");");
-        this.variables.push(resultVariable);
+        this.writer.eq(varName, lhsVariable, rhsVariable);
+        this.variables.push(varName);
     }
 
     @Override
     public void visitIsVoidPostorder(IsVoid isVoid) {
-        final String resultVariable = this.nameGen.getFreshVariableName();
-        final String argVariable = this.variables.pop();
-        writer.write("CoolBool " + resultVariable + " = new CoolBool(" + argVariable + " == null);");
-        this.variables.push(resultVariable);
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
+        final String arg = this.variables.pop();
+        this.writer.isVoid(varName, arg);
+        this.variables.push(varName);
     }
 
     @Override
     public void visitLessThanPostorder(LessThan lessThan) {
-        final String resultVariable = this.nameGen.getFreshVariableName();
-        final String rhsVariable = this.variables.pop();
-        final String lhsVariable = this.variables.pop();
-        writer.write("CoolBool " + resultVariable + " = new CoolBool(" + lhsVariable + ".getValue() < " + rhsVariable
-                + ".getValue());");
-        this.variables.push(resultVariable);
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
+        final String rhsArg = this.variables.pop();
+        final String lhsArg = this.variables.pop();
+        this.writer.lt(varName, lhsArg, rhsArg);
+        this.variables.push(varName);
     }
 
     @Override
     public void visitLessThanOrEqualsPostorder(LessThanOrEquals lessThanOrEquals) {
-        final String resultVariable = this.nameGen.getFreshVariableName();
-        final String rhsVariable = this.variables.pop();
-        final String lhsVariable = this.variables.pop();
-        writer.write("CoolBool " + resultVariable + " = new CoolBool(" + lhsVariable + ".getValue() <= " + rhsVariable
-                + ".getValue());");
-        this.variables.push(resultVariable);
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
+        final String rhsArg = this.variables.pop();
+        final String lhsArg = this.variables.pop();
+        this.writer.lte(varName, lhsArg, rhsArg);
+        this.variables.push(varName);
     }
 
     @Override
     public void visitMultiplicationPostorder(Multiplication multiplication) {
-        final String resultVariable = this.nameGen.getFreshVariableName();
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolInt " + resultVariable + " = new CoolInt(" + lhsVariable + ".getValue() * " + rhsVariable
-                + ".getValue());");
-        this.variables.push(resultVariable);
+        this.writer.mul(varName, lhsVariable, rhsVariable);
+        this.variables.push(varName);
     }
 
     @Override
     public void visitSubtractionPostorder(Subtraction subtraction) {
-        final String resultVariable = this.nameGen.getFreshVariableName();
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        writer.write("CoolInt " + resultVariable + " = new CoolInt(" + lhsVariable + ".getValue() - " + rhsVariable
-                + ".getValue());");
-        this.variables.push(resultVariable);
+        this.writer.sub(varName, lhsVariable, rhsVariable);
+        this.variables.push(varName);
     }
 
     @Override
     public void visitArithmeticNegationPostOrder(ArithmeticNegation arithmeticNegation) {
-        final String resultVariable = this.nameGen.getFreshVariableName();
-        final String argVariable = this.variables.pop();
-        writer.write("CoolInt " + resultVariable + " = new CoolInt(-" + argVariable + ".getValue());");
-        this.variables.push(resultVariable);
+        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
+        final String arg = this.variables.pop();
+        this.writer.arithNeg(varName, arg);
+        this.variables.push(varName);
     }
 
     @Override
     public void visitAssignPostorder(Assign assign) {
         final String expressionVariable = this.variables.pop();
-        final String assigneeVariable = this.nameGen.getJavaNameForVariable(assign.getVariableIdentifier());
-        writer.write(assigneeVariable + " = " + expressionVariable + ";\n");
+        final String assigneeVariable = this.writer.toVariable(assign.getVariableIdentifier());
+        this.writer.assign(assigneeVariable, expressionVariable);
         this.variables.push(assigneeVariable);
+    }
+
+    @Override
+    public void visitNew(New newNode) {
+        final String returnVariable = this.writer.declareVariable(newNode.getType());
+        this.writer.New(returnVariable, newNode.getTypeIdentifier());
+        this.variables.push(returnVariable);
     }
 
     @Override
@@ -291,23 +267,60 @@ public class CoolToJavaVisitor extends Visitor {
     }
 
     @Override
-    public void visitTypecaseInorder(Typecase typecase) {
-        final String resultVariable = this.nameGen.getFreshVariableName();
-        final String controlVariable = this.nameGen.getFreshVariableName();
-        writer.write(this.nameGen.getJavaNameForClass(typecase.getType()) + " " + resultVariable + " = null;\n");
-        writer.write("boolean " + controlVariable + " = false;");
+    public void visitIfPreorderOne(If ifNode) {
+        final String conditionVariable = this.variables.pop();
+        final String resultVariable = this.writer.declareVariable(ifNode.getType());
+        this.writer.beginIf(conditionVariable);
         this.variables.push(resultVariable);
-        this.variables.push(controlVariable);
-        writer.write("{\n");
+    }
+
+    @Override
+    public void visitIfPreorderTwo(If ifNode) {
+        final String thenVariable = this.variables.pop();
+        final String resultVariable = this.variables.peek();
+        this.writer.assign(resultVariable, thenVariable);
+        this.writer.beginElse();
+    }
+
+    @Override
+    public void visitIfPostorder(If ifNode) {
+        final String elseVariable = this.variables.pop();
+        final String resultVariable = this.variables.peek();
+        this.writer.assign(resultVariable, elseVariable);
+        this.writer.endIf();
+    }
+
+    @Override
+    public void visitLoopPreorder(Loop loop) {
+        this.writer.beginLoop();
+    }
+
+    @Override
+    public void visitLoopInorder(Loop loop) {
+        final String conditionVariable = this.variables.pop();
+        this.writer.endLoopCondition(conditionVariable);
+    }
+
+    @Override
+    public void visitLoopPostorder(Loop loop) {
+        this.writer.endLoop();
+        // According to the manual, loops return void, i.e., null
+        this.writer.loadVoid(this.variables.peek());
+    }
+
+    @Override
+    public void visitTypecaseInorder(Typecase typecase) {
+        final String expressionVariable = this.variables.peek();
+        final String resultVariable = this.writer.declareVariable(typecase.getType());
+        this.writer.beginTypecase(expressionVariable);
+        this.variables.push(resultVariable);
     }
 
     @Override
     public void visitTypecasePostorder(Typecase typecase) {
-        writer.write("}\n");
-        // Pop the control variable
-        this.variables.pop();
-
+        this.writer.endTypecase();
         final String resultVariable = this.variables.pop();
+
         // Pop the expression variable
         this.variables.pop();
         this.variables.push(resultVariable);
@@ -315,126 +328,53 @@ public class CoolToJavaVisitor extends Visitor {
 
     @Override
     public void visitCasePreorder(Case caseNode) {
-        // Current layout of the stack: [..., expressionVar, resultVariable, controlVariable]
-        final String expressionVariable = this.variables.get(this.variables.size() - 3);
-        final String controlVariable = this.variables.peek();
-        writer.write("if (!" + controlVariable + " && " + expressionVariable + " instanceof "
-                + this.nameGen.getJavaNameForClass(caseNode.getDeclaredType()) + ") {\n");
-        writer.write(this.nameGen.getJavaNameForClass(caseNode.getDeclaredType()) + " "
-                + this.nameGen.getJavaNameForVariable(caseNode.getVariableIdentifier()) + " = ("
-                + this.nameGen.getJavaNameForClass(caseNode.getDeclaredType()) + ")" + expressionVariable + ";\n");
+        // Current layout of the stack: [..., expressionVar, resultVariable]
+        final String expressionVar = this.variables.get(this.variables.size() - 2);
+        this.writer.beginCase(expressionVar, caseNode.getDeclaredType(), caseNode.getVariableIdentifier());
     }
 
     @Override
     public void visitCasePostorder(Case caseNode) {
         final String expressionVariable = this.variables.pop();
-        final String controlVariable = this.variables.peek();
-        final String resultVariable = this.variables.get(this.variables.size() - 2);
-        writer.write(resultVariable + " = " + expressionVariable + ";\n");
-        writer.write(controlVariable + " = true;\n");
-        writer.write("}\n");
-    }
-
-    @Override
-    public void visitIfPreorderOne(If ifNode) {
-        final String conditionVariable = this.variables.pop();
-        final String resultVariable = this.nameGen.getFreshVariableName();
-        writer.write(this.nameGen.getJavaNameForClass(ifNode.getType()) + " " + resultVariable + ";\n");
-        this.variables.push(resultVariable);
-        writer.write("if (" + conditionVariable + ".getValue()) {\n");
-    }
-
-    @Override
-    public void visitIfPreorderTwo(If ifNode) {
-        final String thenVariable = this.variables.pop();
         final String resultVariable = this.variables.peek();
-        writer.write(resultVariable + " = " + thenVariable + ";\n");
-        writer.write("} else {\n");
-    }
-
-    @Override
-    public void visitIfPostorder(If ifNode) {
-        final String elseVariable = this.variables.pop();
-        final String resultVariable = this.variables.peek();
-        writer.write(resultVariable + " = " + elseVariable + ";\n");
-        writer.write("}");
-    }
-
-    @Override
-    public void visitLoopPreorder(Loop loop) {
-        writer.write("while(true) {");
-    }
-
-    @Override
-    public void visitLoopInorder(Loop loop) {
-        final String conditionVariable = this.variables.pop();
-        writer.write("if(!" + conditionVariable + ".getValue()) { break; }\n");
-    }
-
-    @Override
-    public void visitLoopPostorder(Loop loop) {
-        writer.write("}\n");
-        // According to the manual, loops return void, i.e., null
-        writer.write(this.variables.peek() + " = null;\n");
-    }
-
-    @Override
-    public void visitNew(New newNode) {
-        final String returnVariable = this.nameGen.getFreshVariableName();
-        writer.write(this.nameGen.getJavaNameForClass(newNode.getTypeIdentifier()) + " " + returnVariable + " = new "
-                + this.nameGen.getJavaNameForClass(newNode.getTypeIdentifier()) + "();\n");
-        this.variables.push(returnVariable);
+        this.writer.assign(resultVariable, expressionVariable);
+        this.writer.endCase();
     }
 
     @Override
     public void visitFunctionCallPostorder(FunctionCall functionCall) {
-        final Stack<String> arguments = new Stack<>();
+        final List<String> arguments = new LinkedList<>();
         for (int argIndex = 0; argIndex < functionCall.getArguments().size(); ++argIndex) {
-            arguments.push(this.variables.pop());
+            arguments.add(0, this.variables.pop());
         }
 
         final String dispatchVariable = this.variables.pop();
-        final String resultVariable = this.nameGen.getFreshVariableName();
-        writer.write(this.nameGen.getJavaNameForClass(functionCall.getType()) + " " + resultVariable + " = "
-                + dispatchVariable + "." + this.nameGen.getJavaNameForMethod(functionCall.getFunctionIdentifier())
-                + "(");
-        while (!arguments.isEmpty()) {
-            writer.write(arguments.pop());
-            if (!arguments.isEmpty()) {
-                writer.write(", ");
-            }
-        }
-        writer.write(");");
+        final String resultVariable = this.writer.declareVariable(functionCall.getType());
+        this.writer.functionCall(resultVariable, dispatchVariable, functionCall.getFunctionIdentifier(), arguments);
         this.variables.push(resultVariable);
     }
 
     @Override
     public void visitStaticFunctionCallPostorder(StaticFunctionCall staticFunctionCall) {
-        final Stack<String> arguments = new Stack<>();
+        final List<String> arguments = new LinkedList<>();
         for (int argIndex = 0; argIndex < staticFunctionCall.getArguments().size(); ++argIndex) {
-            arguments.push(this.variables.pop());
+            arguments.add(0, this.variables.pop());
         }
 
         final String dispatchVariable = this.variables.pop();
-        final String resultVariable = this.nameGen.getFreshVariableName();
-        writer.write(this.nameGen.getJavaNameForClass(staticFunctionCall.getType()) + " " + resultVariable + " = "
-                + dispatchVariable + "."
-                + this.nameGen.getJavaNameForMethod(staticFunctionCall.getFunctionIdentifier()) + "(");
-        while (!arguments.isEmpty()) {
-            writer.write(arguments.pop());
-            if (!arguments.isEmpty()) {
-                writer.write(", ");
-            }
-        }
-        writer.write(");");
+        final String resultVariable = this.writer.declareVariable(staticFunctionCall.getType());
+        final IdSymbol staticType = staticFunctionCall.getStaticType();
+        this.writer.staticFunctionCall(resultVariable, dispatchVariable, staticFunctionCall.getFunctionIdentifier(),
+                staticType, arguments);
         this.variables.push(resultVariable);
     }
 
     @Override
     public void visitLetInorder(Let let) {
+        final String letVariable = this.writer.toVariable(let.getVariableIdentifier());
+        this.writer.declareVariable(let.getDeclaredType(), letVariable);
+
         final String initializerVariable = this.variables.pop();
-        writer.write(this.nameGen.getJavaNameForClass(let.getDeclaredType()) + " "
-                + this.nameGen.getJavaNameForVariable(let.getVariableIdentifier()) + " = " + initializerVariable
-                + ";\n");
+        this.writer.assign(letVariable, initializerVariable);
     }
 }
