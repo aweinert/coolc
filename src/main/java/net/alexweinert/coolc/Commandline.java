@@ -7,16 +7,19 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
 public class Commandline {
-    @Parameter(names = "-backend", description = "The formalism to be unparsed to, one of [jar,java]")
+    @Parameter(names = "--backend", description = "The formalism to be unparsed to, one of {jar,java}")
     public String backend = "jar";
 
-    @Parameter(description = "The files to be compiled")
+    @Parameter(description = "<input-files>")
     public List<String> inputFiles = new LinkedList<>();
 
     @Parameter(names = { "-h", "--help" }, description = "Display usage information", help = true)
     private boolean help = false;
 
-    private final JCommander commander;
+    @Parameter(names = { "-o", "--output" }, description = "Target path for output. Treated as folder for java output, as path for jar-file for jar-output.")
+    public String output;
+
+    public final JCommander commander;
 
     public Commandline(JCommander commander) {
         this.commander = commander;

@@ -13,10 +13,6 @@ public class Main {
             return;
         }
 
-        if (!commandline.isValid()) {
-            return;
-        }
-
         final Compiler<?> compiler = Main.buildCompiler(commandline);
         try {
             compiler.compile();
@@ -35,11 +31,21 @@ public class Main {
     }
 
     private static Compiler<?> buildCompiler(Commandline commandline) {
-        if (commandline.showHelp()) {
+        if (commandline.showHelp() || !commandline.isValid()) {
             return new ProcessorBuilder().showHelp(commandline.getParser());
+        }
+
+        final ProcessorBuilder processorBuilder = new ProcessorBuilder();
+        processorBuilder.openFile(commandline.inputFiles.get(0)).parseAndCheckCool().compileToJava();
+
+        if (commandline.backend.toLowerCase().equals("java")) {
+            final String output = commandline.output != null ? commandline.output : "output/";
+            return processorBuilder.dumpJava(output);
+        } else if (commandline.backend.toLowerCase().equals("jar")) {
+            final String output = commandline.output != null ? commandline.output : "out.jar";
+            return processorBuilder.compileJar(output);
         } else {
-            return new ProcessorBuilder().openFile(commandline.inputFiles.get(0)).parseAndCheckCool().compileToJava()
-                    .compileJar("out.jar");
+            return new ProcessorBuilder().showHelp(commandline.getParser());
         }
     }
 }
