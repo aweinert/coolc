@@ -52,9 +52,14 @@ public class CoolToJavaVisitor extends Visitor {
     private final NameGenerator nameGen = new NameGenerator();
     private final Stack<String> variables = new Stack<>();
 
+    private final FromCoolBuilderFactory factory;
     private FromCoolBuilder builder;
 
     private List<JavaClass> javaClasses = new LinkedList<>();
+
+    public CoolToJavaVisitor(FromCoolBuilderFactory factory) {
+        this.factory = factory;
+    }
 
     public JavaProgram process(Program input) throws ProcessorException {
         try {
@@ -86,7 +91,7 @@ public class CoolToJavaVisitor extends Visitor {
 
     @Override
     public void visitClassPreorder(ClassNode classNode) {
-        this.builder = new JavaClassBuilder(this.nameGen.getJavaNameForClass(classNode.getIdentifier()));
+        this.builder = this.factory.createBuilder(classNode.getIdentifier());
 
         this.builder.beginClass(classNode.getIdentifier(), classNode.getParent());
 

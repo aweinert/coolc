@@ -9,7 +9,7 @@ public class CoolToJavaProcessor extends Processor<Program, JavaProgram> {
 
     @Override
     public JavaProgram process(Program input) throws ProcessorException {
-        final CoolToJavaVisitor visitor = new CoolToJavaVisitor();
+        final CoolToJavaVisitor visitor = new CoolToJavaVisitor(FromCoolBuilderFactory.createJavaBuilderFactory());
         return visitor.process(input);
     }
 
