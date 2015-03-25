@@ -8,12 +8,13 @@ import net.alexweinert.coolc.infrastructure.Frontend;
 import net.alexweinert.coolc.processors.cool.frontend.CoolParser;
 import net.alexweinert.coolc.processors.cool.hierarchycheck.CoolHierarchyChecker;
 import net.alexweinert.coolc.processors.cool.selftyperemoval.SelfTypeRemover;
+import net.alexweinert.coolc.processors.cool.tohighlevel.CoolBackendProcessor;
 import net.alexweinert.coolc.processors.cool.typecheck.CoolTypeChecker;
 import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
 import net.alexweinert.coolc.processors.io.FileOpener;
 import net.alexweinert.coolc.processors.io.StringDumper;
 import net.alexweinert.coolc.processors.java.dump.JavaDumper;
-import net.alexweinert.coolc.processors.java.fromcool.CoolToJavaProcessor;
+import net.alexweinert.coolc.processors.java.fromcool.JavaClassBuilderFactory;
 import net.alexweinert.coolc.processors.java.jarcompile.JarCompiler;
 import net.alexweinert.coolc.processors.java.typecasesort.TypecaseSortProcessor;
 import net.alexweinert.coolc.processors.java.variablerenaming.VariableRenamer;
@@ -57,7 +58,7 @@ public class ProcessorBuilder {
     }
 
     public ProcessorBuilder coolToJava() {
-        this.frontend = this.frontend.append(new CoolToJavaProcessor());
+        this.frontend = this.frontend.append(new CoolBackendProcessor<>(new JavaClassBuilderFactory()));
         return this;
     }
 

@@ -1,9 +1,17 @@
 package net.alexweinert.coolc.processors.java.fromcool;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
+import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.coolc.processors.cool.tohighlevel.CoolBackendBuilder;
 import net.alexweinert.coolc.representations.cool.ast.Formal;
 import net.alexweinert.coolc.representations.cool.ast.Formals;
 import net.alexweinert.coolc.representations.cool.symboltables.BoolSymbol;
@@ -13,7 +21,7 @@ import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.StringSymbol;
 import net.alexweinert.coolc.representations.java.JavaClass;
 
-class JavaClassBuilder implements FromCoolBuilder {
+class JavaClassBuilder implements CoolBackendBuilder<JavaClass> {
     private final String classId;
     private final StringBuilder stringBuilder = new StringBuilder();
     private final NameGenerator namegen = new NameGenerator();
@@ -438,5 +446,34 @@ class JavaClassBuilder implements FromCoolBuilder {
     @Override
     public void endTypecase() {
         this.typecaseControlVariables.pop();
+    }
+
+    @Override
+    public Collection<JavaClass> buildBasicClasses() throws ProcessorException {
+        final Collection<JavaClass> returnValue = new HashSet<>();
+        try {
+            returnValue.add(this.copyResource("CoolObject"));
+            returnValue.add(this.copyResource("CoolBool"));
+            returnValue.add(this.copyResource("CoolInt"));
+            returnValue.add(this.copyResource("CoolString"));
+            returnValue.add(this.copyResource("CoolIO"));
+        } catch (IOException e) {
+            throw new ProcessorException(e);
+        }
+        return returnValue;
+    }
+
+    private JavaClass copyResource(String fileName) throws IOException {
+        BufferedReader sourceFileReader = new BufferedReader(new FileReader(new File(this.getClass().getClassLoader()
+                .getResource(fileName + ".java").getFile())));
+        final StringBuilder builder = new StringBuilder();
+        String currentLine = sourceFileReader.readLine();
+
+        while (currentLine != null) {
+            builder.append(currentLine + "\n");
+            currentLine = sourceFileReader.readLine();
+        }
+        sourceFileReader.close();
+        return new JavaClass(fileName, builder.toString());
     }
 }

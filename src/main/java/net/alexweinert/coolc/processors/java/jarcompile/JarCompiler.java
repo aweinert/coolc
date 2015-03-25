@@ -7,15 +7,15 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 import net.alexweinert.coolc.infrastructure.Backend;
 import net.alexweinert.coolc.infrastructure.ProcessorException;
 import net.alexweinert.coolc.representations.java.JavaClass;
-import net.alexweinert.coolc.representations.java.JavaProgram;
 
-public class JarCompiler implements Backend<JavaProgram> {
+public class JarCompiler implements Backend<Collection<JavaClass>> {
     private final Path pathToJar;
 
     public JarCompiler(String pathToJar) {
@@ -23,7 +23,7 @@ public class JarCompiler implements Backend<JavaProgram> {
     }
 
     @Override
-    public void process(JavaProgram input) throws ProcessorException {
+    public void process(Collection<JavaClass> input) throws ProcessorException {
         try {
             final Path tempFolder = Files.createTempDirectory(null);
             final List<String> compilerArgs = new LinkedList<>();
@@ -33,7 +33,7 @@ public class JarCompiler implements Backend<JavaProgram> {
             jarArgs.add("cfe");
             jarArgs.add(pathToJar.toString());
             jarArgs.add("CoolMain");
-            for (JavaClass javaClass : input.getClasses()) {
+            for (JavaClass javaClass : input) {
                 final String pathToFile = tempFolder.resolve(javaClass.getIdentifier() + ".java").toString();
                 final FileWriter fileWriter = new FileWriter(pathToFile);
                 Writer writer = new BufferedWriter(fileWriter);
@@ -58,7 +58,7 @@ public class JarCompiler implements Backend<JavaProgram> {
                 throw new ProcessorException(new Exception("Error during packing of compiled Java classes"));
             }
 
-            for (JavaClass javaClass : input.getClasses()) {
+            for (JavaClass javaClass : input) {
                 Files.delete(tempFolder.resolve(javaClass.getIdentifier() + ".java"));
                 Files.delete(tempFolder.resolve(javaClass.getIdentifier() + ".class"));
             }

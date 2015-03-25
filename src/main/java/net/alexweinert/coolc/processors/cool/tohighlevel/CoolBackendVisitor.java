@@ -1,14 +1,12 @@
-package net.alexweinert.coolc.processors.java.fromcool;
+package net.alexweinert.coolc.processors.cool.tohighlevel;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
 import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.coolc.processors.java.fromcool.NameGenerator;
 import net.alexweinert.coolc.representations.cool.ast.Addition;
 import net.alexweinert.coolc.representations.cool.ast.ArithmeticNegation;
 import net.alexweinert.coolc.representations.cool.ast.Assign;
@@ -44,49 +42,25 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IntTable;
 import net.alexweinert.coolc.representations.cool.symboltables.StringTable;
-import net.alexweinert.coolc.representations.java.JavaClass;
-import net.alexweinert.coolc.representations.java.JavaProgram;
 
-public class CoolToJavaVisitor extends Visitor {
+public class CoolBackendVisitor<T> extends Visitor {
 
-    private final NameGenerator nameGen = new NameGenerator();
     private final Stack<String> variables = new Stack<>();
 
-    private final FromCoolBuilderFactory factory;
-    private FromCoolBuilder builder;
+    private final CoolBackendBuilderFactory<T> factory;
+    private CoolBackendBuilder<T> builder;
 
-    private List<JavaClass> javaClasses = new LinkedList<>();
+    private List<T> javaClasses = new LinkedList<>();
 
-    public CoolToJavaVisitor(FromCoolBuilderFactory factory) {
+    public CoolBackendVisitor(CoolBackendBuilderFactory<T> factory) {
         this.factory = factory;
     }
 
-    public JavaProgram process(Program input) throws ProcessorException {
-        try {
-            this.copyResource("CoolObject");
-            this.copyResource("CoolBool");
-            this.copyResource("CoolInt");
-            this.copyResource("CoolString");
-            this.copyResource("CoolIO");
-        } catch (IOException e) {
-            throw new ProcessorException(e);
-        }
+    public Collection<T> process(Program input) throws ProcessorException {
+        this.builder = this.factory.createBuilder(null);
+        this.javaClasses.addAll(this.builder.buildBasicClasses());
         input.acceptVisitor(this);
-        return new JavaProgram(this.javaClasses);
-    }
-
-    private void copyResource(String fileName) throws IOException {
-        BufferedReader sourceFileReader = new BufferedReader(new FileReader(new File(this.getClass().getClassLoader()
-                .getResource(fileName + ".java").getFile())));
-        final StringBuilder builder = new StringBuilder();
-        String currentLine = sourceFileReader.readLine();
-
-        while (currentLine != null) {
-            builder.append(currentLine + "\n");
-            currentLine = sourceFileReader.readLine();
-        }
-        sourceFileReader.close();
-        this.javaClasses.add(new JavaClass(fileName, builder.toString()));
+        return this.javaClasses;
     }
 
     @Override
@@ -94,7 +68,6 @@ public class CoolToJavaVisitor extends Visitor {
         this.builder = this.factory.createBuilder(classNode.getIdentifier());
 
         this.builder.beginClass(classNode.getIdentifier(), classNode.getParent());
-
     }
 
     @Override

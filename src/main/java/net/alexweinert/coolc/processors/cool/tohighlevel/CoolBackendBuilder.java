@@ -1,21 +1,24 @@
-package net.alexweinert.coolc.processors.java.fromcool;
+package net.alexweinert.coolc.processors.cool.tohighlevel;
 
+import java.util.Collection;
 import java.util.List;
 
+import net.alexweinert.coolc.infrastructure.ProcessorException;
 import net.alexweinert.coolc.representations.cool.ast.Formals;
 import net.alexweinert.coolc.representations.cool.symboltables.BoolSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.StringSymbol;
-import net.alexweinert.coolc.representations.java.JavaClass;
 
-interface FromCoolBuilder {
+public interface CoolBackendBuilder<T> {
 
     void beginClass(IdSymbol idSymbol, IdSymbol parentSymbol);
 
     void endClass();
 
-    JavaClass build();
+    T build();
+
+    Collection<T> buildBasicClasses() throws ProcessorException;
 
     void beginAttributeDefinition(IdSymbol typeSymbol, IdSymbol idSymbol);
 
