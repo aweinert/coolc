@@ -52,7 +52,7 @@ public class CoolToJavaVisitor extends Visitor {
     private final NameGenerator nameGen = new NameGenerator();
     private final Stack<String> variables = new Stack<>();
 
-    private JavaClassBuilder writer;
+    private FromCoolBuilder builder;
 
     private List<JavaClass> javaClasses = new LinkedList<>();
 
@@ -86,31 +86,31 @@ public class CoolToJavaVisitor extends Visitor {
 
     @Override
     public void visitClassPreorder(ClassNode classNode) {
-        this.writer = new JavaClassBuilder(this.nameGen.getJavaNameForClass(classNode.getIdentifier()));
+        this.builder = new JavaClassBuilder(this.nameGen.getJavaNameForClass(classNode.getIdentifier()));
 
-        this.writer.beginClass(classNode.getIdentifier(), classNode.getParent());
+        this.builder.beginClass(classNode.getIdentifier(), classNode.getParent());
 
     }
 
     @Override
     public void visitClassPostorder(ClassNode classNode) {
-        this.writer.endClass();
-        this.javaClasses.add(this.writer.build());
+        this.builder.endClass();
+        this.javaClasses.add(this.builder.build());
     }
 
     @Override
     public void visitAttributePreorder(Attribute attribute) {
-        this.writer.beginAttributeDefinition(attribute.getDeclaredType(), attribute.getName());
+        this.builder.beginAttributeDefinition(attribute.getDeclaredType(), attribute.getName());
         if (attribute.getInitializer() instanceof NoExpression) {
-            final String initializer = this.writer.declareVariable(attribute.getDeclaredType());
+            final String initializer = this.builder.declareVariable(attribute.getDeclaredType());
             if (attribute.getTypeDecl().equals(IdTable.getInstance().getBoolSymbol())) {
-                this.writer.loadBoolean(initializer, BoolSymbol.falsebool);
+                this.builder.loadBoolean(initializer, BoolSymbol.falsebool);
             } else if (attribute.getTypeDecl().equals(IdTable.getInstance().getIntSymbol())) {
-                this.writer.loadInt(initializer, IntTable.getInstance().addInt(0));
+                this.builder.loadInt(initializer, IntTable.getInstance().addInt(0));
             } else if (attribute.getTypeDecl().equals(IdTable.getInstance().getStringSymbol())) {
-                this.writer.loadString(initializer, StringTable.getInstance().addString(""));
+                this.builder.loadString(initializer, StringTable.getInstance().addString(""));
             } else {
-                this.writer.loadVoid(initializer);
+                this.builder.loadVoid(initializer);
             }
             this.variables.push(initializer);
         }
@@ -118,146 +118,146 @@ public class CoolToJavaVisitor extends Visitor {
 
     @Override
     public void visitAttributePostorder(Attribute attribute) {
-        this.writer.endAttributeDefinition(this.variables.pop());
+        this.builder.endAttributeDefinition(this.variables.pop());
     }
 
     @Override
     public void visitMethodPreorder(Method method) {
-        this.writer.startMethodDefinition(method.getReturnType(), method.getName(), method.getFormals());
+        this.builder.startMethodDefinition(method.getReturnType(), method.getName(), method.getFormals());
     }
 
     @Override
     public void visitMethodPostorder(Method method) {
-        this.writer.endMethodDefinition(this.variables.pop());
+        this.builder.endMethodDefinition(this.variables.pop());
     }
 
     @Override
     public void visitBoolConst(BoolConst boolConst) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
-        this.writer.loadBoolean(varName, boolConst.getValue() ? BoolSymbol.truebool : BoolSymbol.falsebool);
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getBoolSymbol());
+        this.builder.loadBoolean(varName, boolConst.getValue() ? BoolSymbol.truebool : BoolSymbol.falsebool);
         this.variables.push(varName);
     }
 
     @Override
     public void visitIntConst(IntConst intConst) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
-        this.writer.loadInt(varName, intConst.getValue());
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getIntSymbol());
+        this.builder.loadInt(varName, intConst.getValue());
         this.variables.push(varName);
     }
 
     @Override
     public void visitStringConstant(StringConst stringConst) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getStringSymbol());
-        this.writer.loadString(varName, stringConst.getValue());
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getStringSymbol());
+        this.builder.loadString(varName, stringConst.getValue());
         this.variables.push(varName);
     }
 
     @Override
     public void visitObjectReference(ObjectReference objectReference) {
-        final String varName = this.writer.declareVariable(objectReference.getType());
-        this.writer.loadVariable(varName, objectReference.getVariableIdentifier());
+        final String varName = this.builder.declareVariable(objectReference.getType());
+        this.builder.loadVariable(varName, objectReference.getVariableIdentifier());
         this.variables.push(varName);
     }
 
     @Override
     public void visitAdditionPostorder(Addition addition) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getIntSymbol());
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        this.writer.add(varName, lhsVariable, rhsVariable);
+        this.builder.add(varName, lhsVariable, rhsVariable);
         this.variables.push(varName);
     }
 
     @Override
     public void visitBooleanNegationPostorder(BooleanNegation booleanNegation) {
-        final String resultVariable = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
+        final String resultVariable = this.builder.declareVariable(IdTable.getInstance().getBoolSymbol());
         final String argVariable = this.variables.pop();
-        this.writer.boolNeg(resultVariable, argVariable);
+        this.builder.boolNeg(resultVariable, argVariable);
         this.variables.push(resultVariable);
     }
 
     @Override
     public void visitDivisionPostorder(Division division) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getIntSymbol());
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        this.writer.div(varName, lhsVariable, rhsVariable);
+        this.builder.div(varName, lhsVariable, rhsVariable);
         this.variables.push(varName);
     }
 
     @Override
     public void visitEqualityPostorder(Equality equality) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getBoolSymbol());
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        this.writer.eq(varName, lhsVariable, rhsVariable);
+        this.builder.eq(varName, lhsVariable, rhsVariable);
         this.variables.push(varName);
     }
 
     @Override
     public void visitIsVoidPostorder(IsVoid isVoid) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getBoolSymbol());
         final String arg = this.variables.pop();
-        this.writer.isVoid(varName, arg);
+        this.builder.isVoid(varName, arg);
         this.variables.push(varName);
     }
 
     @Override
     public void visitLessThanPostorder(LessThan lessThan) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getBoolSymbol());
         final String rhsArg = this.variables.pop();
         final String lhsArg = this.variables.pop();
-        this.writer.lt(varName, lhsArg, rhsArg);
+        this.builder.lt(varName, lhsArg, rhsArg);
         this.variables.push(varName);
     }
 
     @Override
     public void visitLessThanOrEqualsPostorder(LessThanOrEquals lessThanOrEquals) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getBoolSymbol());
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getBoolSymbol());
         final String rhsArg = this.variables.pop();
         final String lhsArg = this.variables.pop();
-        this.writer.lte(varName, lhsArg, rhsArg);
+        this.builder.lte(varName, lhsArg, rhsArg);
         this.variables.push(varName);
     }
 
     @Override
     public void visitMultiplicationPostorder(Multiplication multiplication) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getIntSymbol());
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        this.writer.mul(varName, lhsVariable, rhsVariable);
+        this.builder.mul(varName, lhsVariable, rhsVariable);
         this.variables.push(varName);
     }
 
     @Override
     public void visitSubtractionPostorder(Subtraction subtraction) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getIntSymbol());
         final String rhsVariable = this.variables.pop();
         final String lhsVariable = this.variables.pop();
-        this.writer.sub(varName, lhsVariable, rhsVariable);
+        this.builder.sub(varName, lhsVariable, rhsVariable);
         this.variables.push(varName);
     }
 
     @Override
     public void visitArithmeticNegationPostOrder(ArithmeticNegation arithmeticNegation) {
-        final String varName = this.writer.declareVariable(IdTable.getInstance().getIntSymbol());
+        final String varName = this.builder.declareVariable(IdTable.getInstance().getIntSymbol());
         final String arg = this.variables.pop();
-        this.writer.arithNeg(varName, arg);
+        this.builder.arithNeg(varName, arg);
         this.variables.push(varName);
     }
 
     @Override
     public void visitAssignPostorder(Assign assign) {
         final String expressionVariable = this.variables.pop();
-        final String assigneeVariable = this.writer.toVariable(assign.getVariableIdentifier());
-        this.writer.assign(assigneeVariable, expressionVariable);
+        final String assigneeVariable = this.builder.toVariable(assign.getVariableIdentifier());
+        this.builder.assign(assigneeVariable, expressionVariable);
         this.variables.push(assigneeVariable);
     }
 
     @Override
     public void visitNew(New newNode) {
-        final String returnVariable = this.writer.declareVariable(newNode.getType());
-        this.writer.New(returnVariable, newNode.getTypeIdentifier());
+        final String returnVariable = this.builder.declareVariable(newNode.getType());
+        this.builder.New(returnVariable, newNode.getTypeIdentifier());
         this.variables.push(returnVariable);
     }
 
@@ -268,14 +268,14 @@ public class CoolToJavaVisitor extends Visitor {
 
     @Override
     public void visitIfPreorder(If ifNode) {
-        this.writer.beginIf();
+        this.builder.beginIf();
     }
 
     @Override
     public void visitIfPreorderOne(If ifNode) {
         final String conditionVariable = this.variables.pop();
-        final String resultVariable = this.writer.declareVariable(ifNode.getType());
-        this.writer.beginThen(conditionVariable);
+        final String resultVariable = this.builder.declareVariable(ifNode.getType());
+        this.builder.beginThen(conditionVariable);
         this.variables.push(resultVariable);
     }
 
@@ -283,47 +283,47 @@ public class CoolToJavaVisitor extends Visitor {
     public void visitIfPreorderTwo(If ifNode) {
         final String thenVariable = this.variables.pop();
         final String resultVariable = this.variables.peek();
-        this.writer.assign(resultVariable, thenVariable);
-        this.writer.beginElse();
+        this.builder.assign(resultVariable, thenVariable);
+        this.builder.beginElse();
     }
 
     @Override
     public void visitIfPostorder(If ifNode) {
         final String elseVariable = this.variables.pop();
         final String resultVariable = this.variables.peek();
-        this.writer.assign(resultVariable, elseVariable);
-        this.writer.endIf();
+        this.builder.assign(resultVariable, elseVariable);
+        this.builder.endIf();
     }
 
     @Override
     public void visitLoopPreorder(Loop loop) {
-        this.writer.beginLoop();
+        this.builder.beginLoop();
     }
 
     @Override
     public void visitLoopInorder(Loop loop) {
         final String conditionVariable = this.variables.pop();
-        this.writer.endLoopCondition(conditionVariable);
+        this.builder.endLoopCondition(conditionVariable);
     }
 
     @Override
     public void visitLoopPostorder(Loop loop) {
-        this.writer.endLoop();
+        this.builder.endLoop();
         // According to the manual, loops return void, i.e., null
-        this.writer.loadVoid(this.variables.peek());
+        this.builder.loadVoid(this.variables.peek());
     }
 
     @Override
     public void visitTypecaseInorder(Typecase typecase) {
         final String expressionVariable = this.variables.peek();
-        final String resultVariable = this.writer.declareVariable(typecase.getType());
-        this.writer.beginTypecase(expressionVariable);
+        final String resultVariable = this.builder.declareVariable(typecase.getType());
+        this.builder.beginTypecase(expressionVariable);
         this.variables.push(resultVariable);
     }
 
     @Override
     public void visitTypecasePostorder(Typecase typecase) {
-        this.writer.endTypecase();
+        this.builder.endTypecase();
         final String resultVariable = this.variables.pop();
 
         // Pop the expression variable
@@ -335,15 +335,15 @@ public class CoolToJavaVisitor extends Visitor {
     public void visitCasePreorder(Case caseNode) {
         // Current layout of the stack: [..., expressionVar, resultVariable]
         final String expressionVar = this.variables.get(this.variables.size() - 2);
-        this.writer.beginCase(expressionVar, caseNode.getDeclaredType(), caseNode.getVariableIdentifier());
+        this.builder.beginCase(expressionVar, caseNode.getDeclaredType(), caseNode.getVariableIdentifier());
     }
 
     @Override
     public void visitCasePostorder(Case caseNode) {
         final String expressionVariable = this.variables.pop();
         final String resultVariable = this.variables.peek();
-        this.writer.assign(resultVariable, expressionVariable);
-        this.writer.endCase();
+        this.builder.assign(resultVariable, expressionVariable);
+        this.builder.endCase();
     }
 
     @Override
@@ -354,8 +354,8 @@ public class CoolToJavaVisitor extends Visitor {
         }
 
         final String dispatchVariable = this.variables.pop();
-        final String resultVariable = this.writer.declareVariable(functionCall.getType());
-        this.writer.functionCall(resultVariable, dispatchVariable, functionCall.getFunctionIdentifier(), arguments);
+        final String resultVariable = this.builder.declareVariable(functionCall.getType());
+        this.builder.functionCall(resultVariable, dispatchVariable, functionCall.getFunctionIdentifier(), arguments);
         this.variables.push(resultVariable);
     }
 
@@ -367,19 +367,19 @@ public class CoolToJavaVisitor extends Visitor {
         }
 
         final String dispatchVariable = this.variables.pop();
-        final String resultVariable = this.writer.declareVariable(staticFunctionCall.getType());
+        final String resultVariable = this.builder.declareVariable(staticFunctionCall.getType());
         final IdSymbol staticType = staticFunctionCall.getStaticType();
-        this.writer.staticFunctionCall(resultVariable, dispatchVariable, staticFunctionCall.getFunctionIdentifier(),
+        this.builder.staticFunctionCall(resultVariable, dispatchVariable, staticFunctionCall.getFunctionIdentifier(),
                 staticType, arguments);
         this.variables.push(resultVariable);
     }
 
     @Override
     public void visitLetInorder(Let let) {
-        final String letVariable = this.writer.toVariable(let.getVariableIdentifier());
-        this.writer.declareVariable(let.getDeclaredType(), letVariable);
+        final String letVariable = this.builder.toVariable(let.getVariableIdentifier());
+        this.builder.declareVariable(let.getDeclaredType(), letVariable);
 
         final String initializerVariable = this.variables.pop();
-        this.writer.assign(letVariable, initializerVariable);
+        this.builder.assign(letVariable, initializerVariable);
     }
 }
