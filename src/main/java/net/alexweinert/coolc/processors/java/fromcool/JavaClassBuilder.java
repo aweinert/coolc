@@ -176,7 +176,9 @@ class JavaClassBuilder {
         this.stringBuilder.append(returnVariable + " = new " + type + "();\n");
     }
 
-    public void beginIf(String conditionVariable) {
+    public void beginIf() {}
+
+    public void beginThen(String conditionVariable) {
         this.stringBuilder.append("if (" + conditionVariable + ".getValue()) {\n");
     }
 

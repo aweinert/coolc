@@ -267,10 +267,15 @@ public class CoolToJavaVisitor extends Visitor {
     }
 
     @Override
+    public void visitIfPreorder(If ifNode) {
+        this.writer.beginIf();
+    }
+
+    @Override
     public void visitIfPreorderOne(If ifNode) {
         final String conditionVariable = this.variables.pop();
         final String resultVariable = this.writer.declareVariable(ifNode.getType());
-        this.writer.beginIf(conditionVariable);
+        this.writer.beginThen(conditionVariable);
         this.variables.push(resultVariable);
     }
 
