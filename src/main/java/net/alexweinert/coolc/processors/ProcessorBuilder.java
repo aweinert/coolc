@@ -89,12 +89,12 @@ public class ProcessorBuilder {
     public ProcessorBuilder coolToBytecode() {
         this.hierarchyCheck().sortTypecase().hierarchyCheck().removeSelfType().removeShadowing().hierarchyCheck()
                 .typeCheck();
-        this.frontend.append(new CoolBackendProcessor<>(new FromCoolBuilderFactory()));
+        this.frontend = this.frontend.append(new CoolBackendProcessor<>(new FromCoolBuilderFactory()));
         return this;
     }
 
     public ProcessorBuilder bytecodeToString() {
-        this.frontend.append(new ToStringProcessor());
+        this.frontend = this.frontend.append(new ToStringProcessor());
         return this;
     }
 
