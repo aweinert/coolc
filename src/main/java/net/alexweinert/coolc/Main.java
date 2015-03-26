@@ -36,14 +36,16 @@ public class Main {
         }
 
         final ProcessorBuilder processorBuilder = new ProcessorBuilder();
-        processorBuilder.openFile(commandline.inputFiles.get(0)).parseAndCheckCool().compileToJava();
+        processorBuilder.openFile(commandline.inputFiles.get(0)).parseAndCheckCool();
 
         if (commandline.backend.toLowerCase().equals("java")) {
             final String output = commandline.output != null ? commandline.output : "output/";
-            return processorBuilder.dumpJava(output);
+            return processorBuilder.compileToJava().dumpJava(output);
         } else if (commandline.backend.toLowerCase().equals("jar")) {
             final String output = commandline.output != null ? commandline.output : "out.jar";
-            return processorBuilder.compileJar(output);
+            return processorBuilder.compileToJava().compileJar(output);
+        } else if (commandline.backend.toLowerCase().equals("bytecode")) {
+            return processorBuilder.coolToBytecode().bytecodeToString().dumpToConsole();
         } else {
             return new ProcessorBuilder().showHelp(commandline.getParser());
         }

@@ -5,6 +5,8 @@ import java.nio.file.Paths;
 import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.infrastructure.Compiler;
 import net.alexweinert.coolc.infrastructure.Frontend;
+import net.alexweinert.coolc.processors.bytecode.fromcool.FromCoolBuilderFactory;
+import net.alexweinert.coolc.processors.bytecode.tostring.ToStringProcessor;
 import net.alexweinert.coolc.processors.cool.frontend.CoolParser;
 import net.alexweinert.coolc.processors.cool.hierarchycheck.CoolHierarchyChecker;
 import net.alexweinert.coolc.processors.cool.selftyperemoval.SelfTypeRemover;
@@ -82,6 +84,22 @@ public class ProcessorBuilder {
     public ProcessorBuilder compileToJava() {
         return this.hierarchyCheck().sortTypecase().hierarchyCheck().removeSelfType().removeShadowing()
                 .hierarchyCheck().typeCheck().coolToJava();
+    }
+
+    public ProcessorBuilder coolToBytecode() {
+        this.hierarchyCheck().sortTypecase().hierarchyCheck().removeSelfType().removeShadowing().hierarchyCheck()
+                .typeCheck();
+        this.frontend.append(new CoolBackendProcessor<>(new FromCoolBuilderFactory()));
+        return this;
+    }
+
+    public ProcessorBuilder bytecodeToString() {
+        this.frontend.append(new ToStringProcessor());
+        return this;
+    }
+
+    public Compiler<?> stringToConsole() {
+        return this.frontend.append(new StringDumper());
     }
 
     public Compiler<String> dumpToConsole() {
