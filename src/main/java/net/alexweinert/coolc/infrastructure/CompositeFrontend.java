@@ -17,4 +17,8 @@ class CompositeFrontend<T, U> extends Frontend<U> {
         assert processorResult != null : this.processor.getClass().getSimpleName() + " returned null";
         return processorResult;
     }
+
+    public String toString() {
+        return this.frontend.toString() + " -> " + this.processor.toString();
+    }
 }

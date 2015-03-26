@@ -14,4 +14,8 @@ public class Compiler<T> {
         assert frontendResult != null : this.frontend.getClass().getSimpleName() + " returned null";
         this.backend.process(frontendResult);
     }
+
+    public String toString() {
+        return this.frontend.toString() + " -> " + this.backend.toString();
+    }
 }

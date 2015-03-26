@@ -21,4 +21,8 @@ class CompositeProcessor<T, U, V> extends Processor<T, V> {
         assert result != null : this.secondProcessor.getClass().getSimpleName() + " returned null";
         return result;
     }
+
+    public String toString() {
+        return this.firstProcessor + " -> " + this.secondProcessor;
+    }
 }
