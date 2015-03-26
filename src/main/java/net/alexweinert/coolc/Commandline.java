@@ -7,7 +7,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 
 public class Commandline {
-    @Parameter(names = "--backend", description = "The formalism to be unparsed to, one of {jar,java}")
+    @Parameter(names = "--backend", description = "The formalism to be unparsed to, one of [jar,java,bytecode]")
     public String backend = "jar";
 
     @Parameter(description = "<input-files>")
