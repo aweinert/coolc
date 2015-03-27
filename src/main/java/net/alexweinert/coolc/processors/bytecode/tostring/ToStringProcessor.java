@@ -48,15 +48,17 @@ public class ToStringProcessor extends Processor<Collection<ByteClass>, String> 
             if (argIt.hasNext()) {
                 builder.append(", ");
             }
-            builder.append("):\n");
         }
+        builder.append("):\n");
         builder.append("---local variables\n");
         for (TypedId local : method.getLocalVars()) {
             builder.append(String.format("    %s %s = null;\n", local.getType(), local.getId()));
         }
+        builder.append("\n");
         builder.append("---instructions\n");
         for (LabeledInstruction instruction : method.getInstruction()) {
             builder.append(String.valueOf(instruction) + "\n");
         }
+        builder.append("\n");
     }
 }
