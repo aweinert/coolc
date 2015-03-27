@@ -35,7 +35,7 @@ public abstract class LabeledInstruction {
         }
 
         public LabeledInstruction buildAssign(String target, String source) {
-            final LabeledInstruction returnValue = new AssignInstruction(this.label, target, source);
+            final LabeledInstruction returnValue = new LoadVariableInstruction(this.label, target, source);
             this.label = null;
             return returnValue;
         }
@@ -101,7 +101,7 @@ public abstract class LabeledInstruction {
         }
 
         public LabeledInstruction buildNew(String returnVariable, String type) {
-            final LabeledInstruction returnValue = new NewInstruction(this.label, result, type);
+            final LabeledInstruction returnValue = new NewInstruction(this.label, returnVariable, type);
             this.label = null;
             return returnValue;
         }
@@ -116,14 +116,14 @@ public abstract class LabeledInstruction {
 
         public LabeledInstruction buildStaticFunctionCall(String resultVariable, String dispatchVariable,
                 String staticType, String functionId, List<String> arguments) {
-            final LabeledInstruction returnValue = new FunctionCallInstruction(this.label, resultVariable,
+            final LabeledInstruction returnValue = new StaticFunctionCallInstruction(this.label, resultVariable,
                     dispatchVariable, staticType, functionId, arguments);
             this.label = null;
             return returnValue;
         }
 
         public LabeledInstruction buildBranch(String target) {
-            final LabeledInstruction returnValue = new BranchInstruction(this.label, target);
+            final LabeledInstruction returnValue = new UnconditionalBranchInstruction(this.label, target);
             this.label = null;
             return returnValue;
         }
