@@ -110,6 +110,7 @@ public class FromCoolBuilder implements CoolBackendBuilder<ByteClass> {
     @Override
     public void endMethodDefinition(String returnVariable) {
         this.methodBuilder.addInstruction(this.instructionFactory.buildReturn(returnVariable));
+        this.classBuilder.addMethod(this.methodBuilder.build());
     }
 
     @Override
