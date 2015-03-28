@@ -41,25 +41,29 @@ public abstract class LabeledInstruction {
         }
 
         public LabeledInstruction buildAdd(String result, String lhs, String rhs) {
-            final LabeledInstruction returnValue = new AddInstruction(this.label, result, lhs, rhs);
+            final LabeledInstruction returnValue = BinaryArithmeticInstruction.createAddInstruction(this.label, result,
+                    lhs, rhs);
             this.label = null;
             return returnValue;
         }
 
         public LabeledInstruction buildSub(String result, String lhs, String rhs) {
-            final LabeledInstruction returnValue = new SubInstruction(this.label, result, lhs, rhs);
+            final LabeledInstruction returnValue = BinaryArithmeticInstruction.createSubInstruction(this.label, result,
+                    lhs, rhs);
             this.label = null;
             return returnValue;
         }
 
         public LabeledInstruction buildMul(String result, String lhs, String rhs) {
-            final LabeledInstruction returnValue = new MulInstruction(this.label, result, lhs, rhs);
+            final LabeledInstruction returnValue = BinaryArithmeticInstruction.createMulInstruction(this.label, result,
+                    lhs, rhs);
             this.label = null;
             return returnValue;
         }
 
         public LabeledInstruction buildDiv(String result, String lhs, String rhs) {
-            final LabeledInstruction returnValue = new DivInstruction(this.label, result, lhs, rhs);
+            final LabeledInstruction returnValue = BinaryArithmeticInstruction.createDivInstruction(this.label, result,
+                    lhs, rhs);
             this.label = null;
             return returnValue;
         }
