@@ -9,6 +9,36 @@ class BranchIfNotInstanceOfInstruction extends BranchInstruction {
         this.expressionVariable = expressionVariable;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((expressionVariable == null) ? 0 : expressionVariable.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        BranchIfNotInstanceOfInstruction other = (BranchIfNotInstanceOfInstruction) obj;
+        if (expressionVariable == null) {
+            if (other.expressionVariable != null) {
+                return false;
+            }
+        } else if (!expressionVariable.equals(other.expressionVariable)) {
+            return false;
+        }
+        return true;
+    }
+
     public String getExpressionVariable() {
         return expressionVariable;
     }

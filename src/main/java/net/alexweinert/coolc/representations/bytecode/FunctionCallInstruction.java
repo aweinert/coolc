@@ -16,6 +16,52 @@ class FunctionCallInstruction extends AssignInstruction {
         this.arguments = arguments;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((arguments == null) ? 0 : arguments.hashCode());
+        result = prime * result + ((dispatchVariable == null) ? 0 : dispatchVariable.hashCode());
+        result = prime * result + ((methodId == null) ? 0 : methodId.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        FunctionCallInstruction other = (FunctionCallInstruction) obj;
+        if (arguments == null) {
+            if (other.arguments != null) {
+                return false;
+            }
+        } else if (!arguments.equals(other.arguments)) {
+            return false;
+        }
+        if (dispatchVariable == null) {
+            if (other.dispatchVariable != null) {
+                return false;
+            }
+        } else if (!dispatchVariable.equals(other.dispatchVariable)) {
+            return false;
+        }
+        if (methodId == null) {
+            if (other.methodId != null) {
+                return false;
+            }
+        } else if (!methodId.equals(other.methodId)) {
+            return false;
+        }
+        return true;
+    }
+
     public String getDispatchVariable() {
         return dispatchVariable;
     }

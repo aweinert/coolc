@@ -43,6 +43,48 @@ class BinaryArithmeticInstruction extends AssignInstruction {
         this.rhs = rhs;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((lhs == null) ? 0 : lhs.hashCode());
+        result = prime * result + ((rhs == null) ? 0 : rhs.hashCode());
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        BinaryArithmeticInstruction other = (BinaryArithmeticInstruction) obj;
+        if (lhs == null) {
+            if (other.lhs != null) {
+                return false;
+            }
+        } else if (!lhs.equals(other.lhs)) {
+            return false;
+        }
+        if (rhs == null) {
+            if (other.rhs != null) {
+                return false;
+            }
+        } else if (!rhs.equals(other.rhs)) {
+            return false;
+        }
+        if (type != other.type) {
+            return false;
+        }
+        return true;
+    }
+
     public String toString() {
         return String.format("%s = %s %s %s", this.getTarget(), this.lhs, this.type, this.rhs);
     }

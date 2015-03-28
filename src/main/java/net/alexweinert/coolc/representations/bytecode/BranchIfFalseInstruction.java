@@ -9,6 +9,36 @@ class BranchIfFalseInstruction extends BranchInstruction {
         this.conditionVariable = conditionVariable;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((conditionVariable == null) ? 0 : conditionVariable.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        BranchIfFalseInstruction other = (BranchIfFalseInstruction) obj;
+        if (conditionVariable == null) {
+            if (other.conditionVariable != null) {
+                return false;
+            }
+        } else if (!conditionVariable.equals(other.conditionVariable)) {
+            return false;
+        }
+        return true;
+    }
+
     public String getConditionVariable() {
         return conditionVariable;
     }

@@ -9,6 +9,36 @@ class ReturnInstruction extends LabeledInstruction {
         this.returnVariable = returnVariable;
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + ((returnVariable == null) ? 0 : returnVariable.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        ReturnInstruction other = (ReturnInstruction) obj;
+        if (returnVariable == null) {
+            if (other.returnVariable != null) {
+                return false;
+            }
+        } else if (!returnVariable.equals(other.returnVariable)) {
+            return false;
+        }
+        return true;
+    }
+
     public String getReturnVariable() {
         return returnVariable;
     }
