@@ -13,4 +13,9 @@ class LoadIntInstruction extends AssignInstruction {
         return value;
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitLoadIntInstruction(this.getLabel(), this.getTarget(), this.value);
+    }
+
 }

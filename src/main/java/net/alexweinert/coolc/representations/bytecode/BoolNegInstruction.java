@@ -13,4 +13,9 @@ class BoolNegInstruction extends AssignInstruction {
         return arg;
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitBoolNegInstruction(this.getLabel(), this.getTarget(), this.arg);
+    }
+
 }

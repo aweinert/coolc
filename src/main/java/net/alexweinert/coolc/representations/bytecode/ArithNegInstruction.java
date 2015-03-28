@@ -13,4 +13,9 @@ class ArithNegInstruction extends AssignInstruction {
         return arg;
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitArithNegInstruction(this.getLabel(), this.getTarget(), this.arg);
+    }
+
 }

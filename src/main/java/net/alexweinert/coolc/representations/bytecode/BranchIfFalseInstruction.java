@@ -13,4 +13,9 @@ class BranchIfFalseInstruction extends BranchInstruction {
         return conditionVariable;
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitBranchIfFalseInstruction(this.getLabel(), this.getTarget(), this.conditionVariable);
+    }
+
 }

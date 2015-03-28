@@ -13,4 +13,9 @@ class LoadVariableInstruction extends AssignInstruction {
         return source;
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitLoadVariableInstruction(this.getLabel(), this.getTarget(), this.source);
+    }
+
 }

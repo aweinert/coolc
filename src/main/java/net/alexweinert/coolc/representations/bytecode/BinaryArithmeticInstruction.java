@@ -47,4 +47,27 @@ class BinaryArithmeticInstruction extends AssignInstruction {
         return String.format("%s = %s %s %s", this.getTarget(), this.lhs, this.type, this.rhs);
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        switch (this.type) {
+        case ADD:
+            visitor.visitAddInstruction(this.getLabel(), this.getTarget(), this.lhs, this.rhs);
+            break;
+        case DIV:
+            visitor.visitDivInstruction(this.getLabel(), this.getTarget(), this.lhs, this.rhs);
+            break;
+        case MUL:
+            visitor.visitMulInstruction(this.getLabel(), this.getTarget(), this.lhs, this.rhs);
+            break;
+        case SUB:
+            visitor.visitSubInstruction(this.getLabel(), this.getTarget(), this.lhs, this.rhs);
+            break;
+        default:
+            assert false;
+            break;
+
+        }
+
+    }
+
 }

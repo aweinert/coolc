@@ -13,4 +13,9 @@ class ReturnInstruction extends LabeledInstruction {
         return returnVariable;
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitReturnInstruction(this.getLabel(), this.returnVariable);
+    }
+
 }

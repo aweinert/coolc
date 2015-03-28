@@ -13,4 +13,9 @@ class BranchIfNotInstanceOfInstruction extends BranchInstruction {
         return expressionVariable;
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitBranchIfNotInstanceOfInstruction(this.getLabel(), this.getTarget(), this.expressionVariable);
+    }
+
 }

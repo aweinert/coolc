@@ -6,4 +6,9 @@ class UnconditionalBranchInstruction extends BranchInstruction {
         super(label, target);
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitBranchInstruction(this.getLabel(), this.getTarget());
+    }
+
 }

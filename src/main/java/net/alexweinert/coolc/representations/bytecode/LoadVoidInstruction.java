@@ -6,4 +6,9 @@ class LoadVoidInstruction extends AssignInstruction {
         super(label, target);
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitLoadVoidInstruction(this.getLabel(), this.getTarget());
+    }
+
 }

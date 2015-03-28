@@ -18,4 +18,9 @@ class EqInstruction extends AssignInstruction {
         return rhs;
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitEqInstruction(this.getLabel(), this.getTarget(), this.lhs, this.rhs);
+    }
+
 }

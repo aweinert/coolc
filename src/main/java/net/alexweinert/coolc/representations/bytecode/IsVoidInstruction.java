@@ -13,4 +13,10 @@ class IsVoidInstruction extends AssignInstruction {
         return arg;
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitIsVoidInstruction(this.getLabel(), this.getTarget(), this.arg);
+
+    }
+
 }

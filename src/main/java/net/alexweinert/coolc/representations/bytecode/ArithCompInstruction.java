@@ -42,4 +42,20 @@ class ArithCompInstruction extends AssignInstruction {
     public String getRhs() {
         return rhs;
     }
+
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        switch (this.type) {
+        case LT:
+            visitor.visitLtInstruction(this.getLabel(), this.getTarget(), this.lhs, this.rhs);
+            break;
+        case LTE:
+            visitor.visitLteInstruction(this.getLabel(), this.getTarget(), this.lhs, this.rhs);
+            break;
+        default:
+            assert false;
+            break;
+        }
+
+    }
 }

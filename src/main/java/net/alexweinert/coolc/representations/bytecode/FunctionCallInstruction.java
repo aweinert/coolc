@@ -28,4 +28,10 @@ class FunctionCallInstruction extends AssignInstruction {
         return arguments;
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitFunctionCallInstruction(this.getLabel(), this.getTarget(), this.dispatchVariable, this.methodId,
+                this.arguments);
+    }
+
 }

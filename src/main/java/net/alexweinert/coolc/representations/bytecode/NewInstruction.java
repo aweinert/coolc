@@ -13,4 +13,9 @@ class NewInstruction extends AssignInstruction {
         return type;
     }
 
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visitNewInstruction(this.getLabel(), this.getTarget(), this.type);
+    }
+
 }
