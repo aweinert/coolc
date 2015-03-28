@@ -87,13 +87,15 @@ public abstract class LabeledInstruction {
         }
 
         public LabeledInstruction buildLt(String result, String lhs, String rhs) {
-            final LabeledInstruction returnValue = new LtInstruction(this.label, result, lhs, rhs);
+            final LabeledInstruction returnValue = ArithCompInstruction.createLtInstruction(this.label, result, lhs,
+                    rhs);
             this.label = null;
             return returnValue;
         }
 
         public LabeledInstruction buildLte(String result, String lhs, String rhs) {
-            final LabeledInstruction returnValue = new LteInstruction(this.label, result, lhs, rhs);
+            final LabeledInstruction returnValue = ArithCompInstruction.createLteInstruction(this.label, result, lhs,
+                    rhs);
             this.label = null;
             return returnValue;
         }
@@ -162,4 +164,6 @@ public abstract class LabeledInstruction {
     public String getLabel() {
         return label;
     }
+
+    public abstract void acceptVisitor(Visitor visitor);
 }
