@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.representations.graph;
 
-class Edge<T> {
+public class Edge<T> {
     private final Node<T> source;
     private final Node<T> target;
 

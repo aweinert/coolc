@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.representations.graph;
 
-class Node<T> {
+public class Node<T> {
     final private T value;
 
     Node(T value) {
