@@ -6,6 +6,7 @@ import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.infrastructure.Compiler;
 import net.alexweinert.coolc.infrastructure.Frontend;
 import net.alexweinert.coolc.processors.bytecode.fromcool.FromCoolBuilderFactory;
+import net.alexweinert.coolc.processors.bytecode.tograph.BytecodeToGraphProcessor;
 import net.alexweinert.coolc.processors.bytecode.tostring.ToStringProcessor;
 import net.alexweinert.coolc.processors.cool.frontend.CoolParser;
 import net.alexweinert.coolc.processors.cool.hierarchycheck.CoolHierarchyChecker;
@@ -13,6 +14,7 @@ import net.alexweinert.coolc.processors.cool.selftyperemoval.SelfTypeRemover;
 import net.alexweinert.coolc.processors.cool.tohighlevel.CoolBackendProcessor;
 import net.alexweinert.coolc.processors.cool.typecheck.CoolTypeChecker;
 import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
+import net.alexweinert.coolc.processors.graph.GraphToFileProcessor;
 import net.alexweinert.coolc.processors.io.FileOpener;
 import net.alexweinert.coolc.processors.io.StringDumper;
 import net.alexweinert.coolc.processors.java.dump.JavaDumper;
@@ -109,5 +111,14 @@ public class ProcessorBuilder {
 
     public Compiler<?> showHelp(JCommander jCommander) {
         return new UsageFrontend(jCommander).append(new StringDumper());
+    }
+
+    public ProcessorBuilder bytecodeToGraphs() {
+        this.frontend = this.frontend.append(new BytecodeToGraphProcessor());
+        return this;
+    }
+
+    public Compiler<?> graphsToFile(String outputFolder) {
+        return this.frontend.append(new GraphToFileProcessor(Paths.get(outputFolder)));
     }
 }

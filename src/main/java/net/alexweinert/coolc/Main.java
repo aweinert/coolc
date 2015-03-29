@@ -45,7 +45,8 @@ public class Main {
             final String output = commandline.output != null ? commandline.output : "out.jar";
             return processorBuilder.compileToJava().compileJar(output);
         } else if (commandline.backend.toLowerCase().equals("bytecode")) {
-            return processorBuilder.coolToBytecode().bytecodeToString().stringToConsole();
+            final String output = commandline.output != null ? commandline.output : "output/";
+            return processorBuilder.coolToBytecode().bytecodeToGraphs().graphsToFile(output);
         } else {
             return new ProcessorBuilder().showHelp(commandline.getParser());
         }
