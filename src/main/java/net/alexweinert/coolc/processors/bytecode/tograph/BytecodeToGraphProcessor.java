@@ -30,7 +30,7 @@ public class BytecodeToGraphProcessor extends Processor<Collection<ByteClass>, C
                         builder.addEdge(lastInstruction, instruction);
                     }
                     if (instruction instanceof BranchInstruction) {
-                        jumps.put(instruction, ((LabeledInstruction) instruction).getLabel());
+                        jumps.put(instruction, ((BranchInstruction) instruction).getTarget());
                     }
                     lastInstruction = instruction;
                 }
