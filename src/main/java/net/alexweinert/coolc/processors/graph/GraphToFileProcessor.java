@@ -28,7 +28,8 @@ public class GraphToFileProcessor<T> implements Backend<Collection<Graph<T>>> {
             Integer nodeIndex = 0;
             final Map<Node<T>, Integer> indices = new HashMap<>();
             for (Graph<T> graph : input) {
-                final Writer writer = new FileWriter(this.pathToFolder.resolve(graph.getIdentifier()).toString());
+                final Writer writer = new FileWriter(this.pathToFolder.resolve(graph.getIdentifier() + ".dot")
+                        .toString());
                 writer.write("digraph graph {\n");
                 for (Node<T> node : graph.getNodes()) {
                     indices.put(node, nodeIndex);
