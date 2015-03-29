@@ -28,14 +28,7 @@ class Node<T> {
         }
         @SuppressWarnings("rawtypes")
         Node other = (Node) obj;
-        if (value == null) {
-            if (other.value != null) {
-                return false;
-            }
-        } else if (!value.equals(other.value)) {
-            return false;
-        }
-        return true;
+        return this.value == other.value;
     }
 
     public T getValue() {

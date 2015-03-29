@@ -71,4 +71,13 @@ public class Method {
     public List<LabeledInstruction> getInstruction() {
         return instruction;
     }
+
+    public LabeledInstruction getLabeledInstruction(String label) {
+        for (LabeledInstruction instruction : this.instruction) {
+            if (label.equals(instruction.getLabel())) {
+                return instruction;
+            }
+        }
+        return null;
+    }
 }
