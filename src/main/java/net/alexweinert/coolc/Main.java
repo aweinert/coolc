@@ -44,9 +44,9 @@ public class Main {
         } else if (commandline.backend.toLowerCase().equals("jar")) {
             final String output = commandline.output != null ? commandline.output : "out.jar";
             return processorBuilder.compileToJava().compileJar(output);
-        } else if (commandline.backend.toLowerCase().equals("bytecode")) {
+        } else if (commandline.backend.toLowerCase().equals("jbc")) {
             final String output = commandline.output != null ? commandline.output : "output/";
-            return processorBuilder.coolToBytecode().bytecodeToGraphs().graphsToFile(output);
+            return processorBuilder.coolToBytecode().bytecodeToJbc().jbcToFile(output);
         } else {
             return new ProcessorBuilder().showHelp(commandline.getParser());
         }

@@ -7,6 +7,7 @@ import net.alexweinert.coolc.infrastructure.Compiler;
 import net.alexweinert.coolc.infrastructure.Frontend;
 import net.alexweinert.coolc.processors.bytecode.fromcool.FromCoolBuilderFactory;
 import net.alexweinert.coolc.processors.bytecode.tograph.BytecodeToGraphProcessor;
+import net.alexweinert.coolc.processors.bytecode.tojbc.BytecodeToJbcProcessor;
 import net.alexweinert.coolc.processors.bytecode.tostring.ToStringProcessor;
 import net.alexweinert.coolc.processors.cool.frontend.CoolParser;
 import net.alexweinert.coolc.processors.cool.hierarchycheck.CoolHierarchyChecker;
@@ -22,6 +23,7 @@ import net.alexweinert.coolc.processors.java.fromcool.JavaClassBuilderFactory;
 import net.alexweinert.coolc.processors.java.jarcompile.JarCompiler;
 import net.alexweinert.coolc.processors.java.typecasesort.TypecaseSortProcessor;
 import net.alexweinert.coolc.processors.java.variablerenaming.VariableRenamer;
+import net.alexweinert.coolc.processors.jbc.JbcToFileProcessor;
 import net.alexweinert.coolc.processors.util.UsageFrontend;
 import net.alexweinert.coolc.representations.java.JavaProgram;
 
@@ -120,5 +122,14 @@ public class ProcessorBuilder {
 
     public Compiler<?> graphsToFile(String outputFolder) {
         return this.frontend.append(new GraphToFileProcessor(Paths.get(outputFolder)));
+    }
+
+    public ProcessorBuilder bytecodeToJbc() {
+        this.frontend = this.frontend.append(new BytecodeToJbcProcessor());
+        return this;
+    }
+
+    public Compiler<?> jbcToFile(String outputFolder) {
+        return this.frontend.append(new JbcToFileProcessor(Paths.get(outputFolder)));
     }
 }
