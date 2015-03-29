@@ -30,7 +30,7 @@ public class GraphToFileProcessor<T> implements Backend<Collection<Graph<T>>> {
             for (Graph<T> graph : input) {
                 final Writer writer = new FileWriter(this.pathToFolder.resolve(graph.getIdentifier() + ".dot")
                         .toString());
-                writer.write("digraph graph {\n");
+                writer.write("digraph method {\n");
                 for (Node<T> node : graph.getNodes()) {
                     indices.put(node, nodeIndex);
                     writer.write(nodeIndex + " [label=\"" + String.valueOf(node.getValue()) + "\"];\n");
