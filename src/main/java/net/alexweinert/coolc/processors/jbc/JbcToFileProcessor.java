@@ -23,40 +23,12 @@ public class JbcToFileProcessor implements Backend<Collection<ClassFile>> {
     public void process(Collection<ClassFile> input) throws ProcessorException {
         try {
             for (ClassFile file : input) {
-                final FileOutputStream writer = new FileOutputStream(this.folderPath.resolve(
-                        file.getClassId() + ".class").toString());
-
-                writer.write(new byte[] { (byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe });
-                writer.write(file.getMinorVersion());
-                writer.write(file.getMajorVersion());
-
-                writer.write(file.getConstantsCount());
-                writer.write(file.getConstants());
-
-                writer.write(file.getAccessFlags());
-                writer.write(this.splitChar(file.getThisClassIndex()));
-                writer.write(this.splitChar(file.getSuperClassIndex()));
-
-                writer.write(new byte[] { 0x00, 0x00 });
-                writer.write(file.getInterfaces());
-
-                writer.write(new byte[] { 0x00, 0x00 });
-                writer.write(file.getFields());
-
-                writer.write(new byte[] { 0x00, 0x00 });
-                writer.write(file.getMethods());
-
-                writer.write(new byte[] { 0x00, 0x00 });
-                writer.write(file.getAttributes());
-
+                final FileOutputStream writer = new FileOutputStream(this.folderPath.resolve(file.getPath()).toString());
+                writer.write(file.getContent());
                 writer.close();
             }
         } catch (IOException e) {
             throw new ProcessorException(e);
         }
-    }
-
-    private byte[] splitChar(final char value) {
-        return new byte[] { (byte) ((value >>> 8) & 0xFF), (byte) (value & 0xFF) };
     }
 }

@@ -1,5 +1,6 @@
 package net.alexweinert.coolc.processors.bytecode.tojbc;
 
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -14,12 +15,46 @@ public class BytecodeToJbcProcessor extends Processor<Collection<ByteClass>, Col
     public Collection<ClassFile> process(Collection<ByteClass> input) throws ProcessorException {
         final Collection<ClassFile> returnValue = new HashSet<>();
         for (ByteClass byteClass : input) {
-            final ClassFile.Builder builder = new ClassFile.Builder(byteClass.getId());
-            builder.setParent(byteClass.getParent());
+            final ClassFile.Builder builder = new ClassFile.Builder(Paths.get(byteClass.getId() + ".class"));
+            // magic number
+            builder.appendContent(new byte[] { (byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe });
+            builder.appendContent(new byte[] { 0x00, 0x00 }); // minor version
+            builder.appendContent(new byte[] { 0x00, 0x33 }); // major version
+            builder.appendContent(new byte[] { 0x00, 0x05 }); // constants_table_size
+            builder.appendContent(new byte[] { (byte) 0x07, 0x00, 0x02 }); // Class-tag
+
+            builder.appendContent((byte) 0x01); // UTF8-tag
+            builder.appendContent((byte) 0x00); // String length (high)
+            builder.appendContent((byte) 0x03); // String length (low)
+            for (byte character : "Foo".getBytes()) {
+                builder.appendContent(character);
+            }
+
+            builder.appendContent((byte) 0x07); // Class-tag
+            builder.appendContent((byte) 0x00);
+            builder.appendContent((byte) 0x04);
+
+            builder.appendContent((byte) 0x01); // UTF8-tag
+            builder.appendContent((byte) 0x00); // String length (high)
+            builder.appendContent((byte) 0x06); // String length (low)
+            for (byte character : "Object".getBytes()) {
+                builder.appendContent(character);
+            }
+
+            builder.appendContent(new byte[] { 0x00, 0x00 }); // access flags
+            builder.appendContent(new byte[] { 0x00, 0x01 }); // this id
+            builder.appendContent(new byte[] { 0x00, 0x03 }); // super id
+
+            builder.appendContent(new byte[] { 0x00, 0x00 });
+
+            builder.appendContent(new byte[] { 0x00, 0x00 });
+
+            builder.appendContent(new byte[] { 0x00, 0x00 });
+
+            builder.appendContent(new byte[] { 0x00, 0x00 });
             returnValue.add(builder.build());
         }
 
         return returnValue;
     }
-
 }
