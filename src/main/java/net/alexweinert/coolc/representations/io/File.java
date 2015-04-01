@@ -1,11 +1,11 @@
-package net.alexweinert.coolc.representations.jbc;
+package net.alexweinert.coolc.representations.io;
 
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ClassFile {
+public class File {
     public static class Builder {
         private final Path path;
         private final List<Byte> content = new LinkedList<>();
@@ -31,19 +31,19 @@ public class ClassFile {
             return this;
         }
 
-        public ClassFile build() {
+        public File build() {
             final byte[] contentArray = new byte[this.content.size()];
             for (int i = 0; i < this.content.size(); ++i) {
                 contentArray[i] = (this.content.get(i));
             }
-            return new ClassFile(this.path, contentArray);
+            return new File(this.path, contentArray);
         }
     }
 
     private final Path path;
     private final byte[] content;
 
-    private ClassFile(Path path, byte[] content) {
+    private File(Path path, byte[] content) {
         this.path = path;
         this.content = content;
     }

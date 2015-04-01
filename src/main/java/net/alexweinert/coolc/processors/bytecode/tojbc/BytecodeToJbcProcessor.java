@@ -7,15 +7,15 @@ import java.util.HashSet;
 import net.alexweinert.coolc.infrastructure.Processor;
 import net.alexweinert.coolc.infrastructure.ProcessorException;
 import net.alexweinert.coolc.representations.bytecode.ByteClass;
-import net.alexweinert.coolc.representations.jbc.ClassFile;
+import net.alexweinert.coolc.representations.io.File;
 
-public class BytecodeToJbcProcessor extends Processor<Collection<ByteClass>, Collection<ClassFile>> {
+public class BytecodeToJbcProcessor extends Processor<Collection<ByteClass>, Collection<File>> {
 
     @Override
-    public Collection<ClassFile> process(Collection<ByteClass> input) throws ProcessorException {
-        final Collection<ClassFile> returnValue = new HashSet<>();
+    public Collection<File> process(Collection<ByteClass> input) throws ProcessorException {
+        final Collection<File> returnValue = new HashSet<>();
         for (ByteClass byteClass : input) {
-            final ClassFile.Builder builder = new ClassFile.Builder(Paths.get(byteClass.getId() + ".class"));
+            final File.Builder builder = new File.Builder(Paths.get(byteClass.getId() + ".class"));
             // magic number
             builder.appendContent(new byte[] { (byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe });
             builder.appendContent(new byte[] { 0x00, 0x00 }); // minor version

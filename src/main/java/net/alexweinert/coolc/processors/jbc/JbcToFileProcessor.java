@@ -9,9 +9,9 @@ import java.util.Collection;
 
 import net.alexweinert.coolc.infrastructure.Backend;
 import net.alexweinert.coolc.infrastructure.ProcessorException;
-import net.alexweinert.coolc.representations.jbc.ClassFile;
+import net.alexweinert.coolc.representations.io.File;
 
-public class JbcToFileProcessor implements Backend<Collection<ClassFile>> {
+public class JbcToFileProcessor implements Backend<Collection<File>> {
 
     private final Path folderPath;
 
@@ -20,9 +20,9 @@ public class JbcToFileProcessor implements Backend<Collection<ClassFile>> {
     }
 
     @Override
-    public void process(Collection<ClassFile> input) throws ProcessorException {
+    public void process(Collection<File> input) throws ProcessorException {
         try {
-            for (ClassFile file : input) {
+            for (File file : input) {
                 final FileOutputStream writer = new FileOutputStream(this.folderPath.resolve(file.getPath()).toString());
                 writer.write(file.getContent());
                 writer.close();
