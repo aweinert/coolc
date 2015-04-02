@@ -16,6 +16,7 @@ import net.alexweinert.coolc.processors.cool.tohighlevel.CoolBackendProcessor;
 import net.alexweinert.coolc.processors.cool.typecheck.CoolTypeChecker;
 import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
 import net.alexweinert.coolc.processors.graph.GraphToFileProcessor;
+import net.alexweinert.coolc.processors.io.FileDumper;
 import net.alexweinert.coolc.processors.io.FileOpener;
 import net.alexweinert.coolc.processors.io.StringDumper;
 import net.alexweinert.coolc.processors.java.dump.JavaDumper;
@@ -129,7 +130,12 @@ public class ProcessorBuilder {
         return this;
     }
 
-    public Compiler<?> jbcToFile(String outputFolder) {
-        return this.frontend.append(new JbcToFileProcessor(Paths.get(outputFolder)));
+    public ProcessorBuilder jbcToFile() {
+        this.frontend = this.frontend.append(new JbcToFileProcessor());
+        return this;
+    }
+
+    public Compiler<?> dumpFiles(String outputFolder) {
+        return this.frontend.append(new FileDumper(Paths.get(outputFolder)));
     }
 }

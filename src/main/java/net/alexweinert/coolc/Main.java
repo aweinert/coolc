@@ -46,7 +46,7 @@ public class Main {
             return processorBuilder.compileToJava().compileJar(output);
         } else if (commandline.backend.toLowerCase().equals("jbc")) {
             final String output = commandline.output != null ? commandline.output : "output/";
-            return processorBuilder.coolToBytecode().bytecodeToJbc().jbcToFile(output);
+            return processorBuilder.coolToBytecode().bytecodeToJbc().jbcToFile().dumpFiles(output);
         } else {
             return new ProcessorBuilder().showHelp(commandline.getParser());
         }
