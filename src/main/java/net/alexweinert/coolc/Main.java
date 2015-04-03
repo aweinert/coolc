@@ -32,23 +32,23 @@ public class Main {
 
     private static Compiler<?> buildCompiler(Commandline commandline) {
         if (commandline.showHelp() || !commandline.isValid()) {
-            return new ProcessorBuilder().showHelp(commandline.getParser());
+            return new ProcessorBuilder().helpToString(commandline.getParser()).stringToConsole();
         }
 
         final ProcessorBuilder processorBuilder = new ProcessorBuilder();
-        processorBuilder.openFile(commandline.inputFiles.get(0)).parseAndCheckCool();
+        processorBuilder.openFile(commandline.inputFiles.get(0)).fileToCool().checkCool();
 
         if (commandline.backend.toLowerCase().equals("java")) {
             final String output = commandline.output != null ? commandline.output : "output/";
-            return processorBuilder.compileToJava().dumpJava(output);
+            return processorBuilder.coolToJava().javaToFiles().filesToHarddrive(output);
         } else if (commandline.backend.toLowerCase().equals("jar")) {
             final String output = commandline.output != null ? commandline.output : "out.jar";
-            return processorBuilder.compileToJava().compileJar(output);
+            return processorBuilder.coolToJava().javaToJar().jarToFile().filesToHarddrive(output);
         } else if (commandline.backend.toLowerCase().equals("jbc")) {
             final String output = commandline.output != null ? commandline.output : "output/";
-            return processorBuilder.coolToBytecode().bytecodeToJbc().jbcToFile().dumpFiles(output);
+            return processorBuilder.coolToBytecode().bytecodeToJbc().jbcToFiles().filesToHarddrive(output);
         } else {
-            return new ProcessorBuilder().showHelp(commandline.getParser());
+            return new ProcessorBuilder().helpToString(commandline.getParser()).stringToConsole();
         }
     }
 }
