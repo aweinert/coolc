@@ -19,6 +19,7 @@ import net.alexweinert.coolc.processors.graph.GraphToFileProcessor;
 import net.alexweinert.coolc.processors.io.FileDumper;
 import net.alexweinert.coolc.processors.io.FileOpener;
 import net.alexweinert.coolc.processors.io.StringDumper;
+import net.alexweinert.coolc.processors.java.JavaToJarProcessor;
 import net.alexweinert.coolc.processors.java.dump.JavaDumper;
 import net.alexweinert.coolc.processors.java.fromcool.JavaClassBuilderFactory;
 import net.alexweinert.coolc.processors.java.jarcompile.JarCompiler;
@@ -100,8 +101,8 @@ public class ProcessorBuilder {
     }
 
     public ProcessorBuilder javaToJar() {
-        // TODO Auto-generated method stub
-        return null;
+        this.frontend = this.frontend.append(new JavaToJarProcessor());
+        return this;
     }
 
     public ProcessorBuilder jarToFile() {

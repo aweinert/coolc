@@ -1,5 +1,8 @@
 package net.alexweinert.coolc.representations.io;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -43,7 +46,7 @@ public class File {
     private final Path path;
     private final byte[] content;
 
-    private File(Path path, byte[] content) {
+    public File(Path path, byte[] content) {
         this.path = path;
         this.content = content;
     }
