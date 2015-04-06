@@ -1,120 +1,179 @@
 package net.alexweinert.coolc.processors;
 
+import java.io.Reader;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.infrastructure.Compiler;
 import net.alexweinert.coolc.infrastructure.Frontend;
 import net.alexweinert.coolc.processors.bytecode.fromcool.FromCoolBuilderFactory;
-import net.alexweinert.coolc.processors.bytecode.tograph.BytecodeToGraphProcessor;
 import net.alexweinert.coolc.processors.bytecode.tojbc.BytecodeToJbcProcessor;
-import net.alexweinert.coolc.processors.bytecode.tostring.ToStringProcessor;
 import net.alexweinert.coolc.processors.cool.frontend.CoolParser;
 import net.alexweinert.coolc.processors.cool.hierarchycheck.CoolHierarchyChecker;
 import net.alexweinert.coolc.processors.cool.selftyperemoval.SelfTypeRemover;
 import net.alexweinert.coolc.processors.cool.tohighlevel.CoolBackendProcessor;
 import net.alexweinert.coolc.processors.cool.typecheck.CoolTypeChecker;
-import net.alexweinert.coolc.processors.cool.unparser.CoolUnparser;
-import net.alexweinert.coolc.processors.graph.GraphToFileProcessor;
 import net.alexweinert.coolc.processors.io.FileDumper;
 import net.alexweinert.coolc.processors.io.FileOpener;
 import net.alexweinert.coolc.processors.io.StringDumper;
-import net.alexweinert.coolc.processors.java.JavaToJarProcessor;
-import net.alexweinert.coolc.processors.java.dump.JavaDumper;
+import net.alexweinert.coolc.processors.jar.Jar;
 import net.alexweinert.coolc.processors.java.fromcool.JavaClassBuilderFactory;
-import net.alexweinert.coolc.processors.java.jarcompile.JarCompiler;
-import net.alexweinert.coolc.processors.java.tofiles.JavaToFilesProcessor;
 import net.alexweinert.coolc.processors.java.typecasesort.TypecaseSortProcessor;
-import net.alexweinert.coolc.processors.java.variablerenaming.VariableRenamer;
 import net.alexweinert.coolc.processors.jbc.JbcToFileProcessor;
 import net.alexweinert.coolc.processors.util.UsageFrontend;
-import net.alexweinert.coolc.representations.java.JavaProgram;
+import net.alexweinert.coolc.representations.bytecode.ByteClass;
+import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.io.File;
+import net.alexweinert.coolc.representations.java.JavaClass;
+import net.alexweinert.coolc.representations.jbc.JbcClass;
 
 import com.beust.jcommander.JCommander;
 
-public class ProcessorBuilder {
-    private Frontend frontend = null;
-    private final Output output = new Output();
+public abstract class ProcessorBuilder<T> {
+    protected final Frontend<T> frontend;
+    protected final Output output = new Output();
 
-    public ProcessorBuilder helpToString(JCommander parser) {
-        this.frontend = new UsageFrontend(parser);
-        return this;
+    private ProcessorBuilder(Frontend<T> frontend) {
+        this.frontend = frontend;
     }
 
-    public ProcessorBuilder openFile(String path) {
-        this.frontend = new FileOpener(path);
-        return this;
+    public static class FrontendBuilder {
+        public StringCompilerBuilder helpToString(JCommander parser) {
+            return new StringCompilerBuilder(new UsageFrontend(parser));
+        }
+
+        public ReaderCompilerBuilder openFile(String path) {
+            return new ReaderCompilerBuilder(new FileOpener(path));
+        }
     }
 
-    public ProcessorBuilder fileToCool() {
-        this.frontend = this.frontend.append(new CoolParser());
-        return this;
+    public static class StringCompilerBuilder extends ProcessorBuilder<String> {
+        private StringCompilerBuilder(Frontend<String> frontend) {
+            super(frontend);
+        }
+
+        public Compiler<String> stringToConsole() {
+            return this.frontend.append(new StringDumper());
+        }
     }
 
-    public ProcessorBuilder checkCool() {
-        this.frontend = this.frontend.append(new CoolHierarchyChecker());
-        this.frontend = this.frontend.append(new CoolTypeChecker(output));
-        return this;
+    public static class ReaderCompilerBuilder extends ProcessorBuilder<Reader> {
+
+        private ReaderCompilerBuilder(final Frontend<Reader> frontend) {
+            super(frontend);
+        }
+
+        public CoolProgramCompilerBuilder fileToCool() {
+            return new CoolProgramCompilerBuilder(this.frontend.append(new CoolParser()));
+        }
+
     }
 
-    public ProcessorBuilder coolToBytecode() {
-        this.frontend = this.frontend.append(new CoolHierarchyChecker());
-        this.frontend = this.frontend.append(new TypecaseSortProcessor());
+    public static class CoolProgramCompilerBuilder extends ProcessorBuilder<Program> {
+        private CoolProgramCompilerBuilder(Frontend<Program> frontend) {
+            super(frontend);
+        }
 
-        this.frontend = this.frontend.append(new CoolHierarchyChecker());
-        this.frontend = this.frontend.append(new SelfTypeRemover());
+        public CoolProgramCompilerBuilder checkCool() {
+            return new CoolProgramCompilerBuilder(this.frontend.append(new CoolHierarchyChecker()).append(
+                    new CoolTypeChecker(output)));
+        }
 
-        this.frontend = this.frontend.append(new CoolHierarchyChecker());
-        this.frontend = this.frontend.append(new CoolTypeChecker(output));
-        this.frontend = this.frontend.append(new CoolBackendProcessor<>(new FromCoolBuilderFactory()));
+        public BytecodeCompilerBuilder coolToBytecode() {
+            Frontend<Program> newFrontend = this.frontend;
+            newFrontend = newFrontend.append(new CoolHierarchyChecker());
+            newFrontend = newFrontend.append(new TypecaseSortProcessor());
 
-        return this;
+            newFrontend = newFrontend.append(new CoolHierarchyChecker());
+            newFrontend = newFrontend.append(new SelfTypeRemover());
+
+            newFrontend = newFrontend.append(new CoolHierarchyChecker());
+            newFrontend = newFrontend.append(new CoolTypeChecker(output));
+            return new BytecodeCompilerBuilder(newFrontend.append(new CoolBackendProcessor<>(
+                    new FromCoolBuilderFactory())));
+        }
+
+        public JavaCompilerBuilder coolToJava() {
+            Frontend<Program> newFrontend = this.frontend;
+            newFrontend = newFrontend.append(new CoolHierarchyChecker());
+            newFrontend = newFrontend.append(new TypecaseSortProcessor());
+
+            newFrontend = newFrontend.append(new CoolHierarchyChecker());
+            newFrontend = newFrontend.append(new SelfTypeRemover());
+
+            newFrontend = newFrontend.append(new CoolHierarchyChecker());
+            newFrontend = newFrontend.append(new CoolTypeChecker(output));
+            return new JavaCompilerBuilder(
+                    newFrontend.append(new CoolBackendProcessor<>(new JavaClassBuilderFactory())));
+        }
     }
 
-    public ProcessorBuilder bytecodeToJbc() {
-        this.frontend = this.frontend.append(new BytecodeToJbcProcessor());
-        return this;
+    public static class BytecodeCompilerBuilder extends ProcessorBuilder<Collection<ByteClass>> {
+        private BytecodeCompilerBuilder(final Frontend<Collection<ByteClass>> frontend) {
+            super(frontend);
+        }
+
+        public JbcCompilerBuilder bytecodeToJbc() {
+            return new JbcCompilerBuilder(this.frontend.append(new BytecodeToJbcProcessor()));
+        }
     }
 
-    public ProcessorBuilder jbcToFiles() {
-        this.frontend = this.frontend.append(new JbcToFileProcessor());
-        return this;
+    public static class JavaCompilerBuilder extends ProcessorBuilder<Collection<JavaClass>> {
+        private JavaCompilerBuilder(final Frontend<Collection<JavaClass>> frontend) {
+            super(frontend);
+        }
+
+        public FilesCompilerBuilder javaToFiles() {
+            // TODO return newFilesCompilerBuilder(this.frontend.append(new JavaToFilesProcessor()));
+            return null;
+        }
+
+        public JarCompilerBuilder javaToJar(String relativeJarPath) {
+            // TODO new JarCompilerBuilder(this.frontend.append(new JavaToJarProcessor(Paths.get(relativeJarPath))));
+            return null;
+        }
     }
 
-    public ProcessorBuilder coolToJava() {
-        this.frontend = this.frontend.append(new CoolHierarchyChecker());
-        this.frontend = this.frontend.append(new TypecaseSortProcessor());
+    public static class JarCompilerBuilder extends ProcessorBuilder<Jar> {
+        private JarCompilerBuilder(final Frontend<Jar> frontend) {
+            super(frontend);
+        }
 
-        this.frontend = this.frontend.append(new CoolHierarchyChecker());
-        this.frontend = this.frontend.append(new SelfTypeRemover());
-
-        this.frontend = this.frontend.append(new CoolHierarchyChecker());
-        this.frontend = this.frontend.append(new CoolTypeChecker(output));
-        this.frontend = this.frontend.append(new CoolBackendProcessor<>(new JavaClassBuilderFactory()));
-
-        return this;
+        public FileCompilerBuilder jarToFile() {
+            // TODO Auto-generated method stub
+            return null;
+        }
     }
 
-    public ProcessorBuilder javaToFiles() {
-        this.frontend = this.frontend.append(new JavaToFilesProcessor());
-        return this;
+    public static class JbcCompilerBuilder extends ProcessorBuilder<Collection<JbcClass>> {
+        private JbcCompilerBuilder(final Frontend<Collection<JbcClass>> frontend) {
+            super(frontend);
+        }
+
+        public FilesCompilerBuilder jbcToFiles() {
+            return new FilesCompilerBuilder(this.frontend.append(new JbcToFileProcessor()));
+        }
     }
 
-    public ProcessorBuilder javaToJar() {
-        this.frontend = this.frontend.append(new JavaToJarProcessor());
-        return this;
+    public static class FileCompilerBuilder extends ProcessorBuilder<File> {
+        private FileCompilerBuilder(final Frontend<File> frontend) {
+            super(frontend);
+        }
+
+        public Compiler<File> fileToHarddrive(String outputFolder) {
+            // TODO return this.frontend.append(new FileDumper(Paths.get(outputFolder)));
+            return null;
+        }
     }
 
-    public ProcessorBuilder jarToFile() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    public static class FilesCompilerBuilder extends ProcessorBuilder<Collection<File>> {
+        private FilesCompilerBuilder(final Frontend<Collection<File>> frontend) {
+            super(frontend);
+        }
 
-    public Compiler<?> stringToConsole() {
-        return this.frontend.append(new StringDumper());
-    }
-
-    public Compiler<?> filesToHarddrive(String outputFolder) {
-        return this.frontend.append(new FileDumper(Paths.get(outputFolder)));
+        public Compiler<Collection<File>> filesToHarddrive(String outputFolder) {
+            return this.frontend.append(new FileDumper(Paths.get(outputFolder)));
+        }
     }
 }

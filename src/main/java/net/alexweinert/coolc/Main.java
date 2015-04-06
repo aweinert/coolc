@@ -3,6 +3,7 @@ package net.alexweinert.coolc;
 import net.alexweinert.coolc.infrastructure.Compiler;
 import net.alexweinert.coolc.infrastructure.ProcessorException;
 import net.alexweinert.coolc.processors.ProcessorBuilder;
+import net.alexweinert.coolc.processors.ProcessorBuilder.CoolProgramCompilerBuilder;
 
 import com.beust.jcommander.JCommander;
 
@@ -32,23 +33,24 @@ public class Main {
 
     private static Compiler<?> buildCompiler(Commandline commandline) {
         if (commandline.showHelp() || !commandline.isValid()) {
-            return new ProcessorBuilder().helpToString(commandline.getParser()).stringToConsole();
+            return new ProcessorBuilder.FrontendBuilder().helpToString(commandline.getParser()).stringToConsole();
         }
 
-        final ProcessorBuilder processorBuilder = new ProcessorBuilder();
-        processorBuilder.openFile(commandline.inputFiles.get(0)).fileToCool().checkCool();
+        final ProcessorBuilder.FrontendBuilder frontendBuilder = new ProcessorBuilder.FrontendBuilder();
+        final CoolProgramCompilerBuilder compilerBuilder = frontendBuilder.openFile(commandline.inputFiles.get(0))
+                .fileToCool().checkCool();
 
         if (commandline.backend.toLowerCase().equals("java")) {
             final String output = commandline.output != null ? commandline.output : "output/";
-            return processorBuilder.coolToJava().javaToFiles().filesToHarddrive(output);
+            return compilerBuilder.coolToJava().javaToFiles().filesToHarddrive(output);
         } else if (commandline.backend.toLowerCase().equals("jar")) {
             final String output = commandline.output != null ? commandline.output : "out.jar";
-            return processorBuilder.coolToJava().javaToJar().jarToFile().filesToHarddrive(output);
+            return compilerBuilder.coolToJava().javaToJar(output).jarToFile().fileToHarddrive(output);
         } else if (commandline.backend.toLowerCase().equals("jbc")) {
             final String output = commandline.output != null ? commandline.output : "output/";
-            return processorBuilder.coolToBytecode().bytecodeToJbc().jbcToFiles().filesToHarddrive(output);
+            return compilerBuilder.coolToBytecode().bytecodeToJbc().jbcToFiles().filesToHarddrive(output);
         } else {
-            return new ProcessorBuilder().helpToString(commandline.getParser()).stringToConsole();
+            return new ProcessorBuilder.FrontendBuilder().helpToString(commandline.getParser()).stringToConsole();
         }
     }
 }
