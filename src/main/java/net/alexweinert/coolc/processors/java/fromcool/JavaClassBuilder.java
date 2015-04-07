@@ -20,8 +20,9 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.StringSymbol;
 import net.alexweinert.coolc.representations.java.JavaClass;
+import net.alexweinert.coolc.representations.java.JavaProgram;
 
-class JavaClassBuilder implements CoolBackendBuilder<JavaClass> {
+class JavaClassBuilder implements CoolBackendBuilder<JavaClass, JavaProgram> {
     private final String classId;
     private final StringBuilder stringBuilder = new StringBuilder();
     private final NameGenerator namegen = new NameGenerator();
@@ -475,5 +476,10 @@ class JavaClassBuilder implements CoolBackendBuilder<JavaClass> {
         }
         sourceFileReader.close();
         return new JavaClass(fileName, builder.toString());
+    }
+
+    @Override
+    public JavaProgram buildProgram(List<JavaClass> classes) {
+        return new JavaProgram(classes);
     }
 }

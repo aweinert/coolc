@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Stack;
 
 import net.alexweinert.coolc.infrastructure.ProcessorException;
-import net.alexweinert.coolc.processors.java.fromcool.NameGenerator;
 import net.alexweinert.coolc.representations.cool.ast.Addition;
 import net.alexweinert.coolc.representations.cool.ast.ArithmeticNegation;
 import net.alexweinert.coolc.representations.cool.ast.Assign;
@@ -43,24 +42,24 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IntTable;
 import net.alexweinert.coolc.representations.cool.symboltables.StringTable;
 
-public class CoolBackendVisitor<T> extends Visitor {
+public class CoolBackendVisitor<T, U> extends Visitor {
 
     private final Stack<String> variables = new Stack<>();
 
-    private final CoolBackendBuilderFactory<T> factory;
-    private CoolBackendBuilder<T> builder;
+    private final CoolBackendBuilderFactory<T, U> factory;
+    private CoolBackendBuilder<T, U> builder;
 
     private List<T> javaClasses = new LinkedList<>();
 
-    public CoolBackendVisitor(CoolBackendBuilderFactory<T> factory) {
+    public CoolBackendVisitor(CoolBackendBuilderFactory<T, U> factory) {
         this.factory = factory;
     }
 
-    public Collection<T> process(Program input) throws ProcessorException {
+    public U process(Program input) throws ProcessorException {
         this.builder = this.factory.createBuilder(null);
         this.javaClasses.addAll(this.builder.buildBasicClasses());
         input.acceptVisitor(this);
-        return this.javaClasses;
+        return this.builder.buildProgram(this.javaClasses);
     }
 
     @Override

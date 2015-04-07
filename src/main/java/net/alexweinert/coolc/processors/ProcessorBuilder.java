@@ -3,6 +3,7 @@ package net.alexweinert.coolc.processors;
 import java.io.Reader;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 
 import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.infrastructure.Compiler;
@@ -25,7 +26,7 @@ import net.alexweinert.coolc.processors.util.UsageFrontend;
 import net.alexweinert.coolc.representations.bytecode.ByteClass;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.io.File;
-import net.alexweinert.coolc.representations.java.JavaClass;
+import net.alexweinert.coolc.representations.java.JavaProgram;
 import net.alexweinert.coolc.representations.jbc.JbcClass;
 
 import com.beust.jcommander.JCommander;
@@ -109,8 +110,8 @@ public abstract class ProcessorBuilder<T> {
         }
     }
 
-    public static class BytecodeCompilerBuilder extends ProcessorBuilder<Collection<ByteClass>> {
-        private BytecodeCompilerBuilder(final Frontend<Collection<ByteClass>> frontend) {
+    public static class BytecodeCompilerBuilder extends ProcessorBuilder<List<ByteClass>> {
+        private BytecodeCompilerBuilder(final Frontend<List<ByteClass>> frontend) {
             super(frontend);
         }
 
@@ -119,8 +120,8 @@ public abstract class ProcessorBuilder<T> {
         }
     }
 
-    public static class JavaCompilerBuilder extends ProcessorBuilder<Collection<JavaClass>> {
-        private JavaCompilerBuilder(final Frontend<Collection<JavaClass>> frontend) {
+    public static class JavaCompilerBuilder extends ProcessorBuilder<JavaProgram> {
+        private JavaCompilerBuilder(final Frontend<JavaProgram> frontend) {
             super(frontend);
         }
 

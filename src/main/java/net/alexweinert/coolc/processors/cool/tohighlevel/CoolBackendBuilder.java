@@ -10,7 +10,9 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.StringSymbol;
 
-public interface CoolBackendBuilder<T> {
+public interface CoolBackendBuilder<T, U> {
+
+    U buildProgram(List<T> classes);
 
     void beginClass(IdSymbol idSymbol, IdSymbol parentSymbol);
 

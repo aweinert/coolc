@@ -18,7 +18,7 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IntSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.StringSymbol;
 
-public class FromCoolBuilder implements CoolBackendBuilder<ByteClass> {
+public class FromCoolBuilder implements CoolBackendBuilder<ByteClass, List<ByteClass>> {
 
     private final NameGenerator nameGen = new NameGenerator();
 
@@ -269,6 +269,11 @@ public class FromCoolBuilder implements CoolBackendBuilder<ByteClass> {
         this.labels.pop();
         final String afterLabel = this.labels.pop();
         this.instructionFactory.setLabel(afterLabel);
+    }
+
+    @Override
+    public List<ByteClass> buildProgram(List<ByteClass> classes) {
+        return classes;
     }
 
 }
