@@ -19,7 +19,9 @@ import net.alexweinert.coolc.processors.io.FileDumper;
 import net.alexweinert.coolc.processors.io.FileOpener;
 import net.alexweinert.coolc.processors.io.StringDumper;
 import net.alexweinert.coolc.processors.jar.Jar;
+import net.alexweinert.coolc.processors.java.JavaToJarProcessor;
 import net.alexweinert.coolc.processors.java.fromcool.JavaClassBuilderFactory;
+import net.alexweinert.coolc.processors.java.tofiles.JavaToFilesProcessor;
 import net.alexweinert.coolc.processors.java.typecasesort.TypecaseSortProcessor;
 import net.alexweinert.coolc.processors.jbc.JbcToFileProcessor;
 import net.alexweinert.coolc.processors.util.UsageFrontend;
@@ -126,13 +128,11 @@ public abstract class ProcessorBuilder<T> {
         }
 
         public FilesCompilerBuilder javaToFiles() {
-            // TODO return newFilesCompilerBuilder(this.frontend.append(new JavaToFilesProcessor()));
-            return null;
+            return new FilesCompilerBuilder(this.frontend.append(new JavaToFilesProcessor()));
         }
 
         public JarCompilerBuilder javaToJar(String relativeJarPath) {
-            // TODO new JarCompilerBuilder(this.frontend.append(new JavaToJarProcessor(Paths.get(relativeJarPath))));
-            return null;
+            return new JarCompilerBuilder(this.frontend.append(new JavaToJarProcessor(Paths.get(relativeJarPath))));
         }
     }
 
