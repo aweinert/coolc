@@ -18,8 +18,10 @@ public class JbcClass {
             this.minorVersion = 0x0000;
             this.majorVersion = 0x0033;
 
-            this.idIndex = this.addConstant(this.getConstantBuilder().buildUtf8Constant(id));
-            this.parentIndex = this.addConstant(this.getConstantBuilder().buildUtf8Constant(parent));
+            final char idUtf8Index = this.addConstant(this.getConstantBuilder().buildUtf8Constant(id));
+            this.idIndex = this.addConstant(this.getConstantBuilder().buildClassConstant(idUtf8Index));
+            final char parentUtf8Index = this.addConstant(this.getConstantBuilder().buildUtf8Constant(parent));
+            this.parentIndex = this.addConstant(this.getConstantBuilder().buildClassConstant(parentUtf8Index));
         }
 
         public ConstantPoolEntry.Builder getConstantBuilder() {
