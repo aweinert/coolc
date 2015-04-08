@@ -9,6 +9,7 @@ public class JbcClass {
         private char majorVersion;
 
         private List<ConstantPoolEntry> constantPool = new LinkedList<>();
+        private List<FieldEntry> fields = new LinkedList<>();
 
         private char idIndex;
         private char parentIndex;
@@ -31,9 +32,19 @@ public class JbcClass {
             return (char) (this.constantPool.size() - 1);
         }
 
+        public FieldEntry.Builder getFieldBuilder(char nameIndex, char fieldIndex) {
+            return new FieldEntry.Builder(nameIndex, fieldIndex);
+        }
+
+        public char addField(FieldEntry entry) {
+            assert this.fields.size() < Character.MAX_VALUE : "Too many fields";
+            this.fields.add(entry);
+            return (char) (this.fields.size() - 1);
+        }
+
         public JbcClass build() {
             return new JbcClass(minorVersion, majorVersion, constantPool, (char) 0x00, idIndex, parentIndex,
-                    new LinkedList<Character>(), new LinkedList<FieldEntry>(), new LinkedList<MethodEntry>(),
+                    new LinkedList<Character>(), this.fields, new LinkedList<MethodEntry>(),
                     new LinkedList<AttributeEntry>());
         }
     }
