@@ -37,8 +37,9 @@ public class FieldEntry {
     }
 
     public byte[] toBytes() {
-        byte[] returnValue = new byte[] { 0x00, 0x04, (byte) (nameIndex >>> 8 & 0xFF), (byte) (nameIndex & 0xFF),
-                (byte) (descriptorIndex >>> 8 & 0xFF), (byte) (descriptorIndex & 0xFF) };
+        byte[] returnValue = new byte[] { 0x00, 0x04, (byte) (nameIndex + 1 >>> 8 & 0xFF),
+                (byte) (nameIndex + 1 & 0xFF), (byte) (descriptorIndex + 1 >>> 8 & 0xFF),
+                (byte) (descriptorIndex + 1 & 0xFF) };
         assert this.attributes.size() < Character.MAX_VALUE : "Too many attributes for Field";
         returnValue = Arrays.copyOf(returnValue, returnValue.length + 2);
         returnValue[returnValue.length - 2] = (byte) (this.attributes.size() >>> 8 & 0xFF);
