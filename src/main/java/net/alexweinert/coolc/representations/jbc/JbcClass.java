@@ -17,19 +17,17 @@ public class JbcClass {
             this.minorVersion = 0x0000;
             this.majorVersion = 0x0033;
 
-            this.idIndex = this.addClassConstant(this.addStringConstant(id));
-            this.parentIndex = this.addClassConstant(this.addStringConstant(parent));
+            this.idIndex = this.addConstant(this.getConstantBuilder().buildUtf8Constant(id));
+            this.parentIndex = this.addConstant(this.getConstantBuilder().buildUtf8Constant(parent));
         }
 
-        public char addStringConstant(String value) {
-            assert this.constantPool.size() < Character.MAX_VALUE : "Too many entries in constant pool";
-            this.constantPool.add(new Utf8Constant(value));
-            return (char) (this.constantPool.size() - 1);
+        public ConstantPoolEntry.Builder getConstantBuilder() {
+            return new ConstantPoolEntry.Builder();
         }
 
-        public char addClassConstant(char nameIndex) {
+        public char addConstant(ConstantPoolEntry entry) {
             assert this.constantPool.size() < Character.MAX_VALUE : "Too many entries in constant pool";
-            this.constantPool.add(new ClassConstant(nameIndex));
+            this.constantPool.add(entry);
             return (char) (this.constantPool.size() - 1);
         }
 
