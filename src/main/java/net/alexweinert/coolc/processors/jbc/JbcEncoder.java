@@ -2,6 +2,7 @@ package net.alexweinert.coolc.processors.jbc;
 
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 import net.alexweinert.coolc.representations.io.File;
@@ -74,7 +75,11 @@ public class JbcEncoder {
     }
 
     public void encodeUtf8Constant(byte tag, String value) {
-        final byte[] valueArray = Charset.forName("UTF-8").encode(value).array();
+        byte[] valueArray = Charset.forName("UTF-8").encode(value).array();
+        // Workaroung for odd bug in encoding: Sometimes the string is null-terminated
+        if (valueArray[valueArray.length - 1] == 0x00) {
+            valueArray = Arrays.copyOf(valueArray, valueArray.length - 1);
+        }
         this.builder.appendContent(tag);
         this.builder.appendContent(this.splitter.splitChar((char) valueArray.length));
         this.builder.appendContent(valueArray);
