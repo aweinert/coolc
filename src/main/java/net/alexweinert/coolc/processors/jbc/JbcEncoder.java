@@ -2,6 +2,7 @@ package net.alexweinert.coolc.processors.jbc;
 
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
+import java.util.List;
 
 import net.alexweinert.coolc.representations.io.File;
 import net.alexweinert.coolc.representations.io.File.Builder;
@@ -53,7 +54,7 @@ public class JbcEncoder {
 
         builder.appendContent(splitter.splitChar((char) jbcClass.getFields().size()));
         for (FieldEntry field : jbcClass.getFields()) {
-            builder.appendContent(field.toBytes());
+            field.encode(this);
         }
 
         builder.appendContent(splitter.splitChar((char) jbcClass.getMethods().size()));
@@ -77,5 +78,20 @@ public class JbcEncoder {
         this.builder.appendContent(tag);
         this.builder.appendContent(this.splitter.splitChar((char) valueArray.length));
         this.builder.appendContent(valueArray);
+    }
+
+    public void encodeField(char nameIndex, char descriptorIndex, List<AttributeEntry> attributes) {
+        // Access flags
+        this.builder.appendContent((byte) 0x00);
+        this.builder.appendContent((byte) 0x04);
+
+        this.builder.appendContent(this.splitter.splitChar((char) (nameIndex + 1)));
+        this.builder.appendContent(this.splitter.splitChar((char) (descriptorIndex + 1)));
+
+        assert attributes.size() < Character.MAX_VALUE : "Too many attributes for Field";
+        this.builder.appendContent(this.splitter.splitChar((char) attributes.size()));
+        for (AttributeEntry attribute : attributes) {
+            this.builder.appendContent(attribute.toBytes());
+        }
     }
 }
