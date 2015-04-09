@@ -1,5 +1,7 @@
 package net.alexweinert.coolc.representations.jbc;
 
+import net.alexweinert.coolc.processors.jbc.JbcEncoder;
+
 public class ClassConstant extends ConstantPoolEntry {
     private final char nameIndex;
 
@@ -13,7 +15,7 @@ public class ClassConstant extends ConstantPoolEntry {
     }
 
     @Override
-    public byte[] toBytes() {
-        return new byte[] { this.tag, (byte) ((this.nameIndex + 1) >>> 8 & 0xFF), (byte) ((this.nameIndex + 1) & 0xFF) };
+    public void encode(JbcEncoder encoder) {
+        encoder.encodeClassConstant(this.tag, this.nameIndex);
     }
 }

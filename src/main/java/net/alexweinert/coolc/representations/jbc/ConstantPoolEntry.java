@@ -1,5 +1,7 @@
 package net.alexweinert.coolc.representations.jbc;
 
+import net.alexweinert.coolc.processors.jbc.JbcEncoder;
+
 public abstract class ConstantPoolEntry {
     public static class Builder {
         public ClassConstant buildClassConstant(char idIndex) {
@@ -17,5 +19,5 @@ public abstract class ConstantPoolEntry {
         this.tag = tag;
     }
 
-    public abstract byte[] toBytes();
+    public abstract void encode(JbcEncoder jbcEncoder);
 }

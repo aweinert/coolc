@@ -1,5 +1,6 @@
 package net.alexweinert.coolc.processors.jbc;
 
+import java.nio.charset.Charset;
 import java.nio.file.Paths;
 
 import net.alexweinert.coolc.representations.io.File;
@@ -36,7 +37,7 @@ public class JbcEncoder {
 
         builder.appendContent(splitter.splitChar((char) (jbcClass.getConstantPool().size() + 1)));
         for (ConstantPoolEntry constant : jbcClass.getConstantPool()) {
-            builder.appendContent(constant.toBytes());
+            constant.encode(this);
         }
 
         builder.appendContent(splitter.splitChar(jbcClass.getAccessFlags()));
@@ -64,5 +65,17 @@ public class JbcEncoder {
         for (AttributeEntry attribute : jbcClass.getAttributes()) {
             builder.appendContent(attribute.toBytes());
         }
+    }
+
+    public void encodeClassConstant(byte tag, char nameIndex) {
+        this.builder.appendContent(tag);
+        this.builder.appendContent(this.splitter.splitChar((char) (nameIndex + 1)));
+    }
+
+    public void encodeUtf8Constant(byte tag, String value) {
+        final byte[] valueArray = Charset.forName("UTF-8").encode(value).array();
+        this.builder.appendContent(tag);
+        this.builder.appendContent(this.splitter.splitChar((char) valueArray.length));
+        this.builder.appendContent(valueArray);
     }
 }
