@@ -64,7 +64,7 @@ public class JbcEncoder {
 
         builder.appendContent(splitter.splitChar((char) jbcClass.getAttributes().size()));
         for (AttributeEntry attribute : jbcClass.getAttributes()) {
-            builder.appendContent(attribute.toBytes());
+            attribute.encode(this);
         }
     }
 
@@ -91,7 +91,7 @@ public class JbcEncoder {
         assert attributes.size() < Character.MAX_VALUE : "Too many attributes for Field";
         this.builder.appendContent(this.splitter.splitChar((char) attributes.size()));
         for (AttributeEntry attribute : attributes) {
-            this.builder.appendContent(attribute.toBytes());
+            attribute.encode(this);
         }
     }
 }
