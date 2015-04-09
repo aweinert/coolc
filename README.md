@@ -3,8 +3,6 @@ This compiler takes a Cool-program as input and emits Java-code.
 At the moment, there are a couple of deviations from standardized Cool.
 These will be fixed later down the line.
 
-[![Code Climate](https://codeclimate.com/github/aweinert/coolc/badges/gpa.svg)](https://codeclimate.com/github/aweinert/coolc)
-
 # Setup
 Since the compiler itself is written in Java and uses maven for its builds, please make sure that you have maven installed.
 On Ubuntu-based systems, this should be as simple as `sudo apt-get install maven`.
