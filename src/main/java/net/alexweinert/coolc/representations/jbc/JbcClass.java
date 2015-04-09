@@ -59,8 +59,7 @@ public class JbcClass {
 
         public JbcClass build() {
             return new JbcClass(minorVersion, majorVersion, constantPool, (char) 0x00, idIndex, parentIndex,
-                    new LinkedList<Character>(), this.fields, new LinkedList<MethodEntry>(),
-                    new LinkedList<AttributeEntry>());
+                    new LinkedList<Character>(), this.fields, this.methods, new LinkedList<AttributeEntry>());
         }
     }
 
