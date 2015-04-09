@@ -59,7 +59,7 @@ public class JbcEncoder {
 
         builder.appendContent(splitter.splitChar((char) jbcClass.getMethods().size()));
         for (MethodEntry method : jbcClass.getMethods()) {
-            builder.appendContent(method.toBytes());
+            method.encode(this);
         }
 
         builder.appendContent(splitter.splitChar((char) jbcClass.getAttributes().size()));
@@ -93,5 +93,10 @@ public class JbcEncoder {
         for (AttributeEntry attribute : attributes) {
             attribute.encode(this);
         }
+    }
+
+    public void encodeMethod(MethodEntry methodEntry) {
+        // TODO Auto-generated method stub
+
     }
 }
