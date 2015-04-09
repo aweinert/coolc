@@ -95,8 +95,19 @@ public class JbcEncoder {
         }
     }
 
-    public void encodeMethod(MethodEntry methodEntry) {
-        // TODO Auto-generated method stub
+    public void encodeMethod(char nameIndex, char descriptorIndex, List<AttributeEntry> attributes) {
+        // Access flags
+        this.builder.appendContent((byte) 0x00);
+        this.builder.appendContent((byte) 0x01);
+
+        this.builder.appendContent(this.splitter.splitChar((char) (nameIndex + 1)));
+        this.builder.appendContent(this.splitter.splitChar((char) (descriptorIndex + 1)));
+
+        assert attributes.size() < Character.MAX_VALUE : "Too many attributes for Method";
+        this.builder.appendContent(this.splitter.splitChar((char) attributes.size()));
+        for (AttributeEntry attribute : attributes) {
+            attribute.encode(this);
+        }
 
     }
 }
