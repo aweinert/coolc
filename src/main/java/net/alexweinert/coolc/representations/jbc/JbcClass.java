@@ -3,6 +3,8 @@ package net.alexweinert.coolc.representations.jbc;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.alexweinert.coolc.processors.jbc.JbcEncoder;
+
 public class JbcClass {
     public static class Builder {
         private char minorVersion;
@@ -118,6 +120,10 @@ public class JbcClass {
 
     public List<AttributeEntry> getAttributes() {
         return attributes;
+    }
+
+    public void encode(JbcEncoder encoder) {
+        encoder.encodeJbcClass(this);
     }
 
 }
