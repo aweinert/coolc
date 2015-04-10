@@ -76,7 +76,7 @@ public class JbcEncoder {
 
     public void encodeUtf8Constant(byte tag, String value) {
         byte[] valueArray = Charset.forName("UTF-8").encode(value).array();
-        // Workaroung for odd bug in encoding: Sometimes the string is null-terminated
+        // Workaround for odd bug in encoding: Sometimes the string is null-terminated
         if (valueArray[valueArray.length - 1] == 0x00) {
             valueArray = Arrays.copyOf(valueArray, valueArray.length - 1);
         }
