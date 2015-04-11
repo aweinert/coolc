@@ -61,6 +61,7 @@ public class CodeAttribute extends AttributeEntry {
             }
             // Length of attributesCount
             attributeLength += encoder.getCharLength();
+            // Length of attributes
             for (AttributeEntry attribute : this.attributes) {
                 attributeLength += encoder.getAttributeEntryLength(attribute);
             }
