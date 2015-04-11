@@ -37,8 +37,14 @@ public class CodeAttribute extends AttributeEntry {
         }
 
         public CodeAttribute build(JbcEncoder encoder) {
-            // TODO
-            return null;
+            final int attributeLength = this.computeAttributeLength(encoder);
+            final int codeLength = this.computeCodeLength(encoder);
+            assert this.exceptionTable.size() < Character.MAX_VALUE;
+            final char exceptionTableLength = (char) this.exceptionTable.size();
+            assert this.attributes.size() < Character.MAX_VALUE;
+            final char attributesCount = (char) this.attributes.size();
+            return new CodeAttribute(this.attributeNameIndex, attributeLength, this.maxStack, this.maxLocals,
+                    codeLength, code, exceptionTableLength, exceptionTable, attributesCount, attributes);
         }
 
         private int computeAttributeLength(JbcEncoder encoder) {
@@ -66,6 +72,14 @@ public class CodeAttribute extends AttributeEntry {
                 attributeLength += encoder.getAttributeEntryLength(attribute);
             }
             return attributeLength;
+        }
+
+        private int computeCodeLength(JbcEncoder encoder) {
+            int codeLength = 0;
+            for (OpCode opCode : code) {
+                codeLength += encoder.getOpcodeLength(opCode);
+            }
+            return codeLength;
         }
 
     }
