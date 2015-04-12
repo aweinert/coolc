@@ -6,6 +6,10 @@ import net.alexweinert.coolc.representations.jbc.OpCode;
 
 public class JbcEncoding {
 
+    public static JbcEncoding createStandardEncoding() {
+        return new JbcEncoding();
+    }
+
     public int getCharLength() {
         return 2;
     }
