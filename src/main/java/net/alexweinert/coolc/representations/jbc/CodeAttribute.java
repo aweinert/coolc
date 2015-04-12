@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import net.alexweinert.coolc.processors.jbc.JbcEncoder;
+import net.alexweinert.coolc.processors.jbc.JbcEncoding;
 
 public class CodeAttribute extends AttributeEntry {
 
@@ -36,9 +37,9 @@ public class CodeAttribute extends AttributeEntry {
             return this;
         }
 
-        public CodeAttribute build(JbcEncoder encoder) {
-            final int attributeLength = this.computeAttributeLength(encoder);
-            final int codeLength = this.computeCodeLength(encoder);
+        public CodeAttribute build(JbcEncoding encoding) {
+            final int attributeLength = this.computeAttributeLength(encoding);
+            final int codeLength = this.computeCodeLength(encoding);
             assert this.exceptionTable.size() < Character.MAX_VALUE;
             final char exceptionTableLength = (char) this.exceptionTable.size();
             assert this.attributes.size() < Character.MAX_VALUE;
@@ -47,37 +48,37 @@ public class CodeAttribute extends AttributeEntry {
                     codeLength, code, exceptionTableLength, exceptionTable, attributesCount, attributes);
         }
 
-        private int computeAttributeLength(JbcEncoder encoder) {
+        private int computeAttributeLength(JbcEncoding encoding) {
             int attributeLength = 0;
             // Length of maxStack
-            attributeLength += encoder.getCharLength();
+            attributeLength += encoding.getCharLength();
             // Length of maxLocals
-            attributeLength += encoder.getCharLength();
+            attributeLength += encoding.getCharLength();
             // Length of codeLength
-            attributeLength += encoder.getIntLength();
+            attributeLength += encoding.getIntLength();
             // Length of code
             for (OpCode opCode : code) {
-                attributeLength += encoder.getOpcodeLength(opCode);
+                attributeLength += encoding.getOpcodeLength(opCode);
             }
             // Length of exceptionTableLength
-            attributeLength += encoder.getCharLength();
+            attributeLength += encoding.getCharLength();
             // Length of exceptionTable
             for (ExceptionTableEntry exceptionTableEntry : this.exceptionTable) {
-                attributeLength += encoder.getExceptionTableEntryLength(exceptionTableEntry);
+                attributeLength += encoding.getExceptionTableEntryLength(exceptionTableEntry);
             }
             // Length of attributesCount
-            attributeLength += encoder.getCharLength();
+            attributeLength += encoding.getCharLength();
             // Length of attributes
             for (AttributeEntry attribute : this.attributes) {
-                attributeLength += encoder.getAttributeEntryLength(attribute);
+                attributeLength += encoding.getAttributeEntryLength(attribute);
             }
             return attributeLength;
         }
 
-        private int computeCodeLength(JbcEncoder encoder) {
+        private int computeCodeLength(JbcEncoding encoding) {
             int codeLength = 0;
             for (OpCode opCode : code) {
-                codeLength += encoder.getOpcodeLength(opCode);
+                codeLength += encoding.getOpcodeLength(opCode);
             }
             return codeLength;
         }

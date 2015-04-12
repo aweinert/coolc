@@ -11,11 +11,9 @@ import net.alexweinert.coolc.representations.jbc.AttributeEntry;
 import net.alexweinert.coolc.representations.jbc.ClassConstant;
 import net.alexweinert.coolc.representations.jbc.CodeAttribute;
 import net.alexweinert.coolc.representations.jbc.ConstantPoolEntry;
-import net.alexweinert.coolc.representations.jbc.ExceptionTableEntry;
 import net.alexweinert.coolc.representations.jbc.FieldEntry;
 import net.alexweinert.coolc.representations.jbc.JbcClass;
 import net.alexweinert.coolc.representations.jbc.MethodEntry;
-import net.alexweinert.coolc.representations.jbc.OpCode;
 import net.alexweinert.coolc.representations.jbc.Utf8Constant;
 
 public class JbcEncoder {
@@ -124,26 +122,8 @@ public class JbcEncoder {
 
     }
 
-    public int getCharLength() {
-        return 2;
-    }
+    public void encodeNop() {
+        this.builder.appendContent((byte) 0x00);
 
-    public int getIntLength() {
-        return 4;
-    }
-
-    public int getOpcodeLength(OpCode opCode) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    public int getExceptionTableEntryLength(ExceptionTableEntry exceptionTableEntry) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    public int getAttributeEntryLength(AttributeEntry attribute) {
-        // TODO Auto-generated method stub
-        return 0;
     }
 }
