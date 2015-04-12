@@ -11,9 +11,11 @@ import net.alexweinert.coolc.representations.jbc.AttributeEntry;
 import net.alexweinert.coolc.representations.jbc.ClassConstant;
 import net.alexweinert.coolc.representations.jbc.CodeAttribute;
 import net.alexweinert.coolc.representations.jbc.ConstantPoolEntry;
+import net.alexweinert.coolc.representations.jbc.ExceptionTableEntry;
 import net.alexweinert.coolc.representations.jbc.FieldEntry;
 import net.alexweinert.coolc.representations.jbc.JbcClass;
 import net.alexweinert.coolc.representations.jbc.MethodEntry;
+import net.alexweinert.coolc.representations.jbc.OpCode;
 import net.alexweinert.coolc.representations.jbc.Utf8Constant;
 
 public class JbcEncoder {
@@ -118,8 +120,22 @@ public class JbcEncoder {
     }
 
     public void encodeCodeAttribute(CodeAttribute codeAttribute) {
-        // TODO Auto-generated method stub
-
+        this.builder.appendContent(this.splitter.splitChar((char) (codeAttribute.getAttributeNameIndex() + 1)));
+        this.builder.appendContent(this.splitter.splitInt(codeAttribute.getAttributeLength()));
+        this.builder.appendContent(this.splitter.splitChar(codeAttribute.getMaxStack()));
+        this.builder.appendContent(this.splitter.splitChar(codeAttribute.getMaxLocals()));
+        this.builder.appendContent(this.splitter.splitInt(codeAttribute.getCodeLength()));
+        for (OpCode opCode : codeAttribute.getCode()) {
+            opCode.encode(this);
+        }
+        this.builder.appendContent(this.splitter.splitChar(codeAttribute.getExceptionTableLength()));
+        for (ExceptionTableEntry exception : codeAttribute.getExceptionTable()) {
+            // TODO
+        }
+        this.builder.appendContent(this.splitter.splitChar(codeAttribute.getAttributesCount()));
+        for (AttributeEntry attribute : codeAttribute.getAttributes()) {
+            attribute.encode(this);
+        }
     }
 
     public void encodeNop() {
