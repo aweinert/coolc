@@ -6,13 +6,16 @@ import java.util.List;
 
 import net.alexweinert.coolc.infrastructure.Processor;
 import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.coolc.processors.jbc.JbcEncoding;
 import net.alexweinert.coolc.representations.bytecode.Attribute;
 import net.alexweinert.coolc.representations.bytecode.ByteClass;
 import net.alexweinert.coolc.representations.bytecode.Method;
 import net.alexweinert.coolc.representations.bytecode.TypedId;
+import net.alexweinert.coolc.representations.jbc.CodeAttribute;
 import net.alexweinert.coolc.representations.jbc.FieldEntry;
 import net.alexweinert.coolc.representations.jbc.JbcClass;
 import net.alexweinert.coolc.representations.jbc.MethodEntry;
+import net.alexweinert.coolc.representations.jbc.OpCode;
 
 public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collection<JbcClass>> {
 
@@ -50,8 +53,12 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
         final String descriptor = buildMethodDescriptor(method);
         final char descriptorIndex = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant(descriptor));
 
-        final MethodEntry jbcMethod = builder.getMethodBuilder(nameIndex, descriptorIndex).build();
-        return jbcMethod;
+        final MethodEntry.Builder methodBuilder = builder.getMethodBuilder(nameIndex, descriptorIndex);
+        final CodeAttribute.Builder codeBuilder = new CodeAttribute.Builder(builder.addConstant(builder
+                .getConstantBuilder().buildUtf8Constant("Code")), (char) 0, (char) 0);
+        codeBuilder.addOpCode(OpCode.buildNop());
+        methodBuilder.addAttribute(codeBuilder.build(JbcEncoding.createStandardEncoding()));
+        return methodBuilder.build();
     }
 
     private String buildMethodDescriptor(Method method) {
