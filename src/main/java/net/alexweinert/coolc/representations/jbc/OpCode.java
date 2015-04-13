@@ -8,6 +8,10 @@ public abstract class OpCode {
         return new Nop();
     }
 
+    public static OpCode buildGoto(final char target) {
+        return new GotoInstruction(target);
+    }
+
     public abstract void encode(JbcEncoder encoder);
 
     public abstract int getLength(JbcEncoding encoding);

@@ -36,4 +36,8 @@ public class JbcEncoding {
         return 0;
     }
 
+    public int getGotoLength() {
+        return 3;
+    }
+
 }

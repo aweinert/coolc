@@ -142,4 +142,9 @@ public class JbcEncoder {
         this.builder.appendContent((byte) 0x00);
 
     }
+
+    public void encodeGoto(char target) {
+        this.builder.appendContent((byte) 0xa7);
+        this.builder.appendContent(this.splitter.splitChar(target));
+    }
 }
