@@ -40,4 +40,12 @@ public class JbcEncoding {
         return 3;
     }
 
+    public int getL2ILength() {
+        return 1;
+    }
+
+    public int getI2kLength() {
+        return 1;
+    }
+
 }

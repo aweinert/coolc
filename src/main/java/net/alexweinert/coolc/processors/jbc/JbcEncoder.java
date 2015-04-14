@@ -147,4 +147,12 @@ public class JbcEncoder {
         this.builder.appendContent((byte) 0xa7);
         this.builder.appendContent(this.splitter.splitChar(target));
     }
+
+    public void encodeL2I() {
+        this.builder.appendContent((byte) 0x88);
+    }
+
+    public void encodeI2L() {
+        this.builder.appendContent((byte) 0x85);
+    }
 }
