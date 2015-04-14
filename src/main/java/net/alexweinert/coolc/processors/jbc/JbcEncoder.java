@@ -155,4 +155,25 @@ public class JbcEncoder {
     public void encodeI2L() {
         this.builder.appendContent((byte) 0x85);
     }
+
+    public void encodeALoad(byte index) {
+        this.builder.appendContent((byte) 0x19);
+        this.builder.appendContent(index);
+    }
+
+    public void encodeALoad0() {
+        this.builder.appendContent((byte) 0x2a);
+    }
+
+    public void encodeALoad1() {
+        this.builder.appendContent((byte) 0x2b);
+    }
+
+    public void encodeALoad2() {
+        this.builder.appendContent((byte) 0x2c);
+    }
+
+    public void encodeALoad3() {
+        this.builder.appendContent((byte) 0x2d);
+    }
 }

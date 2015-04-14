@@ -48,4 +48,24 @@ public class JbcEncoding {
         return 1;
     }
 
+    public int getALoadLength() {
+        return 2;
+    }
+
+    public int getALoad0Length() {
+        return 1;
+    }
+
+    public int getALoad1Length() {
+        return 1;
+    }
+
+    public int getALoad2Length() {
+        return 1;
+    }
+
+    public int getALoad3Length() {
+        return 1;
+    }
+
 }
