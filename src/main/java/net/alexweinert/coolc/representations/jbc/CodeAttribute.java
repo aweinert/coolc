@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.alexweinert.coolc.processors.jbc.JbcEncoder;
 import net.alexweinert.coolc.processors.jbc.JbcEncoding;
+import net.alexweinert.coolc.representations.jbc.instructions.OpCode;
 
 public class CodeAttribute extends AttributeEntry {
 

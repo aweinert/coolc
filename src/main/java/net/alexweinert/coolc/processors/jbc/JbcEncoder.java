@@ -15,8 +15,8 @@ import net.alexweinert.coolc.representations.jbc.ExceptionTableEntry;
 import net.alexweinert.coolc.representations.jbc.FieldEntry;
 import net.alexweinert.coolc.representations.jbc.JbcClass;
 import net.alexweinert.coolc.representations.jbc.MethodEntry;
-import net.alexweinert.coolc.representations.jbc.OpCode;
 import net.alexweinert.coolc.representations.jbc.Utf8Constant;
+import net.alexweinert.coolc.representations.jbc.instructions.OpCode;
 
 public class JbcEncoder {
     public static File encode(JbcClass jbcClass) {

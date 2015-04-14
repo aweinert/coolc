@@ -1,4 +1,4 @@
-package net.alexweinert.coolc.representations.jbc;
+package net.alexweinert.coolc.representations.jbc.instructions;
 
 import net.alexweinert.coolc.processors.jbc.JbcEncoder;
 import net.alexweinert.coolc.processors.jbc.JbcEncoding;

@@ -2,7 +2,7 @@ package net.alexweinert.coolc.processors.jbc;
 
 import net.alexweinert.coolc.representations.jbc.AttributeEntry;
 import net.alexweinert.coolc.representations.jbc.ExceptionTableEntry;
-import net.alexweinert.coolc.representations.jbc.OpCode;
+import net.alexweinert.coolc.representations.jbc.instructions.OpCode;
 
 public class JbcEncoding {
 
