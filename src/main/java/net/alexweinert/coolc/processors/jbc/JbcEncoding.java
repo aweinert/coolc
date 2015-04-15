@@ -68,4 +68,8 @@ public class JbcEncoding {
         return 1;
     }
 
+    public int getInvokeVirtualLength() {
+        return 3;
+    }
+
 }

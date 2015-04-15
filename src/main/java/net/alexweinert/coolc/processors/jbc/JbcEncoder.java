@@ -176,4 +176,9 @@ public class JbcEncoder {
     public void encodeALoad3() {
         this.builder.appendContent((byte) 0x2d);
     }
+
+    public void encodeInvokeVirtual(char index) {
+        this.builder.appendContent((byte) 0xb6);
+        this.builder.appendContent(this.splitter.splitChar(index));
+    }
 }
