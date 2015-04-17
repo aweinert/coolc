@@ -181,4 +181,20 @@ public class JbcEncoder {
         this.builder.appendContent((byte) 0xb6);
         this.builder.appendContent(this.splitter.splitChar(index));
     }
+
+    public void encodeIAdd() {
+        this.builder.appendContent((byte) 0x60);
+    }
+
+    public void encodeIDiv() {
+        this.builder.appendContent((byte) 0x6c);
+    }
+
+    public void encodeIMul() {
+        this.builder.appendContent((byte) 0x68);
+    }
+
+    public void encodeISub() {
+        this.builder.appendContent((byte) 0x64);
+    }
 }

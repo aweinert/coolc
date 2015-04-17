@@ -72,4 +72,20 @@ public class JbcEncoding {
         return 3;
     }
 
+    public int getIAddLength() {
+        return 1;
+    }
+
+    public int getIDivLength() {
+        return 1;
+    }
+
+    public int getIMulLength() {
+        return 1;
+    }
+
+    public int getISubLength() {
+        return 1;
+    }
+
 }
