@@ -15,7 +15,7 @@ import net.alexweinert.coolc.representations.jbc.CodeAttribute;
 import net.alexweinert.coolc.representations.jbc.FieldEntry;
 import net.alexweinert.coolc.representations.jbc.JbcClass;
 import net.alexweinert.coolc.representations.jbc.MethodEntry;
-import net.alexweinert.coolc.representations.jbc.OpCode;
+import net.alexweinert.coolc.representations.jbc.instructions.OpCode;
 
 public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collection<JbcClass>> {
 
@@ -56,7 +56,10 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
         final MethodEntry.Builder methodBuilder = builder.getMethodBuilder(nameIndex, descriptorIndex);
         final CodeAttribute.Builder codeBuilder = new CodeAttribute.Builder(builder.addConstant(builder
                 .getConstantBuilder().buildUtf8Constant("Code")), (char) 0, (char) 0);
-        codeBuilder.addOpCode(OpCode.buildNop());
+
+        final BytecodeOpToJbcOpConverter converter = BytecodeOpToJbcOpConverter.create(method.getLocalVars());
+        final List<OpCode> opCodes = converter.convert(method.getInstruction());
+
         methodBuilder.addAttribute(codeBuilder.build(JbcEncoding.createStandardEncoding()));
         return methodBuilder.build();
     }
