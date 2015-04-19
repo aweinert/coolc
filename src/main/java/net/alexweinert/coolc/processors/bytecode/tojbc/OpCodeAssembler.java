@@ -1,5 +1,68 @@
 package net.alexweinert.coolc.processors.bytecode.tojbc;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import net.alexweinert.coolc.processors.jbc.JbcEncoding;
+import net.alexweinert.coolc.representations.jbc.instructions.OpCode;
+
 public class OpCodeAssembler {
+
+    private static class BranchPrototype {
+        private enum Condition {
+            NONE, EQZERO
+        }
+
+        private final Condition condition;
+        private final String target;
+
+        private BranchPrototype(Condition condition, String target) {
+            this.condition = condition;
+            this.target = target;
+        }
+
+        public Condition getCondition() {
+            return condition;
+        }
+
+        public String getTarget() {
+            return target;
+        }
+
+        public int getLength(JbcEncoding encoding) {
+            return 3;
+        }
+
+        public OpCode toOpcode(char target) {
+            return null;
+        }
+    }
+
+    private final JbcEncoding encoding;
+
+    private final List<OpCode> opCodes = new LinkedList<>();
+    private final Map<Integer, BranchPrototype> branchPrototypes = new HashMap<>();
+    private final Map<String, Character> labelToPos = new HashMap<>();
+
+    public OpCodeAssembler(JbcEncoding encoding) {
+        this.encoding = encoding;
+    }
+
+    public List<OpCode> assemble() {
+        final List<OpCode> returnValue = new LinkedList<>();
+        for (int i = 0; i < this.opCodes.size(); ++i) {
+            final OpCode opCode = this.opCodes.get(i);
+            if (opCode != null) {
+                returnValue.add(opCode);
+            } else {
+                final BranchPrototype prot = this.branchPrototypes.get(i);
+                final char targetAddr = this.labelToPos.get(prot.getTarget());
+                returnValue.add(prot.toOpcode(targetAddr));
+            }
+        }
+        return returnValue;
+    }
 
 }
