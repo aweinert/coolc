@@ -143,4 +143,9 @@ public class OpCodeAssembler {
 
     }
 
+    public void addIfICmpLe(String labelTrue) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -66,8 +66,24 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitLteInstruction(String label, String target, String lhs, String rhs) {
-        // TODO Auto-generated method stub
-        super.visitLteInstruction(label, target, lhs, rhs);
+        // TODO
+        final ConstantPoolEntry getValueMethodId = this.classBuilder.getConstantBuilder().buildUtf8Constant("");
+        final char getValueMethodIdIndex = this.classBuilder.addConstant(getValueMethodId);
+        this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
+        this.assembler.addInvokeDynamic(getValueMethodIdIndex);
+        this.assembler.addALoad(this.variableNameToNumber.get(rhs));
+        this.assembler.addInvokeDynamic(getValueMethodIdIndex);
+        final String labelTrue = "bcToJbc" + this.usedLabels++;
+        this.assembler.addIfICmpLe(labelTrue);
+        this.assembler.addIConst0();
+        final String labelAfter = "bcToJbc" + this.usedLabels++;
+        this.assembler.addGoto(labelAfter);
+        this.assembler.addIConst1(labelTrue);
+        this.assembler.addNop(labelAfter);
+        // TODO
+        final ConstantPoolEntry coolBoolId = this.classBuilder.getConstantBuilder().buildUtf8Constant("");
+        final char coolBoolIndex = this.classBuilder.addConstant(coolBoolId);
+        this.assembler.addNew(coolBoolIndex);
     }
 
     @Override
