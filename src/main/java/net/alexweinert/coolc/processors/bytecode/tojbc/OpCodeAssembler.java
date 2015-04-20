@@ -12,7 +12,7 @@ public class OpCodeAssembler {
 
     private static class BranchPrototype {
         private enum Condition {
-            NONE, EQZERO
+            NONE, EQZERO, NEQZERO
         }
 
         private final Condition condition;
@@ -46,8 +46,46 @@ public class OpCodeAssembler {
     private final Map<Integer, BranchPrototype> branchPrototypes = new HashMap<>();
     private final Map<String, Character> labelToPos = new HashMap<>();
 
+    private char byteCounter = 0;
+
     public OpCodeAssembler(JbcEncoding encoding) {
         this.encoding = encoding;
+    }
+
+    public void addGoto(final String label, final String target) {
+        this.labelToPos.put(label, this.byteCounter);
+        this.addGoto(target);
+    }
+
+    public void addGoto(final String target) {
+        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.NONE, target);
+        this.branchPrototypes.put(this.opCodes.size(), prot);
+        this.opCodes.add(null);
+        this.byteCounter += prot.getLength(this.encoding);
+    }
+
+    public void addBranchIfEqZero(final String label, final String target) {
+        this.labelToPos.put(label, this.byteCounter);
+        this.addBranchIfEqZero(target);
+    }
+
+    public void addBranchIfEqZero(final String target) {
+        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.EQZERO, target);
+        this.branchPrototypes.put(this.opCodes.size(), prot);
+        this.opCodes.add(null);
+        this.byteCounter += prot.getLength(this.encoding);
+    }
+
+    public void addBranchIfNeqZero(final String label, final String target) {
+        this.labelToPos.put(label, this.byteCounter);
+        this.addBranchIfNeqZero(target);
+    }
+
+    public void addBranchIfNeqZero(final String target) {
+        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.NEQZERO, target);
+        this.branchPrototypes.put(this.opCodes.size(), prot);
+        this.opCodes.add(null);
+        this.byteCounter += prot.getLength(this.encoding);
     }
 
     public List<OpCode> assemble() {
