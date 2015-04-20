@@ -103,4 +103,44 @@ public class OpCodeAssembler {
         return returnValue;
     }
 
+    public void addALoad(String label, char integer) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addALoad(char character) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addInvokeDynamic(char getValueMethodIdIndex) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addIfICmpLt(String labelTrue) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addIConst0() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addIConst1(String labelTrue) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addNop(String labelAfter) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addNew(char coolBoolIndex) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

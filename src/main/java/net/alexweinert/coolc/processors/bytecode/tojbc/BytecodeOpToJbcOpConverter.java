@@ -4,28 +4,37 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.alexweinert.coolc.processors.jbc.JbcEncoding;
 import net.alexweinert.coolc.representations.bytecode.LabeledInstruction;
 import net.alexweinert.coolc.representations.bytecode.TypedId;
 import net.alexweinert.coolc.representations.bytecode.Visitor;
+import net.alexweinert.coolc.representations.jbc.ConstantPoolEntry;
+import net.alexweinert.coolc.representations.jbc.JbcClass;
 import net.alexweinert.coolc.representations.jbc.instructions.OpCode;
 
 class BytecodeOpToJbcOpConverter extends Visitor {
 
-    public static BytecodeOpToJbcOpConverter create(List<TypedId> localVariables) {
-        final Map<String, Integer> variableNameToNumber = new HashMap<>();
-        int id = 0;
+    public static BytecodeOpToJbcOpConverter create(List<TypedId> localVariables, JbcClass.Builder classBuilder,
+            JbcEncoding encoding) {
+        final Map<String, Character> variableNameToNumber = new HashMap<>();
+        char id = 0;
         for (TypedId typedId : localVariables) {
             variableNameToNumber.put(typedId.getId(), id++);
         }
-        return new BytecodeOpToJbcOpConverter(variableNameToNumber, new OpCodeAssembler());
+        return new BytecodeOpToJbcOpConverter(variableNameToNumber, new OpCodeAssembler(encoding), classBuilder);
     }
 
-    private Map<String, Integer> variableNameToNumber;
+    private Map<String, Character> variableNameToNumber;
     private final OpCodeAssembler assembler;
+    private final JbcClass.Builder classBuilder;
 
-    BytecodeOpToJbcOpConverter(Map<String, Integer> variableNameToNumber, OpCodeAssembler assembler) {
+    private int usedLabels = 0;
+
+    BytecodeOpToJbcOpConverter(Map<String, Character> variableNameToNumber, OpCodeAssembler assembler,
+            JbcClass.Builder classBuilder) {
         this.variableNameToNumber = variableNameToNumber;
         this.assembler = assembler;
+        this.classBuilder = classBuilder;
     }
 
     public List<OpCode> convert(List<LabeledInstruction> list) {
@@ -35,8 +44,24 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitLtInstruction(String label, String target, String lhs, String rhs) {
-        // TODO Auto-generated method stub
-        super.visitLtInstruction(label, target, lhs, rhs);
+        // TODO
+        final ConstantPoolEntry getValueMethodId = this.classBuilder.getConstantBuilder().buildUtf8Constant("");
+        final char getValueMethodIdIndex = this.classBuilder.addConstant(getValueMethodId);
+        this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
+        this.assembler.addInvokeDynamic(getValueMethodIdIndex);
+        this.assembler.addALoad(this.variableNameToNumber.get(rhs));
+        this.assembler.addInvokeDynamic(getValueMethodIdIndex);
+        final String labelTrue = "bcToJbc" + this.usedLabels++;
+        this.assembler.addIfICmpLt(labelTrue);
+        this.assembler.addIConst0();
+        final String labelAfter = "bcToJbc" + this.usedLabels++;
+        this.assembler.addGoto(labelAfter);
+        this.assembler.addIConst1(labelTrue);
+        this.assembler.addNop(labelAfter);
+        // TODO
+        final ConstantPoolEntry coolBoolId = this.classBuilder.getConstantBuilder().buildUtf8Constant("");
+        final char coolBoolIndex = this.classBuilder.addConstant(coolBoolId);
+        this.assembler.addNew(coolBoolIndex);
     }
 
     @Override
