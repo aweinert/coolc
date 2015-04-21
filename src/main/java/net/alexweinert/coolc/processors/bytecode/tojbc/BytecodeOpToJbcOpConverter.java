@@ -1,6 +1,7 @@
 package net.alexweinert.coolc.processors.bytecode.tojbc;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,8 +39,10 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     }
 
     public List<OpCode> convert(List<LabeledInstruction> list) {
-        // TODO Auto-generated method stub
-        return null;
+        for (LabeledInstruction instr : list) {
+            instr.acceptVisitor(this);
+        }
+        return assembler.assemble();
     }
 
     @Override
