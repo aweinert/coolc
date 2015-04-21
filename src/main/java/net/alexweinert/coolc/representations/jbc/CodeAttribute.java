@@ -13,7 +13,7 @@ public class CodeAttribute extends AttributeEntry {
         private final char attributeNameIndex;
         private final char maxStack;
         private final char maxLocals;
-        private final List<OpCode> code = new LinkedList<>();
+        private List<OpCode> code = new LinkedList<>();
         private final List<ExceptionTableEntry> exceptionTable = new LinkedList<>();
         private final List<AttributeEntry> attributes = new LinkedList<>();
 
@@ -82,6 +82,10 @@ public class CodeAttribute extends AttributeEntry {
                 codeLength += encoding.getOpcodeLength(opCode);
             }
             return codeLength;
+        }
+
+        public void setCode(List<OpCode> code) {
+            this.code = code;
         }
 
     }
