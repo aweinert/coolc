@@ -100,9 +100,14 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         this.assembler.addGoto(labelAfter);
         this.assembler.addIConst1(labelTrue);
         this.assembler.addNop(labelAfter);
-        // TODO
-        final ConstantPoolEntry coolBoolId = this.classBuilder.getConstantBuilder().buildUtf8Constant("");
-        final char coolBoolIndex = this.classBuilder.addConstant(coolBoolId);
+
+        final ConstantPoolEntry coolBoolString = this.classBuilder.getConstantBuilder().buildUtf8Constant("CoolBool");
+        final char coolBoolStringId = this.classBuilder.addConstant(coolBoolString);
+
+        final ConstantPoolEntry coolBoolClassRef = this.classBuilder.getConstantBuilder().buildClassConstant(
+                coolBoolStringId);
+        final char coolBoolIndex = this.classBuilder.addConstant(coolBoolClassRef);
+
         this.assembler.addNew(coolBoolIndex);
     }
 

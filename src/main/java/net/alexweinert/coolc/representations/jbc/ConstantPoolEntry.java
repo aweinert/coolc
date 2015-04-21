@@ -16,9 +16,8 @@ public abstract class ConstantPoolEntry {
             return new NameAndType(nameId, typeId);
         }
 
-        public ConstantPoolEntry buildMethodRef(char coolIntClassRefIndex, char getValueMethodNameAndTypeId) {
-            // TODO Auto-generated method stub
-            return null;
+        public ConstantPoolEntry buildMethodRef(char classRefIndex, char nameAndTypeIndex) {
+            return new MethodRef(classRefIndex, nameAndTypeIndex);
         }
     }
 

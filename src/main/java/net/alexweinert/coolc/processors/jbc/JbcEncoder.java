@@ -204,4 +204,10 @@ public class JbcEncoder {
         this.builder.appendContent(this.splitter.splitChar(typeId));
 
     }
+
+    public void encodeMethodRef(char classRefIndex, char nameAndTypeIndex) {
+        this.builder.appendContent((byte) 0x0a);
+        this.builder.appendContent(this.splitter.splitChar(classRefIndex));
+        this.builder.appendContent(this.splitter.splitChar(nameAndTypeIndex));
+    }
 }
