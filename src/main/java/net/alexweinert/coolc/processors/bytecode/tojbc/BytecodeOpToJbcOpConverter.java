@@ -47,13 +47,12 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitLtInstruction(String label, String target, String lhs, String rhs) {
-        // TODO
-        final ConstantPoolEntry getValueMethodId = this.classBuilder.getConstantBuilder().buildUtf8Constant("");
-        final char getValueMethodIdIndex = this.classBuilder.addConstant(getValueMethodId);
+        final char getValueMethodRefId = addMethodRefConst("CoolInt", "getValue", "()I");
+
         this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
-        this.assembler.addInvokeDynamic(getValueMethodIdIndex);
+        this.assembler.addInvokeDynamic(getValueMethodRefId);
         this.assembler.addALoad(this.variableNameToNumber.get(rhs));
-        this.assembler.addInvokeDynamic(getValueMethodIdIndex);
+        this.assembler.addInvokeDynamic(getValueMethodRefId);
         final String labelTrue = "bcToJbc" + this.usedLabels++;
         this.assembler.addIfICmpLt(labelTrue);
         this.assembler.addIConst0();
@@ -61,36 +60,14 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         this.assembler.addGoto(labelAfter);
         this.assembler.addIConst1(labelTrue);
         this.assembler.addNop(labelAfter);
-        // TODO
-        final ConstantPoolEntry coolBoolId = this.classBuilder.getConstantBuilder().buildUtf8Constant("");
-        final char coolBoolIndex = this.classBuilder.addConstant(coolBoolId);
-        this.assembler.addNew(coolBoolIndex);
+
+        final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
+        this.assembler.addNew(coolBoolClassRefIndex);
     }
 
     @Override
     public void visitLteInstruction(String label, String target, String lhs, String rhs) {
-        final ConstantPoolEntry coolIntTypeString = this.classBuilder.getConstantBuilder().buildUtf8Constant("CoolInt");
-        final char coolIntTypeStringIndex = this.classBuilder.addConstant(coolIntTypeString);
-
-        final ConstantPoolEntry coolIntClassRef = this.classBuilder.getConstantBuilder().buildClassConstant(
-                coolIntTypeStringIndex);
-        final char coolIntClassRefIndex = this.classBuilder.addConstant(coolIntClassRef);
-
-        final ConstantPoolEntry getValueMethodNameString = this.classBuilder.getConstantBuilder().buildUtf8Constant(
-                "getValue");
-        final char getValueMethodNameStringId = this.classBuilder.addConstant(getValueMethodNameString);
-
-        final ConstantPoolEntry getValueMethodTypeString = this.classBuilder.getConstantBuilder().buildUtf8Constant(
-                "()I");
-        final char getValueMethodTypeStringId = this.classBuilder.addConstant(getValueMethodTypeString);
-
-        final ConstantPoolEntry getValueMethodNameAndType = this.classBuilder.getConstantBuilder().buildNameAndType(
-                getValueMethodNameStringId, getValueMethodTypeStringId);
-        final char getValueMethodNameAndTypeId = this.classBuilder.addConstant(getValueMethodNameAndType);
-
-        final ConstantPoolEntry getValueMethodRef = this.classBuilder.getConstantBuilder().buildMethodRef(
-                coolIntClassRefIndex, getValueMethodNameAndTypeId);
-        final char getValueMethodRefId = this.classBuilder.addConstant(getValueMethodRef);
+        final char getValueMethodRefId = addMethodRefConst("CoolInt", "getValue", "()I");
 
         this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeDynamic(getValueMethodRefId);
@@ -104,14 +81,8 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         this.assembler.addIConst1(labelTrue);
         this.assembler.addNop(labelAfter);
 
-        final ConstantPoolEntry coolBoolString = this.classBuilder.getConstantBuilder().buildUtf8Constant("CoolBool");
-        final char coolBoolStringId = this.classBuilder.addConstant(coolBoolString);
-
-        final ConstantPoolEntry coolBoolClassRef = this.classBuilder.getConstantBuilder().buildClassConstant(
-                coolBoolStringId);
-        final char coolBoolIndex = this.classBuilder.addConstant(coolBoolClassRef);
-
-        this.assembler.addNew(coolBoolIndex);
+        final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
+        this.assembler.addNew(coolBoolClassRefIndex);
     }
 
     @Override
@@ -220,6 +191,44 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     public void visitBranchInstruction(String label, String target) {
         // TODO Auto-generated method stub
         super.visitBranchInstruction(label, target);
+    }
+
+    private char addMethodRefConst(final String classId, final String methodId, final String methodType) {
+        final char coolIntClassRefIndex = addClassRefConst(classId);
+
+        final char getValueMethodNameAndTypeId = addNameAndTypeConst(methodId, methodType);
+
+        final ConstantPoolEntry getValueMethodRef = this.classBuilder.getConstantBuilder().buildMethodRef(
+                coolIntClassRefIndex, getValueMethodNameAndTypeId);
+        final char getValueMethodRefId = this.classBuilder.addConstant(getValueMethodRef);
+        return getValueMethodRefId;
+    }
+
+    private char addNameAndTypeConst(final String name, final String type) {
+        final char getValueMethodNameStringId = addUtf8Const(name);
+
+        final char getValueMethodTypeStringId = addUtf8Const(type);
+
+        final ConstantPoolEntry getValueMethodNameAndType = this.classBuilder.getConstantBuilder().buildNameAndType(
+                getValueMethodNameStringId, getValueMethodTypeStringId);
+        final char getValueMethodNameAndTypeId = this.classBuilder.addConstant(getValueMethodNameAndType);
+        return getValueMethodNameAndTypeId;
+    }
+
+    private char addUtf8Const(final String name) {
+        final ConstantPoolEntry getValueMethodNameString = this.classBuilder.getConstantBuilder().buildUtf8Constant(
+                name);
+        final char getValueMethodNameStringId = this.classBuilder.addConstant(getValueMethodNameString);
+        return getValueMethodNameStringId;
+    }
+
+    private char addClassRefConst(final String classId) {
+        final char coolIntTypeStringIndex = addUtf8Const(classId);
+
+        final ConstantPoolEntry coolIntClassRef = this.classBuilder.getConstantBuilder().buildClassConstant(
+                coolIntTypeStringIndex);
+        final char coolIntClassRefIndex = this.classBuilder.addConstant(coolIntClassRef);
+        return coolIntClassRefIndex;
     }
 
 }
