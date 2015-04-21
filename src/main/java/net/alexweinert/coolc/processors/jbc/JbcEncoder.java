@@ -197,4 +197,11 @@ public class JbcEncoder {
     public void encodeISub() {
         this.builder.appendContent((byte) 0x64);
     }
+
+    public void encodeNameAndType(char nameId, char typeId) {
+        this.builder.appendContent((byte) 0x0c);
+        this.builder.appendContent(this.splitter.splitChar(nameId));
+        this.builder.appendContent(this.splitter.splitChar(typeId));
+
+    }
 }

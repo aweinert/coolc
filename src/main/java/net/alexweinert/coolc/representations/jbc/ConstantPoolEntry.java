@@ -12,9 +12,8 @@ public abstract class ConstantPoolEntry {
             return new Utf8Constant(value);
         }
 
-        public ConstantPoolEntry buildNameAndType(char getValueMethodNameStringId, char getValueMethodTypeStringId) {
-            // TODO Auto-generated method stub
-            return null;
+        public ConstantPoolEntry buildNameAndType(char nameId, char typeId) {
+            return new NameAndType(nameId, typeId);
         }
 
         public ConstantPoolEntry buildMethodRef(char coolIntClassRefIndex, char getValueMethodNameAndTypeId) {
