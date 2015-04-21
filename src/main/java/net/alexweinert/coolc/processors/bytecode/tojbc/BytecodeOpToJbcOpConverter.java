@@ -66,13 +66,33 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitLteInstruction(String label, String target, String lhs, String rhs) {
-        // TODO
-        final ConstantPoolEntry getValueMethodId = this.classBuilder.getConstantBuilder().buildUtf8Constant("");
-        final char getValueMethodIdIndex = this.classBuilder.addConstant(getValueMethodId);
+        final ConstantPoolEntry coolIntTypeString = this.classBuilder.getConstantBuilder().buildUtf8Constant("CoolInt");
+        final char coolIntTypeStringIndex = this.classBuilder.addConstant(coolIntTypeString);
+
+        final ConstantPoolEntry coolIntClassRef = this.classBuilder.getConstantBuilder().buildClassConstant(
+                coolIntTypeStringIndex);
+        final char coolIntClassRefIndex = this.classBuilder.addConstant(coolIntClassRef);
+
+        final ConstantPoolEntry getValueMethodNameString = this.classBuilder.getConstantBuilder().buildUtf8Constant(
+                "getValue");
+        final char getValueMethodNameStringId = this.classBuilder.addConstant(getValueMethodNameString);
+
+        final ConstantPoolEntry getValueMethodTypeString = this.classBuilder.getConstantBuilder().buildUtf8Constant(
+                "()I");
+        final char getValueMethodTypeStringId = this.classBuilder.addConstant(getValueMethodTypeString);
+
+        final ConstantPoolEntry getValueMethodNameAndType = this.classBuilder.getConstantBuilder().buildNameAndType(
+                getValueMethodNameStringId, getValueMethodTypeStringId);
+        final char getValueMethodNameAndTypeId = this.classBuilder.addConstant(getValueMethodNameAndType);
+
+        final ConstantPoolEntry getValueMethodRef = this.classBuilder.getConstantBuilder().buildMethodRef(
+                coolIntClassRefIndex, getValueMethodNameAndTypeId);
+        final char getValueMethodRefId = this.classBuilder.addConstant(getValueMethodRef);
+
         this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
-        this.assembler.addInvokeDynamic(getValueMethodIdIndex);
+        this.assembler.addInvokeDynamic(getValueMethodRefId);
         this.assembler.addALoad(this.variableNameToNumber.get(rhs));
-        this.assembler.addInvokeDynamic(getValueMethodIdIndex);
+        this.assembler.addInvokeDynamic(getValueMethodRefId);
         final String labelTrue = "bcToJbc" + this.usedLabels++;
         this.assembler.addIfICmpLe(labelTrue);
         this.assembler.addIConst0();
@@ -88,8 +108,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitBoolNegInstruction(String label, String target, String arg) {
-        // TODO Auto-generated method stub
-        super.visitBoolNegInstruction(label, target, arg);
+
     }
 
     @Override
