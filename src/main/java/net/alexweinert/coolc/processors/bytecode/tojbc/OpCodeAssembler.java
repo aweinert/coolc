@@ -123,17 +123,32 @@ public class OpCodeAssembler {
 
     }
 
+    public void addIConst0(String label) {
+        // TODO Auto-generated method stub
+
+    }
+
     public void addIConst0() {
         // TODO Auto-generated method stub
 
     }
 
-    public void addIConst1(String labelTrue) {
+    public void addIConst1(String label) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addIConst1() {
         // TODO Auto-generated method stub
 
     }
 
     public void addNop(String labelAfter) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addNew(String label, char coolBoolClassRefIndex) {
         // TODO Auto-generated method stub
 
     }
@@ -144,6 +159,56 @@ public class OpCodeAssembler {
     }
 
     public void addIfICmpLe(String labelTrue) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addIfEq(String labelTrue) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addIfNe(String target) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addAReturn() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addAStore(Character character) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addAConstNull(String label) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addAConstNull() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addIAdd() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addIDiv() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addISub() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addIMul() {
         // TODO Auto-generated method stub
 
     }
