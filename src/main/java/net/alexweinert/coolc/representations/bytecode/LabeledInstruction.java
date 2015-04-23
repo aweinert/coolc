@@ -140,9 +140,9 @@ public abstract class LabeledInstruction {
             return returnValue;
         }
 
-        public LabeledInstruction buildBranchIfNotInstanceOf(String expressionVariable, String target) {
-            final LabeledInstruction returnValue = new BranchIfNotInstanceOfInstruction(this.label, expressionVariable,
-                    target);
+        public LabeledInstruction buildBranchIfNotInstanceOf(String target, String expressionVariable, String type) {
+            final LabeledInstruction returnValue = new BranchIfNotInstanceOfInstruction(this.label, target,
+                    expressionVariable, type);
             this.label = null;
             return returnValue;
         }

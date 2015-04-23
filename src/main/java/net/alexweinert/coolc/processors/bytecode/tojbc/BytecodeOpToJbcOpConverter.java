@@ -139,7 +139,8 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     }
 
     @Override
-    public void visitBranchIfNotInstanceOfInstruction(String label, String target, String expressionVariable) {
+    public void visitBranchIfNotInstanceOfInstruction(String label, String target, String expressionVariable,
+            String type) {
         // TODO
     }
 

@@ -14,7 +14,8 @@ public class Visitor {
 
     public void visitBranchIfFalseInstruction(String label, String target, String conditionVariable) {}
 
-    public void visitBranchIfNotInstanceOfInstruction(String label, String target, String expressionVariable) {}
+    public void visitBranchIfNotInstanceOfInstruction(String label, String target, String expressionVariable,
+            String type) {}
 
     public void visitAddInstruction(String label, String target, String lhs, String rhs) {}
 

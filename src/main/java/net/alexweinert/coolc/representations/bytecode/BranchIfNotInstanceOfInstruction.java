@@ -3,10 +3,12 @@ package net.alexweinert.coolc.representations.bytecode;
 class BranchIfNotInstanceOfInstruction extends BranchInstruction {
 
     private final String expressionVariable;
+    private final String type;
 
-    public BranchIfNotInstanceOfInstruction(String label, String expressionVariable, String target) {
+    public BranchIfNotInstanceOfInstruction(String label, String target, String expressionVariable, String type) {
         super(label, target);
         this.expressionVariable = expressionVariable;
+        this.type = type;
     }
 
     @Override
@@ -45,7 +47,8 @@ class BranchIfNotInstanceOfInstruction extends BranchInstruction {
 
     @Override
     public void acceptVisitor(Visitor visitor) {
-        visitor.visitBranchIfNotInstanceOfInstruction(this.getLabel(), this.getTarget(), this.expressionVariable);
+        visitor.visitBranchIfNotInstanceOfInstruction(this.getLabel(), this.getTarget(), this.expressionVariable,
+                this.type);
     }
 
 }

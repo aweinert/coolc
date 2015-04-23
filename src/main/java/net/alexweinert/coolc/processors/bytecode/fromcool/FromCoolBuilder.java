@@ -251,8 +251,8 @@ public class FromCoolBuilder implements CoolBackendBuilder<ByteClass, List<ByteC
     public void beginCase(String expressionVariable, IdSymbol typeSymbol, IdSymbol idSymbol) {
         this.instructionFactory.setLabel(this.labels.pop());
         final String nextLabel = this.nameGen.getFreshLabel("TypeCase");
-        this.methodBuilder.addInstruction(this.instructionFactory.buildBranchIfNotInstanceOf(expressionVariable,
-                nextLabel));
+        this.methodBuilder.addInstruction(this.instructionFactory.buildBranchIfNotInstanceOf(nextLabel,
+                expressionVariable, typeSymbol.getString()));
         this.labels.push(nextLabel);
     }
 
