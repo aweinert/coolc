@@ -103,22 +103,22 @@ public class OpCodeAssembler {
         return returnValue;
     }
 
-    public void addALoad(String label, char integer) {
+    public void addALoad(String label, char varIndex) {
         // TODO Auto-generated method stub
 
     }
 
-    public void addALoad(char character) {
+    public void addALoad(char varIndex) {
         // TODO Auto-generated method stub
 
     }
 
-    public void addInvokeDynamic(char getValueMethodIdIndex) {
+    public void addInvokeDynamic(char methodRefId) {
         // TODO Auto-generated method stub
 
     }
 
-    public void addIfICmpLt(String labelTrue) {
+    public void addIfICmpLt(String label) {
         // TODO Auto-generated method stub
 
     }
@@ -143,27 +143,27 @@ public class OpCodeAssembler {
 
     }
 
-    public void addNop(String labelAfter) {
+    public void addNop(String label) {
         // TODO Auto-generated method stub
 
     }
 
-    public void addNew(String label, char coolBoolClassRefIndex) {
+    public void addNew(String label, char classRefIndex) {
         // TODO Auto-generated method stub
 
     }
 
-    public void addNew(char coolBoolIndex) {
+    public void addNew(char classRefIndex) {
         // TODO Auto-generated method stub
 
     }
 
-    public void addIfICmpLe(String labelTrue) {
+    public void addIfICmpLe(String target) {
         // TODO Auto-generated method stub
 
     }
 
-    public void addIfEq(String labelTrue) {
+    public void addIfEq(String target) {
         // TODO Auto-generated method stub
 
     }
@@ -178,7 +178,7 @@ public class OpCodeAssembler {
 
     }
 
-    public void addAStore(Character character) {
+    public void addAStore(char character) {
         // TODO Auto-generated method stub
 
     }
@@ -209,6 +209,36 @@ public class OpCodeAssembler {
     }
 
     public void addIMul() {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addInstanceof(char classRefId) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addIfNull(String target) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addPushShort(String label, int value) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void addPushShort(int value) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void pushLdc(String label, char stringRef) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void pushLdc(char stringRef) {
         // TODO Auto-generated method stub
 
     }

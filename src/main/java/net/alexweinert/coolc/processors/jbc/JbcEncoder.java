@@ -210,4 +210,9 @@ public class JbcEncoder {
         this.builder.appendContent(this.splitter.splitChar(classRefIndex));
         this.builder.appendContent(this.splitter.splitChar(nameAndTypeIndex));
     }
+
+    public void encodeStringConstant(char utf8Index) {
+        this.builder.appendContent((byte) 0x08);
+        this.builder.appendContent(this.splitter.splitChar(utf8Index));
+    }
 }

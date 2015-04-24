@@ -19,6 +19,10 @@ public abstract class ConstantPoolEntry {
         public ConstantPoolEntry buildMethodRef(char classRefIndex, char nameAndTypeIndex) {
             return new MethodRef(classRefIndex, nameAndTypeIndex);
         }
+
+        public ConstantPoolEntry buildStringConstant(char utf8Index) {
+            return new StringConstant(utf8Index);
+        }
     }
 
     protected final byte tag;

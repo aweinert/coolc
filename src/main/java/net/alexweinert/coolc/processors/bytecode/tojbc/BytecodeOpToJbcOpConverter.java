@@ -97,8 +97,17 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitEqInstruction(String label, String target, String lhs, String rhs) {
-        // TODO Auto-generated method stub
-        super.visitEqInstruction(label, target, lhs, rhs);
+        final char equalsMethodRefId = addMethodRefConst("CoolObject", "equals", "(LCoolObject;)I");
+        if (label != null) {
+            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
+        } else {
+            this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
+        }
+        this.assembler.addALoad((char) this.variableNameToNumber.get(rhs));
+        this.assembler.addInvokeDynamic(equalsMethodRefId);
+        final char coolBoolClassRefId = addClassRefConst("CoolBool");
+        this.assembler.addNew(coolBoolClassRefId);
+        this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
 
     @Override
@@ -141,7 +150,15 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     @Override
     public void visitBranchIfNotInstanceOfInstruction(String label, String target, String expressionVariable,
             String type) {
-        // TODO
+        if (label != null) {
+            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(expressionVariable));
+        } else {
+            this.assembler.addALoad((char) this.variableNameToNumber.get(expressionVariable));
+        }
+
+        final char classRefId = this.addClassRefConst("Cool" + type);
+        this.assembler.addInstanceof(classRefId);
+        this.assembler.addIfNe(target);
     }
 
     @Override
@@ -233,26 +250,66 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitIsVoidInstruction(String label, String target, String arg) {
-        // TODO Auto-generated method stub
-        super.visitIsVoidInstruction(label, target, arg);
+        if (label != null) {
+            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(arg));
+        } else {
+            this.assembler.addALoad((char) this.variableNameToNumber.get(arg));
+        }
+
+        final String trueLabel = "bcToJbc" + usedLabels++;
+        this.assembler.addIfNull(trueLabel);
+        this.assembler.addIConst0();
+        final String continueLabel = "bcToJbc" + usedLabels++;
+        this.assembler.addGoto(continueLabel);
+        this.assembler.addIConst1(trueLabel);
+        final char coolBoolClassRefId = this.addClassRefConst("CoolBool");
+        this.assembler.addNew(continueLabel, coolBoolClassRefId);
     }
 
     @Override
     public void visitLoadBoolInstruction(String label, String target, boolean value) {
-        // TODO Auto-generated method stub
-        super.visitLoadBoolInstruction(label, target, value);
+        if (label != null) {
+            if (value) {
+                this.assembler.addIConst1(label);
+            } else {
+                this.assembler.addIConst0(label);
+            }
+        } else {
+            if (value) {
+                this.assembler.addIConst1();
+            } else {
+                this.assembler.addIConst0();
+            }
+        }
+        final char coolBoolClassRefId = this.addClassRefConst("CoolBool");
+        this.assembler.addNew(coolBoolClassRefId);
+        this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
 
     @Override
     public void visitLoadIntInstruction(String label, String target, int value) {
-        // TODO Auto-generated method stub
-        super.visitLoadIntInstruction(label, target, value);
+        if (label != null) {
+            this.assembler.addPushShort(label, value);
+        } else {
+            this.assembler.addPushShort(value);
+        }
+        final char coolIntClassRefId = this.addClassRefConst("CoolInt");
+        this.assembler.addNew(coolIntClassRefId);
+        this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
 
     @Override
     public void visitLoadStringInstruction(String label, String target, String value) {
-        // TODO Auto-generated method stub
-        super.visitLoadStringInstruction(label, target, value);
+        final char stringRef = this.addStringConst(value);
+
+        if (label != null) {
+            this.assembler.pushLdc(label, stringRef);
+        } else {
+            this.assembler.pushLdc(stringRef);
+        }
+        final char coolStringClassRefId = this.addClassRefConst("CoolString");
+        this.assembler.addNew(coolStringClassRefId);
+        this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
 
     @Override
@@ -341,6 +398,13 @@ class BytecodeOpToJbcOpConverter extends Visitor {
                 coolIntTypeStringIndex);
         final char coolIntClassRefIndex = this.classBuilder.addConstant(coolIntClassRef);
         return coolIntClassRefIndex;
+    }
+
+    private char addStringConst(final String value) {
+        final char utf8Index = addUtf8Const(value);
+        final ConstantPoolEntry stringRef = this.classBuilder.getConstantBuilder().buildStringConstant(utf8Index);
+        final char stringRefId = this.classBuilder.addConstant(stringRef);
+        return stringRefId;
     }
 
 }
