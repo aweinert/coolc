@@ -12,11 +12,13 @@ public class OpCodeAssembler {
 
     private static class BranchPrototype {
         private enum Condition {
-            NONE, EQZERO, NEQZERO, LT, NEZERO, LE, REFEQNULL
+            NONE, EQZERO, LT, NEZERO, LE, REFEQNULL
         }
 
         private final Condition condition;
         private final String target;
+
+        private final OpCode.Factory opCodeFactory = new OpCode.Factory();
 
         private BranchPrototype(Condition condition, String target) {
             this.condition = condition;
@@ -32,7 +34,23 @@ public class OpCodeAssembler {
         }
 
         public OpCode toOpcode(char target) {
-            return null;
+            switch (this.condition) {
+            case EQZERO:
+                return opCodeFactory.buildIfEq(target);
+            case LE:
+                return opCodeFactory.buildIfIcmpLe(target);
+            case LT:
+                return opCodeFactory.buildIfIcmpLt(target);
+            case NEZERO:
+                return opCodeFactory.buildIfNeq(target);
+            case NONE:
+                return opCodeFactory.buildGoto(target);
+            case REFEQNULL:
+                return opCodeFactory.buildIfNull(target);
+            default:
+                assert false;
+                return null;
+            }
         }
     }
 
@@ -87,18 +105,6 @@ public class OpCodeAssembler {
 
     public void addBranchIfEqZero(final String target) {
         final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.EQZERO, target);
-        this.branchPrototypes.put(this.opCodes.size(), prot);
-        this.opCodes.add(null);
-        this.byteCounter += prot.getLength(this.encoding);
-    }
-
-    public void addBranchIfNeqZero(final String label, final String target) {
-        this.registerLabel(label);
-        this.addBranchIfNeqZero(target);
-    }
-
-    public void addBranchIfNeqZero(final String target) {
-        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.NEQZERO, target);
         this.branchPrototypes.put(this.opCodes.size(), prot);
         this.opCodes.add(null);
         this.byteCounter += prot.getLength(this.encoding);

@@ -89,6 +89,31 @@ public abstract class OpCode {
             return null;
         }
 
+        public OpCode buildIfEq(char target) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        public OpCode buildIfIcmpLe(char target) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        public OpCode buildIfIcmpLt(char target) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        public OpCode buildIfNeq(char target) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        public OpCode buildIfNull(char target) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
     }
 
     public abstract void encode(JbcEncoder encoder);
