@@ -13,14 +13,12 @@ class IfNeqInstruction extends OpCode {
 
     @Override
     public void encode(JbcEncoder encoder) {
-        // TODO Auto-generated method stub
-
+        encoder.encodeIfNeq(this.target);
     }
 
     @Override
     public int getLength(JbcEncoding encoding) {
-        // TODO Auto-generated method stub
-        return 0;
+        return encoding.getIfNeqLength();
     }
 
 }

@@ -13,14 +13,13 @@ class LdcInstruction extends OpCode {
 
     @Override
     public void encode(JbcEncoder encoder) {
-        // TODO Auto-generated method stub
-
+        assert this.constRefId < Byte.MAX_VALUE;
+        encoder.encodeLdc((byte) this.constRefId);
     }
 
     @Override
     public int getLength(JbcEncoding encoding) {
-        // TODO Auto-generated method stub
-        return 0;
+        return encoding.getLdcLength();
     }
 
 }

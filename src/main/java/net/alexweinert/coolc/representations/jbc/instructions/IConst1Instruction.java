@@ -7,14 +7,12 @@ class IConst1Instruction extends OpCode {
 
     @Override
     public void encode(JbcEncoder encoder) {
-        // TODO Auto-generated method stub
-
+        encoder.encodeIConst1();
     }
 
     @Override
     public int getLength(JbcEncoding encoding) {
-        // TODO Auto-generated method stub
-        return 0;
+        return encoding.getIConst1Length();
     }
 
 }

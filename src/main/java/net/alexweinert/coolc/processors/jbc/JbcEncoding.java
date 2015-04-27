@@ -88,4 +88,64 @@ public class JbcEncoding {
         return 1;
     }
 
+    public int getAConstNullLength() {
+        return 1;
+    }
+
+    public int getAReturnInstructionLength() {
+        return 1;
+    }
+
+    public int getAStoreLength() {
+        return 3;
+    }
+
+    public int getIConst0Length() {
+        return 1;
+    }
+
+    public int getIConst1Length() {
+        return 1;
+    }
+
+    public int getIfEqLength() {
+        return 3;
+    }
+
+    public int getIfIcmpLeLength() {
+        return 3;
+    }
+
+    public int getIfIcmpLtLength() {
+        return 3;
+    }
+
+    public int getIfNeqLength() {
+        return 3;
+    }
+
+    public int getIfNullLength() {
+        return 3;
+    }
+
+    public int getInstanceOfLength() {
+        return 3;
+    }
+
+    public int getInvokeDynamicLength() {
+        return 5;
+    }
+
+    public int getLdcLength() {
+        return 2;
+    }
+
+    public int getNewLength() {
+        return 3;
+    }
+
+    public int getSiPushLength() {
+        return 3;
+    }
+
 }

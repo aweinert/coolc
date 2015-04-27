@@ -13,14 +13,13 @@ public class PushShortInstruction extends OpCode {
 
     @Override
     public void encode(JbcEncoder encoder) {
-        // TODO Auto-generated method stub
-
+        assert this.value < Short.MAX_VALUE;
+        encoder.encodeSiPush((short) this.value);
     }
 
     @Override
     public int getLength(JbcEncoding encoding) {
-        // TODO Auto-generated method stub
-        return 0;
+        return encoding.getSiPushLength();
     }
 
 }

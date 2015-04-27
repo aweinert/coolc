@@ -215,4 +215,80 @@ public class JbcEncoder {
         this.builder.appendContent((byte) 0x08);
         this.builder.appendContent(this.splitter.splitChar(utf8Index));
     }
+
+    public void encodeAConstNullInstruction() {
+        this.builder.appendContent((byte) 0x01);
+
+    }
+
+    public void encodeAReturnInstruction() {
+        this.builder.appendContent((byte) 0xb0);
+    }
+
+    public void encodeAStore(byte varId) {
+        this.builder.appendContent((byte) 0x3a);
+        this.builder.appendContent(varId);
+
+    }
+
+    public void encodeIConst0() {
+        this.builder.appendContent((byte) 0x3);
+    }
+
+    public void encodeIConst1() {
+        this.builder.appendContent((byte) 0x4);
+    }
+
+    public void encodeIfEq(char target) {
+        this.builder.appendContent((byte) 0x99);
+        this.builder.appendContent(this.splitter.splitChar(target));
+    }
+
+    public void encodeIfIcmpLe(char target) {
+        this.builder.appendContent((byte) 0xa4);
+        this.builder.appendContent(this.splitter.splitChar(target));
+    }
+
+    public void encodeIfIcmpLt(char target) {
+        this.builder.appendContent((byte) 0xa1);
+        this.builder.appendContent(this.splitter.splitChar(target));
+    }
+
+    public void encodeIfNeq(char target) {
+        this.builder.appendContent((byte) 0x9a);
+        this.builder.appendContent(this.splitter.splitChar(target));
+    }
+
+    public void encodeIfNull(char target) {
+        this.builder.appendContent((byte) 0x6c);
+        this.builder.appendContent(this.splitter.splitChar(target));
+    }
+
+    public void encodeInstanceOf(char classRefId) {
+        this.builder.appendContent((byte) 0xc1);
+        this.builder.appendContent(this.splitter.splitChar(classRefId));
+    }
+
+    public void encodeInvokeDynamic(char methodRefId) {
+        this.builder.appendContent((byte) 0xba);
+        this.builder.appendContent(this.splitter.splitChar(methodRefId));
+        this.builder.appendContent((byte) 0x00);
+        this.builder.appendContent((byte) 0x00);
+    }
+
+    public void encodeLdc(byte constRefId) {
+        this.builder.appendContent((byte) 0x12);
+        this.builder.appendContent(constRefId);
+
+    }
+
+    public void encodeNew(char classRefId) {
+        this.builder.appendContent((byte) 0xbb);
+        this.builder.appendContent(this.splitter.splitChar(classRefId));
+    }
+
+    public void encodeSiPush(short value) {
+        this.builder.appendContent((byte) 0x11);
+        this.builder.appendContent((byte) value);
+    }
 }

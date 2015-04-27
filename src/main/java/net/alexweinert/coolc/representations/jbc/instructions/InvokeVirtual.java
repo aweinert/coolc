@@ -13,7 +13,7 @@ public class InvokeVirtual extends OpCode {
 
     @Override
     public void encode(JbcEncoder encoder) {
-        encoder.encodeInvokeVirtual(this.index);
+        encoder.encodeInvokeVirtual(index);
     }
 
     @Override
