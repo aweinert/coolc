@@ -12,7 +12,7 @@ public class OpCodeAssembler {
 
     private static class BranchPrototype {
         private enum Condition {
-            NONE, EQZERO, NEQZERO
+            NONE, EQZERO, NEQZERO, LT, NEZERO, LE, REFEQNULL
         }
 
         private final Condition condition;
@@ -21,10 +21,6 @@ public class OpCodeAssembler {
         private BranchPrototype(Condition condition, String target) {
             this.condition = condition;
             this.target = target;
-        }
-
-        public Condition getCondition() {
-            return condition;
         }
 
         public String getTarget() {
@@ -41,6 +37,7 @@ public class OpCodeAssembler {
     }
 
     private final JbcEncoding encoding;
+    private final OpCode.Factory opCodeFactory = new OpCode.Factory();
 
     private final List<OpCode> opCodes = new LinkedList<>();
     private final Map<Integer, BranchPrototype> branchPrototypes = new HashMap<>();
@@ -52,40 +49,8 @@ public class OpCodeAssembler {
         this.encoding = encoding;
     }
 
-    public void addGoto(final String label, final String target) {
+    private void registerLabel(final String label) {
         this.labelToPos.put(label, this.byteCounter);
-        this.addGoto(target);
-    }
-
-    public void addGoto(final String target) {
-        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.NONE, target);
-        this.branchPrototypes.put(this.opCodes.size(), prot);
-        this.opCodes.add(null);
-        this.byteCounter += prot.getLength(this.encoding);
-    }
-
-    public void addBranchIfEqZero(final String label, final String target) {
-        this.labelToPos.put(label, this.byteCounter);
-        this.addBranchIfEqZero(target);
-    }
-
-    public void addBranchIfEqZero(final String target) {
-        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.EQZERO, target);
-        this.branchPrototypes.put(this.opCodes.size(), prot);
-        this.opCodes.add(null);
-        this.byteCounter += prot.getLength(this.encoding);
-    }
-
-    public void addBranchIfNeqZero(final String label, final String target) {
-        this.labelToPos.put(label, this.byteCounter);
-        this.addBranchIfNeqZero(target);
-    }
-
-    public void addBranchIfNeqZero(final String target) {
-        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.NEQZERO, target);
-        this.branchPrototypes.put(this.opCodes.size(), prot);
-        this.opCodes.add(null);
-        this.byteCounter += prot.getLength(this.encoding);
     }
 
     public List<OpCode> assemble() {
@@ -103,144 +68,207 @@ public class OpCodeAssembler {
         return returnValue;
     }
 
-    public void addALoad(String label, char varIndex) {
-        // TODO Auto-generated method stub
+    public void addGoto(final String label, final String target) {
+        this.registerLabel(label);
+        this.addGoto(target);
+    }
 
+    public void addGoto(final String target) {
+        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.NONE, target);
+        this.branchPrototypes.put(this.opCodes.size(), prot);
+        this.opCodes.add(null);
+        this.byteCounter += prot.getLength(this.encoding);
+    }
+
+    public void addBranchIfEqZero(final String label, final String target) {
+        this.registerLabel(label);
+        this.addBranchIfEqZero(target);
+    }
+
+    public void addBranchIfEqZero(final String target) {
+        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.EQZERO, target);
+        this.branchPrototypes.put(this.opCodes.size(), prot);
+        this.opCodes.add(null);
+        this.byteCounter += prot.getLength(this.encoding);
+    }
+
+    public void addBranchIfNeqZero(final String label, final String target) {
+        this.registerLabel(label);
+        this.addBranchIfNeqZero(target);
+    }
+
+    public void addBranchIfNeqZero(final String target) {
+        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.NEQZERO, target);
+        this.branchPrototypes.put(this.opCodes.size(), prot);
+        this.opCodes.add(null);
+        this.byteCounter += prot.getLength(this.encoding);
+    }
+
+    public void addALoad(String label, char varIndex) {
+        this.registerLabel(label);
+        this.addALoad(varIndex);
     }
 
     public void addALoad(char varIndex) {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildALoad(varIndex);
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addInvokeDynamic(char methodRefId) {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildInvokeDynamic(methodRefId);
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
-    public void addIfICmpLt(String label) {
-        // TODO Auto-generated method stub
-
+    public void addIfICmpLt(String target) {
+        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.LT, target);
+        this.branchPrototypes.put(this.opCodes.size(), prot);
+        this.opCodes.add(null);
+        this.byteCounter += prot.getLength(this.encoding);
     }
 
     public void addIConst0(String label) {
-        // TODO Auto-generated method stub
-
+        this.registerLabel(label);
+        this.addIConst0();
     }
 
     public void addIConst0() {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildIConst0();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addIConst1(String label) {
-        // TODO Auto-generated method stub
-
+        this.registerLabel(label);
+        this.addIConst1();
     }
 
     public void addIConst1() {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildIConst1();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addNop(String label) {
-        // TODO Auto-generated method stub
-
+        this.registerLabel(label);
+        final OpCode opCode = opCodeFactory.buildNop();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addNew(String label, char classRefIndex) {
-        // TODO Auto-generated method stub
-
+        this.registerLabel(label);
+        this.addNew(classRefIndex);
     }
 
     public void addNew(char classRefIndex) {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildNew();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addIfICmpLe(String target) {
-        // TODO Auto-generated method stub
-
+        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.LE, target);
+        this.branchPrototypes.put(this.opCodes.size(), prot);
+        this.opCodes.add(null);
+        this.byteCounter += prot.getLength(this.encoding);
     }
 
     public void addIfEq(String target) {
-        // TODO Auto-generated method stub
-
+        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.EQZERO, target);
+        this.branchPrototypes.put(this.opCodes.size(), prot);
+        this.opCodes.add(null);
+        this.byteCounter += prot.getLength(this.encoding);
     }
 
     public void addIfNe(String target) {
-        // TODO Auto-generated method stub
-
+        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.NEZERO, target);
+        this.branchPrototypes.put(this.opCodes.size(), prot);
+        this.opCodes.add(null);
+        this.byteCounter += prot.getLength(this.encoding);
     }
 
     public void addAReturn() {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildAReturn();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
-    public void addAStore(char character) {
-        // TODO Auto-generated method stub
-
+    public void addAStore(char varId) {
+        final OpCode opCode = opCodeFactory.buildAStore(varId);
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addAConstNull(String label) {
-        // TODO Auto-generated method stub
-
+        this.registerLabel(label);
+        this.addAConstNull();
     }
 
     public void addAConstNull() {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildAConstNull();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addIAdd() {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildIAdd();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addIDiv() {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildIDiv();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addISub() {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildISub();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addIMul() {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildIMul();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addInstanceof(char classRefId) {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildInstanceOf(classRefId);
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addIfNull(String target) {
-        // TODO Auto-generated method stub
-
+        final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.REFEQNULL, target);
+        this.branchPrototypes.put(this.opCodes.size(), prot);
+        this.opCodes.add(null);
+        this.byteCounter += prot.getLength(this.encoding);
     }
 
     public void addPushShort(String label, int value) {
-        // TODO Auto-generated method stub
-
+        this.registerLabel(label);
+        this.addPushShort(value);
     }
 
     public void addPushShort(int value) {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildPushShort(value);
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void pushLdc(String label, char stringRef) {
-        // TODO Auto-generated method stub
-
+        this.registerLabel(label);
+        this.pushLdc(stringRef);
     }
 
     public void pushLdc(char stringRef) {
-        // TODO Auto-generated method stub
-
+        final OpCode opCode = opCodeFactory.buildLdc(stringRef);
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
 }
