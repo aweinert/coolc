@@ -15,12 +15,16 @@ import net.alexweinert.coolc.representations.jbc.instructions.OpCode;
 
 class BytecodeOpToJbcOpConverter extends Visitor {
 
-    public static BytecodeOpToJbcOpConverter create(List<TypedId> localVariables, JbcClass.Builder classBuilder,
-            JbcEncoding encoding) {
+    public static BytecodeOpToJbcOpConverter create(List<TypedId> parameters, List<TypedId> localVariables,
+            JbcClass.Builder classBuilder, JbcEncoding encoding) {
         final Map<String, Character> variableNameToNumber = new HashMap<>();
-        char id = 0;
-        for (TypedId typedId : localVariables) {
-            variableNameToNumber.put(typedId.getId(), id++);
+        variableNameToNumber.put("self", (char) 0);
+        char id = 1;
+        for (; id - 1 < parameters.size(); ++id) {
+            variableNameToNumber.put(parameters.get(id - 1).getId(), id);
+        }
+        for (; id - 1 - parameters.size() < localVariables.size(); ++id) {
+            variableNameToNumber.put(localVariables.get(id - 1 - parameters.size()).getId(), id);
         }
         return new BytecodeOpToJbcOpConverter(variableNameToNumber, new OpCodeAssembler(encoding), classBuilder);
     }
