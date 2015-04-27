@@ -169,7 +169,7 @@ public class OpCodeAssembler {
     }
 
     public void addNew(char classRefIndex) {
-        final OpCode opCode = opCodeFactory.buildNew();
+        final OpCode opCode = opCodeFactory.buildNew(classRefIndex);
         this.opCodes.add(opCode);
         this.byteCounter += opCode.getLength(this.encoding);
     }
