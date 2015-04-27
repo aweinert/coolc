@@ -15,103 +15,83 @@ public abstract class OpCode {
         }
 
         public OpCode buildALoad(char varIndex) {
-            // TODO Auto-generated method stub
-            return null;
+            return new ALoadInstruction(varIndex);
         }
 
         public OpCode buildInvokeDynamic(char methodRefId) {
-            // TODO Auto-generated method stub
-            return null;
+            return new InvokeDynamicInstruction(methodRefId);
         }
 
         public OpCode buildIConst0() {
-            // TODO Auto-generated method stub
-            return null;
+            return new IConst0Instruction();
         }
 
         public OpCode buildIConst1() {
-            // TODO Auto-generated method stub
-            return null;
+            return new IConst1Instruction();
         }
 
-        public OpCode buildNew() {
-            // TODO Auto-generated method stub
-            return null;
+        public OpCode buildNew(char classRefIndex) {
+            return new NewInstruction(classRefIndex);
         }
 
         public OpCode buildAReturn() {
-            // TODO Auto-generated method stub
-            return null;
+            return new AReturnInstruction();
         }
 
         public OpCode buildAStore(char varId) {
-            // TODO Auto-generated method stub
-            return null;
+            return new AStoreInstruction(varId);
         }
 
         public OpCode buildAConstNull() {
-            // TODO Auto-generated method stub
-            return null;
+            return new AConstNullInstruction();
         }
 
         public OpCode buildIAdd() {
-            // TODO Auto-generated method stub
-            return null;
+            return new IAddInstruction();
         }
 
         public OpCode buildIDiv() {
-            // TODO Auto-generated method stub
-            return null;
+            return new IDivInstruction();
         }
 
         public OpCode buildISub() {
-            // TODO Auto-generated method stub
-            return null;
+            return new ISubInstruction();
         }
 
         public OpCode buildIMul() {
-            // TODO Auto-generated method stub
-            return null;
+            return new IMulInstruction();
         }
 
         public OpCode buildInstanceOf(char classRefId) {
-            // TODO Auto-generated method stub
-            return null;
+            return new InstanceOfInstruction(classRefId);
         }
 
         public OpCode buildPushShort(int value) {
-            // TODO Auto-generated method stub
-            return null;
+            return new PushShortInstruction(value);
         }
 
         public OpCode buildLdc(char stringRef) {
-            // TODO Auto-generated method stub
-            return null;
+            return new LdcInstruction(stringRef);
         }
 
         public OpCode buildIfEq(char target) {
-            // TODO Auto-generated method stub
-            return null;
+            return new IfEqInstruction(target);
         }
 
         public OpCode buildIfIcmpLe(char target) {
-            // TODO Auto-generated method stub
-            return null;
+            return new IfIcmpLeInstruction(target);
         }
 
         public OpCode buildIfIcmpLt(char target) {
-            // TODO Auto-generated method stub
-            return null;
+            return new IfIcmpLtInstruction(target);
         }
 
         public OpCode buildIfNeq(char target) {
-            // TODO Auto-generated method stub
-            return null;
+            return new IfNeqInstruction(target);
         }
 
         public OpCode buildIfNull(char target) {
-            // TODO Auto-generated method stub
-            return null;
+            return new IfNullInstruction(target);
         }
 
     }
