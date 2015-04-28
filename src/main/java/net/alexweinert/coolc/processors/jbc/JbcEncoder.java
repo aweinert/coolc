@@ -289,6 +289,6 @@ public class JbcEncoder {
 
     public void encodeSiPush(short value) {
         this.builder.appendContent((byte) 0x11);
-        this.builder.appendContent((byte) value);
+        this.builder.appendContent(this.splitter.splitChar((char) value));
     }
 }
