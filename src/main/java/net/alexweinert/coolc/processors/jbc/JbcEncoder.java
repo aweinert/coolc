@@ -200,20 +200,20 @@ public class JbcEncoder {
 
     public void encodeNameAndType(char nameId, char typeId) {
         this.builder.appendContent((byte) 0x0c);
-        this.builder.appendContent(this.splitter.splitChar(nameId));
-        this.builder.appendContent(this.splitter.splitChar(typeId));
+        this.builder.appendContent(this.splitter.splitChar((char) (nameId + 1)));
+        this.builder.appendContent(this.splitter.splitChar((char) (typeId + 1)));
 
     }
 
     public void encodeMethodRef(char classRefIndex, char nameAndTypeIndex) {
         this.builder.appendContent((byte) 0x0a);
-        this.builder.appendContent(this.splitter.splitChar(classRefIndex));
-        this.builder.appendContent(this.splitter.splitChar(nameAndTypeIndex));
+        this.builder.appendContent(this.splitter.splitChar((char) (classRefIndex + 1)));
+        this.builder.appendContent(this.splitter.splitChar((char) (nameAndTypeIndex + 1)));
     }
 
     public void encodeStringConstant(char utf8Index) {
         this.builder.appendContent((byte) 0x08);
-        this.builder.appendContent(this.splitter.splitChar(utf8Index));
+        this.builder.appendContent(this.splitter.splitChar((char) (utf8Index + 1)));
     }
 
     public void encodeAConstNullInstruction() {
