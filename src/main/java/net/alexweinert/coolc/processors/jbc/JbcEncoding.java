@@ -92,12 +92,12 @@ public class JbcEncoding {
         return 1;
     }
 
-    public int getAReturnInstructionLength() {
+    public int getAReturnLength() {
         return 1;
     }
 
     public int getAStoreLength() {
-        return 3;
+        return 2;
     }
 
     public int getIConst0Length() {

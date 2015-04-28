@@ -12,7 +12,7 @@ class AReturnInstruction extends OpCode {
 
     @Override
     public int getLength(JbcEncoding encoding) {
-        return encoding.getAReturnInstructionLength();
+        return encoding.getAReturnLength();
     }
 
 }
