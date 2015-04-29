@@ -75,9 +75,13 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
             descriptorBuilder.append(";");
         }
         descriptorBuilder.append(")");
-        descriptorBuilder.append("L");
-        descriptorBuilder.append(method.getReturnType());
-        descriptorBuilder.append(";");
+        if (method.getReturnType() != null) {
+            descriptorBuilder.append("L");
+            descriptorBuilder.append(method.getReturnType());
+            descriptorBuilder.append(";");
+        } else {
+            descriptorBuilder.append("V");
+        }
         return descriptorBuilder.toString();
     }
 }
