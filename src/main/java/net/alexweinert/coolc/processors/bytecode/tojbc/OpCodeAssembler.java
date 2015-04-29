@@ -121,8 +121,8 @@ public class OpCodeAssembler {
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
-    public void addInvokeDynamic(char methodRefId) {
-        final OpCode opCode = opCodeFactory.buildInvokeDynamic(methodRefId);
+    public void addInvokeVirtual(char methodRefId) {
+        final OpCode opCode = opCodeFactory.buildInvokeVirtual(methodRefId);
         this.opCodes.add(opCode);
         this.byteCounter += opCode.getLength(this.encoding);
     }

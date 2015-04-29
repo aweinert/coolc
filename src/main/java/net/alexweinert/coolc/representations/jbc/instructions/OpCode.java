@@ -98,6 +98,10 @@ public abstract class OpCode {
             return new ReturnInstruction();
         }
 
+        public OpCode buildInvokeVirtual(char methodRefId) {
+            return new InvokeVirtual(methodRefId);
+        }
+
     }
 
     public abstract void encode(JbcEncoder encoder);
