@@ -28,7 +28,7 @@ public class FileDumper implements Backend<Collection<File>> {
             for (File file : input) {
                 final Path path = this.outputPath.resolve(file.getPath());
                 final OutputStream writer = new DataOutputStream(Files.newOutputStream(path, StandardOpenOption.CREATE,
-                        StandardOpenOption.WRITE));
+                        StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE));
                 writer.write(file.getContent());
                 writer.close();
             }
