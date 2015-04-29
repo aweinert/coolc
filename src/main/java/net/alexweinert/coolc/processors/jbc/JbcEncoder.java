@@ -179,7 +179,7 @@ public class JbcEncoder {
 
     public void encodeInvokeVirtual(char index) {
         this.builder.appendContent((byte) 0xb6);
-        this.builder.appendContent(this.splitter.splitChar(index));
+        this.builder.appendContent(this.splitter.splitChar((char) (index + 1)));
     }
 
     public void encodeIAdd() {
@@ -266,25 +266,25 @@ public class JbcEncoder {
 
     public void encodeInstanceOf(char classRefId) {
         this.builder.appendContent((byte) 0xc1);
-        this.builder.appendContent(this.splitter.splitChar(classRefId));
+        this.builder.appendContent(this.splitter.splitChar((char) (classRefId + 1)));
     }
 
     public void encodeInvokeDynamic(char methodRefId) {
         this.builder.appendContent((byte) 0xba);
-        this.builder.appendContent(this.splitter.splitChar(methodRefId));
+        this.builder.appendContent(this.splitter.splitChar((char) (methodRefId + 1)));
         this.builder.appendContent((byte) 0x00);
         this.builder.appendContent((byte) 0x00);
     }
 
     public void encodeLdc(byte constRefId) {
         this.builder.appendContent((byte) 0x12);
-        this.builder.appendContent(constRefId);
+        this.builder.appendContent((byte) (constRefId + 1));
 
     }
 
     public void encodeNew(char classRefId) {
         this.builder.appendContent((byte) 0xbb);
-        this.builder.appendContent(this.splitter.splitChar(classRefId));
+        this.builder.appendContent(this.splitter.splitChar((char) (classRefId + 1)));
     }
 
     public void encodeSiPush(short value) {
