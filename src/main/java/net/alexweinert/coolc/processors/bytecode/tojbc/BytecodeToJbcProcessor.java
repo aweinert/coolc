@@ -55,8 +55,8 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
 
         final MethodEntry.Builder methodBuilder = builder.getMethodBuilder(nameIndex, descriptorIndex);
         final CodeAttribute.Builder codeBuilder = new CodeAttribute.Builder(builder.addConstant(builder
-                .getConstantBuilder().buildUtf8Constant("Code")), (char) 255,
-                (char) (method.getParameters().size() + method.getLocalVars().size()));
+                .getConstantBuilder().buildUtf8Constant("Code")), (char) 255, (char) (method.getParameters().size()
+                + method.getLocalVars().size() + 1));
 
         final BytecodeOpToJbcOpConverter converter = BytecodeOpToJbcOpConverter.create(method.getParameters(),
                 method.getLocalVars(), builder, JbcEncoding.createStandardEncoding());
