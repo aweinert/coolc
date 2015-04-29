@@ -295,4 +295,17 @@ public class JbcEncoder {
     public void encodeReturn() {
         this.builder.appendContent((byte) 0xb1);
     }
+
+    public void encodeDup() {
+        this.builder.appendContent((byte) 0x59);
+    }
+
+    public void encodeInvokeSpecial(char methodRefId) {
+        this.builder.appendContent((byte) 0xb7);
+        this.builder.appendContent(this.splitter.splitChar((char) (methodRefId + 1)));
+    }
+
+    public void encodePop() {
+        this.builder.appendContent((byte) 0x57);
+    }
 }

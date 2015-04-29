@@ -286,7 +286,24 @@ public class OpCodeAssembler {
         final OpCode opCode = opCodeFactory.buildReturn();
         this.opCodes.add(opCode);
         this.byteCounter += opCode.getLength(this.encoding);
+    }
 
+    public void addDup() {
+        final OpCode opCode = opCodeFactory.buildDup();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
+    }
+
+    public void addInvokeSpecial(char methodRefId) {
+        final OpCode opCode = opCodeFactory.buildInvokeSpecial(methodRefId);
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
+    }
+
+    public void addPop() {
+        final OpCode opCode = opCodeFactory.buildPop();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
     }
 
 }

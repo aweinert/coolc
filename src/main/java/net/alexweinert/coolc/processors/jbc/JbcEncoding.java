@@ -152,4 +152,16 @@ public class JbcEncoding {
         return 1;
     }
 
+    public int getDupLength() {
+        return 1;
+    }
+
+    public int getInvokeSpecialLength() {
+        return 3;
+    }
+
+    public int getPopLength() {
+        return 1;
+    }
+
 }

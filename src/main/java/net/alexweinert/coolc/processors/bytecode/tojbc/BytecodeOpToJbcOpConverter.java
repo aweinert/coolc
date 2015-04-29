@@ -71,6 +71,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
         final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
         this.assembler.addNew(coolBoolClassRefIndex);
+        this.initializeNewInstance("CoolBool");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
 
@@ -96,6 +97,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
         final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
         this.assembler.addNew(coolBoolClassRefIndex);
+        this.initializeNewInstance("CoolBool");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
 
@@ -111,6 +113,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         this.assembler.addInvokeVirtual(equalsMethodRefId);
         final char coolBoolClassRefId = addClassRefConst("CoolBool");
         this.assembler.addNew(coolBoolClassRefId);
+        this.initializeNewInstance("CoolBool");
         this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
 
@@ -134,6 +137,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
         final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
         this.assembler.addNew(coolBoolClassRefIndex);
+        this.initializeNewInstance("CoolBool");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
 
@@ -182,6 +186,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
         final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
         this.assembler.addNew(coolIntClassRefIndex);
+        this.initializeNewInstance("CoolInt");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
 
@@ -202,6 +207,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
         final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
         this.assembler.addNew(coolIntClassRefIndex);
+        this.initializeNewInstance("CoolInt");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
 
@@ -222,6 +228,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
         final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
         this.assembler.addNew(coolIntClassRefIndex);
+        this.initializeNewInstance("CoolInt");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
 
@@ -242,6 +249,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
         final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
         this.assembler.addNew(coolIntClassRefIndex);
+        this.initializeNewInstance("CoolInt");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
 
@@ -287,6 +295,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         }
         final char coolBoolClassRefId = this.addClassRefConst("CoolBool");
         this.assembler.addNew(coolBoolClassRefId);
+        this.initializeNewInstance("CoolBool");
         this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
 
@@ -299,6 +308,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         }
         final char coolIntClassRefId = this.addClassRefConst("CoolInt");
         this.assembler.addNew(coolIntClassRefId);
+        this.initializeNewInstance("CoolInt");
         this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
 
@@ -313,6 +323,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         }
         final char coolStringClassRefId = this.addClassRefConst("CoolString");
         this.assembler.addNew(coolStringClassRefId);
+        this.initializeNewInstance("CoolString");
         this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
 
@@ -341,10 +352,19 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         final char coolBoolClassRefIndex = this.addClassRefConst("Cool" + type);
         if (label != null) {
             this.assembler.addNew(label, coolBoolClassRefIndex);
+            this.initializeNewInstance("CoolBool");
         } else {
             this.assembler.addNew(coolBoolClassRefIndex);
+            this.initializeNewInstance("CoolBool");
         }
+        initializeNewInstance(type);
         this.assembler.addAStore(this.variableNameToNumber.get(target));
+    }
+
+    private void initializeNewInstance(String type) {
+        this.assembler.addDup();
+        this.assembler.addInvokeSpecial(this.addMethodRefConst(type, "<init>", "()V"));
+        this.assembler.addPop();
     }
 
     @Override

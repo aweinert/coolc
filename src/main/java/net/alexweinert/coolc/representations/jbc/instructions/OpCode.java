@@ -102,6 +102,18 @@ public abstract class OpCode {
             return new InvokeVirtual(methodRefId);
         }
 
+        public OpCode buildDup() {
+            return new Dup();
+        }
+
+        public OpCode buildInvokeSpecial(char methodRefId) {
+            return new InvokeSpecial(methodRefId);
+        }
+
+        public OpCode buildPop() {
+            return new Pop();
+        }
+
     }
 
     public abstract void encode(JbcEncoder encoder);
