@@ -349,12 +349,20 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitReturnInstruction(String label, String returnVariable) {
-        if (label != null) {
-            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(returnVariable));
+        if (returnVariable == null) {
+            if (label != null) {
+                this.assembler.addReturn(label);
+            } else {
+                this.assembler.addReturn();
+            }
         } else {
-            this.assembler.addALoad((char) this.variableNameToNumber.get(returnVariable));
+            if (label != null) {
+                this.assembler.addALoad(label, (char) this.variableNameToNumber.get(returnVariable));
+            } else {
+                this.assembler.addALoad((char) this.variableNameToNumber.get(returnVariable));
+            }
+            this.assembler.addAReturn();
         }
-        this.assembler.addAReturn();
     }
 
     @Override

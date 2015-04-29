@@ -94,6 +94,10 @@ public abstract class OpCode {
             return new IfNullInstruction(target);
         }
 
+        public OpCode buildReturn() {
+            return new ReturnInstruction();
+        }
+
     }
 
     public abstract void encode(JbcEncoder encoder);

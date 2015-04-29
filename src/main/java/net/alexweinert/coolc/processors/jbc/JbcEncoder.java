@@ -291,4 +291,8 @@ public class JbcEncoder {
         this.builder.appendContent((byte) 0x11);
         this.builder.appendContent(this.splitter.splitChar((char) value));
     }
+
+    public void encodeReturn() {
+        this.builder.appendContent((byte) 0xb1);
+    }
 }

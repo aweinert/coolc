@@ -55,6 +55,7 @@ public class FromCoolBuilder implements CoolBackendBuilder<ByteClass, List<ByteC
 
     @Override
     public void endAttributeDefinition(String variable) {
+        this.methodBuilder.addInstruction(instructionFactory.buildReturn(null));
         this.classBuilder.addMethod(this.methodBuilder.build());
         this.methodBuilder = null;
     }

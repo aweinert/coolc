@@ -148,4 +148,8 @@ public class JbcEncoding {
         return 3;
     }
 
+    public int getReturnLength() {
+        return 1;
+    }
+
 }

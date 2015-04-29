@@ -277,4 +277,16 @@ public class OpCodeAssembler {
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
+    public void addReturn(String label) {
+        this.registerLabel(label);
+        this.addReturn();
+    }
+
+    public void addReturn() {
+        final OpCode opCode = opCodeFactory.buildReturn();
+        this.opCodes.add(opCode);
+        this.byteCounter += opCode.getLength(this.encoding);
+
+    }
+
 }
