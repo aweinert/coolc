@@ -58,6 +58,7 @@ public class OpCodeAssembler {
     private final OpCode.Factory opCodeFactory = new OpCode.Factory();
 
     private final List<OpCode> opCodes = new LinkedList<>();
+    private final List<Character> positions = new LinkedList<>();
     private final Map<Integer, BranchPrototype> branchPrototypes = new HashMap<>();
     private final Map<String, Character> labelToPos = new HashMap<>();
 
@@ -79,8 +80,9 @@ public class OpCodeAssembler {
                 returnValue.add(opCode);
             } else {
                 final BranchPrototype prot = this.branchPrototypes.get(i);
+                final char currentAddress = this.positions.get(i);
                 final char targetAddr = this.labelToPos.get(prot.getTarget());
-                returnValue.add(prot.toOpcode(targetAddr));
+                returnValue.add(prot.toOpcode((char) (targetAddr - currentAddress)));
             }
         }
         return returnValue;
@@ -95,6 +97,7 @@ public class OpCodeAssembler {
         final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.NONE, target);
         this.branchPrototypes.put(this.opCodes.size(), prot);
         this.opCodes.add(null);
+        this.positions.add(this.byteCounter);
         this.byteCounter += prot.getLength(this.encoding);
     }
 
@@ -107,6 +110,7 @@ public class OpCodeAssembler {
         final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.EQZERO, target);
         this.branchPrototypes.put(this.opCodes.size(), prot);
         this.opCodes.add(null);
+        this.positions.add(this.byteCounter);
         this.byteCounter += prot.getLength(this.encoding);
     }
 
@@ -118,12 +122,14 @@ public class OpCodeAssembler {
     public void addALoad(char varIndex) {
         final OpCode opCode = opCodeFactory.buildALoad(varIndex);
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addInvokeVirtual(char methodRefId) {
         final OpCode opCode = opCodeFactory.buildInvokeVirtual(methodRefId);
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
@@ -131,6 +137,7 @@ public class OpCodeAssembler {
         final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.LT, target);
         this.branchPrototypes.put(this.opCodes.size(), prot);
         this.opCodes.add(null);
+        this.positions.add(this.byteCounter);
         this.byteCounter += prot.getLength(this.encoding);
     }
 
@@ -142,6 +149,7 @@ public class OpCodeAssembler {
     public void addIConst0() {
         final OpCode opCode = opCodeFactory.buildIConst0();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
@@ -153,6 +161,7 @@ public class OpCodeAssembler {
     public void addIConst1() {
         final OpCode opCode = opCodeFactory.buildIConst1();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
@@ -160,6 +169,7 @@ public class OpCodeAssembler {
         this.registerLabel(label);
         final OpCode opCode = opCodeFactory.buildNop();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
@@ -171,6 +181,7 @@ public class OpCodeAssembler {
     public void addNew(char classRefIndex) {
         final OpCode opCode = opCodeFactory.buildNew(classRefIndex);
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
@@ -178,6 +189,7 @@ public class OpCodeAssembler {
         final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.LE, target);
         this.branchPrototypes.put(this.opCodes.size(), prot);
         this.opCodes.add(null);
+        this.positions.add(this.byteCounter);
         this.byteCounter += prot.getLength(this.encoding);
     }
 
@@ -185,6 +197,7 @@ public class OpCodeAssembler {
         final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.EQZERO, target);
         this.branchPrototypes.put(this.opCodes.size(), prot);
         this.opCodes.add(null);
+        this.positions.add(this.byteCounter);
         this.byteCounter += prot.getLength(this.encoding);
     }
 
@@ -192,18 +205,21 @@ public class OpCodeAssembler {
         final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.NEZERO, target);
         this.branchPrototypes.put(this.opCodes.size(), prot);
         this.opCodes.add(null);
+        this.positions.add(this.byteCounter);
         this.byteCounter += prot.getLength(this.encoding);
     }
 
     public void addAReturn() {
         final OpCode opCode = opCodeFactory.buildAReturn();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addAStore(char varId) {
         final OpCode opCode = opCodeFactory.buildAStore(varId);
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
@@ -215,36 +231,42 @@ public class OpCodeAssembler {
     public void addAConstNull() {
         final OpCode opCode = opCodeFactory.buildAConstNull();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addIAdd() {
         final OpCode opCode = opCodeFactory.buildIAdd();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addIDiv() {
         final OpCode opCode = opCodeFactory.buildIDiv();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addISub() {
         final OpCode opCode = opCodeFactory.buildISub();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addIMul() {
         final OpCode opCode = opCodeFactory.buildIMul();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addInstanceof(char classRefId) {
         final OpCode opCode = opCodeFactory.buildInstanceOf(classRefId);
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
@@ -252,6 +274,7 @@ public class OpCodeAssembler {
         final BranchPrototype prot = new BranchPrototype(BranchPrototype.Condition.REFEQNULL, target);
         this.branchPrototypes.put(this.opCodes.size(), prot);
         this.opCodes.add(null);
+        this.positions.add(this.byteCounter);
         this.byteCounter += prot.getLength(this.encoding);
     }
 
@@ -263,6 +286,7 @@ public class OpCodeAssembler {
     public void addPushShort(int value) {
         final OpCode opCode = opCodeFactory.buildPushShort(value);
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
@@ -274,6 +298,7 @@ public class OpCodeAssembler {
     public void pushLdc(char stringRef) {
         final OpCode opCode = opCodeFactory.buildLdc(stringRef);
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
@@ -285,24 +310,28 @@ public class OpCodeAssembler {
     public void addReturn() {
         final OpCode opCode = opCodeFactory.buildReturn();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addDup() {
         final OpCode opCode = opCodeFactory.buildDup();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addInvokeSpecial(char methodRefId) {
         final OpCode opCode = opCodeFactory.buildInvokeSpecial(methodRefId);
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
     public void addPop() {
         final OpCode opCode = opCodeFactory.buildPop();
         this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
