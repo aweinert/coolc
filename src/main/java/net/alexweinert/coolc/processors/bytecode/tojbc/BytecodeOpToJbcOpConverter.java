@@ -79,11 +79,13 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     public void visitLteInstruction(String label, String target, String lhs, String rhs) {
         final char getValueMethodRefId = addMethodRefConst("CoolInt", "getValue", "()I");
 
+        final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
         if (label != null) {
-            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(label, coolBoolClassRefIndex);
         } else {
-            this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(coolBoolClassRefIndex);
         }
+        this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad(this.variableNameToNumber.get(rhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
@@ -95,8 +97,6 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         this.assembler.addIConst1(labelTrue);
         this.assembler.addNop(labelAfter);
 
-        final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
-        this.assembler.addNew(coolBoolClassRefIndex);
         this.initializeNewInstance("CoolBool");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
@@ -104,15 +104,15 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     @Override
     public void visitEqInstruction(String label, String target, String lhs, String rhs) {
         final char equalsMethodRefId = addMethodRefConst("CoolObject", "equals", "(LCoolObject;)I");
+        final char coolBoolClassRefId = addClassRefConst("CoolBool");
         if (label != null) {
-            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(label, coolBoolClassRefId);
         } else {
-            this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(coolBoolClassRefId);
         }
+        this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addALoad((char) this.variableNameToNumber.get(rhs));
         this.assembler.addInvokeVirtual(equalsMethodRefId);
-        final char coolBoolClassRefId = addClassRefConst("CoolBool");
-        this.assembler.addNew(coolBoolClassRefId);
         this.initializeNewInstance("CoolBool");
         this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
@@ -121,11 +121,13 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     public void visitBoolNegInstruction(String label, String target, String arg) {
         final char getValueMethodRefId = addMethodRefConst("CoolBool", "getValue", "()I");
 
+        final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
         if (label != null) {
-            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(arg));
+            this.assembler.addNew(label, coolBoolClassRefIndex);
         } else {
-            this.assembler.addALoad((char) this.variableNameToNumber.get(arg));
+            this.assembler.addNew(coolBoolClassRefIndex);
         }
+        this.assembler.addALoad((char) this.variableNameToNumber.get(arg));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         final String labelFalse = "bcToJbc" + this.usedLabels++;
         this.assembler.addIfEq(labelFalse);
@@ -135,8 +137,6 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         this.assembler.addIConst0(labelFalse);
         this.assembler.addNop(labelAfter);
 
-        final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
-        this.assembler.addNew(coolBoolClassRefIndex);
         this.initializeNewInstance("CoolBool");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
@@ -173,19 +173,19 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     public void visitAddInstruction(String label, String target, String lhs, String rhs) {
         final char getValueMethodRefId = addMethodRefConst("CoolInt", "getValue", "()I");
 
+        final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
         if (label != null) {
-            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(label, coolIntClassRefIndex);
         } else {
-            this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(coolIntClassRefIndex);
         }
+        this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad((char) this.variableNameToNumber.get(rhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
 
         this.assembler.addIAdd();
 
-        final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
-        this.assembler.addNew(coolIntClassRefIndex);
         this.initializeNewInstance("CoolInt");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
@@ -194,19 +194,19 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     public void visitDivInstruction(String label, String target, String lhs, String rhs) {
         final char getValueMethodRefId = addMethodRefConst("CoolInt", "getValue", "()I");
 
+        final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
         if (label != null) {
-            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(label, coolIntClassRefIndex);
         } else {
-            this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(coolIntClassRefIndex);
         }
+        this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad((char) this.variableNameToNumber.get(rhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
 
         this.assembler.addIDiv();
 
-        final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
-        this.assembler.addNew(coolIntClassRefIndex);
         this.initializeNewInstance("CoolInt");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
@@ -215,19 +215,19 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     public void visitMulInstruction(String label, String target, String lhs, String rhs) {
         final char getValueMethodRefId = addMethodRefConst("CoolInt", "getValue", "()I");
 
+        final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
         if (label != null) {
-            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(label, coolIntClassRefIndex);
         } else {
-            this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(coolIntClassRefIndex);
         }
+        this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad((char) this.variableNameToNumber.get(rhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
 
         this.assembler.addIMul();
 
-        final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
-        this.assembler.addNew(coolIntClassRefIndex);
         this.initializeNewInstance("CoolInt");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
@@ -236,19 +236,19 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     public void visitSubInstruction(String label, String target, String lhs, String rhs) {
         final char getValueMethodRefId = addMethodRefConst("CoolInt", "getValue", "()I");
 
+        final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
         if (label != null) {
-            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(label, coolIntClassRefIndex);
         } else {
-            this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(coolIntClassRefIndex);
         }
+        this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad((char) this.variableNameToNumber.get(rhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
 
         this.assembler.addISub();
 
-        final char coolIntClassRefIndex = this.addClassRefConst("CoolInt");
-        this.assembler.addNew(coolIntClassRefIndex);
         this.initializeNewInstance("CoolInt");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
@@ -262,11 +262,13 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitIsVoidInstruction(String label, String target, String arg) {
+        final char coolBoolClassRefId = this.addClassRefConst("CoolBool");
         if (label != null) {
-            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(arg));
+            this.assembler.addNew(label, coolBoolClassRefId);
         } else {
-            this.assembler.addALoad((char) this.variableNameToNumber.get(arg));
+            this.assembler.addNew(coolBoolClassRefId);
         }
+        this.assembler.addALoad((char) this.variableNameToNumber.get(arg));
 
         final String trueLabel = "bcToJbc" + usedLabels++;
         this.assembler.addIfNull(trueLabel);
@@ -274,40 +276,39 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         final String continueLabel = "bcToJbc" + usedLabels++;
         this.assembler.addGoto(continueLabel);
         this.assembler.addIConst1(trueLabel);
-        final char coolBoolClassRefId = this.addClassRefConst("CoolBool");
-        this.assembler.addNew(continueLabel, coolBoolClassRefId);
+        this.assembler.addNop(continueLabel);
+
+        this.initializeNewInstance("CoolBool");
+
+        this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
 
     @Override
     public void visitLoadBoolInstruction(String label, String target, boolean value) {
-        if (label != null) {
-            if (value) {
-                this.assembler.addIConst1(label);
-            } else {
-                this.assembler.addIConst0(label);
-            }
-        } else {
-            if (value) {
-                this.assembler.addIConst1();
-            } else {
-                this.assembler.addIConst0();
-            }
-        }
         final char coolBoolClassRefId = this.addClassRefConst("CoolBool");
-        this.assembler.addNew(coolBoolClassRefId);
+        if (label != null) {
+            this.assembler.addNew(label, coolBoolClassRefId);
+        } else {
+            this.assembler.addNew(coolBoolClassRefId);
+        }
+        if (value) {
+            this.assembler.addIConst1();
+        } else {
+            this.assembler.addIConst0();
+        }
         this.initializeNewInstance("CoolBool");
         this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
 
     @Override
     public void visitLoadIntInstruction(String label, String target, int value) {
-        if (label != null) {
-            this.assembler.addPushShort(label, value);
-        } else {
-            this.assembler.addPushShort(value);
-        }
         final char coolIntClassRefId = this.addClassRefConst("CoolInt");
-        this.assembler.addNew(coolIntClassRefId);
+        if (label != null) {
+            this.assembler.addNew(label, coolIntClassRefId);
+        } else {
+            this.assembler.addNew(coolIntClassRefId);
+        }
+        this.assembler.addPushShort(value);
         this.initializeNewInstance("CoolInt");
         this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
@@ -316,13 +317,14 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     public void visitLoadStringInstruction(String label, String target, String value) {
         final char stringRef = this.addStringConst(value);
 
-        if (label != null) {
-            this.assembler.pushLdc(label, stringRef);
-        } else {
-            this.assembler.pushLdc(stringRef);
-        }
         final char coolStringClassRefId = this.addClassRefConst("CoolString");
-        this.assembler.addNew(coolStringClassRefId);
+
+        if (label != null) {
+            this.assembler.addNew(label, coolStringClassRefId);
+        } else {
+            this.assembler.addNew(coolStringClassRefId);
+        }
+        this.assembler.pushLdc(stringRef);
         this.initializeNewInstance("CoolString");
         this.assembler.addAStore((char) this.variableNameToNumber.get(target));
     }
@@ -349,13 +351,11 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitNewInstruction(String label, String target, String type) {
-        final char coolBoolClassRefIndex = this.addClassRefConst("Cool" + type);
+        final char typeReferenceId = this.addClassRefConst("Cool" + type);
         if (label != null) {
-            this.assembler.addNew(label, coolBoolClassRefIndex);
-            this.initializeNewInstance("CoolBool");
+            this.assembler.addNew(label, typeReferenceId);
         } else {
-            this.assembler.addNew(coolBoolClassRefIndex);
-            this.initializeNewInstance("CoolBool");
+            this.assembler.addNew(typeReferenceId);
         }
         initializeNewInstance(type);
         this.assembler.addAStore(this.variableNameToNumber.get(target));
