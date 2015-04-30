@@ -53,11 +53,13 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     public void visitLtInstruction(String label, String target, String lhs, String rhs) {
         final char getValueMethodRefId = addMethodRefConst("CoolInt", "getValue", "()I");
 
+        final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
         if (label != null) {
-            this.assembler.addALoad(label, (char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(label, coolBoolClassRefIndex);
         } else {
-            this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
+            this.assembler.addNew(coolBoolClassRefIndex);
         }
+        this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad(this.variableNameToNumber.get(rhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
@@ -69,8 +71,6 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         this.assembler.addIConst1(labelTrue);
         this.assembler.addNop(labelAfter);
 
-        final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
-        this.assembler.addNew(coolBoolClassRefIndex);
         this.initializeNewInstance("CoolBool");
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
