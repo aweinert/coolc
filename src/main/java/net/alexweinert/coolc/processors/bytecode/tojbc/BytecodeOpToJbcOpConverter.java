@@ -59,6 +59,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolBoolClassRefIndex);
         }
+        this.assembler.addDup();
         this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad(this.variableNameToNumber.get(rhs));
@@ -85,6 +86,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolBoolClassRefIndex);
         }
+        this.assembler.addDup();
         this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad(this.variableNameToNumber.get(rhs));
@@ -110,6 +112,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolBoolClassRefId);
         }
+        this.assembler.addDup();
         this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addALoad((char) this.variableNameToNumber.get(rhs));
         this.assembler.addInvokeVirtual(equalsMethodRefId);
@@ -127,6 +130,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolBoolClassRefIndex);
         }
+        this.assembler.addDup();
         this.assembler.addALoad((char) this.variableNameToNumber.get(arg));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         final String labelFalse = "bcToJbc" + this.usedLabels++;
@@ -179,6 +183,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolIntClassRefIndex);
         }
+        this.assembler.addDup();
         this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad((char) this.variableNameToNumber.get(rhs));
@@ -200,6 +205,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolIntClassRefIndex);
         }
+        this.assembler.addDup();
         this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad((char) this.variableNameToNumber.get(rhs));
@@ -221,6 +227,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolIntClassRefIndex);
         }
+        this.assembler.addDup();
         this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad((char) this.variableNameToNumber.get(rhs));
@@ -242,6 +249,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolIntClassRefIndex);
         }
+        this.assembler.addDup();
         this.assembler.addALoad((char) this.variableNameToNumber.get(lhs));
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         this.assembler.addALoad((char) this.variableNameToNumber.get(rhs));
@@ -268,6 +276,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolBoolClassRefId);
         }
+        this.assembler.addDup();
         this.assembler.addALoad((char) this.variableNameToNumber.get(arg));
 
         final String trueLabel = "bcToJbc" + usedLabels++;
@@ -291,6 +300,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolBoolClassRefId);
         }
+        this.assembler.addDup();
         if (value) {
             this.assembler.addIConst1();
         } else {
@@ -308,6 +318,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolIntClassRefId);
         }
+        this.assembler.addDup();
         this.assembler.addPushShort(value);
         this.initializeNewInstance("CoolInt");
         this.assembler.addAStore((char) this.variableNameToNumber.get(target));
@@ -324,6 +335,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(coolStringClassRefId);
         }
+        this.assembler.addDup();
         this.assembler.pushLdc(stringRef);
         this.initializeNewInstance("CoolString");
         this.assembler.addAStore((char) this.variableNameToNumber.get(target));
@@ -357,12 +369,12 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addNew(typeReferenceId);
         }
+        this.assembler.addDup();
         initializeNewInstance(type);
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
 
     private void initializeNewInstance(String type) {
-        this.assembler.addDup();
         if (type.equals("CoolInt") || type.equals("CoolBool")) {
             this.assembler.addInvokeSpecial(this.addMethodRefConst(type, "<init>", "(I)V"));
         } else if (type.equals("CoolString")) {
@@ -370,7 +382,6 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addInvokeSpecial(this.addMethodRefConst(type, "<init>", "()V"));
         }
-        this.assembler.addPop();
     }
 
     @Override
