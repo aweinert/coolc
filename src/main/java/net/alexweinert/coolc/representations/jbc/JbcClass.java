@@ -19,7 +19,7 @@ public class JbcClass {
 
         public Builder(String id, String parent) {
             this.minorVersion = 0x0000;
-            this.majorVersion = 0x0033;
+            this.majorVersion = 0x0031;
 
             final char idUtf8Index = this.addConstant(this.getConstantBuilder().buildUtf8Constant(id));
             this.idIndex = this.addConstant(this.getConstantBuilder().buildClassConstant(idUtf8Index));
