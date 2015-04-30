@@ -363,7 +363,13 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     private void initializeNewInstance(String type) {
         this.assembler.addDup();
-        this.assembler.addInvokeSpecial(this.addMethodRefConst(type, "<init>", "()V"));
+        if (type.equals("CoolInt") || type.equals("CoolBool")) {
+            this.assembler.addInvokeSpecial(this.addMethodRefConst(type, "<init>", "(I)V"));
+        } else if (type.equals("CoolString")) {
+            this.assembler.addInvokeSpecial(this.addMethodRefConst(type, "<init>", "(java/lang/String)V"));
+        } else {
+            this.assembler.addInvokeSpecial(this.addMethodRefConst(type, "<init>", "()V"));
+        }
         this.assembler.addPop();
     }
 
