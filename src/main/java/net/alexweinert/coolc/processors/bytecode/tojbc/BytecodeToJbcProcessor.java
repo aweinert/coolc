@@ -71,13 +71,13 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
         final StringBuilder descriptorBuilder = new StringBuilder("(");
         for (TypedId id : method.getParameters()) {
             descriptorBuilder.append("L");
-            descriptorBuilder.append(id.getType());
+            descriptorBuilder.append("Cool" + id.getType());
             descriptorBuilder.append(";");
         }
         descriptorBuilder.append(")");
         if (method.getReturnType() != null) {
             descriptorBuilder.append("L");
-            descriptorBuilder.append(method.getReturnType());
+            descriptorBuilder.append("Cool" + method.getReturnType());
             descriptorBuilder.append(";");
         } else {
             descriptorBuilder.append("V");
