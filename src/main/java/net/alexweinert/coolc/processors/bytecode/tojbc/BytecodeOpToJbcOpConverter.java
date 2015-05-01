@@ -147,7 +147,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitBranchIfFalseInstruction(String label, String target, String conditionVariable) {
-        final char getValueMethodRefId = addMethodRefConst("CoolInt", "getValue", "()I");
+        final char getValueMethodRefId = addMethodRefConst("CoolBool", "getValue", "()I");
 
         if (label != null) {
             this.assembler.addALoad(label, (char) this.variableNameToNumber.get(conditionVariable));
