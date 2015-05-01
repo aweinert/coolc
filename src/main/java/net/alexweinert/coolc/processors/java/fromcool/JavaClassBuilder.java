@@ -376,8 +376,8 @@ class JavaClassBuilder implements CoolBackendBuilder<JavaClass, JavaProgram> {
      * @see net.alexweinert.coolc.processors.java.fromcool.FromCoolBuilder#functionCall(java.lang.String,
      * java.lang.String, net.alexweinert.coolc.representations.cool.symboltables.IdSymbol, java.util.List) */
     @Override
-    public void functionCall(String resultVariable, String dispatchVariable, IdSymbol functionIdentifier,
-            List<String> arguments) {
+    public void functionCall(String resultVariable, String dispatchVariable, String dispatchVariableType,
+            IdSymbol functionIdentifier, List<String> arguments) {
         final String methodId = this.namegen.getJavaNameForMethod(functionIdentifier);
         this.stringBuilder.append(resultVariable + " = " + dispatchVariable + "." + methodId + "(");
         final Iterator<String> iterator = arguments.iterator();
@@ -400,7 +400,7 @@ class JavaClassBuilder implements CoolBackendBuilder<JavaClass, JavaProgram> {
     public void staticFunctionCall(String resultVariable, String dispatchVariable, IdSymbol functionIdentifier,
             IdSymbol staticType, List<String> arguments) {
         // TODO: Actually perform a static function call
-        this.functionCall(resultVariable, dispatchVariable, functionIdentifier, arguments);
+        this.functionCall(resultVariable, dispatchVariable, staticType.toString(), functionIdentifier, arguments);
     }
 
     /* (non-Javadoc)

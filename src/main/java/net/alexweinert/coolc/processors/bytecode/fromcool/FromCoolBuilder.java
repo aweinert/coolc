@@ -227,10 +227,10 @@ public class FromCoolBuilder implements CoolBackendBuilder<ByteClass, List<ByteC
     }
 
     @Override
-    public void functionCall(String resultVariable, String dispatchVariable, IdSymbol functionIdentifier,
-            List<String> arguments) {
+    public void functionCall(String resultVariable, String dispatchVariable, String dispatchVariableType,
+            IdSymbol functionIdentifier, List<String> arguments) {
         this.methodBuilder.addInstruction(this.instructionFactory.buildFunctionCall(resultVariable, dispatchVariable,
-                functionIdentifier.getString(), arguments));
+                dispatchVariableType, functionIdentifier.getString(), arguments));
     }
 
     @Override

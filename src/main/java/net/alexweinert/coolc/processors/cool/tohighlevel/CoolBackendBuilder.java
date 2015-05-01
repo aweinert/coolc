@@ -84,8 +84,8 @@ public interface CoolBackendBuilder<T, U> {
 
     void endLoop();
 
-    void functionCall(String resultVariable, String dispatchVariable, IdSymbol functionIdentifier,
-            List<String> arguments);
+    void functionCall(String resultVariable, String dispatchVariable, String dispatchVariableType,
+            IdSymbol functionIdentifier, List<String> arguments);
 
     void staticFunctionCall(String resultVariable, String dispatchVariable, IdSymbol functionIdentifier,
             IdSymbol staticType, List<String> arguments);

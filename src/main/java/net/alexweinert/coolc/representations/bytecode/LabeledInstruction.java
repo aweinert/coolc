@@ -112,10 +112,10 @@ public abstract class LabeledInstruction {
             return returnValue;
         }
 
-        public LabeledInstruction buildFunctionCall(String resultVariable, String dispatchVariable, String functionId,
-                List<String> arguments) {
+        public LabeledInstruction buildFunctionCall(String resultVariable, String dispatchVariable,
+                String dispatchVariableType, String functionId, List<String> arguments) {
             final LabeledInstruction returnValue = new FunctionCallInstruction(this.label, resultVariable,
-                    dispatchVariable, functionId, arguments);
+                    dispatchVariable, dispatchVariableType, functionId, arguments);
             this.label = null;
             return returnValue;
         }

@@ -332,7 +332,8 @@ public class CoolBackendVisitor<T, U> extends Visitor {
 
         final String dispatchVariable = this.variables.pop();
         final String resultVariable = this.builder.declareVariable(functionCall.getType());
-        this.builder.functionCall(resultVariable, dispatchVariable, functionCall.getFunctionIdentifier(), arguments);
+        this.builder.functionCall(resultVariable, dispatchVariable, functionCall.getDispatchExpression().getType()
+                .toString(), functionCall.getFunctionIdentifier(), arguments);
         this.variables.push(resultVariable);
     }
 

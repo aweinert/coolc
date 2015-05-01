@@ -262,10 +262,10 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     }
 
     @Override
-    public void visitFunctionCallInstruction(String label, String target, String dispatchVariable, String methodId,
-            List<String> arguments) {
+    public void visitFunctionCallInstruction(String label, String target, String dispatchVariable,
+            String dispatchVariableType, String methodId, List<String> arguments) {
         // TODO Auto-generated method stub
-        super.visitFunctionCallInstruction(label, target, dispatchVariable, methodId, arguments);
+        super.visitFunctionCallInstruction(label, target, dispatchVariable, dispatchVariableType, methodId, arguments);
     }
 
     @Override

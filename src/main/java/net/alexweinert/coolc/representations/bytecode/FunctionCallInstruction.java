@@ -5,13 +5,15 @@ import java.util.List;
 class FunctionCallInstruction extends AssignInstruction {
 
     private final String dispatchVariable;
+    private final String dispatchVariableType;
     private final String methodId;
     private final List<String> arguments;
 
-    public FunctionCallInstruction(String label, String resultVariable, String dispatchVariable, String functionId,
-            List<String> arguments) {
+    public FunctionCallInstruction(String label, String resultVariable, String dispatchVariable,
+            String dispatchVariableType, String functionId, List<String> arguments) {
         super(label, resultVariable);
         this.dispatchVariable = dispatchVariable;
+        this.dispatchVariableType = dispatchVariableType;
         this.methodId = functionId;
         this.arguments = arguments;
     }
@@ -76,8 +78,8 @@ class FunctionCallInstruction extends AssignInstruction {
 
     @Override
     public void acceptVisitor(Visitor visitor) {
-        visitor.visitFunctionCallInstruction(this.getLabel(), this.getTarget(), this.dispatchVariable, this.methodId,
-                this.arguments);
+        visitor.visitFunctionCallInstruction(this.getLabel(), this.getTarget(), this.dispatchVariable,
+                this.dispatchVariableType, this.methodId, this.arguments);
     }
 
 }

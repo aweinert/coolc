@@ -27,8 +27,8 @@ public class Visitor {
 
     public void visitEqInstruction(String label, String target, String lhs, String rhs) {}
 
-    public void visitFunctionCallInstruction(String label, String target, String dispatchVariable, String methodId,
-            List<String> arguments) {}
+    public void visitFunctionCallInstruction(String label, String target, String dispatchVariable,
+            String dispatchVariableType, String methodId, List<String> arguments) {}
 
     public void visitIsVoidInstruction(String label, String target, String arg) {}
 
