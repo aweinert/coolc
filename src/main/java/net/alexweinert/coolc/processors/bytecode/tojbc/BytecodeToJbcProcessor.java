@@ -14,6 +14,7 @@ import net.alexweinert.coolc.representations.bytecode.TypedId;
 import net.alexweinert.coolc.representations.jbc.CodeAttribute;
 import net.alexweinert.coolc.representations.jbc.FieldEntry;
 import net.alexweinert.coolc.representations.jbc.JbcClass;
+import net.alexweinert.coolc.representations.jbc.JbcClass.Builder;
 import net.alexweinert.coolc.representations.jbc.MethodEntry;
 import net.alexweinert.coolc.representations.jbc.instructions.OpCode;
 
@@ -29,6 +30,8 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
                 builder.addField(this.buildField(builder, attr));
             }
 
+            builder.addMethod(this.buildInitMethod(builder, byteClass.getParent()));
+
             for (Method method : byteClass.getMethods()) {
                 final MethodEntry jbcMethod = buildMethod(builder, method);
                 builder.addMethod(jbcMethod);
@@ -42,6 +45,37 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
         }
 
         return returnValue;
+    }
+
+    private MethodEntry buildInitMethod(Builder builder, String parent) {
+        final char nameIndex = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant("<init>"));
+        final char descIndex = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant("()V"));
+
+        final MethodEntry.Builder methodBuilder = new MethodEntry.Builder(nameIndex, descIndex);
+
+        final OpCodeAssembler assembler = new OpCodeAssembler(new JbcEncoding());
+        assembler.addALoad((char) 0);
+
+        final char parentInitDeclId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant("()V"));
+        final char parentInitNameId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant("<init>"));
+        final char parentInitNameAndDeclId = builder.addConstant(builder.getConstantBuilder().buildNameAndType(
+                parentInitNameId, parentInitDeclId));
+
+        final char parentNameId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant("Cool" + parent));
+        final char parentClassRefId = builder
+                .addConstant(builder.getConstantBuilder().buildClassConstant(parentNameId));
+
+        final char parentInitMethodRefId = builder.addConstant(builder.getConstantBuilder().buildMethodRef(
+                parentClassRefId, parentInitNameAndDeclId));
+        assembler.addInvokeSpecial(parentInitMethodRefId);
+
+        assembler.addReturn();
+        final char codeId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant("Code"));
+        final CodeAttribute.Builder codeBuilder = new CodeAttribute.Builder(codeId, (char) 1, (char) 1);
+        codeBuilder.setCode(assembler.assemble());
+        methodBuilder.addAttribute(codeBuilder.build(new JbcEncoding()));
+
+        return methodBuilder.build();
     }
 
     private MethodEntry buildMainMethod(JbcClass.Builder builder) {

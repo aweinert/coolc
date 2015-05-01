@@ -167,6 +167,10 @@ public class OpCodeAssembler {
 
     public void addNop(String label) {
         this.registerLabel(label);
+        this.addNop();
+    }
+
+    public void addNop() {
         final OpCode opCode = opCodeFactory.buildNop();
         this.opCodes.add(opCode);
         this.positions.add(this.byteCounter);
