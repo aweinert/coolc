@@ -12,6 +12,8 @@ public class MethodEntry {
         private final char descriptorIndex;
         private final List<AttributeEntry> attributes = new LinkedList<>();
 
+        private boolean isStatic = false;
+
         public Builder(char nameIndex, char descriptorIndex) {
             this.nameIndex = nameIndex;
             this.descriptorIndex = descriptorIndex;
@@ -23,21 +25,31 @@ public class MethodEntry {
         }
 
         public MethodEntry build() {
-            return new MethodEntry(nameIndex, descriptorIndex, attributes);
+            return new MethodEntry(nameIndex, descriptorIndex, isStatic, attributes);
+        }
+
+        public void setStatic(boolean isStatic) {
+            this.isStatic = isStatic;
         }
     }
 
     private final char nameIndex;
     private final char descriptorIndex;
+    private final boolean isStatic;
     private final List<AttributeEntry> attributes;
 
-    private MethodEntry(char nameIndex, char descriptorIndex, List<AttributeEntry> attributes) {
+    private MethodEntry(char nameIndex, char descriptorIndex, boolean isStatic, List<AttributeEntry> attributes) {
         this.nameIndex = nameIndex;
         this.descriptorIndex = descriptorIndex;
+        this.isStatic = isStatic;
         this.attributes = attributes;
     }
 
     public void encode(JbcEncoder jbcEncoder) {
-        jbcEncoder.encodeMethod(this.nameIndex, this.descriptorIndex, this.attributes);
+        if (this.isStatic) {
+            jbcEncoder.encodeStaticMethod(this.nameIndex, this.descriptorIndex, this.attributes);
+        } else {
+            jbcEncoder.encodeMethod(this.nameIndex, this.descriptorIndex, this.attributes);
+        }
     }
 }

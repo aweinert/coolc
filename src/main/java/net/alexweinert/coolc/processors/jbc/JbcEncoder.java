@@ -103,6 +103,22 @@ public class JbcEncoder {
         }
     }
 
+    public void encodeStaticMethod(char nameIndex, char descriptorIndex, List<AttributeEntry> attributes) {
+        // Access flags
+        this.builder.appendContent((byte) 0x00);
+        // 0x08 (static) | 0x01 (public) = 0x09
+        this.builder.appendContent((byte) 0x09);
+
+        this.builder.appendContent(this.splitter.splitChar((char) (nameIndex + 1)));
+        this.builder.appendContent(this.splitter.splitChar((char) (descriptorIndex + 1)));
+
+        assert attributes.size() < Character.MAX_VALUE : "Too many attributes for Method";
+        this.builder.appendContent(this.splitter.splitChar((char) attributes.size()));
+        for (AttributeEntry attribute : attributes) {
+            attribute.encode(this);
+        }
+    }
+
     public void encodeMethod(char nameIndex, char descriptorIndex, List<AttributeEntry> attributes) {
         // Access flags
         this.builder.appendContent((byte) 0x00);
@@ -116,7 +132,6 @@ public class JbcEncoder {
         for (AttributeEntry attribute : attributes) {
             attribute.encode(this);
         }
-
     }
 
     public void encodeCodeAttribute(CodeAttribute codeAttribute) {
