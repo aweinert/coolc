@@ -81,7 +81,7 @@ class FunctionCallInstruction extends AssignInstruction {
     @Override
     public void acceptVisitor(Visitor visitor) {
         visitor.visitFunctionCallInstruction(this.getLabel(), this.getTarget(), this.dispatchVariable,
-                this.dispatchVariableType, this.methodId, this.arguments);
+                this.dispatchVariableType, this.methodId, "IO", this.arguments, this.argumentTypes);
     }
 
 }

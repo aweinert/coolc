@@ -263,7 +263,8 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitFunctionCallInstruction(String label, String target, String dispatchVariable,
-            String dispatchVariableType, String methodId, List<String> arguments) {
+            String dispatchVariableType, String methodId, String returnType, List<String> arguments,
+            List<String> argumentTypes) {
         if (label != null) {
             this.assembler.addALoad(label, this.variableNameToNumber.get(dispatchVariable));
         } else {
@@ -272,8 +273,17 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         for (String argumentVariable : arguments) {
             this.assembler.addALoad(this.variableNameToNumber.get(argumentVariable));
         }
+        final StringBuilder methodDeclBuilder = new StringBuilder("(");
+        for (String argumentType : argumentTypes) {
+            methodDeclBuilder.append("L");
+            methodDeclBuilder.append("Cool" + argumentType);
+            methodDeclBuilder.append(";");
+        }
+        methodDeclBuilder.append(")L");
+        methodDeclBuilder.append("Cool" + returnType);
+        methodDeclBuilder.append(";");
         final char methodRefId = this.addMethodRefConst("Cool" + dispatchVariableType, methodId,
-                "(LCoolString;)LCoolIO;");
+                methodDeclBuilder.toString());
         this.assembler.addInvokeVirtual(methodRefId);
         this.assembler.addAStore(this.variableNameToNumber.get(target));
     }
