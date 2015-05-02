@@ -8,7 +8,7 @@ import com.beust.jcommander.Parameter;
 
 public class Commandline {
     @Parameter(names = "--backend", description = "The formalism to be unparsed to, one of [jar,java,bytecode]")
-    public String backend = "jar";
+    public String backend = "jbc";
 
     @Parameter(description = "<input-files>")
     public List<String> inputFiles = new LinkedList<>();
