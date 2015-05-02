@@ -106,7 +106,6 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
         final char mainMethodRefId = builder.addConstant(builder.getConstantBuilder().buildMethodRef(classRefIndex,
                 mainMethodTypeId));
         assembler.addInvokeVirtual(mainMethodRefId);
-        assembler.addPop();
         assembler.addReturn();
 
         final char codeStringId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant("Code"));
