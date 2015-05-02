@@ -113,17 +113,19 @@ public abstract class LabeledInstruction {
         }
 
         public LabeledInstruction buildFunctionCall(String resultVariable, String dispatchVariable,
-                String dispatchVariableType, String functionId, List<String> arguments, List<String> argumentTypes) {
+                String dispatchVariableType, String functionId, String returnType, List<String> arguments,
+                List<String> argumentTypes) {
             final LabeledInstruction returnValue = new FunctionCallInstruction(this.label, resultVariable,
-                    dispatchVariable, dispatchVariableType, functionId, arguments, argumentTypes);
+                    dispatchVariable, dispatchVariableType, functionId, returnType, arguments, argumentTypes);
             this.label = null;
             return returnValue;
         }
 
         public LabeledInstruction buildStaticFunctionCall(String resultVariable, String dispatchVariable,
-                String staticType, String functionId, List<String> arguments, List<String> argumentTypes) {
+                String staticType, String functionId, String returnType, List<String> arguments,
+                List<String> argumentTypes) {
             final LabeledInstruction returnValue = new StaticFunctionCallInstruction(this.label, resultVariable,
-                    dispatchVariable, staticType, functionId, arguments, argumentTypes);
+                    dispatchVariable, staticType, functionId, returnType, arguments, argumentTypes);
             this.label = null;
             return returnValue;
         }

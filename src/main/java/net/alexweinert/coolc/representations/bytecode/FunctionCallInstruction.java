@@ -7,15 +7,18 @@ class FunctionCallInstruction extends AssignInstruction {
     private final String dispatchVariable;
     private final String dispatchVariableType;
     private final String methodId;
+    private final String returnType;
     private final List<String> arguments;
     private final List<String> argumentTypes;
 
     public FunctionCallInstruction(String label, String resultVariable, String dispatchVariable,
-            String dispatchVariableType, String functionId, List<String> arguments, List<String> argumentTypes) {
+            String dispatchVariableType, String functionId, String returnType, List<String> arguments,
+            List<String> argumentTypes) {
         super(label, resultVariable);
         this.dispatchVariable = dispatchVariable;
         this.dispatchVariableType = dispatchVariableType;
         this.methodId = functionId;
+        this.returnType = returnType;
         this.arguments = arguments;
         this.argumentTypes = argumentTypes;
     }
@@ -81,7 +84,7 @@ class FunctionCallInstruction extends AssignInstruction {
     @Override
     public void acceptVisitor(Visitor visitor) {
         visitor.visitFunctionCallInstruction(this.getLabel(), this.getTarget(), this.dispatchVariable,
-                this.dispatchVariableType, this.methodId, "IO", this.arguments, this.argumentTypes);
+                this.dispatchVariableType, this.methodId, this.returnType, this.arguments, this.argumentTypes);
     }
 
 }

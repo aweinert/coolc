@@ -338,7 +338,7 @@ public class CoolBackendVisitor<T, U> extends Visitor {
             argumentTypes.add(arg.getType().toString());
         }
         this.builder.functionCall(resultVariable, dispatchVariable, functionCall.getDispatchExpression().getType()
-                .toString(), functionCall.getFunctionIdentifier(), arguments, argumentTypes);
+                .toString(), functionCall.getFunctionIdentifier(), functionCall.getType(), arguments, argumentTypes);
         this.variables.push(resultVariable);
     }
 
@@ -357,7 +357,7 @@ public class CoolBackendVisitor<T, U> extends Visitor {
             argumentTypes.add(arg.getType().toString());
         }
         this.builder.staticFunctionCall(resultVariable, dispatchVariable, staticFunctionCall.getFunctionIdentifier(),
-                staticType, arguments, argumentTypes);
+                staticType, staticFunctionCall.getType(), arguments, argumentTypes);
         this.variables.push(resultVariable);
     }
 
