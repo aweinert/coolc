@@ -228,16 +228,16 @@ public class FromCoolBuilder implements CoolBackendBuilder<ByteClass, List<ByteC
 
     @Override
     public void functionCall(String resultVariable, String dispatchVariable, String dispatchVariableType,
-            IdSymbol functionIdentifier, List<String> arguments) {
+            IdSymbol functionIdentifier, List<String> arguments, List<String> argumentTypes) {
         this.methodBuilder.addInstruction(this.instructionFactory.buildFunctionCall(resultVariable, dispatchVariable,
-                dispatchVariableType, functionIdentifier.getString(), arguments));
+                dispatchVariableType, functionIdentifier.getString(), arguments, argumentTypes));
     }
 
     @Override
     public void staticFunctionCall(String resultVariable, String dispatchVariable, IdSymbol functionIdentifier,
-            IdSymbol staticType, List<String> arguments) {
+            IdSymbol staticType, List<String> arguments, List<String> argumentTypes) {
         this.methodBuilder.addInstruction(this.instructionFactory.buildStaticFunctionCall(resultVariable,
-                dispatchVariable, staticType.getString(), functionIdentifier.getString(), arguments));
+                dispatchVariable, staticType.getString(), functionIdentifier.getString(), arguments, argumentTypes));
     }
 
     @Override

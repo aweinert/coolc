@@ -8,14 +8,16 @@ class FunctionCallInstruction extends AssignInstruction {
     private final String dispatchVariableType;
     private final String methodId;
     private final List<String> arguments;
+    private final List<String> argumentTypes;
 
     public FunctionCallInstruction(String label, String resultVariable, String dispatchVariable,
-            String dispatchVariableType, String functionId, List<String> arguments) {
+            String dispatchVariableType, String functionId, List<String> arguments, List<String> argumentTypes) {
         super(label, resultVariable);
         this.dispatchVariable = dispatchVariable;
         this.dispatchVariableType = dispatchVariableType;
         this.methodId = functionId;
         this.arguments = arguments;
+        this.argumentTypes = argumentTypes;
     }
 
     @Override

@@ -7,8 +7,8 @@ class StaticFunctionCallInstruction extends FunctionCallInstruction {
     private final String staticType;
 
     public StaticFunctionCallInstruction(String label, String resultVariable, String dispatchVariable,
-            String staticType, String functionId, List<String> arguments) {
-        super(label, resultVariable, dispatchVariable, staticType, functionId, arguments);
+            String staticType, String functionId, List<String> arguments, List<String> argumentTypes) {
+        super(label, resultVariable, dispatchVariable, staticType, functionId, arguments, argumentTypes);
         this.staticType = staticType;
     }
 

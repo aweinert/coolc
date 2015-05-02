@@ -17,6 +17,7 @@ import net.alexweinert.coolc.representations.cool.ast.Case;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Division;
 import net.alexweinert.coolc.representations.cool.ast.Equality;
+import net.alexweinert.coolc.representations.cool.ast.Expression;
 import net.alexweinert.coolc.representations.cool.ast.FunctionCall;
 import net.alexweinert.coolc.representations.cool.ast.If;
 import net.alexweinert.coolc.representations.cool.ast.IntConst;
@@ -332,8 +333,12 @@ public class CoolBackendVisitor<T, U> extends Visitor {
 
         final String dispatchVariable = this.variables.pop();
         final String resultVariable = this.builder.declareVariable(functionCall.getType());
+        final List<String> argumentTypes = new LinkedList<>();
+        for (Expression arg : functionCall.getArguments()) {
+            argumentTypes.add(arg.getType().toString());
+        }
         this.builder.functionCall(resultVariable, dispatchVariable, functionCall.getDispatchExpression().getType()
-                .toString(), functionCall.getFunctionIdentifier(), arguments);
+                .toString(), functionCall.getFunctionIdentifier(), arguments, argumentTypes);
         this.variables.push(resultVariable);
     }
 
@@ -347,8 +352,12 @@ public class CoolBackendVisitor<T, U> extends Visitor {
         final String dispatchVariable = this.variables.pop();
         final String resultVariable = this.builder.declareVariable(staticFunctionCall.getType());
         final IdSymbol staticType = staticFunctionCall.getStaticType();
+        final List<String> argumentTypes = new LinkedList<>();
+        for (Expression arg : staticFunctionCall.getArguments()) {
+            argumentTypes.add(arg.getType().toString());
+        }
         this.builder.staticFunctionCall(resultVariable, dispatchVariable, staticFunctionCall.getFunctionIdentifier(),
-                staticType, arguments);
+                staticType, arguments, argumentTypes);
         this.variables.push(resultVariable);
     }
 
