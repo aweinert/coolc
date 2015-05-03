@@ -3,11 +3,14 @@ package net.alexweinert.coolc.processors;
 import java.io.Reader;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.infrastructure.Compiler;
 import net.alexweinert.coolc.infrastructure.Frontend;
+import net.alexweinert.coolc.infrastructure.Processor;
+import net.alexweinert.coolc.infrastructure.ProcessorException;
 import net.alexweinert.coolc.processors.bytecode.fromcool.FromCoolBuilderFactory;
 import net.alexweinert.coolc.processors.bytecode.tojbc.BytecodeToJbcProcessor;
 import net.alexweinert.coolc.processors.cool.frontend.CoolParser;
@@ -162,9 +165,14 @@ public abstract class ProcessorBuilder<T> {
             super(frontend);
         }
 
-        public Compiler<File> fileToHarddrive(String outputFolder) {
-            // TODO return this.frontend.append(new FileDumper(Paths.get(outputFolder)));
-            return null;
+        public Compiler<Collection<File>> fileToHarddrive(String outputFolder) {
+            return this.frontend.append(new Processor<File, Collection<File>>() {
+
+                @Override
+                public Collection<File> process(File input) throws ProcessorException {
+                    return Collections.singleton(input);
+                }
+            }).append(new FileDumper(Paths.get(outputFolder)));
         }
     }
 
