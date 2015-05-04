@@ -323,4 +323,11 @@ public class JbcEncoder {
     public void encodePop() {
         this.builder.appendContent((byte) 0x57);
     }
+
+    public void encodeFieldRefConstant(char classRefId, char nameAndTypeRefId) {
+        this.builder.appendContent((byte) 0x09);
+        this.builder.appendContent(this.splitter.splitChar((char) (classRefId + 1)));
+        this.builder.appendContent(this.splitter.splitChar((char) (nameAndTypeRefId + 1)));
+
+    }
 }

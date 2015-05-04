@@ -20,6 +20,10 @@ public abstract class ConstantPoolEntry {
             return new MethodRef(classRefIndex, nameAndTypeIndex);
         }
 
+        public ConstantPoolEntry buildFieldRef(char classRefId, char nameAndTypeRefId) {
+            return new FieldRefConstant(classRefId, nameAndTypeRefId);
+        }
+
         public ConstantPoolEntry buildStringConstant(char utf8Index) {
             return new StringConstant(utf8Index);
         }
