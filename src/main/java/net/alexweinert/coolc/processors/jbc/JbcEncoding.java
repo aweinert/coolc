@@ -164,4 +164,12 @@ public class JbcEncoding {
         return 1;
     }
 
+    public int getGetFieldLength() {
+        return 3;
+    }
+
+    public int getPutFieldLength() {
+        return 3;
+    }
+
 }

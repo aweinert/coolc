@@ -114,6 +114,14 @@ public abstract class OpCode {
             return new Pop();
         }
 
+        public OpCode buildGetField(char fieldRefId) {
+            return new GetField(fieldRefId);
+        }
+
+        public OpCode buildPutField(char fieldRefId) {
+            return new PutField(fieldRefId);
+        }
+
     }
 
     public abstract void encode(JbcEncoder encoder);

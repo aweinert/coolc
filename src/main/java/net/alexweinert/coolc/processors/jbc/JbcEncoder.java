@@ -330,4 +330,14 @@ public class JbcEncoder {
         this.builder.appendContent(this.splitter.splitChar((char) (nameAndTypeRefId + 1)));
 
     }
+
+    public void encodePutField(char fieldRefId) {
+        this.builder.appendContent((byte) 0xb5);
+        this.builder.appendContent(this.splitter.splitChar((char) (fieldRefId + 1)));
+    }
+
+    public void encodeGetField(char fieldRefId) {
+        this.builder.appendContent((byte) 0xb4);
+        this.builder.appendContent(this.splitter.splitChar((char) (fieldRefId + 1)));
+    }
 }
