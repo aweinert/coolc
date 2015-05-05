@@ -59,4 +59,13 @@ public class ByteClass {
     public List<Method> getMethods() {
         return methods;
     }
+
+    public Attribute getAttribute(String id) {
+        for (Attribute attr : this.attributes) {
+            if (attr.getId().equals(id)) {
+                return attr;
+            }
+        }
+        return null;
+    }
 }

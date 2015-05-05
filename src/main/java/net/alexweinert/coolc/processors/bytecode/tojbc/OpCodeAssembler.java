@@ -339,4 +339,32 @@ public class OpCodeAssembler {
         this.byteCounter += opCode.getLength(this.encoding);
     }
 
+    public void addPutField(String label, char fieldRefId) {
+        this.registerLabel(label);
+        this.addPutField(fieldRefId);
+    }
+
+    public void addPutField(char fieldRefId) {
+        final OpCode opCode = opCodeFactory.buildPutField(fieldRefId);
+        this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
+        this.byteCounter += opCode.getLength(this.encoding);
+    }
+
+    public void addGetField(String label, char fieldRefId) {
+        this.registerLabel(label);
+        this.addGetField(fieldRefId);
+    }
+
+    public void addGetField(char fieldRefId) {
+        final OpCode opCode = opCodeFactory.buildGetField(fieldRefId);
+        this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
+        this.byteCounter += opCode.getLength(this.encoding);
+    }
+
+    public void addAStore(String label, Character character) {
+        this.registerLabel(label);
+        this.addAStore(character);
+    }
 }

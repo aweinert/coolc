@@ -33,7 +33,7 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
             builder.addMethod(this.buildInitMethod(builder, byteClass.getParent()));
 
             for (Method method : byteClass.getMethods()) {
-                final MethodEntry jbcMethod = buildMethod(builder, method);
+                final MethodEntry jbcMethod = buildMethod(builder, byteClass, method);
                 builder.addMethod(jbcMethod);
             }
 
@@ -123,7 +123,7 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
         return field;
     }
 
-    private MethodEntry buildMethod(final JbcClass.Builder builder, Method method) {
+    private MethodEntry buildMethod(final JbcClass.Builder builder, ByteClass enclosingClass, Method method) {
         final char nameIndex = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant(method.getId()));
 
         final String descriptor = buildMethodDescriptor(method);
@@ -134,8 +134,8 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
                 .getConstantBuilder().buildUtf8Constant("Code")), (char) 255, (char) (method.getParameters().size()
                 + method.getLocalVars().size() + 1));
 
-        final BytecodeOpToJbcOpConverter converter = BytecodeOpToJbcOpConverter.create(method.getParameters(),
-                method.getLocalVars(), builder, JbcEncoding.createStandardEncoding());
+        final BytecodeOpToJbcOpConverter converter = BytecodeOpToJbcOpConverter.create(enclosingClass,
+                method.getParameters(), method.getLocalVars(), builder, JbcEncoding.createStandardEncoding());
         final List<OpCode> opCodes = converter.convert(method.getInstruction());
         codeBuilder.setCode(opCodes);
 
