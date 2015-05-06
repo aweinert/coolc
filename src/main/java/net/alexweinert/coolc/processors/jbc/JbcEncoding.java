@@ -172,4 +172,8 @@ public class JbcEncoding {
         return 3;
     }
 
+    public int getSwapLength() {
+        return 1;
+    }
+
 }

@@ -73,6 +73,7 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
         for (Attribute attr : attributes) {
 
             assembler.addALoad((char) 0);
+            assembler.addALoad((char) 0);
 
             final char attrInitMethodNameId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant(
                     attr.getInitMethodId()));
@@ -101,7 +102,7 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
 
         assembler.addReturn();
         final char codeId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant("Code"));
-        final CodeAttribute.Builder codeBuilder = new CodeAttribute.Builder(codeId, (char) 1, (char) 1);
+        final CodeAttribute.Builder codeBuilder = new CodeAttribute.Builder(codeId, (char) 16, (char) 1);
         codeBuilder.setCode(assembler.assemble());
         methodBuilder.addAttribute(codeBuilder.build(new JbcEncoding()));
 
@@ -148,7 +149,7 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
     private FieldEntry buildField(final JbcClass.Builder builder, Attribute attr) {
         final char nameIndex = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant(attr.getId()));
         final char descriptorIndex = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant(
-                "L" + attr.getType() + ";"));
+                "LCool" + attr.getType() + ";"));
         final FieldEntry field = builder.getFieldBuilder(nameIndex, descriptorIndex).build();
         return field;
     }

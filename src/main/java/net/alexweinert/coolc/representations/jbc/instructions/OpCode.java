@@ -122,6 +122,10 @@ public abstract class OpCode {
             return new PutField(fieldRefId);
         }
 
+        public OpCode buildSwap() {
+            return new Swap();
+        }
+
     }
 
     public abstract void encode(JbcEncoder encoder);

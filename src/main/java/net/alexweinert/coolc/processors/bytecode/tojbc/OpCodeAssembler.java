@@ -367,4 +367,11 @@ public class OpCodeAssembler {
         this.registerLabel(label);
         this.addAStore(character);
     }
+
+    public void addSwap() {
+        final OpCode opCode = opCodeFactory.buildSwap();
+        this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
+        this.byteCounter += opCode.getLength(this.encoding);
+    }
 }

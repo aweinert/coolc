@@ -412,10 +412,9 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         if (this.variableNameToNumber.containsKey(id)) {
             this.assembler.addALoad(label, this.variableNameToNumber.get(id));
         } else {
-            this.assembler.addGetField(
-                    label,
-                    this.addFieldRefConst("Cool" + this.enclosingClass.getId(), id, "Cool"
-                            + this.enclosingClass.getAttribute(id).getType()));
+            this.assembler.addALoad(label, (char) 0);
+            this.assembler.addGetField(this.addFieldRefConst("Cool" + this.enclosingClass.getId(), id, "Cool"
+                    + this.enclosingClass.getAttribute(id).getType()));
         }
     }
 
@@ -423,6 +422,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         if (this.variableNameToNumber.containsKey(id)) {
             this.assembler.addALoad(this.variableNameToNumber.get(id));
         } else {
+            this.assembler.addALoad((char) 0);
             this.assembler.addGetField(this.addFieldRefConst("Cool" + this.enclosingClass.getId(), id, "LCool"
                     + this.enclosingClass.getAttribute(id).getType() + ";"));
         }
@@ -433,10 +433,10 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         if (this.variableNameToNumber.containsKey(id)) {
             this.assembler.addAStore(label, this.variableNameToNumber.get(id));
         } else {
-            this.assembler.addPutField(
-                    label,
-                    this.addFieldRefConst("Cool" + this.enclosingClass.getId(), id, "Cool"
-                            + this.enclosingClass.getAttribute(id).getType()));
+            this.assembler.addALoad(label, (char) 0);
+            this.assembler.addSwap();
+            this.assembler.addPutField(this.addFieldRefConst("Cool" + this.enclosingClass.getId(), id, "Cool"
+                    + this.enclosingClass.getAttribute(id).getType()));
         }
     }
 
@@ -444,6 +444,8 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         if (this.variableNameToNumber.containsKey(id)) {
             this.assembler.addAStore(this.variableNameToNumber.get(id));
         } else {
+            this.assembler.addALoad((char) 0);
+            this.assembler.addSwap();
             this.assembler.addPutField(this.addFieldRefConst("Cool" + this.enclosingClass.getId(), id, "LCool"
                     + this.enclosingClass.getAttribute(id).getType() + ";"));
         }
