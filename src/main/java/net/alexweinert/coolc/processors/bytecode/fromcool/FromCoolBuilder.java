@@ -50,12 +50,12 @@ public class FromCoolBuilder implements CoolBackendBuilder<ByteClass, List<ByteC
     public void beginAttributeDefinition(IdSymbol typeSymbol, IdSymbol idSymbol) {
         final String initializerId = this.nameGen.getIdForInitializer(typeSymbol, idSymbol);
         this.classBuilder.addAttribute(new Attribute(typeSymbol.getString(), idSymbol.getString(), initializerId));
-        this.methodBuilder = new Method.Builder(null, initializerId);
+        this.methodBuilder = new Method.Builder(typeSymbol.getString(), initializerId);
     }
 
     @Override
     public void endAttributeDefinition(String variable) {
-        this.methodBuilder.addInstruction(instructionFactory.buildReturn(null));
+        this.methodBuilder.addInstruction(instructionFactory.buildReturn(variable));
         this.classBuilder.addMethod(this.methodBuilder.build());
         this.methodBuilder = null;
     }
