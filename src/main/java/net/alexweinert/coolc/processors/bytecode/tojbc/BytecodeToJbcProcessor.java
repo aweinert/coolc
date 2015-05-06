@@ -30,7 +30,8 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
                 builder.addField(this.buildField(builder, attr));
             }
 
-            builder.addMethod(this.buildInitMethod(builder, byteClass.getParent()));
+            builder.addMethod(this.buildInitMethod(builder, byteClass.getId(), byteClass.getParent(),
+                    byteClass.getAttributes()));
 
             for (Method method : byteClass.getMethods()) {
                 final MethodEntry jbcMethod = buildMethod(builder, byteClass, method);
@@ -47,7 +48,7 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
         return returnValue;
     }
 
-    private MethodEntry buildInitMethod(Builder builder, String parent) {
+    private MethodEntry buildInitMethod(Builder builder, String classId, String parent, List<Attribute> attributes) {
         final char nameIndex = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant("<init>"));
         final char descIndex = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant("()V"));
 
@@ -68,6 +69,35 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
         final char parentInitMethodRefId = builder.addConstant(builder.getConstantBuilder().buildMethodRef(
                 parentClassRefId, parentInitNameAndDeclId));
         assembler.addInvokeSpecial(parentInitMethodRefId);
+
+        for (Attribute attr : attributes) {
+
+            assembler.addALoad((char) 0);
+
+            final char attrInitMethodNameId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant(
+                    attr.getInitMethodId()));
+            final char attrInitMethodTypeId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant(
+                    "()LCool" + attr.getType() + ";"));
+            final char attrInitNameAndDeclId = builder.addConstant(builder.getConstantBuilder().buildNameAndType(
+                    attrInitMethodNameId, attrInitMethodTypeId));
+
+            final char classNameId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant(
+                    "Cool" + classId));
+            final char classRefId = builder.addConstant(builder.getConstantBuilder().buildClassConstant(classNameId));
+
+            final char attrInitMethodIdRef = builder.addConstant(builder.getConstantBuilder().buildMethodRef(
+                    classRefId, attrInitNameAndDeclId));
+            assembler.addInvokeVirtual(attrInitMethodIdRef);
+
+            final char attrNameId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant(attr.getId()));
+            final char attrTypeId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant(
+                    "LCool" + attr.getType() + ";"));
+            final char attrNameAndDeclId = builder.addConstant(builder.getConstantBuilder().buildNameAndType(
+                    attrNameId, attrTypeId));
+            final char attributeFieldRefId = builder.addConstant(builder.getConstantBuilder().buildFieldRef(classRefId,
+                    attrNameAndDeclId));
+            assembler.addPutField(attributeFieldRefId);
+        }
 
         assembler.addReturn();
         final char codeId = builder.addConstant(builder.getConstantBuilder().buildUtf8Constant("Code"));
