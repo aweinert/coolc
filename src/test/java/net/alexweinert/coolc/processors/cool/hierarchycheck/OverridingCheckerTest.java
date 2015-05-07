@@ -104,15 +104,12 @@ public class OverridingCheckerTest {
         final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
 
         // TODO: Mock hierarchy, declaredSignatures
-        final ClassHierarchy hierarchy = ClassHierarchyFactory.buildHierarchy(testProgram);
         final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
         declaredSignatures.put(classOne.getIdentifier(), DeclaredClassSignature.create(classOne));
         declaredSignatures.put(classTwo.getIdentifier(), DeclaredClassSignature.create(classTwo));
         final Program receivedProgram = OverridingChecker.checkOverriding(testProgram, err);
 
-        final Program expectedProgram = factory.program(classOne, factory.classNode("ClassTwo", "ClassOne"));
-
-        Assert.assertEquals(expectedProgram, receivedProgram);
+        Assert.assertEquals(testProgram, receivedProgram);
         Mockito.verify(err).reportWronglyOverriddenMethod(methodDefOne, methodDefTwo);
         Mockito.verifyNoMoreInteractions(err);
     }
