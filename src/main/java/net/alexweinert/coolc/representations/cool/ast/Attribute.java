@@ -90,4 +90,8 @@ public class Attribute extends Feature {
         return true;
     }
 
+    public String toString() {
+        return this.name.toString() + " : " + this.type_decl.toString() + " <- " + this.init.toString();
+    }
+
 }
