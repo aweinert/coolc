@@ -30,6 +30,7 @@ import net.alexweinert.coolc.processors.jbc.JbcToFileProcessor;
 import net.alexweinert.coolc.processors.util.UsageFrontend;
 import net.alexweinert.coolc.representations.bytecode.ByteClass;
 import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
 import net.alexweinert.coolc.representations.io.File;
 import net.alexweinert.coolc.representations.java.JavaProgram;
 import net.alexweinert.coolc.representations.jbc.JbcClass;
@@ -94,7 +95,13 @@ public abstract class ProcessorBuilder<T> {
             newFrontend = newFrontend.append(new CoolHierarchyChecker());
             newFrontend = newFrontend.append(new SelfTypeRemover());
 
-            newFrontend = newFrontend.append(new CoolHierarchyChecker());
+            newFrontend = newFrontend.append(new Processor<Program, Program>() {
+                @Override
+                public Program process(Program input) throws ProcessorException {
+                    input.setHierarchy(ClassHierarchy.create(input));
+                    return input;
+                }
+            });
             newFrontend = newFrontend.append(new CoolTypeChecker(output));
             return new BytecodeCompilerBuilder(newFrontend.append(new CoolBackendProcessor<>(
                     new FromCoolBuilderFactory())));
