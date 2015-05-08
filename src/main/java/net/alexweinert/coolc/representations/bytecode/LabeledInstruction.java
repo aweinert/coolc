@@ -155,6 +155,12 @@ public abstract class LabeledInstruction {
             return returnValue;
         }
 
+        public LabeledInstruction buildNop() {
+            final LabeledInstruction returnValue = new NopInstruction(this.label);
+            this.label = null;
+            return returnValue;
+        }
+
     }
 
     private final String label;

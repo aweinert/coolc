@@ -531,4 +531,13 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         return stringRefId;
     }
 
+    @Override
+    public void visitNopInstruction(String label) {
+        if (label != null) {
+            this.assembler.addNop(label);
+        } else {
+            this.assembler.addNop();
+        }
+    }
+
 }

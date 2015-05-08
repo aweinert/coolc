@@ -270,7 +270,8 @@ public class FromCoolBuilder implements CoolBackendBuilder<ByteClass, List<ByteC
     @Override
     public void endTypecase() {
         // TODO Properly handle non-matches, for now, just pop the final (catch-all) label
-        this.labels.pop();
+        this.instructionFactory.setLabel(this.labels.pop());
+        this.methodBuilder.addInstruction(this.instructionFactory.buildNop());
         final String afterLabel = this.labels.pop();
         this.instructionFactory.setLabel(afterLabel);
     }

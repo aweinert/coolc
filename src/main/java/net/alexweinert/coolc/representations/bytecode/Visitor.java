@@ -49,4 +49,6 @@ public class Visitor {
 
     public void visitBranchInstruction(String label, String target) {}
 
+    public void visitNopInstruction(String label) {}
+
 }
