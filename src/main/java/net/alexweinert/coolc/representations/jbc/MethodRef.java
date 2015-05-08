@@ -18,4 +18,34 @@ public class MethodRef extends ConstantPoolEntry {
         jbcEncoder.encodeMethodRef(this.classRefIndex, this.nameAndTypeIndex);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + classRefIndex;
+        result = prime * result + nameAndTypeIndex;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MethodRef other = (MethodRef) obj;
+        if (classRefIndex != other.classRefIndex) {
+            return false;
+        }
+        if (nameAndTypeIndex != other.nameAndTypeIndex) {
+            return false;
+        }
+        return true;
+    }
+
 }
