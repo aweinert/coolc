@@ -176,4 +176,8 @@ public class JbcEncoding {
         return 1;
     }
 
+    public int getLdcWLength() {
+        return 3;
+    }
+
 }

@@ -344,4 +344,9 @@ public class JbcEncoder {
     public void encodeSwap() {
         this.builder.appendContent((byte) 0x5f);
     }
+
+    public void encodeLdcW(char constRefId) {
+        this.builder.appendContent((byte) 0x13);
+        this.builder.appendContent(this.splitter.splitChar((char) (constRefId + 1)));
+    }
 }

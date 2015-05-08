@@ -71,7 +71,7 @@ public abstract class OpCode {
         }
 
         public OpCode buildLdc(char stringRef) {
-            return new LdcInstruction(stringRef);
+            return new LdcWInstruction(stringRef);
         }
 
         public OpCode buildIfEq(char target) {
