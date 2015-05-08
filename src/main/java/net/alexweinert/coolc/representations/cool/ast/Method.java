@@ -122,9 +122,9 @@ public class Method extends Feature {
             }
         }
 
-        builder.append(") {\n\t");
-        builder.append(this.expr);
-        builder.append("\n}");
+        builder.append(") {...}");
+        // builder.append(this.expr);
+        // builder.append("\n}");
         return builder.toString();
     }
 }

@@ -77,4 +77,8 @@ public class Formal extends TreeNode {
         }
         return true;
     }
+
+    public String toString() {
+        return this.name.toString() + " : " + this.type_decl.toString();
+    }
 }
