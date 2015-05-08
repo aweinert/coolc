@@ -313,6 +313,7 @@ public class CoolBackendVisitor<T, U> extends Visitor {
     public void visitCasePreorder(Case caseNode) {
         // Current layout of the stack: [..., expressionVar, resultVariable]
         final String expressionVar = this.variables.get(this.variables.size() - 2);
+        this.builder.declareVariable(caseNode.getDeclaredType(), caseNode.getVariableIdentifier().getString());
         this.builder.beginCase(expressionVar, caseNode.getDeclaredType(), caseNode.getVariableIdentifier());
     }
 
