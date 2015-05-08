@@ -2,6 +2,7 @@ package net.alexweinert.coolc.processors.bytecode.tojbc;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.alexweinert.coolc.infrastructure.Processor;
@@ -33,8 +34,9 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
             builder.addMethod(this.buildInitMethod(builder, byteClass.getId(), byteClass.getParent(),
                     byteClass.getAttributes()));
 
+            final ByteClass enclosingClass = this.buildEnclosingClass(byteClass, input);
             for (Method method : byteClass.getMethods()) {
-                final MethodEntry jbcMethod = buildMethod(builder, byteClass, method);
+                final MethodEntry jbcMethod = buildMethod(builder, enclosingClass, method);
                 builder.addMethod(jbcMethod);
             }
 
@@ -46,6 +48,40 @@ public class BytecodeToJbcProcessor extends Processor<List<ByteClass>, Collectio
         }
 
         return returnValue;
+    }
+
+    private ByteClass buildEnclosingClass(ByteClass byteClass, List<ByteClass> input) {
+        final List<Method> methods = byteClass.getMethods();
+
+        final List<Attribute> attributes = new LinkedList<>(byteClass.getAttributes());
+
+        String parentClassId = byteClass.getParent();
+        while (!parentClassId.equals("Object")) {
+            ByteClass parentClass = null;
+            for (ByteClass candidateClass : input) {
+                if (candidateClass.getId().equals(parentClassId)) {
+                    parentClass = candidateClass;
+                    break;
+                }
+            }
+
+            for (Attribute attr : parentClass.getAttributes()) {
+                boolean alreadyExists = false;
+                for (Attribute existingAttribute : attributes) {
+                    if (existingAttribute.getId().equals(attr.getId())) {
+                        alreadyExists = true;
+                        break;
+                    }
+                }
+
+                if (!alreadyExists) {
+                    attributes.add(attr);
+                }
+            }
+
+            parentClassId = parentClass.getParent();
+        }
+        return new ByteClass(byteClass.getId(), byteClass.getParent(), attributes, methods);
     }
 
     private MethodEntry buildInitMethod(Builder builder, String classId, String parent, List<Attribute> attributes) {
