@@ -108,7 +108,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitEqInstruction(String label, String target, String lhs, String rhs) {
-        final char equalsMethodRefId = addMethodRefConst("CoolObject", "equals", "(LCoolObject;)I");
+        final char equalsMethodRefId = addMethodRefConst("CoolObject", "equals", "(Ljava/lang/Object;)Z");
         final char coolBoolClassRefId = addClassRefConst("CoolBool");
         if (label != null) {
             this.assembler.addNew(label, coolBoolClassRefId);
@@ -125,7 +125,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitBoolNegInstruction(String label, String target, String arg) {
-        final char getValueMethodRefId = addMethodRefConst("CoolBool", "getValue", "()I");
+        final char getValueMethodRefId = addMethodRefConst("CoolBool", "getValue", "()Z");
 
         final char coolBoolClassRefIndex = this.addClassRefConst("CoolBool");
         if (label != null) {
@@ -150,7 +150,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
     @Override
     public void visitBranchIfFalseInstruction(String label, String target, String conditionVariable) {
-        final char getValueMethodRefId = addMethodRefConst("CoolBool", "getValue", "()I");
+        final char getValueMethodRefId = addMethodRefConst("CoolBool", "getValue", "()Z");
 
         if (label != null) {
             this.loadVariable(label, conditionVariable);
@@ -398,8 +398,10 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     }
 
     private void initializeNewInstance(String type) {
-        if (type.equals("CoolInt") || type.equals("CoolBool")) {
+        if (type.equals("CoolInt")) {
             this.assembler.addInvokeSpecial(this.addMethodRefConst(type, "<init>", "(I)V"));
+        } else if (type.equals("CoolBool")) {
+            this.assembler.addInvokeSpecial(this.addMethodRefConst(type, "<init>", "(Z)V"));
         } else if (type.equals("CoolString")) {
             this.assembler.addInvokeSpecial(this.addMethodRefConst(type, "<init>", "(Ljava/lang/String;)V"));
         } else {
