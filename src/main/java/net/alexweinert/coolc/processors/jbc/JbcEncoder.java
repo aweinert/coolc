@@ -275,7 +275,7 @@ public class JbcEncoder {
     }
 
     public void encodeIfNull(char target) {
-        this.builder.appendContent((byte) 0x6c);
+        this.builder.appendContent((byte) 0xc6);
         this.builder.appendContent(this.splitter.splitChar(target));
     }
 
