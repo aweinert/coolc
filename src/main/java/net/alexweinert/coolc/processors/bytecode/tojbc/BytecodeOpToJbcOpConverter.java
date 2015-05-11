@@ -423,8 +423,8 @@ class BytecodeOpToJbcOpConverter extends Visitor {
             this.assembler.addALoad(this.variableNameToNumber.get(id));
         } else {
             this.assembler.addALoad((char) 0);
-            this.assembler.addGetField(this.addFieldRefConst("Cool" + this.enclosingClass.getId(), id, "LCool"
-                    + this.enclosingClass.getAttribute(id).getType() + ";"));
+            this.assembler.addGetField(this.addFieldRefConst("Cool" + this.enclosingClass.getId(), id, "Cool"
+                    + this.enclosingClass.getAttribute(id).getType()));
         }
     }
 
@@ -446,14 +446,14 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         } else {
             this.assembler.addALoad((char) 0);
             this.assembler.addSwap();
-            this.assembler.addPutField(this.addFieldRefConst("Cool" + this.enclosingClass.getId(), id, "LCool"
-                    + this.enclosingClass.getAttribute(id).getType() + ";"));
+            this.assembler.addPutField(this.addFieldRefConst("Cool" + this.enclosingClass.getId(), id, "Cool"
+                    + this.enclosingClass.getAttribute(id).getType()));
         }
     }
 
     private char addFieldRefConst(String classId, String fieldId, String fieldType) {
         final char classIdRef = this.addClassRefConst(classId);
-        final char fieldIdAndTypeRef = this.addNameAndTypeConst(fieldId, fieldType);
+        final char fieldIdAndTypeRef = this.addNameAndTypeConst(fieldId, "L" + fieldType + ";");
         final ConstantPoolEntry fieldRefConst = this.classBuilder.getConstantBuilder().buildFieldRef(classIdRef,
                 fieldIdAndTypeRef);
         return this.classBuilder.addConstant(fieldRefConst);
@@ -486,10 +486,10 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         }
     }
 
-    private char addMethodRefConst(final String classId, final String methodId, final String methodType) {
+    private char addMethodRefConst(final String classId, final String methodId, final String methodDescriptor) {
         final char coolIntClassRefIndex = addClassRefConst(classId);
 
-        final char getValueMethodNameAndTypeId = addNameAndTypeConst(methodId, methodType);
+        final char getValueMethodNameAndTypeId = addNameAndTypeConst(methodId, methodDescriptor);
 
         final ConstantPoolEntry getValueMethodRef = this.classBuilder.getConstantBuilder().buildMethodRef(
                 coolIntClassRefIndex, getValueMethodNameAndTypeId);
@@ -497,10 +497,10 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         return getValueMethodRefId;
     }
 
-    private char addNameAndTypeConst(final String name, final String type) {
+    private char addNameAndTypeConst(final String name, final String descriptor) {
         final char getValueMethodNameStringId = addUtf8Const(name);
 
-        final char getValueMethodTypeStringId = addUtf8Const(type);
+        final char getValueMethodTypeStringId = addUtf8Const(descriptor);
 
         final ConstantPoolEntry getValueMethodNameAndType = this.classBuilder.getConstantBuilder().buildNameAndType(
                 getValueMethodNameStringId, getValueMethodTypeStringId);
