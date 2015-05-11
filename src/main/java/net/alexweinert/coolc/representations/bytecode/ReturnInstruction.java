@@ -48,4 +48,7 @@ class ReturnInstruction extends LabeledInstruction {
         visitor.visitReturnInstruction(this.getLabel(), this.returnVariable);
     }
 
+    public String toString() {
+        return this.getLabel() + ": return " + this.returnVariable;
+    }
 }

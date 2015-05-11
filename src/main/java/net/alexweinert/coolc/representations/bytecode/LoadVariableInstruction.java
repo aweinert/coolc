@@ -48,4 +48,8 @@ class LoadVariableInstruction extends AssignInstruction {
         visitor.visitLoadVariableInstruction(this.getLabel(), this.getTarget(), this.source);
     }
 
+    public String toString() {
+        return this.getLabel() + ": " + this.getTarget() + " = " + this.getSource();
+    }
+
 }

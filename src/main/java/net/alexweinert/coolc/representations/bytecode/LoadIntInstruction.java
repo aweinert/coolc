@@ -44,4 +44,8 @@ class LoadIntInstruction extends AssignInstruction {
         visitor.visitLoadIntInstruction(this.getLabel(), this.getTarget(), this.value);
     }
 
+    public String toString() {
+        return this.getLabel() + ": " + this.getTarget() + " = " + this.getValue();
+    }
+
 }
