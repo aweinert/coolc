@@ -32,6 +32,10 @@ public class JbcClass {
         }
 
         public char addConstant(ConstantPoolEntry entry) {
+            final int index = this.constantPool.indexOf(entry);
+            if (index != -1) {
+                return (char) index;
+            }
             assert this.constantPool.size() < Character.MAX_VALUE : "Too many entries in constant pool";
             this.constantPool.add(entry);
             return (char) (this.constantPool.size() - 1);
