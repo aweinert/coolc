@@ -257,6 +257,7 @@ public class FromCoolBuilder implements CoolBackendBuilder<ByteClass, List<ByteC
         final String nextLabel = this.nameGen.getFreshLabel("TypeCase");
         this.methodBuilder.addInstruction(this.instructionFactory.buildBranchIfNotInstanceOf(nextLabel,
                 expressionVariable, typeSymbol.getString()));
+        this.methodBuilder.addInstruction(this.instructionFactory.buildAssign(idSymbol.toString(), expressionVariable));
         this.labels.push(nextLabel);
     }
 
