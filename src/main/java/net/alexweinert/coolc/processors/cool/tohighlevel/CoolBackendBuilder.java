@@ -96,6 +96,6 @@ public interface CoolBackendBuilder<T, U> {
 
     void endCase();
 
-    void endTypecase();
+    void endTypecase(String resultVariable);
 
 }

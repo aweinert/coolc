@@ -446,7 +446,7 @@ class JavaClassBuilder implements CoolBackendBuilder<JavaClass, JavaProgram> {
      * 
      * @see net.alexweinert.coolc.processors.java.fromcool.FromCoolBuilder#endTypecase() */
     @Override
-    public void endTypecase() {
+    public void endTypecase(String resultVariable) {
         this.typecaseControlVariables.pop();
     }
 

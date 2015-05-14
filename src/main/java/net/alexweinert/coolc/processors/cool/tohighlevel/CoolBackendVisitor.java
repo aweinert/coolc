@@ -301,8 +301,8 @@ public class CoolBackendVisitor<T, U> extends Visitor {
 
     @Override
     public void visitTypecasePostorder(Typecase typecase) {
-        this.builder.endTypecase();
         final String resultVariable = this.variables.pop();
+        this.builder.endTypecase(resultVariable);
 
         // Pop the expression variable
         this.variables.pop();
