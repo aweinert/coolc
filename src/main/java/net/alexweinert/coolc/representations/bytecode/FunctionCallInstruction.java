@@ -1,5 +1,6 @@
 package net.alexweinert.coolc.representations.bytecode;
 
+import java.util.Iterator;
 import java.util.List;
 
 class FunctionCallInstruction extends AssignInstruction {
@@ -87,4 +88,24 @@ class FunctionCallInstruction extends AssignInstruction {
                 this.dispatchVariableType, this.methodId, this.returnType, this.arguments, this.argumentTypes);
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder(String.valueOf(this.getLabel()));
+        builder.append(": ");
+        builder.append(String.valueOf(this.getTarget()));
+        builder.append(" = ");
+        builder.append(dispatchVariable);
+        builder.append(".");
+        builder.append(methodId);
+        builder.append("(");
+        final Iterator<String> argIt = this.arguments.iterator();
+        while (argIt.hasNext()) {
+            builder.append(argIt.next());
+            if (argIt.hasNext()) {
+                builder.append(" ");
+            }
+        }
+        builder.append(")");
+        return builder.toString();
+    }
 }
