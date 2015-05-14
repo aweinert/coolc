@@ -1,8 +1,9 @@
 package net.alexweinert.coolc.processors.cool.tohighlevel;
 
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import net.alexweinert.coolc.infrastructure.ProcessorException;
@@ -37,6 +38,10 @@ import net.alexweinert.coolc.representations.cool.ast.StringConst;
 import net.alexweinert.coolc.representations.cool.ast.Subtraction;
 import net.alexweinert.coolc.representations.cool.ast.Typecase;
 import net.alexweinert.coolc.representations.cool.ast.Visitor;
+import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
+import net.alexweinert.coolc.representations.cool.information.DeclaredClassSignature;
+import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
+import net.alexweinert.coolc.representations.cool.information.MethodSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.BoolSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
@@ -51,6 +56,7 @@ public class CoolBackendVisitor<T, U> extends Visitor {
     private CoolBackendBuilder<T, U> builder;
 
     private List<T> javaClasses = new LinkedList<>();
+    private Map<IdSymbol, DefinedClassSignature> methods;
 
     public CoolBackendVisitor(CoolBackendBuilderFactory<T, U> factory) {
         this.factory = factory;
@@ -59,8 +65,43 @@ public class CoolBackendVisitor<T, U> extends Visitor {
     public U process(Program input) throws ProcessorException {
         this.builder = this.factory.createBuilder(null);
         this.javaClasses.addAll(this.builder.buildBasicClasses());
+
+        this.methods = this.createMethodMap(input);
+
         input.acceptVisitor(this);
         return this.builder.buildProgram(this.javaClasses);
+    }
+
+    private Map<IdSymbol, DefinedClassSignature> createMethodMap(Program program) {
+        final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = new HashMap<>();
+        declaredSignatures.put(IdTable.getInstance().getObjectSymbol(), DeclaredClassSignature.createObjectSignature());
+        declaredSignatures.put(IdTable.getInstance().getBoolSymbol(), DeclaredClassSignature.createBoolSignature());
+        declaredSignatures.put(IdTable.getInstance().getIntSymbol(), DeclaredClassSignature.createIntSignature());
+        declaredSignatures.put(IdTable.getInstance().getStringSymbol(), DeclaredClassSignature.createStringSignature());
+        declaredSignatures.put(IdTable.getInstance().getIOSymbol(), DeclaredClassSignature.createIOSignature());
+
+        for (ClassNode classNode : program.getClasses()) {
+            declaredSignatures.put(classNode.getIdentifier(), DeclaredClassSignature.create(classNode));
+        }
+
+        final ClassHierarchy hierarchy = ClassHierarchy.create(program);
+        final Map<IdSymbol, DefinedClassSignature> returnValue = new HashMap<>();
+        returnValue.put(IdTable.getInstance().getObjectSymbol(),
+                DefinedClassSignature.create(IdTable.getInstance().getObjectSymbol(), hierarchy, declaredSignatures));
+        returnValue.put(IdTable.getInstance().getBoolSymbol(),
+                DefinedClassSignature.create(IdTable.getInstance().getBoolSymbol(), hierarchy, declaredSignatures));
+        returnValue.put(IdTable.getInstance().getIntSymbol(),
+                DefinedClassSignature.create(IdTable.getInstance().getIntSymbol(), hierarchy, declaredSignatures));
+        returnValue.put(IdTable.getInstance().getStringSymbol(),
+                DefinedClassSignature.create(IdTable.getInstance().getStringSymbol(), hierarchy, declaredSignatures));
+        returnValue.put(IdTable.getInstance().getIOSymbol(),
+                DefinedClassSignature.create(IdTable.getInstance().getIOSymbol(), hierarchy, declaredSignatures));
+        for (ClassNode classNode : program.getClasses()) {
+            returnValue.put(classNode.getIdentifier(),
+                    DefinedClassSignature.create(classNode.getIdentifier(), hierarchy, declaredSignatures));
+        }
+
+        return returnValue;
     }
 
     @Override
@@ -335,8 +376,12 @@ public class CoolBackendVisitor<T, U> extends Visitor {
         final String dispatchVariable = this.variables.pop();
         final String resultVariable = this.builder.declareVariable(functionCall.getType());
         final List<String> argumentTypes = new LinkedList<>();
-        for (Expression arg : functionCall.getArguments()) {
-            argumentTypes.add(arg.getType().toString());
+        final DefinedClassSignature definingClassSignature = this.methods.get(functionCall.getDispatchExpression()
+                .getType());
+        final MethodSignature calledMethodSignature = definingClassSignature.getMethodSignature(functionCall
+                .getFunctionIdentifier());
+        for (IdSymbol argType : calledMethodSignature.getArgumentTypes()) {
+            argumentTypes.add(argType.toString());
         }
         this.builder.functionCall(resultVariable, dispatchVariable, functionCall.getDispatchExpression().getType()
                 .toString(), functionCall.getFunctionIdentifier(), functionCall.getType(), arguments, argumentTypes);
