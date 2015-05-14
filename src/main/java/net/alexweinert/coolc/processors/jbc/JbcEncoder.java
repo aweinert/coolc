@@ -349,4 +349,9 @@ public class JbcEncoder {
         this.builder.appendContent((byte) 0x13);
         this.builder.appendContent(this.splitter.splitChar((char) (constRefId + 1)));
     }
+
+    public void encodeCheckCast(char classRefId) {
+        this.builder.appendContent((byte) 0xc0);
+        this.builder.appendContent(this.splitter.splitChar((char) (classRefId + 1)));
+    }
 }

@@ -374,4 +374,11 @@ public class OpCodeAssembler {
         this.positions.add(this.byteCounter);
         this.byteCounter += opCode.getLength(this.encoding);
     }
+
+    public void addCheckCast(char classRefId) {
+        final OpCode opCode = opCodeFactory.buildCheckCast(classRefId);
+        this.opCodes.add(opCode);
+        this.positions.add(this.byteCounter);
+        this.byteCounter += opCode.getLength(this.encoding);
+    }
 }

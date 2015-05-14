@@ -258,6 +258,8 @@ public class FromCoolBuilder implements CoolBackendBuilder<ByteClass, List<ByteC
         this.methodBuilder.addInstruction(this.instructionFactory.buildBranchIfNotInstanceOf(nextLabel,
                 expressionVariable, typeSymbol.getString()));
         this.methodBuilder.addInstruction(this.instructionFactory.buildAssign(idSymbol.toString(), expressionVariable));
+        this.methodBuilder
+                .addInstruction(this.instructionFactory.buildCast(idSymbol.toString(), typeSymbol.toString()));
         this.labels.push(nextLabel);
     }
 

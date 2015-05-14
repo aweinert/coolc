@@ -161,6 +161,12 @@ public abstract class LabeledInstruction {
             return returnValue;
         }
 
+        public LabeledInstruction buildCast(String variable, String type) {
+            final LabeledInstruction returnValue = new CastInstruction(this.label, variable, type);
+            this.label = null;
+            return returnValue;
+        }
+
     }
 
     private final String label;

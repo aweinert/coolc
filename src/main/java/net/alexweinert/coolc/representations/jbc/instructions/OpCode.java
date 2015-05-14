@@ -126,6 +126,10 @@ public abstract class OpCode {
             return new Swap();
         }
 
+        public OpCode buildCheckCast(char classRefId) {
+            return new CheckCast(classRefId);
+        }
+
     }
 
     public abstract void encode(JbcEncoder encoder);

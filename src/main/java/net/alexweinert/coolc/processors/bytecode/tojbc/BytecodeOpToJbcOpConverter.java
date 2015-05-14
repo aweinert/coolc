@@ -542,4 +542,16 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         }
     }
 
+    @Override
+    public void visitCastInstruction(String label, String variable, String type) {
+        if (label != null) {
+            this.loadVariable(label, variable);
+        } else {
+            this.loadVariable(variable);
+        }
+        final char classRefId = this.addClassRefConst("Cool" + type);
+        this.assembler.addCheckCast(classRefId);
+        this.storeVariable(variable);
+    }
+
 }

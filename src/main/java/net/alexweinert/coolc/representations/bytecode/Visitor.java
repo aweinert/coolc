@@ -51,4 +51,6 @@ public class Visitor {
 
     public void visitNopInstruction(String label) {}
 
+    public void visitCastInstruction(String label, String variable, String type) {}
+
 }

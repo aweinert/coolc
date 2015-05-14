@@ -180,4 +180,8 @@ public class JbcEncoding {
         return 3;
     }
 
+    public int getCheckCastLength() {
+        return 3;
+    }
+
 }
