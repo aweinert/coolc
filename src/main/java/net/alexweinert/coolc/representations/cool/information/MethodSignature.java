@@ -77,7 +77,7 @@ public class MethodSignature {
             final IdSymbol returnType = IdTable.getInstance().getSelfTypeSymbol();
             final IdSymbol identifierSymbol = IdTable.getInstance().addString("out_int");
             final List<IdSymbol> argumentTypes = new LinkedList<>();
-            argumentTypes.add(IdTable.getInstance().getStringSymbol());
+            argumentTypes.add(IdTable.getInstance().getIntSymbol());
             return new MethodSignature(returnType, identifierSymbol, argumentTypes);
         }
 
