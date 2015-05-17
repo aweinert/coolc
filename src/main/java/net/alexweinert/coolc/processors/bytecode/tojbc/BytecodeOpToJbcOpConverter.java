@@ -159,7 +159,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         }
 
         this.assembler.addInvokeVirtual(getValueMethodRefId);
-        this.assembler.addIfNe(target);
+        this.assembler.addIfEq(target);
     }
 
     @Override
