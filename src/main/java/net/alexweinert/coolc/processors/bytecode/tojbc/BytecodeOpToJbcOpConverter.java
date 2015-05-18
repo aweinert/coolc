@@ -138,10 +138,10 @@ class BytecodeOpToJbcOpConverter extends Visitor {
         this.assembler.addInvokeVirtual(getValueMethodRefId);
         final String labelFalse = "bcToJbc" + this.usedLabels++;
         this.assembler.addIfEq(labelFalse);
-        this.assembler.addIConst1();
+        this.assembler.addIConst0();
         final String labelAfter = "bcToJbc" + this.usedLabels++;
         this.assembler.addGoto(labelAfter);
-        this.assembler.addIConst0(labelFalse);
+        this.assembler.addIConst1(labelFalse);
         this.assembler.addNop(labelAfter);
 
         this.initializeNewInstance("CoolBool");
