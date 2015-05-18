@@ -215,7 +215,7 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 	// Handle escaped tab
 	this.string_buf.append('\t');
 }
-<STRING> "\n" {
+<STRING> "\\n" {
 	// Handle escaped newline
 	this.string_buf.append('\n');
 }
