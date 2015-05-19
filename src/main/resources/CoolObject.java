@@ -1,10 +1,10 @@
 public class CoolObject {
-    public CoolObject coolabort() {
+    public CoolObject abort() {
         System.exit(1);
         return null;
     }
 
-    public CoolString cooltype_name() {
+    public CoolString type_name() {
         final String simpleName = this.getClass().getSimpleName();
         return new CoolString(simpleName.substring(4, simpleName.length() - 1));
     }
