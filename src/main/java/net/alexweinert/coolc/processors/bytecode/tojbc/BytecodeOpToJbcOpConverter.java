@@ -177,6 +177,24 @@ class BytecodeOpToJbcOpConverter extends Visitor {
     }
 
     @Override
+    public void visitArithNegInstruction(String label, String target, String arg) {
+        final char classRefIndex = this.addClassRefConst("CoolInt");
+        if (label != null) {
+            this.assembler.addNew(label, classRefIndex);
+        } else {
+            this.assembler.addNew(classRefIndex);
+        }
+        this.assembler.addDup();
+        this.loadVariable(arg);
+        final char getValueMethodRefId = addMethodRefConst("CoolInt", "getValue", "()I");
+        this.assembler.addInvokeVirtual(getValueMethodRefId);
+        this.assembler.addPushShort(-1);
+        this.assembler.addIMul();
+        this.initializeNewInstance("CoolInt");
+        this.storeVariable(target);
+    }
+
+    @Override
     public void visitAddInstruction(String label, String target, String lhs, String rhs) {
         final char getValueMethodRefId = addMethodRefConst("CoolInt", "getValue", "()I");
 

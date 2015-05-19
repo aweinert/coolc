@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Visitor {
 
-    void visitArithNegInstruction(String label, String target, String arg) {}
+    public void visitArithNegInstruction(String label, String target, String arg) {}
 
     public void visitLtInstruction(String label, String target, String lhs, String rhs) {}
 
