@@ -35,7 +35,8 @@ public class FileToJarProcessor extends Processor<Collection<File>, File> {
                 arguments.add(file.getPath().toString());
             }
 
-            Runtime.getRuntime().exec(arguments.toArray(new String[arguments.size()]), null, tempFolder.toFile());
+            Runtime.getRuntime().exec(arguments.toArray(new String[arguments.size()]), null, tempFolder.toFile())
+                    .waitFor();
 
             return (new File.Builder(Paths.get(this.jarPath))).appendContent(
                     Files.readAllBytes(tempFolder.resolve("output.jar"))).build();

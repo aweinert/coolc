@@ -45,7 +45,8 @@ public class Main {
             return compilerBuilder.coolToJava().javaToFiles().filesToHarddrive(output);
         } else if (commandline.backend.toLowerCase().equals("jar")) {
             final String output = commandline.output != null ? commandline.output : "out.jar";
-            return compilerBuilder.coolToJava().javaToJar(output).jarToFile().fileToHarddrive(output);
+            return compilerBuilder.coolToBytecode().bytecodeToJbc().jbcToFiles().filesToJar(output, "CoolMain")
+                    .fileToHarddrive(".");
         } else if (commandline.backend.toLowerCase().equals("jbc")) {
             final String output = commandline.output != null ? commandline.output : "output/";
             return compilerBuilder.coolToBytecode().bytecodeToJbc().jbcToFiles().filesToHarddrive(output);
