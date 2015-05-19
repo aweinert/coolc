@@ -22,15 +22,50 @@
 	</pluginRepositories>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>*.class</include>
+				</includes>
+				<excludes>
+					<exclude>*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.2</version>
+				<goals><goal>compile</goal></goals>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.4.0</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals><goal>exec</goal></goals>
+						<configuration>
+							<executable>javac</executable>
+							<arguments>
+								<argument>-s</argument>
+								<argument>${basedir}/src/main/resources</argument>
+								<argument>${basedir}/src/main/resources/CoolObject.java</argument>
+								<argument>${basedir}/src/main/resources/CoolBool.java</argument>
+								<argument>${basedir}/src/main/resources/CoolInt.java</argument>
+								<argument>${basedir}/src/main/resources/CoolString.java</argument>
+								<argument>${basedir}/src/main/resources/CoolIO.java</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>de.jflex</groupId>
