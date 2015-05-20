@@ -173,7 +173,7 @@ class BytecodeOpToJbcOpConverter extends Visitor {
 
         final char classRefId = this.addClassRefConst("Cool" + type);
         this.assembler.addInstanceof(classRefId);
-        this.assembler.addIfNe(target);
+        this.assembler.addIfEq(target);
     }
 
     @Override
