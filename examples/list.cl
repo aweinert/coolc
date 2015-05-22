@@ -7,45 +7,45 @@ class Book inherits Publication {
 	title: String;
 	author: String;
 
-	init(title: String, author: String) : Book {
+	init(title_param: String, author_param: String) : Book {
 		{
-			self.title <- title;
-			self.author <- author;
+			title <- title_param;
+			author <- author_param;
 			self;
 		}
 	};
 
-	get_title(): String { self.title };
-	get_author(): String { self.author };
+	get_title(): String { title };
+	get_author(): String { author };
 };
 
 class Article inherits Publication {
 	title: String;
 	author: String;
-	magazine String;
+	magazine: String;
 
-	init(title: String, author: String, magazine: String) : Article {
+	init(title_param: String, author_param: String, magazine_param: String) : Article {
 		{
-			self.title <- title;
-			self.author <- author;
-			self.magazine <- magazine;
+			title <- title_param;
+			author <- author_param;
+			magazine <- magazine_param;
 			self;
 		}
 	};
 
-	get_title(): String { self.title };
-	get_author(): String { self.author };
-	get_magazine(): String { self.magazine };
+	get_title(): String { title };
+	get_author(): String { author };
+	get_magazine(): String { magazine };
 };
 
 class PublicationList {
 	publication: Publication;
 	next : PublicationList;
 
-	init(publication: Publication, next: PublicationList): PublicationList {
+	init(publication_param: Publication, next_param: PublicationList): PublicationList {
 		{
-			self.publication <- publication;
-			self.publicationList <- publicationList;
+			publication <- publication_param;
+			publicationList <- publicationList_param;
 			self;
 		}
 	};
