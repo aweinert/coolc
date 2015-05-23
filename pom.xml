@@ -80,7 +80,7 @@
 						<configuration>
 							<outputDirectory>src/main/java</outputDirectory>
 							<lexDefinitions>
-								<lexDefinition>src/main/java/net/alexweinert/coolc/processors/cool/frontend/lexer/cool.lex</lexDefinition>
+								<lexDefinition>src/main/jflex/cool.lex</lexDefinition>
 							</lexDefinitions>
 						</configuration>
 					</execution>
@@ -97,7 +97,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<cupDefinition>src/main/java/net/alexweinert/coolc/processors/cool/frontend/parser/cool.cup</cupDefinition>
+							<cupDefinition>src/main/cup/cool.cup</cupDefinition>
 							<packageName>net.alexweinert.coolc.processors.cool.frontend.parser</packageName>
 							<className>Parser</className>
 							<outputDirectory>src/main/java/</outputDirectory>
