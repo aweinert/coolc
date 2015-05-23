@@ -14,3 +14,5 @@ This produces a file `out.jar` in the base directory.
 
 # Differences to standard Cool
 - Static function call is not implemented and works like a normal function call
+- When no branch of a typecase-statement matches, the behavior is undefined
+  instead of exiting with an error message
