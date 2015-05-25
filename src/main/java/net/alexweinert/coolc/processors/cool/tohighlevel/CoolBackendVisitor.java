@@ -327,9 +327,12 @@ public class CoolBackendVisitor<T, U> extends Visitor {
 
     @Override
     public void visitLoopPostorder(Loop loop) {
+        this.variables.pop();
         this.builder.endLoop();
         // According to the manual, loops return void, i.e., null
-        this.builder.loadVoid(this.variables.peek());
+        final String loopResultVar = this.builder.declareVariable(IdTable.getInstance().getObjectSymbol());
+        this.builder.loadVoid(loopResultVar);
+        this.variables.push(loopResultVar);
     }
 
     @Override
