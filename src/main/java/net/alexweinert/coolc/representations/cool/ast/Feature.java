@@ -18,7 +18,7 @@ public abstract class Feature extends TreeNode {
     @Override
     public int hashCode() {
         final int prime = 31;
-        int result = 1;
+        int result = super.hashCode();
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
@@ -28,7 +28,7 @@ public abstract class Feature extends TreeNode {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
+        if (!super.equals(obj)) {
             return false;
         }
         if (getClass() != obj.getClass()) {
