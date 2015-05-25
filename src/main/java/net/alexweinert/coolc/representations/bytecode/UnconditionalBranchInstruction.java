@@ -11,4 +11,7 @@ class UnconditionalBranchInstruction extends BranchInstruction {
         visitor.visitBranchInstruction(this.getLabel(), this.getTarget());
     }
 
+    public String toString() {
+        return String.valueOf(this.getLabel()) + ": goto " + this.getTarget();
+    }
 }

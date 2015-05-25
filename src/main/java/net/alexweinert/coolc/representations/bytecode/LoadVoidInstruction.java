@@ -11,4 +11,7 @@ class LoadVoidInstruction extends AssignInstruction {
         visitor.visitLoadVoidInstruction(this.getLabel(), this.getTarget());
     }
 
+    public String toString() {
+        return String.valueOf(this.getLabel()) + ": " + this.getTarget() + " = void";
+    }
 }
