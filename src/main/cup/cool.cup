@@ -30,22 +30,12 @@ action code {:
 
 :} 
 
-/************************************************************************/
-/*                DON'T CHANGE ANYTHING IN THIS SECTION                 */
-
 parser code {:
-    int omerrs = 0;
 
     public void syntax_error(Symbol cur_token) {
         int lineno = action_obj.curr_lineno();
-	String filename = action_obj.curr_filename();
-	System.err.println("\"" + filename + "\", line " + lineno + 
-		         ": parse error at or near " + cur_token.toString());
-	omerrs++;
-	if (omerrs>50) {
-	   System.err.println("More than 50 errors");
-	   System.exit(1);
-	}
+		String filename = action_obj.curr_filename();
+		this.error.parseError(filename, lineno, -1, curToken.sym);
     }
 
     public void unrecovered_syntax_error(Symbol cur_token) {
@@ -65,9 +55,6 @@ terminal StringSymbol STR_CONST;
 terminal IntSymbol INT_CONST;
 terminal Boolean BOOL_CONST;
 terminal IdSymbol TYPEID, OBJECTID;
-
-/*  DON'T CHANGE ANYTHING ABOVE THIS LINE, OR YOUR PARSER WON'T WORK      */
-/**************************************************************************/
 
 
 /*
