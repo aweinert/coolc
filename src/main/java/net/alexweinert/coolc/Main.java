@@ -39,7 +39,7 @@ public class Main {
 
         final ProcessorBuilder.FrontendBuilder frontendBuilder = new ProcessorBuilder.FrontendBuilder();
         final CoolProgramCompilerBuilder compilerBuilder = frontendBuilder.openFile(commandline.inputFiles.get(0))
-                .fileToCool().checkCool();
+                .fileToCool(commandline.inputFiles.get(0)).checkCool();
 
         if (commandline.backend.toLowerCase().equals("java")) {
             final String output = commandline.output != null ? commandline.output : "output/";

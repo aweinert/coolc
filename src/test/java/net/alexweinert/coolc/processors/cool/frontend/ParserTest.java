@@ -21,7 +21,7 @@ public class ParserTest {
         final URI uri = this.getClass().getResource("/parser/positive/class-a.cl").toURI();
         final String path = Paths.get(uri).toString();
 
-        final CoolParser parser = new CoolParser();
+        final CoolParser parser = new CoolParser("class-a.cl");
         final Program actualProgram = parser.process(new FileReader(path));
         final Program expectedProgram = new Program(path, 1, new Classes(path, 1,
                 Collections.singletonList(new ClassNode(path, 1, IdTable.getInstance().addString("A"), IdTable

@@ -72,8 +72,8 @@ public abstract class ProcessorBuilder<T> {
             super(frontend);
         }
 
-        public CoolProgramCompilerBuilder fileToCool() {
-            return new CoolProgramCompilerBuilder(this.frontend.append(new CoolParser()));
+        public CoolProgramCompilerBuilder fileToCool(final String filename) {
+            return new CoolProgramCompilerBuilder(this.frontend.append(new CoolParser(filename)));
         }
 
     }
