@@ -82,6 +82,7 @@
 							<lexDefinitions>
 								<lexDefinition>src/main/jflex/cool.lex</lexDefinition>
 							</lexDefinitions>
+							<backup>false</backup>
 						</configuration>
 					</execution>
 				</executions>
