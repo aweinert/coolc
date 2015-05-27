@@ -18,7 +18,8 @@ public class Main {
         try {
             compiler.compile();
         } catch (ProcessorException e) {
-            e.printStackTrace();
+            System.out.println("Error during compilation. Exiting.");
+            System.exit(1);
         }
     }
 
