@@ -12,15 +12,20 @@ public class CoolParser extends Processor<Reader, Program> {
 
     @Override
     public Program process(final Reader reader) throws ProcessorException {
-        final Program program;
         try {
             final Parser parser = ParserFactory.createParserFromReader(reader);
-            program = (Program) parser.parse().value;
+            final Object parseResult = parser.parse().value;
+            final ParserErrorHandler handler = parser.getErrorHandler();
+            if (handler.hasErrors()) {
+                for (String error : handler.getErrorMessages()) {
+                    System.out.println(error);
+                }
+                throw new ProcessorException(null);
+            }
+            return (Program) parseResult;
         } catch (Exception e) {
             throw new ProcessorException(e);
         }
-
-        return program;
     }
 
 }

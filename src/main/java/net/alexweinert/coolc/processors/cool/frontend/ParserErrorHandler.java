@@ -15,7 +15,7 @@ public class ParserErrorHandler {
     }
 
     public boolean hasErrors() {
-        return this.errorMessages.isEmpty();
+        return !this.errorMessages.isEmpty();
     }
 
     public List<String> getErrorMessages() {

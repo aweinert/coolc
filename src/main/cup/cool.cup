@@ -10,6 +10,7 @@
 
 import java_cup.runtime.*;
 import net.alexweinert.coolc.processors.cool.frontend.lexer.Lexer;
+import net.alexweinert.coolc.processors.cool.frontend.ParserErrorHandler;
 import net.alexweinert.coolc.representations.cool.symboltables.*;
 import net.alexweinert.coolc.representations.cool.ast.*;
 
@@ -32,10 +33,16 @@ action code {:
 
 parser code {:
 
+	final ParserErrorHandler error = new ParserErrorHandler();
+
+	public ParserErrorHandler getErrorHandler() {
+		return this.error;
+	}
+
     public void syntax_error(Symbol cur_token) {
         int lineno = action_obj.curr_lineno();
 		String filename = action_obj.curr_filename();
-		this.error.parseError(filename, lineno, -1, curToken.sym);
+		this.error.parseError(filename, lineno, -1, cur_token.sym);
     }
 
     public void unrecovered_syntax_error(Symbol cur_token) {
