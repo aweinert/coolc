@@ -3,7 +3,7 @@ package net.alexweinert.coolc.processors.cool.hierarchycheck;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.alexweinert.coolc.Output;
+import net.alexweinert.coolc.infrastructure.ProcessorException;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
@@ -13,8 +13,8 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 class SemanticChecker {
-    public static Program checkSemantics(Program program, Output out) {
-        final SemanticErrorReporter error = new SemanticErrorReporter(out);
+    public static Program checkSemantics(Program program) throws ProcessorException {
+        final SemanticErrorReporter error = new SemanticErrorReporter();
 
         program = MultipleClassesRemover.removeMultipleClassDefinitions(program, error);
         program = BuiltinRedefinitionRemover.removeBuiltinRedefinition(program, error);
@@ -23,6 +23,13 @@ class SemanticChecker {
         program = CircularInheritanceRemover.removeCircularInheritance(program, error);
         program = InterfaceChecker.checkInterfaces(program, error);
         program = OverridingChecker.checkOverriding(program, error);
+
+        if (error.hasErrors()) {
+            for (String errorMessage : error.getErrors()) {
+                System.out.println(errorMessage);
+            }
+            throw new ProcessorException(null);
+        }
 
         program.setHierarchy(ClassHierarchy.create(program));
 

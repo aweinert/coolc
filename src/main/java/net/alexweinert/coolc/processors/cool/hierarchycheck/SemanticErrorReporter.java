@@ -1,21 +1,17 @@
 package net.alexweinert.coolc.processors.cool.hierarchycheck;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.representations.cool.ast.Attribute;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Method;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 class SemanticErrorReporter {
-    private final Output out;
-
-    SemanticErrorReporter(Output out) {
-        this.out = out;
-    }
+    final List<String> errorMessages = new LinkedList<>();
 
     public void reportMultipleAttributes(ClassNode classNode, List<Attribute> attributes) {
         final StringBuilder builder = new StringBuilder();
@@ -32,7 +28,7 @@ class SemanticErrorReporter {
             builder.append("\n");
         }
         builder.append("  Only using the first one, ignoring subsequent ones");
-        out.error(builder.toString());
+        this.errorMessages.add(builder.toString());
     }
 
     public void reportMultipleMethods(ClassNode classNode, List<Method> methods) {
@@ -50,7 +46,7 @@ class SemanticErrorReporter {
             builder.append("\n");
         }
         builder.append("  Only using the first one, ignoring subsequent ones");
-        out.error(builder.toString());
+        this.errorMessages.add(builder.toString());
     }
 
     public void reportOverriddenAttribute(Attribute originalAttribute, Attribute offendingAttribute) {
@@ -64,7 +60,7 @@ class SemanticErrorReporter {
         builder.append(originalAttribute.getFilename());
         builder.append(":");
         builder.append(originalAttribute.getLineNumber());
-        out.error(builder.toString());
+        this.errorMessages.add(builder.toString());
 
     }
 
@@ -79,24 +75,24 @@ class SemanticErrorReporter {
         builder.append(originalMethod.getFilename());
         builder.append(":");
         builder.append(originalMethod.getLineNumber());
-        out.error(builder.toString());
+        this.errorMessages.add(builder.toString());
     }
 
     public void reportRedefinitionOfBuiltInClass(IdSymbol identifier, ClassNode classNode) {
         final String errorString = String.format("Redefinition of builtin class %s at %s:%d", identifier,
                 classNode.getFilename(), classNode.getLineNumber());
-        out.error(errorString);
+        this.errorMessages.add(errorString);
     }
 
     public void reportBaseClassInheritance(ClassNode classNode) {
         final String formatString = "Class %s inherits from base class %s at %s:%d\nIgnoring inheritance declaration";
-        out.error(String.format(formatString, classNode.getIdentifier(), classNode.getParent(),
+        this.errorMessages.add(String.format(formatString, classNode.getIdentifier(), classNode.getParent(),
                 classNode.getFilename(), classNode.getLineNumber()));
     }
 
     public void reportUndefinedParentClass(ClassNode classNode) {
         final String formatString = "Parent %s of class %s is undefined. Defined at %s:%d\nSetting parent to Object";
-        out.error(String.format(formatString, classNode.getParent(), classNode.getIdentifier(),
+        this.errorMessages.add(String.format(formatString, classNode.getParent(), classNode.getIdentifier(),
                 classNode.getFilename(), classNode.getLineNumber()));
     }
 
@@ -124,13 +120,21 @@ class SemanticErrorReporter {
         builder.append("Breaking circle by setting parent of ");
         builder.append(tieBreaker.getIdentifier());
         builder.append(" to Object");
-        out.error(builder.toString());
+        this.errorMessages.add(builder.toString());
     }
 
     public void reportClassRedefinition(ClassNode originalClass, ClassNode redefinedClass) {
         final String formatString = "Redefinition of class %s at %s:%d. Original definition at %s:%d. Ignoring redefinition";
-        out.error(String.format(formatString, originalClass.getIdentifier(), redefinedClass.getFilename(),
+        this.errorMessages.add(String.format(formatString, originalClass.getIdentifier(), redefinedClass.getFilename(),
                 redefinedClass.getLineNumber(), originalClass.getFilename(), originalClass.getLineNumber()));
+    }
+
+    public boolean hasErrors() {
+        return !this.errorMessages.isEmpty();
+    }
+
+    public List<String> getErrors() {
+        return this.errorMessages;
     }
 
 }
