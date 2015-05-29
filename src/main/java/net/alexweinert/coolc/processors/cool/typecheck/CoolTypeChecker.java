@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.infrastructure.Processor;
+import net.alexweinert.coolc.infrastructure.ProcessorException;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.information.ClassHierarchy;
@@ -18,11 +19,11 @@ public class CoolTypeChecker extends Processor<Program, Program> {
     private final TypeErrorReporter err;
 
     public CoolTypeChecker(Output err) {
-        this.err = new TypeErrorReporter(err);
+        this.err = new TypeErrorReporter();
     }
 
     @Override
-    public Program process(Program input) {
+    public Program process(Program input) throws ProcessorException {
         final ClassHierarchy hierarchy = input.getHierarchy();
         final Map<IdSymbol, DeclaredClassSignature> declaredSignatures = CoolTypeChecker
                 .createDeclaredSignatures(input);
@@ -30,6 +31,13 @@ public class CoolTypeChecker extends Processor<Program, Program> {
                 hierarchy, declaredSignatures);
 
         CoolTypeChecker.typecheck(input, definedSignatures, this.err);
+
+        if (this.err.hasErrors()) {
+            for (String errorMessage : this.err.getErrors()) {
+                System.out.println(errorMessage);
+                throw new ProcessorException(null);
+            }
+        }
 
         return input;
     }
