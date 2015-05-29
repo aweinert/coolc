@@ -1,7 +1,5 @@
 package net.alexweinert.coolc.processors.cool.hierarchycheck;
 
-import net.alexweinert.coolc.processors.cool.hierarchycheck.ParentDefinednessChecker;
-import net.alexweinert.coolc.processors.cool.hierarchycheck.SemanticErrorReporter;
 import net.alexweinert.coolc.representations.cool.ast.ASTFactory;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Program;

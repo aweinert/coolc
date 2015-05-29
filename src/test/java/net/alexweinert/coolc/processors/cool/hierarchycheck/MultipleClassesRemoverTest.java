@@ -2,8 +2,6 @@ package net.alexweinert.coolc.processors.cool.hierarchycheck;
 
 import java.util.Collections;
 
-import net.alexweinert.coolc.processors.cool.hierarchycheck.MultipleClassesRemover;
-import net.alexweinert.coolc.processors.cool.hierarchycheck.SemanticErrorReporter;
 import net.alexweinert.coolc.representations.cool.ast.ASTFactory;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Feature;

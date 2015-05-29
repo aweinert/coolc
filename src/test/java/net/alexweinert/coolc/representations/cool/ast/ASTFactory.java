@@ -1,41 +1,7 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
-import net.alexweinert.coolc.representations.cool.ast.Addition;
-import net.alexweinert.coolc.representations.cool.ast.ArgumentExpressions;
-import net.alexweinert.coolc.representations.cool.ast.Assign;
-import net.alexweinert.coolc.representations.cool.ast.Attribute;
-import net.alexweinert.coolc.representations.cool.ast.Block;
-import net.alexweinert.coolc.representations.cool.ast.BlockExpressions;
-import net.alexweinert.coolc.representations.cool.ast.BoolConst;
-import net.alexweinert.coolc.representations.cool.ast.ClassNode;
-import net.alexweinert.coolc.representations.cool.ast.Classes;
-import net.alexweinert.coolc.representations.cool.ast.Division;
-import net.alexweinert.coolc.representations.cool.ast.Expression;
-import net.alexweinert.coolc.representations.cool.ast.Feature;
-import net.alexweinert.coolc.representations.cool.ast.Features;
-import net.alexweinert.coolc.representations.cool.ast.Formal;
-import net.alexweinert.coolc.representations.cool.ast.Formals;
-import net.alexweinert.coolc.representations.cool.ast.FunctionCall;
-import net.alexweinert.coolc.representations.cool.ast.If;
-import net.alexweinert.coolc.representations.cool.ast.IntConst;
-import net.alexweinert.coolc.representations.cool.ast.IsVoid;
-import net.alexweinert.coolc.representations.cool.ast.LessThan;
-import net.alexweinert.coolc.representations.cool.ast.LessThanOrEquals;
-import net.alexweinert.coolc.representations.cool.ast.Let;
-import net.alexweinert.coolc.representations.cool.ast.Loop;
-import net.alexweinert.coolc.representations.cool.ast.Method;
-import net.alexweinert.coolc.representations.cool.ast.Multiplication;
-import net.alexweinert.coolc.representations.cool.ast.New;
-import net.alexweinert.coolc.representations.cool.ast.NoExpression;
-import net.alexweinert.coolc.representations.cool.ast.ObjectReference;
-import net.alexweinert.coolc.representations.cool.ast.Program;
-import net.alexweinert.coolc.representations.cool.ast.StaticFunctionCall;
-import net.alexweinert.coolc.representations.cool.ast.StringConst;
-import net.alexweinert.coolc.representations.cool.ast.Subtraction;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 import net.alexweinert.coolc.representations.cool.symboltables.IntTable;
@@ -66,8 +32,8 @@ public class ASTFactory {
     public ClassNode classNode(String identifier, String parent, Feature... features) {
         final IdSymbol identifierSymbol = IdTable.getInstance().addString(identifier);
         final IdSymbol parentSymbol = IdTable.getInstance().addString(parent);
-        return new ClassNode(this.filename, this.lineNumber, identifierSymbol, parentSymbol, new Features(this.filename,
-                this.lineNumber, Arrays.asList(features)));
+        return new ClassNode(this.filename, this.lineNumber, identifierSymbol, parentSymbol, new Features(
+                this.filename, this.lineNumber, Arrays.asList(features)));
     }
 
     public Attribute attribute(String identifier, String type) {
