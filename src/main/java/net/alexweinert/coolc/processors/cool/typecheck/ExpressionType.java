@@ -6,18 +6,15 @@ import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 abstract class ExpressionType {
     private static class SelfType extends ExpressionType {
-        public IdSymbol getTypeId(IdSymbol containingClass) {
-            return containingClass;
+
+        final private IdSymbol containingClass;
+
+        public SelfType(IdSymbol containingClass) {
+            this.containingClass = containingClass;
         }
 
-        @Override
-        public ExpressionType computeLeastUpperBound(ExpressionType other, IdSymbol containingClassId,
-                ClassHierarchy hierarchy) {
-            if (other instanceof SelfType) {
-                return this;
-            } else {
-                return other.computeLeastUpperBound(this, containingClassId, hierarchy);
-            }
+        public IdSymbol getTypeId() {
+            return this.containingClass;
         }
 
         @Override
@@ -33,16 +30,8 @@ abstract class ExpressionType {
             this.type = type;
         }
 
-        public IdSymbol getTypeId(IdSymbol containingClass) {
+        public IdSymbol getTypeId() {
             return this.type;
-        }
-
-        @Override
-        public ExpressionType computeLeastUpperBound(ExpressionType other, IdSymbol containingClassId,
-                ClassHierarchy hierarchy) {
-            final IdSymbol leastUpperBoundSymbol = hierarchy.getLeastUpperBound(this.type,
-                    other.getTypeId(containingClassId));
-            return ExpressionType.create(leastUpperBoundSymbol);
         }
 
         @Override
@@ -51,16 +40,19 @@ abstract class ExpressionType {
         }
     }
 
-    public static ExpressionType create(IdSymbol type) {
+    public static ExpressionType create(IdSymbol type, IdSymbol containingClass) {
         if (type.equals(IdTable.getInstance().addString("SELF_TYPE"))) {
-            return new SelfType();
+            return new SelfType(containingClass);
         } else {
             return new ConcreteType(type);
         }
     }
 
-    public abstract IdSymbol getTypeId(IdSymbol containingClass);
+    public abstract IdSymbol getTypeId();
 
-    public abstract ExpressionType computeLeastUpperBound(ExpressionType other, IdSymbol containingClassId,
-            ClassHierarchy hierarchy);
+    public ExpressionType computeLeastUpperBound(ExpressionType other, IdSymbol containingClassId,
+            ClassHierarchy hierarchy) {
+        final IdSymbol leastUpperBoundSymbol = hierarchy.getLeastUpperBound(this.getTypeId(), other.getTypeId());
+        return new ConcreteType(leastUpperBoundSymbol);
+    }
 }

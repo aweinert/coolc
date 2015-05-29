@@ -29,6 +29,8 @@ public class ExpressionTypeCheckerTest {
 
     ClassHierarchy hierarchy;
 
+    private final IdSymbol testClassSymbol = IdTable.getInstance().addString("TestClass");
+
     @Before
     public void defineStandardHierarchy() {
         this.hierarchy = Mockito.mock(ClassHierarchy.class);
@@ -138,7 +140,8 @@ public class ExpressionTypeCheckerTest {
 
         final IdSymbol variableId = IdTable.getInstance().addString("foo");
         final VariablesScope scope = Mockito.mock(VariablesScope.class);
-        Mockito.when(scope.getVariableType(variableId)).thenReturn(ExpressionType.create(boolSymbol));
+        Mockito.when(scope.getVariableType(variableId)).thenReturn(
+                ExpressionType.create(boolSymbol, this.testClassSymbol));
         Mockito.when(scope.containsVariable(variableId)).thenReturn(true);
 
         this.testWelltypedExpression(boolSymbol, testExpression, scope);
@@ -168,7 +171,7 @@ public class ExpressionTypeCheckerTest {
 
         final VariablesScope scope = Mockito.mock(VariablesScope.class);
         Mockito.when(scope.getVariableType(IdTable.getInstance().addString("foo"))).thenReturn(
-                ExpressionType.create(intSymbol));
+                ExpressionType.create(intSymbol, this.testClassSymbol));
 
         this.testWelltypedExpression(intSymbol, testExpression, scope);
     }
@@ -186,11 +189,13 @@ public class ExpressionTypeCheckerTest {
 
         final IdSymbol xSymbol = IdTable.getInstance().addString("x");
         Mockito.when(scope.containsVariable(xSymbol)).thenReturn(true);
-        Mockito.when(scope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+        Mockito.when(scope.getVariableType(xSymbol)).thenReturn(
+                ExpressionType.create(classASymbol, this.testClassSymbol));
 
         final IdSymbol ySymbol = IdTable.getInstance().addString("y");
         Mockito.when(scope.containsVariable(ySymbol)).thenReturn(true);
-        Mockito.when(scope.getVariableType(ySymbol)).thenReturn(ExpressionType.create(classBSymbol));
+        Mockito.when(scope.getVariableType(ySymbol)).thenReturn(
+                ExpressionType.create(classBSymbol, this.testClassSymbol));
 
         Mockito.when(this.hierarchy.conformsTo(classBSymbol, classASymbol)).thenReturn(true);
 
@@ -209,11 +214,13 @@ public class ExpressionTypeCheckerTest {
 
         final IdSymbol xSymbol = IdTable.getInstance().addString("x");
         Mockito.when(scope.containsVariable(xSymbol)).thenReturn(true);
-        Mockito.when(scope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+        Mockito.when(scope.getVariableType(xSymbol)).thenReturn(
+                ExpressionType.create(classASymbol, this.testClassSymbol));
 
         final IdSymbol ySymbol = IdTable.getInstance().addString("y");
         Mockito.when(scope.containsVariable(ySymbol)).thenReturn(true);
-        Mockito.when(scope.getVariableType(ySymbol)).thenReturn(ExpressionType.create(classBSymbol));
+        Mockito.when(scope.getVariableType(ySymbol)).thenReturn(
+                ExpressionType.create(classBSymbol, this.testClassSymbol));
 
         Mockito.when(this.hierarchy.conformsTo(classBSymbol, classASymbol)).thenReturn(false);
 
@@ -243,12 +250,14 @@ public class ExpressionTypeCheckerTest {
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
         final IdSymbol xSymbol = IdTable.getInstance().addString("x");
         final IdSymbol classASymbol = IdTable.getInstance().addString("ClassA");
-        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(
+                ExpressionType.create(classASymbol, this.testClassSymbol));
         Mockito.when(initialScope.containsVariable(xSymbol)).thenReturn(true);
 
         final IdSymbol ySymbol = IdTable.getInstance().addString("y");
         final IdSymbol classBSymbol = IdTable.getInstance().addString("ClassB");
-        Mockito.when(initialScope.getVariableType(ySymbol)).thenReturn(ExpressionType.create(classBSymbol));
+        Mockito.when(initialScope.getVariableType(ySymbol)).thenReturn(
+                ExpressionType.create(classBSymbol, this.testClassSymbol));
         Mockito.when(initialScope.containsVariable(ySymbol)).thenReturn(true);
 
         Mockito.when(this.hierarchy.getLeastUpperBound(classASymbol, classBSymbol)).thenReturn(classASymbol);
@@ -266,12 +275,14 @@ public class ExpressionTypeCheckerTest {
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
         final IdSymbol xSymbol = IdTable.getInstance().addString("x");
         final IdSymbol classASymbol = IdTable.getInstance().addString("ClassA");
-        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(
+                ExpressionType.create(classASymbol, this.testClassSymbol));
         Mockito.when(initialScope.containsVariable(xSymbol)).thenReturn(true);
 
         final IdSymbol ySymbol = IdTable.getInstance().addString("y");
         final IdSymbol classBSymbol = IdTable.getInstance().addString("ClassB");
-        Mockito.when(initialScope.getVariableType(ySymbol)).thenReturn(ExpressionType.create(classBSymbol));
+        Mockito.when(initialScope.getVariableType(ySymbol)).thenReturn(
+                ExpressionType.create(classBSymbol, this.testClassSymbol));
         Mockito.when(initialScope.containsVariable(ySymbol)).thenReturn(true);
 
         final IdSymbol objectSymbol = IdTable.getInstance().getObjectSymbol();
@@ -358,11 +369,12 @@ public class ExpressionTypeCheckerTest {
         final IdSymbol variableSymbol = IdTable.getInstance().addString("x");
 
         final VariablesScope innerScope = Mockito.mock(VariablesScope.class);
-        Mockito.when(innerScope.getVariableType(variableSymbol)).thenReturn(ExpressionType.create(boolSymbol));
+        Mockito.when(innerScope.getVariableType(variableSymbol)).thenReturn(
+                ExpressionType.create(boolSymbol, this.testClassSymbol));
         Mockito.when(innerScope.containsVariable(variableSymbol)).thenReturn(true);
 
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
-        Mockito.when(initialScope.addVariable(variableSymbol, boolSymbol)).thenReturn(innerScope);
+        Mockito.when(initialScope.addVariable(this.testClassSymbol, variableSymbol, boolSymbol)).thenReturn(innerScope);
 
         this.testWelltypedExpression(boolSymbol, testExpression, initialScope);
     }
@@ -377,11 +389,12 @@ public class ExpressionTypeCheckerTest {
         final IdSymbol variableSymbol = IdTable.getInstance().addString("x");
 
         final VariablesScope innerScope = Mockito.mock(VariablesScope.class);
-        Mockito.when(innerScope.getVariableType(variableSymbol)).thenReturn(ExpressionType.create(boolSymbol));
+        Mockito.when(innerScope.getVariableType(variableSymbol)).thenReturn(
+                ExpressionType.create(boolSymbol, this.testClassSymbol));
         Mockito.when(innerScope.containsVariable(variableSymbol)).thenReturn(true);
 
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
-        Mockito.when(initialScope.addVariable(variableSymbol, boolSymbol)).thenReturn(innerScope);
+        Mockito.when(initialScope.addVariable(this.testClassSymbol, variableSymbol, boolSymbol)).thenReturn(innerScope);
 
         final TypeErrorReporter err = this.testIlltypedExpression(boolSymbol, testExpression, initialScope);
 
@@ -401,7 +414,8 @@ public class ExpressionTypeCheckerTest {
 
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
         Mockito.when(initialScope.containsVariable(xSymbol)).thenReturn(true);
-        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(
+                ExpressionType.create(classASymbol, this.testClassSymbol));
 
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
         final MethodSignature barSignature = MethodSignature.getFactory().create(
@@ -420,7 +434,7 @@ public class ExpressionTypeCheckerTest {
                 definedSignatures, err);
         call.acceptVisitor(checker);
 
-        Assert.assertEquals(IdTable.getInstance().getStringSymbol(), checker.getResultType().getTypeId(classId));
+        Assert.assertEquals(IdTable.getInstance().getStringSymbol(), checker.getResultType().getTypeId());
 
         Mockito.verifyZeroInteractions(err);
     }
@@ -438,7 +452,8 @@ public class ExpressionTypeCheckerTest {
 
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
         Mockito.when(initialScope.containsVariable(xSymbol)).thenReturn(true);
-        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(
+                ExpressionType.create(classASymbol, this.testClassSymbol));
 
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
         final MethodSignature barSignature = MethodSignature.getFactory().create(
@@ -457,7 +472,7 @@ public class ExpressionTypeCheckerTest {
                 definedSignatures, err);
         call.acceptVisitor(checker);
 
-        Assert.assertEquals(IdTable.getInstance().getIntSymbol(), checker.getResultType().getTypeId(classId));
+        Assert.assertEquals(IdTable.getInstance().getIntSymbol(), checker.getResultType().getTypeId());
 
         Mockito.verifyZeroInteractions(err);
     }
@@ -476,7 +491,8 @@ public class ExpressionTypeCheckerTest {
 
         final VariablesScope initialScope = Mockito.mock(VariablesScope.class);
         Mockito.when(initialScope.containsVariable(xSymbol)).thenReturn(true);
-        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(ExpressionType.create(classASymbol));
+        Mockito.when(initialScope.getVariableType(xSymbol)).thenReturn(
+                ExpressionType.create(classASymbol, this.testClassSymbol));
 
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
         final MethodSignature barSignature = MethodSignature.getFactory().create(
@@ -495,7 +511,7 @@ public class ExpressionTypeCheckerTest {
                 definedSignatures, err);
         call.acceptVisitor(checker);
 
-        Assert.assertEquals(IdTable.getInstance().getStringSymbol(), checker.getResultType().getTypeId(classId));
+        Assert.assertEquals(IdTable.getInstance().getStringSymbol(), checker.getResultType().getTypeId());
 
         Mockito.verifyZeroInteractions(err);
     }
@@ -515,17 +531,15 @@ public class ExpressionTypeCheckerTest {
     }
 
     private void testWelltypedExpression(IdSymbol expectedType, Expression testExpression, VariablesScope initialScope) {
-        final IdSymbol classId = IdTable.getInstance().addString("TestClass");
-
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
 
         final TypeErrorReporter err = Mockito.mock(TypeErrorReporter.class);
 
-        final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, initialScope, hierarchy,
+        final ExpressionTypeChecker checker = new ExpressionTypeChecker(this.testClassSymbol, initialScope, hierarchy,
                 definedSignatures, err);
         testExpression.acceptVisitor(checker);
 
-        Assert.assertEquals(expectedType, checker.getResultType().getTypeId(classId));
+        Assert.assertEquals(expectedType, checker.getResultType().getTypeId());
 
         Mockito.verifyZeroInteractions(err);
     }
@@ -541,17 +555,15 @@ public class ExpressionTypeCheckerTest {
      */
     private TypeErrorReporter testIlltypedExpression(IdSymbol expectedType, Expression testExpression,
             VariablesScope initialScope) {
-        final IdSymbol classId = IdTable.getInstance().addString("TestClass");
-
         final Map<IdSymbol, DefinedClassSignature> definedSignatures = new HashMap<>();
 
         final TypeErrorReporter err = Mockito.mock(TypeErrorReporter.class);
 
-        final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, initialScope, hierarchy,
+        final ExpressionTypeChecker checker = new ExpressionTypeChecker(this.testClassSymbol, initialScope, hierarchy,
                 definedSignatures, err);
         testExpression.acceptVisitor(checker);
 
-        Assert.assertEquals(expectedType, checker.getResultType().getTypeId(classId));
+        Assert.assertEquals(expectedType, checker.getResultType().getTypeId());
 
         return err;
     }

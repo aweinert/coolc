@@ -15,17 +15,17 @@ class VariablesScope {
 
     public static VariablesScope createFromClassSignature(IdSymbol classId, DefinedClassSignature signature) {
         final Map<IdSymbol, ExpressionType> types = new HashMap<>();
-        types.put(IdTable.getInstance().getSelfSymbol(), ExpressionType.create(classId));
+        types.put(IdTable.getInstance().getSelfSymbol(), ExpressionType.create(classId, classId));
         for (Attribute attribute : signature.getAttributes()) {
-            types.put(attribute.getName(), ExpressionType.create(attribute.getDeclaredType()));
+            types.put(attribute.getName(), ExpressionType.create(attribute.getDeclaredType(), classId));
         }
         return new VariablesScope(types);
     }
 
-    public static VariablesScope createFromMethod(VariablesScope classSignature, Method method) {
+    public static VariablesScope createFromMethod(IdSymbol containingClass, VariablesScope classSignature, Method method) {
         final Map<IdSymbol, ExpressionType> types = new HashMap<>(classSignature.variableTypes);
         for (Formal formal : method.getFormals()) {
-            types.put(formal.getIdentifier(), ExpressionType.create(formal.getDeclaredType()));
+            types.put(formal.getIdentifier(), ExpressionType.create(formal.getDeclaredType(), containingClass));
         }
         return new VariablesScope(types);
     }
@@ -34,9 +34,9 @@ class VariablesScope {
         this.variableTypes = variableTypes;
     }
 
-    public VariablesScope addVariable(IdSymbol variableId, IdSymbol type) {
+    public VariablesScope addVariable(IdSymbol containingClass, IdSymbol variableId, IdSymbol type) {
         final Map<IdSymbol, ExpressionType> newTypes = new HashMap<>(variableTypes);
-        newTypes.put(variableId, ExpressionType.create(type));
+        newTypes.put(variableId, ExpressionType.create(type, containingClass));
         return new VariablesScope(newTypes);
     }
 

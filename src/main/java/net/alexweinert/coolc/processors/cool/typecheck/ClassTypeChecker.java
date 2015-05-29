@@ -34,7 +34,7 @@ class ClassTypeChecker extends Visitor {
         final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, classScope, hierarchy,
                 definedSignatures, err);
         attribute.getInitializer().acceptVisitor(checker);
-        final IdSymbol initializerType = checker.getResultType().getTypeId(this.classId);
+        final IdSymbol initializerType = checker.getResultType().getTypeId();
         final IdSymbol declaredType = attribute.getDeclaredType();
         if (!hierarchy.conformsTo(initializerType, declaredType)) {
             err.reportAttributeInitializerTypeError(attribute, checker.getResultType());
@@ -43,11 +43,11 @@ class ClassTypeChecker extends Visitor {
 
     @Override
     public void visitMethodPostorder(Method method) {
-        final VariablesScope methodScope = VariablesScope.createFromMethod(classScope, method);
+        final VariablesScope methodScope = VariablesScope.createFromMethod(this.classId, classScope, method);
         final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, methodScope, hierarchy,
                 definedSignatures, err);
         method.getBody().acceptVisitor(checker);
-        final IdSymbol bodyType = checker.getResultType().getTypeId(this.classId);
+        final IdSymbol bodyType = checker.getResultType().getTypeId();
         final IdSymbol declaredType = method.getReturnType();
         if (!hierarchy.conformsTo(bodyType, declaredType)) {
             err.reportMethodBodyTypeError(method, checker.getResultType());
