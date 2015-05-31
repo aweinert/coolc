@@ -10,8 +10,10 @@ import java.util.Map;
 import net.alexweinert.coolc.representations.cool.ast.Attribute;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Method;
+import net.alexweinert.coolc.representations.cool.ast.NoExpression;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 
 public class ClassHierarchy {
 
@@ -36,8 +38,19 @@ public class ClassHierarchy {
         this.parentClasses = new HashMap<>(parentClasses);
     }
 
+    /**
+     * classOne conforms to classTwo if classOne is a subclass of classTwo, or if classOne is the IdSymbol of the type
+     * of a {@link NoExpression}.
+     * 
+     * @param classOne
+     *            The supposedly more specific type
+     * @param classTwo
+     *            The alleged parent class
+     * @return True if classOne conforms to classTwo
+     */
     public boolean conformsTo(IdSymbol classOne, IdSymbol classTwo) {
-        return this.parentClasses.get(classOne).contains(classTwo);
+        return classOne.equals(IdTable.getInstance().getNoExprTypeSymbol())
+                || this.parentClasses.get(classOne).contains(classTwo);
     }
 
     public IdSymbol getLeastUpperBound(IdSymbol classOne, IdSymbol classTwo) {

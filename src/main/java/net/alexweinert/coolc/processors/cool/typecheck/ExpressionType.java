@@ -40,12 +40,25 @@ abstract class ExpressionType {
         }
     }
 
+    private static class NoExpressionType extends ExpressionType {
+
+        @Override
+        public IdSymbol getTypeId() {
+            return IdTable.getInstance().getNoExprTypeSymbol();
+        }
+
+    }
+
     public static ExpressionType create(IdSymbol type, IdSymbol containingClass) {
         if (type.equals(IdTable.getInstance().addString("SELF_TYPE"))) {
             return new SelfType(containingClass);
         } else {
             return new ConcreteType(type);
         }
+    }
+
+    public static ExpressionType createNoExpressionType() {
+        return new NoExpressionType();
     }
 
     public abstract IdSymbol getTypeId();

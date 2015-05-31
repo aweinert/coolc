@@ -27,6 +27,7 @@ import net.alexweinert.coolc.representations.cool.ast.Let;
 import net.alexweinert.coolc.representations.cool.ast.Loop;
 import net.alexweinert.coolc.representations.cool.ast.Multiplication;
 import net.alexweinert.coolc.representations.cool.ast.New;
+import net.alexweinert.coolc.representations.cool.ast.NoExpression;
 import net.alexweinert.coolc.representations.cool.ast.ObjectReference;
 import net.alexweinert.coolc.representations.cool.ast.StaticFunctionCall;
 import net.alexweinert.coolc.representations.cool.ast.StringConst;
@@ -65,6 +66,11 @@ class ExpressionTypeChecker extends Visitor {
     public ExpressionType getResultType() {
         assert this.argumentTypes.size() == 1;
         return this.argumentTypes.peek();
+    }
+
+    @Override
+    public void visitNoExpression(NoExpression noExpression) {
+        this.argumentTypes.push(ExpressionType.createNoExpressionType());
     }
 
     @Override

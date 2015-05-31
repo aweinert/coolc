@@ -76,4 +76,8 @@ public class IdTable extends AbstractTable<String> {
     public IdSymbol getMainSymbol() {
         return this.addString("Main");
     }
+
+    public IdSymbol getNoExprTypeSymbol() {
+        return this.addString("no_expr_type");
+    }
 }
