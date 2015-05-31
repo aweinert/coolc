@@ -75,19 +75,19 @@ class ExpressionTypeChecker extends Visitor {
 
     @Override
     public void visitBoolConst(BoolConst boolConst) {
-        this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol(), this.classId));
+        this.argumentTypes.push(ExpressionType.createBoolType());
         boolConst.setType(IdTable.getInstance().getBoolSymbol());
     }
 
     @Override
     public void visitIntConst(IntConst intConst) {
-        this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getIntSymbol(), this.classId));
+        this.argumentTypes.push(ExpressionType.createIntType());
         intConst.setType(IdTable.getInstance().getIntSymbol());
     }
 
     @Override
     public void visitStringConstant(StringConst stringConst) {
-        this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getStringSymbol(), this.classId));
+        this.argumentTypes.push(ExpressionType.createStringType());
         stringConst.setType(IdTable.getInstance().getStringSymbol());
     }
 
@@ -99,7 +99,7 @@ class ExpressionTypeChecker extends Visitor {
             referenceType = scope.getVariableType(objectReference.getVariableIdentifier());
         } else {
             err.reportVariableOutOfScope(objectReference);
-            referenceType = ExpressionType.create(IdTable.getInstance().getObjectSymbol(), this.classId);
+            referenceType = ExpressionType.createObjectType();
         }
         this.argumentTypes.push(referenceType);
         objectReference.setType(referenceType.getTypeId());
@@ -129,29 +129,29 @@ class ExpressionTypeChecker extends Visitor {
     public void visitArithmeticNegationPostOrder(ArithmeticNegation arithmeticNegation) {
         final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
 
-        final IdSymbol argType = this.argumentTypes.pop().getTypeId();
-        if (!this.hierarchy.conformsTo(argType, intSymbol)) {
-            err.reportTypeMismatch(arithmeticNegation, argType, intSymbol);
+        final ExpressionType argType = this.argumentTypes.pop();
+        if (!argType.conformsTo(ExpressionType.createIntType(), hierarchy)) {
+            err.reportTypeMismatch(arithmeticNegation, argType.getTypeId(), intSymbol);
         }
 
-        this.argumentTypes.push(ExpressionType.create(intSymbol, this.classId));
+        this.argumentTypes.push(ExpressionType.createIntType());
         arithmeticNegation.setType(intSymbol);
     }
 
     private void visitBinaryArithmeticOperation(Expression operation) {
         final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
 
-        final IdSymbol rhsType = this.argumentTypes.pop().getTypeId();
-        if (!this.hierarchy.conformsTo(rhsType, intSymbol)) {
-            err.reportTypeMismatch(operation, rhsType, intSymbol);
+        final ExpressionType rhsType = this.argumentTypes.pop();
+        if (!rhsType.conformsTo(ExpressionType.createIntType(), this.hierarchy)) {
+            err.reportTypeMismatch(operation, rhsType.getTypeId(), intSymbol);
         }
 
-        final IdSymbol lhsType = this.argumentTypes.pop().getTypeId();
-        if (!this.hierarchy.conformsTo(lhsType, intSymbol)) {
-            err.reportTypeMismatch(operation, lhsType, intSymbol);
+        final ExpressionType lhsType = this.argumentTypes.pop();
+        if (!lhsType.conformsTo(ExpressionType.createIntType(), this.hierarchy)) {
+            err.reportTypeMismatch(operation, lhsType.getTypeId(), intSymbol);
         }
 
-        this.argumentTypes.push(ExpressionType.create(intSymbol, this.classId));
+        this.argumentTypes.push(ExpressionType.createIntType());
         operation.setType(intSymbol);
     }
 
@@ -170,27 +170,23 @@ class ExpressionTypeChecker extends Visitor {
         final ExpressionType rhsType = this.argumentTypes.pop();
         final ExpressionType lhsType = this.argumentTypes.pop();
 
-        final boolean lhsIsInt = lhsType.equals(ExpressionType.create(IdTable.getInstance().getIntSymbol(),
-                this.classId));
-        final boolean lhsIsString = lhsType.equals(ExpressionType.create(IdTable.getInstance().getStringSymbol(),
-                this.classId));
-        final boolean lhsIsBool = lhsType.equals(ExpressionType.create(IdTable.getInstance().getBoolSymbol(),
-                this.classId));
+        final boolean lhsIsBool = lhsType.equals(ExpressionType.createBoolType());
+        final boolean lhsIsInt = lhsType.equals(ExpressionType.createIntType());
+        final boolean lhsIsString = lhsType.equals(ExpressionType.createStringType());
         final boolean lhsIsPrimitive = lhsIsInt || lhsIsString || lhsIsBool;
-        final boolean rhsIsInt = rhsType.equals(ExpressionType.create(IdTable.getInstance().getIntSymbol(),
-                this.classId));
-        final boolean rhsIsString = rhsType.equals(ExpressionType.create(IdTable.getInstance().getStringSymbol(),
-                this.classId));
-        final boolean rhsIsBool = rhsType.equals(ExpressionType.create(IdTable.getInstance().getBoolSymbol(),
-                this.classId));
+
+        final boolean rhsIsBool = rhsType.equals(ExpressionType.createBoolType());
+        final boolean rhsIsInt = rhsType.equals(ExpressionType.createIntType());
+        final boolean rhsIsString = rhsType.equals(ExpressionType.createStringType());
         final boolean rhsIsPrimitive = rhsIsInt || rhsIsString || rhsIsBool;
+
         if (lhsIsPrimitive && !lhsType.equals(rhsType)) {
             this.err.reportTypeMismatch(equality, rhsType.getTypeId(), lhsType.getTypeId());
         } else if (rhsIsPrimitive && !lhsType.equals(rhsType)) {
             this.err.reportTypeMismatch(equality, lhsType.getTypeId(), rhsType.getTypeId());
         }
 
-        this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol(), this.classId));
+        this.argumentTypes.push(ExpressionType.createBoolType());
         equality.setType(IdTable.getInstance().getBoolSymbol());
 
     }
@@ -198,17 +194,17 @@ class ExpressionTypeChecker extends Visitor {
     private void visitArithmeticComparison(Expression operation) {
         final IdSymbol intSymbol = IdTable.getInstance().getIntSymbol();
 
-        final IdSymbol rhsType = this.argumentTypes.pop().getTypeId();
-        if (!this.hierarchy.conformsTo(rhsType, intSymbol)) {
-            err.reportTypeMismatch(operation, rhsType, intSymbol);
+        final ExpressionType rhsType = this.argumentTypes.pop();
+        if (!rhsType.conformsTo(ExpressionType.createIntType(), this.hierarchy)) {
+            err.reportTypeMismatch(operation, rhsType.getTypeId(), intSymbol);
         }
 
-        final IdSymbol lhsType = this.argumentTypes.pop().getTypeId();
-        if (!this.hierarchy.conformsTo(lhsType, intSymbol)) {
-            err.reportTypeMismatch(operation, lhsType, intSymbol);
+        final ExpressionType lhsType = this.argumentTypes.pop();
+        if (!lhsType.conformsTo(ExpressionType.createIntType(), this.hierarchy)) {
+            err.reportTypeMismatch(operation, lhsType.getTypeId(), intSymbol);
         }
 
-        this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol(), this.classId));
+        this.argumentTypes.push(ExpressionType.createBoolType());
         operation.setType(IdTable.getInstance().getBoolSymbol());
     }
 
@@ -216,12 +212,12 @@ class ExpressionTypeChecker extends Visitor {
     public void visitBooleanNegationPostorder(BooleanNegation booleanNegation) {
         final IdSymbol boolSymbol = IdTable.getInstance().getBoolSymbol();
 
-        final IdSymbol argType = this.argumentTypes.pop().getTypeId();
-        if (!this.hierarchy.conformsTo(argType, boolSymbol)) {
-            err.reportTypeMismatch(booleanNegation, argType, boolSymbol);
+        final ExpressionType argType = this.argumentTypes.pop();
+        if (!argType.conformsTo(ExpressionType.createBoolType(), this.hierarchy)) {
+            err.reportTypeMismatch(booleanNegation, argType.getTypeId(), boolSymbol);
         }
 
-        this.argumentTypes.push(ExpressionType.create(boolSymbol, this.classId));
+        this.argumentTypes.push(ExpressionType.createBoolType());
         booleanNegation.setType(boolSymbol);
     }
 
@@ -229,17 +225,16 @@ class ExpressionTypeChecker extends Visitor {
     public void visitAssignPostorder(Assign assign) {
         final IdSymbol assignedVariable = assign.getVariableIdentifier();
         final ExpressionType rhsType = this.argumentTypes.pop();
-        final IdSymbol rhsTypeId = rhsType.getTypeId();
-        final IdSymbol lhsTypeId = this.variablesScopes.peek().getVariableType(assignedVariable).getTypeId();
+        final ExpressionType lhsType = this.variablesScopes.peek().getVariableType(assignedVariable);
 
-        if (this.hierarchy.conformsTo(rhsTypeId, lhsTypeId)) {
+        if (rhsType.conformsTo(lhsType, this.hierarchy)) {
             this.argumentTypes.push(rhsType);
-            assign.setType(rhsTypeId);
+            assign.setType(rhsType.getTypeId());
         } else {
-            err.reportTypeMismatch(assign, rhsTypeId, lhsTypeId);
-            final IdSymbol lhsDeclaredType = this.variablesScopes.peek().getVariableType(assignedVariable).getTypeId();
-            this.argumentTypes.push(ExpressionType.create(lhsDeclaredType, this.classId));
-            assign.setType(lhsDeclaredType);
+            err.reportTypeMismatch(assign, rhsType.getTypeId(), lhsType.getTypeId());
+            final ExpressionType lhsDeclaredType = this.variablesScopes.peek().getVariableType(assignedVariable);
+            this.argumentTypes.push(lhsDeclaredType);
+            assign.setType(lhsDeclaredType.getTypeId());
         }
     }
 
@@ -278,7 +273,7 @@ class ExpressionTypeChecker extends Visitor {
     @Override
     public void visitLoopPostorder(Loop loop) {
         this.argumentTypes.pop();
-        this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getObjectSymbol(), this.classId));
+        this.argumentTypes.push(ExpressionType.createObjectType());
     }
 
     @Override
@@ -289,16 +284,18 @@ class ExpressionTypeChecker extends Visitor {
     @Override
     public void visitIsVoidPostorder(IsVoid isVoid) {
         this.argumentTypes.pop();
-        this.argumentTypes.push(ExpressionType.create(IdTable.getInstance().getBoolSymbol(), this.classId));
+        this.argumentTypes.push(ExpressionType.createBoolType());
     }
 
     @Override
     public void visitLetInorder(Let let) {
         final ExpressionType initializerType = this.argumentTypes.pop();
-        final IdSymbol initializerTypeSymbol = initializerType.getTypeId();
         final IdSymbol expectedInitializerTypeSymbol = let.getDeclaredType();
-        if (!this.hierarchy.conformsTo(initializerTypeSymbol, expectedInitializerTypeSymbol)) {
-            this.err.reportTypeMismatch(let.getInitializer(), initializerTypeSymbol, expectedInitializerTypeSymbol);
+        final ExpressionType expectedInitializerType = ExpressionType.create(expectedInitializerTypeSymbol,
+                this.classId);
+        if (!initializerType.conformsTo(expectedInitializerType, this.hierarchy)) {
+            this.err.reportTypeMismatch(let.getInitializer(), initializerType.getTypeId(),
+                    expectedInitializerTypeSymbol);
         }
         final VariablesScope currentScope = this.variablesScopes.peek();
         this.variablesScopes.push(currentScope.addVariable(this.classId, let.getVariableIdentifier(),
@@ -313,7 +310,7 @@ class ExpressionTypeChecker extends Visitor {
 
     @Override
     public void visitFunctionCallInorder(FunctionCall call) {
-        final IdSymbol calleeType = this.argumentTypes.pop().getTypeId();
+        final ExpressionType calleeType = this.argumentTypes.pop();
         this.pushArgumentTypes(call, calleeType);
     }
 
@@ -327,10 +324,10 @@ class ExpressionTypeChecker extends Visitor {
 
     @Override
     public void visitStaticFunctionCallInorder(StaticFunctionCall call) {
-        final IdSymbol calleeType = this.argumentTypes.pop().getTypeId();
-        final IdSymbol declaredCalleeType = call.getStaticType();
-        if (!this.hierarchy.conformsTo(calleeType, declaredCalleeType)) {
-            this.err.reportTypeMismatch(call.getCallee(), calleeType, declaredCalleeType);
+        final ExpressionType calleeType = this.argumentTypes.pop();
+        final ExpressionType declaredCalleeType = ExpressionType.create(call.getStaticType(), this.classId);
+        if (!calleeType.conformsTo(declaredCalleeType, this.hierarchy)) {
+            this.err.reportTypeMismatch(call.getCallee(), calleeType.getTypeId(), declaredCalleeType.getTypeId());
         }
 
         this.pushArgumentTypes(call, declaredCalleeType);
@@ -355,16 +352,16 @@ class ExpressionTypeChecker extends Visitor {
      * expression is of the given type. Reports errors if the number of given arguments does not conform to the number
      * of declared arguments.
      */
-    private void pushArgumentTypes(FunctionCall call, final IdSymbol calleeType) {
-        this.methodDefiningClasses.push(calleeType);
+    private void pushArgumentTypes(FunctionCall call, final ExpressionType calleeType) {
+        this.methodDefiningClasses.push(calleeType.getTypeId());
 
-        final DefinedClassSignature calleeSignature = this.definedSignatures.get(calleeType);
+        final DefinedClassSignature calleeSignature = this.definedSignatures.get(calleeType.getTypeId());
         final MethodSignature methodSignature = calleeSignature.getMethodSignature(call.getFunctionIdentifier());
 
         final List<ExpressionType> argumentTypes = new LinkedList<>();
         final boolean methodDefined = methodSignature != null;
         if (methodDefined) {
-            this.methodReturnTypes.push(ExpressionType.create(methodSignature.getReturnType(), calleeType));
+            this.methodReturnTypes.push(ExpressionType.create(methodSignature.getReturnType(), calleeType.getTypeId()));
 
             final int declaredNumberOfArgs = methodSignature.getArgumentTypes().size();
             final int givenNumberOfArgs = call.getArguments().size();
@@ -372,18 +369,20 @@ class ExpressionTypeChecker extends Visitor {
 
             if (correctNumberOfArguments) {
                 for (IdSymbol argType : methodSignature.getArgumentTypes()) {
-                    argumentTypes.add(ExpressionType.create(argType, calleeType));
+                    argumentTypes.add(ExpressionType.create(argType, calleeType.getTypeId()));
                 }
             } else {
                 this.err.reportWrongNumberOfFunctionArguments(call, methodSignature.getArgumentTypes().size());
                 for (int i = 0; i < givenNumberOfArgs; ++i) {
-                    argumentTypes.add(ExpressionType.create(IdTable.getInstance().getObjectSymbol(), calleeType));
+                    argumentTypes.add(ExpressionType.create(IdTable.getInstance().getObjectSymbol(),
+                            calleeType.getTypeId()));
                 }
             }
         } else {
-            this.err.reportUndefinedMethod(call, calleeType);
+            this.err.reportUndefinedMethod(call, calleeType.getTypeId());
             for (int i = 0; i < call.getArguments().size(); ++i) {
-                argumentTypes.add(ExpressionType.create(IdTable.getInstance().getObjectSymbol(), calleeType));
+                argumentTypes
+                        .add(ExpressionType.create(IdTable.getInstance().getObjectSymbol(), calleeType.getTypeId()));
             }
         }
         this.methodSignatures.push(argumentTypes);
@@ -391,11 +390,11 @@ class ExpressionTypeChecker extends Visitor {
 
     @Override
     public void visitArgumentExpressionsInorder(ArgumentExpressions expressions) {
-        final IdSymbol givenArgumentType = this.argumentTypes.pop().getTypeId();
-        final IdSymbol expectedArgumentType = this.methodSignatures.peek().get(0).getTypeId();
+        final ExpressionType givenArgumentType = this.argumentTypes.pop();
+        final ExpressionType expectedArgumentType = this.methodSignatures.peek().get(0);
         this.methodSignatures.peek().remove(0);
-        if (!this.hierarchy.conformsTo(givenArgumentType, expectedArgumentType)) {
-            this.err.reportTypeMismatch(expressions, givenArgumentType, expectedArgumentType);
+        if (!givenArgumentType.conformsTo(expectedArgumentType, this.hierarchy)) {
+            this.err.reportTypeMismatch(expressions, givenArgumentType.getTypeId(), expectedArgumentType.getTypeId());
         }
     }
 
@@ -404,11 +403,11 @@ class ExpressionTypeChecker extends Visitor {
         if (expressions.size() == 0) {
             return;
         }
-        final IdSymbol givenArgumentType = this.argumentTypes.pop().getTypeId();
-        final IdSymbol expectedArgumentType = this.methodSignatures.peek().get(0).getTypeId();
+        final ExpressionType givenArgumentType = this.argumentTypes.pop();
+        final ExpressionType expectedArgumentType = this.methodSignatures.peek().get(0);
         this.methodSignatures.peek().remove(0);
-        if (!this.hierarchy.conformsTo(givenArgumentType, expectedArgumentType)) {
-            this.err.reportTypeMismatch(expressions, givenArgumentType, expectedArgumentType);
+        if (!givenArgumentType.conformsTo(expectedArgumentType, this.hierarchy)) {
+            this.err.reportTypeMismatch(expressions, givenArgumentType.getTypeId(), expectedArgumentType.getTypeId());
         }
     }
 
@@ -419,7 +418,7 @@ class ExpressionTypeChecker extends Visitor {
             branchTypes.add(this.argumentTypes.pop());
         }
 
-        final ExpressionType switchExpressionType = this.argumentTypes.pop();
+        this.argumentTypes.pop();
 
         final Iterator<ExpressionType> typeIterator = branchTypes.iterator();
         ExpressionType leastUpperBound = typeIterator.next();

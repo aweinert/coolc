@@ -21,6 +21,16 @@ abstract class ExpressionType {
         public String toString() {
             return "SELF_TYPE";
         }
+
+        @Override
+        public boolean conformsTo(ExpressionType other, ClassHierarchy hierarchy) {
+            return other.equals(this) || hierarchy.conformsTo(this.containingClass, other.getTypeId());
+        }
+
+        public boolean equals(Object other) {
+            return other.getClass().equals(this.getClass())
+                    && this.containingClass.equals(((SelfType) other).containingClass);
+        }
     }
 
     private static class ConcreteType extends ExpressionType {
@@ -38,6 +48,11 @@ abstract class ExpressionType {
         public String toString() {
             return this.type.toString();
         }
+
+        @Override
+        public boolean conformsTo(ExpressionType other, ClassHierarchy hierarchy) {
+            return hierarchy.conformsTo(this.type, other.getTypeId());
+        }
     }
 
     private static class NoExpressionType extends ExpressionType {
@@ -47,6 +62,27 @@ abstract class ExpressionType {
             return IdTable.getInstance().getNoExprTypeSymbol();
         }
 
+        @Override
+        public boolean conformsTo(ExpressionType other, ClassHierarchy hierarchy) {
+            return true;
+        }
+
+    }
+
+    public static ExpressionType createObjectType() {
+        return new ConcreteType(IdTable.getInstance().getObjectSymbol());
+    }
+
+    public static ExpressionType createIntType() {
+        return new ConcreteType(IdTable.getInstance().getIntSymbol());
+    }
+
+    public static ExpressionType createBoolType() {
+        return new ConcreteType(IdTable.getInstance().getBoolSymbol());
+    }
+
+    public static ExpressionType createStringType() {
+        return new ConcreteType(IdTable.getInstance().getStringSymbol());
     }
 
     public static ExpressionType create(IdSymbol type, IdSymbol containingClass) {
@@ -62,6 +98,8 @@ abstract class ExpressionType {
     }
 
     public abstract IdSymbol getTypeId();
+
+    public abstract boolean conformsTo(ExpressionType other, ClassHierarchy hierarchy);
 
     public ExpressionType computeLeastUpperBound(ExpressionType other, IdSymbol containingClassId,
             ClassHierarchy hierarchy) {
