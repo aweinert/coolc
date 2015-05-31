@@ -34,9 +34,9 @@ class ClassTypeChecker extends Visitor {
         final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, classScope, hierarchy,
                 definedSignatures, err);
         attribute.getInitializer().acceptVisitor(checker);
-        final IdSymbol initializerType = checker.getResultType().getTypeId();
-        final IdSymbol declaredType = attribute.getDeclaredType();
-        if (!hierarchy.conformsTo(initializerType, declaredType)) {
+        final ExpressionType initializerType = checker.getResultType();
+        final ExpressionType declaredType = ExpressionType.create(attribute.getDeclaredType(), this.classId);
+        if (!initializerType.conformsTo(declaredType, this.hierarchy)) {
             err.reportAttributeInitializerTypeError(attribute, checker.getResultType());
         }
     }
@@ -47,9 +47,9 @@ class ClassTypeChecker extends Visitor {
         final ExpressionTypeChecker checker = new ExpressionTypeChecker(classId, methodScope, hierarchy,
                 definedSignatures, err);
         method.getBody().acceptVisitor(checker);
-        final IdSymbol bodyType = checker.getResultType().getTypeId();
-        final IdSymbol declaredType = method.getReturnType();
-        if (!hierarchy.conformsTo(bodyType, declaredType)) {
+        final ExpressionType bodyType = checker.getResultType();
+        final ExpressionType declaredType = ExpressionType.create(method.getReturnType(), this.classId);
+        if (!bodyType.conformsTo(declaredType, this.hierarchy)) {
             err.reportMethodBodyTypeError(method, checker.getResultType());
         }
     }
