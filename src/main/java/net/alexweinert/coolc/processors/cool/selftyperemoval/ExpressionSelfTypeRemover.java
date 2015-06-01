@@ -59,7 +59,7 @@ class ExpressionSelfTypeRemover extends Visitor {
         final Expression rhsArg = arguments.pop();
         final Expression lhsArg = arguments.pop();
 
-        arguments.push(new Addition(addition.getFilename(), addition.getLineNumber(), lhsArg, rhsArg));
+        this.arguments.push(new Addition(addition.getFilename(), addition.getLineNumber(), lhsArg, rhsArg));
     }
 
     @Override
@@ -244,6 +244,11 @@ class ExpressionSelfTypeRemover extends Visitor {
     @Override
     public void visitObjectReference(ObjectReference objectReference) {
         this.arguments.push(objectReference);
+    }
+
+    @Override
+    public void visitStaticFunctionCallInorder(StaticFunctionCall staticFunctionCall) {
+        this.argumentExpressions.push(new LinkedList<Expression>());
     }
 
     @Override
