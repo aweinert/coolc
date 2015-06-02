@@ -18,13 +18,19 @@ public class DefinedClassSignature extends ClassSignature {
         final Map<IdSymbol, Attribute> attributes = new HashMap<>();
         final Map<IdSymbol, MethodSignature> methods = new HashMap<>();
 
+        /* When collecting the signatures, we only collect the signatures of the most specific parentclass. This allows
+         * us to handle the types of programs that come out of the removal of the self type */
         for (IdSymbol ancestor : hierarchy.getWeakAncestors(classId)) {
             final DeclaredClassSignature ancestorSignature = declaredSignatures.get(ancestor);
             for (Attribute attribute : ancestorSignature.getAttributes()) {
-                attributes.put(attribute.getName(), attribute);
+                if (!attributes.containsKey(attribute.getName())) {
+                    attributes.put(attribute.getName(), attribute);
+                }
             }
             for (MethodSignature method : ancestorSignature.getMethodSignatures()) {
-                methods.put(method.getIdentifier(), method);
+                if (!methods.containsKey(method.getIdentifier())) {
+                    methods.put(method.getIdentifier(), method);
+                }
             }
         }
 
