@@ -411,6 +411,23 @@ public class CoolBackendVisitor<T, U> extends Visitor {
     }
 
     @Override
+    public void visitLetPreorder(Let let) {
+        if (let.getInitializer() instanceof NoExpression) {
+            final String initializerVariable = this.builder.declareVariable(let.getDeclaredType());
+            this.variables.push(initializerVariable);
+            if (let.getDeclaredType().equals(IdTable.getInstance().getBoolSymbol())) {
+                this.builder.loadBoolean(initializerVariable, BoolSymbol.falsebool);
+            } else if (let.getDeclaredType().equals(IdTable.getInstance().getIntSymbol())) {
+                this.builder.loadInt(initializerVariable, IntTable.getInstance().addInt(0));
+            } else if (let.getDeclaredType().equals(IdTable.getInstance().getStringSymbol())) {
+                this.builder.loadString(initializerVariable, StringTable.getInstance().addString(""));
+            } else {
+                this.builder.loadVoid(initializerVariable);
+            }
+        }
+    }
+
+    @Override
     public void visitLetInorder(Let let) {
         final String letVariable = this.builder.toVariable(let.getVariableIdentifier());
         this.builder.declareVariable(let.getDeclaredType(), letVariable);
