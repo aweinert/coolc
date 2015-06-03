@@ -1,3 +1,4 @@
+(* Tests assignments and loops. Inspired by an example from CS164 *)
 class Main {
 	main() : Object {
 		let io : IO <- new IO in
