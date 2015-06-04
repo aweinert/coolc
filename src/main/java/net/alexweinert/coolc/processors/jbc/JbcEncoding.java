@@ -49,7 +49,7 @@ public class JbcEncoding {
     }
 
     public int getALoadLength() {
-        return 2;
+        return 4;
     }
 
     public int getALoad0Length() {
@@ -97,7 +97,7 @@ public class JbcEncoding {
     }
 
     public int getAStoreLength() {
-        return 2;
+        return 4;
     }
 
     public int getIConst0Length() {
