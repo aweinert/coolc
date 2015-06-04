@@ -171,9 +171,11 @@ public class JbcEncoder {
         this.builder.appendContent((byte) 0x85);
     }
 
-    public void encodeALoad(byte index) {
+    public void encodeALoad(char index) {
+        /* We actually use wide in combination with aload here to access more than Byte.MAX_VALUE local variables */
+        this.builder.appendContent((byte) 0xc4);
         this.builder.appendContent((byte) 0x19);
-        this.builder.appendContent(index);
+        this.builder.appendContent(this.splitter.splitChar(index));
     }
 
     public void encodeALoad0() {
@@ -240,9 +242,11 @@ public class JbcEncoder {
         this.builder.appendContent((byte) 0xb0);
     }
 
-    public void encodeAStore(byte varId) {
+    public void encodeAStore(char varId) {
+        /* We actually use wide in combination with astore here to access more than Byte.MAX_VALUE local variables */
+        this.builder.appendContent((byte) 0xc4);
         this.builder.appendContent((byte) 0x3a);
-        this.builder.appendContent(varId);
+        this.builder.appendContent(this.splitter.splitChar(varId));
 
     }
 

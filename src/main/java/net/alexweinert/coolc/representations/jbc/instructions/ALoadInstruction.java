@@ -13,8 +13,8 @@ class ALoadInstruction extends OpCode {
 
     @Override
     public void encode(JbcEncoder encoder) {
-        assert this.varIndex < Byte.MAX_VALUE;
-        encoder.encodeALoad((byte) this.varIndex);
+        assert this.varIndex < Character.MAX_VALUE;
+        encoder.encodeALoad((char) this.varIndex);
     }
 
     @Override

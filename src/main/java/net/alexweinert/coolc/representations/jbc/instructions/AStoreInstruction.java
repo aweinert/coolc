@@ -13,8 +13,8 @@ class AStoreInstruction extends OpCode {
 
     @Override
     public void encode(JbcEncoder encoder) {
-        assert this.varId < Byte.MAX_VALUE;
-        encoder.encodeAStore((byte) this.varId);
+        assert this.varId < Character.MAX_VALUE;
+        encoder.encodeAStore((char) this.varId);
     }
 
     @Override
