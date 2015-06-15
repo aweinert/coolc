@@ -211,7 +211,7 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 	// Handle escaped backspace
 	this.string_buf.append('\b');
 }
-<STRING> "\t" {
+<STRING> "\\t" {
 	// Handle escaped tab
 	this.string_buf.append('\t');
 }
