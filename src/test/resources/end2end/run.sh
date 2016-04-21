@@ -20,6 +20,12 @@ function runSingle {
 	fi
 }
 
+if [ "$#" -ne 1 ]; then
+	echo "Usage: $0 <run-command>"
+	echo "<run-command> - The command to run the compiler"
+	exit 1
+fi
+
 for testDir in ./*; do
 	if [ -d $testDir ]; then
 		code=$testDir/code.cl
