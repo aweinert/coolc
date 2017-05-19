@@ -39,7 +39,9 @@ public class EndToEndTest {
         procBuilder.redirectInput(new File(inputPath));
 
         final Process proc = procBuilder.start();
-        proc.waitFor();
+        /* Execute compiled program and check exit code
+         * Cool programs always exit with code 0, so an exit code != 0 indicates a crash */
+        Assert.assertEquals(0, proc.waitFor());
         // Method for turning InputStream into String taken from http://stackoverflow.com/a/5445161
         java.util.Scanner s = new java.util.Scanner(proc.getInputStream()).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
@@ -47,6 +49,7 @@ public class EndToEndTest {
 
     private String compile(String codePath) {
         final String[] args = new String[] { codePath };
+        // Execute compiler and check for exit code
         Main.main(args);
         return "out.jar";
     }
