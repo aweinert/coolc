@@ -24,10 +24,7 @@ public class EndToEndTest {
             final String expectedOutput = new String(Files.readAllBytes(Paths.get(expectedOutputPath)));
 
             Assert.assertEquals(expectedOutput, actualOutput);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.assertNull(e);
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Assert.assertNull(e);
         }
