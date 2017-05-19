@@ -9,8 +9,25 @@ import java.nio.file.Paths;
 
 public class EndToEndTest {
     @Test
-    public void helloWorld1() {
-        runTest("helloWorld", 1);
+    public void helloWorld() {
+        runTestWithoutInput("helloWorld");
+    }
+
+    @Test
+    public void assign1() {
+        runTestWithoutInput("assign");
+    }
+
+    private void runTestWithoutInput(String testName) {
+        final String codePath = getCodePath(testName);
+        final String jarPath = compile(codePath);
+
+        try {
+            runJarWithoutInput(jarPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.assertNull(e);
+        }
     }
 
     private void runTest(String testName, int inputNumber) {
@@ -28,6 +45,12 @@ public class EndToEndTest {
             e.printStackTrace();
             Assert.assertNull(e);
         }
+    }
+
+    private void runJarWithoutInput(String jarPath) throws IOException, InterruptedException {
+        final ProcessBuilder procBuilder = new ProcessBuilder("java", "-jar", jarPath);
+        final Process proc = procBuilder.start();
+        Assert.assertEquals(0, proc.waitFor());
     }
 
     private String runJar(String jarPath, String inputPath) throws IOException, InterruptedException {
