@@ -10,12 +10,12 @@ import java.nio.file.Paths;
 public class EndToEndTest {
     @Test
     public void helloWorld() {
-        runTestWithoutInput("helloWorld");
+        runTest("helloWorld", 1);
     }
 
     @Test
     public void assign1() {
-        runTestWithoutInput("assign");
+        runTest("assign", 1);
     }
 
     private void runTestWithoutInput(String testName) {
