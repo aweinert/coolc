@@ -4,7 +4,7 @@
    no error checking is done *)
 class CellularAutomaton {
     population_map : String;
-	io : IO;
+	io : IO <- new IO;
    
     init(map : String) : SELF_TYPE {
         {
