@@ -18,6 +18,11 @@ public class EndToEndTest {
         runTest("assign", 1);
     }
 
+    @Test
+    public void cells() {
+        runTest("cells", 1);
+    }
+
     private void runTestWithoutInput(String testName) {
         final String codePath = getCodePath(testName);
         final String jarPath = compile(codePath);
