@@ -28,6 +28,11 @@ public class EndToEndTest {
         runTest("factorial", 1);
     }
 
+    @Test
+    public void list() {
+        runTest("list", 1);
+    }
+
     private void runTestWithoutInput(String testName) {
         final String codePath = getCodePath(testName);
         final String jarPath = compile(codePath);
