@@ -23,6 +23,11 @@ public class EndToEndTest {
         runTest("cells", 1);
     }
 
+    @Test
+    public void factorial() {
+        runTest("factorial", 1);
+    }
+
     private void runTestWithoutInput(String testName) {
         final String codePath = getCodePath(testName);
         final String jarPath = compile(codePath);
