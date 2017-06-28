@@ -33,6 +33,11 @@ public class EndToEndTest {
         runTest("list", 1);
     }
 
+    @Test
+    public void loop() {
+        runTest("loop", 1);
+    }
+
     private void runTestWithoutInput(String testName) {
         final String codePath = getCodePath(testName);
         final String jarPath = compile(codePath);
