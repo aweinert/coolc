@@ -1,0 +1,11 @@
+This is a very simple stack machine that only supports the following commands:
+<int> - Push the given integer on top of the stack. Cannot be evaluated.
++     - Push an addition command on the stack. When evaluated, it takes the next two elements from the stack,
+        which must be ints, adds them and pushes the result back on the stack.
+s     - Push a swap command on the stack. When evaluated, this takes the next two elements from the stack,
+        and pushes them back on the stack in reverse order.
+e     - Evaluate the command on top of the stack.
+d     - Display the current stack.
+x     - Quit the program.
+>>>>>6
+>

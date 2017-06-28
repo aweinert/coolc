@@ -38,6 +38,11 @@ public class EndToEndTest {
         runTest("loop", 1);
     }
 
+    @Test
+    public void stack1() {
+        runTest("stack", 1);
+    }
+
     private void runTestWithoutInput(String testName) {
         final String codePath = getCodePath(testName);
         final String jarPath = compile(codePath);
