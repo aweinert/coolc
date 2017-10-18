@@ -2,6 +2,7 @@ package net.alexweinert.coolc.processors.cool.frontend;
 
 import java.io.Reader;
 
+import java_cup.runtime.Symbol;
 import net.alexweinert.coolc.infrastructure.Processor;
 import net.alexweinert.coolc.infrastructure.ProcessorException;
 import net.alexweinert.coolc.processors.cool.frontend.lexer.Lexer;
@@ -22,7 +23,7 @@ public class CoolParser extends Processor<Reader, Program> {
         try {
             final Parser parser = ParserFactory.createParserFromReader(reader);
             ((Lexer) parser.getScanner()).set_filename(this.filename);
-            final Object parseResult = parser.parse().value;
+            final Symbol parseResult = parser.parse();
             final ParserErrorHandler handler = parser.getErrorHandler();
             if (handler.hasErrors()) {
                 for (String error : handler.getErrorMessages()) {
@@ -30,7 +31,7 @@ public class CoolParser extends Processor<Reader, Program> {
                 }
                 throw new ProcessorException(null);
             }
-            return (Program) parseResult;
+            return (Program) parseResult.value;
         } catch (Exception e) {
             throw new ProcessorException(e);
         }
