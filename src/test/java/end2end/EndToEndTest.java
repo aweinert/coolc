@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 public class EndToEndTest {
     @Test
     public void helloWorld() {
-        runTest("helloWorld", 1);
+        runTest("helloworld", 1);
     }
 
     @Test
