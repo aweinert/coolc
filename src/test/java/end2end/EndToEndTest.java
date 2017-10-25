@@ -1,3 +1,5 @@
+package end2end;
+
 import net.alexweinert.coolc.Main;
 import org.junit.Assert;
 import org.junit.Test;
