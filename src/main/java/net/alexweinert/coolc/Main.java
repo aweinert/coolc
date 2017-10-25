@@ -19,6 +19,8 @@ public class Main {
             compiler.compile();
         } catch (ProcessorException e) {
             System.out.println("Error during compilation. Exiting.");
+            System.out.println(e.getCause().toString());
+            e.getCause().printStackTrace();
             System.exit(1);
         }
     }
