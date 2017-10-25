@@ -4,8 +4,7 @@ import net.alexweinert.coolc.Main;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -81,11 +80,20 @@ public class EndToEndTest {
     }
 
     private String runJar(String jarPath, String inputPath) throws IOException, InterruptedException {
-        final String command = String.format("java -jar %s", jarPath);
         final ProcessBuilder procBuilder = new ProcessBuilder("java", "-jar", jarPath);
-        procBuilder.redirectInput(new File(inputPath));
-
         final Process proc = procBuilder.start();
+
+        final File inputFile = new File(inputPath);
+        final BufferedReader inputReader = new BufferedReader(new FileReader(inputFile));
+        String currentLine = inputReader.readLine();
+        while(currentLine != null) {
+            proc.getOutputStream().write(currentLine.getBytes());
+            // Sleep in order to avoid timing issue causing Issue #4
+            Thread.sleep(200);
+            currentLine = inputReader.readLine();
+        }
+        proc.getOutputStream().close();
+
         /* Execute compiled program and check exit code
          * Cool programs always exit with code 0, so an exit code != 0 indicates a crash */
         Assert.assertEquals(0, proc.waitFor());
