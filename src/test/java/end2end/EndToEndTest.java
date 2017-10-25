@@ -85,15 +85,15 @@ public class EndToEndTest {
 
         final File inputFile = new File(inputPath);
         final BufferedReader inputReader = new BufferedReader(new FileReader(inputFile));
-        // readLine removes the final newline. The cool-program may, however, require it.
         String currentLine = inputReader.readLine();
         while(currentLine != null) {
+            // readLine removes the final newline. The cool-program may, however, require it.
+            currentLine += "\n";
             proc.getOutputStream().write(currentLine.getBytes());
             proc.getOutputStream().flush();
             // Sleep in order to avoid timing issue causing Issue #4
             Thread.sleep(200);
-            // readLine removes the final newline. The cool-program may, however, require it.
-            currentLine = inputReader.readLine() + "\n";
+            currentLine = inputReader.readLine();
         }
         inputReader.close();
         proc.getOutputStream().close();
