@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import net.alexweinert.coolc.Main;
 import net.alexweinert.coolc.Output;
 import net.alexweinert.coolc.infrastructure.Compiler;
 import net.alexweinert.coolc.infrastructure.Frontend;
@@ -37,6 +38,8 @@ import net.alexweinert.coolc.representations.java.JavaProgram;
 import net.alexweinert.coolc.representations.jbc.JbcClass;
 
 import com.beust.jcommander.JCommander;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public abstract class ProcessorBuilder<T> {
     protected final Frontend<T> frontend;
@@ -73,7 +76,10 @@ public abstract class ProcessorBuilder<T> {
         }
 
         public CoolProgramCompilerBuilder fileToCool(final String filename) {
-            return new CoolProgramCompilerBuilder(this.frontend.append(new CoolParser(filename)));
+            final ApplicationContext context = new AnnotationConfigApplicationContext(CoolParser.class);
+            final CoolParser parser = context.getBean(CoolParser.class);
+            parser.setFilename(filename);
+            return new CoolProgramCompilerBuilder(this.frontend.append(parser));
         }
 
     }
