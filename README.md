@@ -13,8 +13,9 @@ On Ubuntu-based systems, this should be as simple as `sudo apt-get install maven
 
 Afterwards, you can download and compile the compiler like this:
 
-    $ https://github.com/aweinert/coolc.git
+    $ git clone https://github.com/aweinert/coolc.git
     [...]
+    $ cd coolc
     $ mvn compile
     [...]
     $ ./run examples/hello-world.cl
