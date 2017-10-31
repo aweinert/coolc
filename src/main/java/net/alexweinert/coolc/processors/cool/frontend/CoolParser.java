@@ -10,22 +10,25 @@ import net.alexweinert.coolc.processors.cool.frontend.parser.Parser;
 import net.alexweinert.coolc.processors.cool.frontend.parser.ParserFactory;
 import net.alexweinert.coolc.processors.cool.frontend.parser.ParserFactoryInterface;
 import net.alexweinert.coolc.representations.cool.ast.Program;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 @Component
-@ComponentScan( { "net.alexweinert.coolc.processors.cool.frontend.parser","net.alexweinert.coolc.processors.cool.frontend.lexer" } )
+@ComponentScan( { "net.alexweinert.coolc","net.alexweinert.coolc.processors.cool.frontend.parser","net.alexweinert.coolc.processors.cool.frontend.lexer" } )
 public class CoolParser extends Processor<Reader, Program> {
 
     final ParserFactoryInterface parserFactory;
+    final Logger logger;
 
     private String filename;
 
     @Autowired
-    public CoolParser(final ParserFactoryInterface parserFactory) {
+    public CoolParser(final ParserFactoryInterface parserFactory, final Logger logger) {
         this.parserFactory = parserFactory;
+        this.logger = logger;
     }
 
     public void setFilename(final String filename) { this.filename = filename; }
@@ -36,17 +39,25 @@ public class CoolParser extends Processor<Reader, Program> {
             final Parser parser = parserFactory.createParserForReader(reader);
             ((Lexer) parser.getScanner()).set_filename(this.filename);
 
+            logger.trace("Created Parser");
+
             final Symbol parseResult = parser.parse();
+            logger.trace("Finished parsing");
             final ParserErrorHandler handler = parser.getErrorHandler();
             if (handler.hasErrors()) {
+                logger.error("Errors during parsing");
                 for (String error : handler.getErrorMessages()) {
-                    System.out.println(error);
+                    logger.error(error);
                 }
-                throw new ProcessorException(null);
+                final ProcessorException exception = new ProcessorException(null);
+                logger.error(exception);
+                throw exception;
             }
 
+            logger.trace("No errors during parsing");
             return (Program) parseResult.value;
         } catch (Exception e) {
+            logger.error(e);
             throw new ProcessorException(e);
         }
     }
