@@ -35,30 +35,32 @@ public class CoolParser extends Processor<Reader, Program> {
 
     @Override
     public Program process(final Reader reader) throws ProcessorException {
+        final Parser parser = parserFactory.createParserForReader(reader);
+        ((Lexer) parser.getScanner()).set_filename(this.filename);
+        logger.trace("Created Parser");
+
+        final Symbol parseResult;
         try {
-            final Parser parser = parserFactory.createParserForReader(reader);
-            ((Lexer) parser.getScanner()).set_filename(this.filename);
-
-            logger.trace("Created Parser");
-
-            final Symbol parseResult = parser.parse();
-            logger.trace("Finished parsing");
-            final ParserErrorHandler handler = parser.getErrorHandler();
-            if (handler.hasErrors()) {
-                logger.error("Errors during parsing");
-                for (String error : handler.getErrorMessages()) {
-                    logger.error(error);
-                }
-                final ProcessorException exception = new ProcessorException(null);
-                logger.error(exception);
-                throw exception;
-            }
-
-            logger.trace("No errors during parsing");
-            return (Program) parseResult.value;
+            parseResult = parser.parse();
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("Internal error during parsing", e);
             throw new ProcessorException(e);
         }
+        logger.trace("Finished parsing");
+
+        final ParserErrorHandler handler = parser.getErrorHandler();
+        if (handler.hasErrors()) {
+            logger.trace("Errors during parsing");
+            for (String error : handler.getErrorMessages()) {
+                logger.error(error);
+            }
+
+            // TODO: Handle this gracefully, errors in user input are expected behavior
+            final ProcessorException exception = new ProcessorException(null);
+            throw exception;
+        }
+
+        logger.trace("No errors during parsing");
+        return (Program) parseResult.value;
     }
 }
