@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.alexweinert.coolc.infrastructure.Processor;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Processor;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.processors.jbc.JbcEncoding;
 import net.alexweinert.coolc.representations.bytecode.Attribute;
 import net.alexweinert.coolc.representations.bytecode.ByteClass;

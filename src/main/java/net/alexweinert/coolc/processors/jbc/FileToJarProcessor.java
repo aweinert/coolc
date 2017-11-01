@@ -6,8 +6,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import net.alexweinert.coolc.infrastructure.Processor;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Processor;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.io.File;
 
 public class FileToJarProcessor extends Processor<Collection<File>, File> {

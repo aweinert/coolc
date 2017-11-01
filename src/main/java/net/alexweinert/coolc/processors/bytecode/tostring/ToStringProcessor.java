@@ -3,8 +3,8 @@ package net.alexweinert.coolc.processors.bytecode.tostring;
 import java.util.Collection;
 import java.util.Iterator;
 
-import net.alexweinert.coolc.infrastructure.Processor;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Processor;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.bytecode.Attribute;
 import net.alexweinert.coolc.representations.bytecode.ByteClass;
 import net.alexweinert.coolc.representations.bytecode.LabeledInstruction;

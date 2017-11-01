@@ -8,10 +8,10 @@ import java.util.List;
 
 import net.alexweinert.coolc.Main;
 import net.alexweinert.coolc.Output;
-import net.alexweinert.coolc.infrastructure.Compiler;
-import net.alexweinert.coolc.infrastructure.Frontend;
-import net.alexweinert.coolc.infrastructure.Processor;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Compiler;
+import net.alexweinert.pipelines.Frontend;
+import net.alexweinert.pipelines.Processor;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.processors.bytecode.fromcool.FromCoolBuilderFactory;
 import net.alexweinert.coolc.processors.bytecode.tojbc.BytecodeToJbcProcessor;
 import net.alexweinert.coolc.processors.cool.frontend.CoolParser;

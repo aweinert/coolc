@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.processors.cool.tohighlevel.CoolBackendBuilder;
 import net.alexweinert.coolc.representations.bytecode.Attribute;
 import net.alexweinert.coolc.representations.bytecode.ByteClass;

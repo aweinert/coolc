@@ -1,7 +1,7 @@
 package net.alexweinert.coolc.processors.java.typecasesort;
 
-import net.alexweinert.coolc.infrastructure.Processor;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Processor;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.ast.Transformer;
 

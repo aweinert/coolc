@@ -10,6 +10,13 @@
 	<name>coolc</name>
 	<url>http://maven.apache.org</url>
 
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+
 	<pluginRepositories>
 		<pluginRepository>
 			<id>emustudio-repository</id>
@@ -117,6 +124,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.github.aweinert</groupId>
+			<artifactId>pipelines</artifactId>
+			<version>3f56d2f</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>

@@ -8,8 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.alexweinert.coolc.infrastructure.Backend;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Backend;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.graph.Edge;
 import net.alexweinert.coolc.representations.graph.Graph;
 import net.alexweinert.coolc.representations.graph.Node;

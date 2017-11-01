@@ -7,8 +7,8 @@ import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import net.alexweinert.coolc.infrastructure.Backend;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Backend;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.java.JavaClass;
 import net.alexweinert.coolc.representations.java.JavaProgram;
 

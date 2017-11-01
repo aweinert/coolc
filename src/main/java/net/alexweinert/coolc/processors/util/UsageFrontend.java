@@ -2,8 +2,8 @@ package net.alexweinert.coolc.processors.util;
 
 import java.nio.file.Paths;
 
-import net.alexweinert.coolc.infrastructure.Frontend;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Frontend;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.io.File;
 
 import com.beust.jcommander.JCommander;

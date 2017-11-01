@@ -9,8 +9,8 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 
-import net.alexweinert.coolc.infrastructure.Processor;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Processor;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.io.File;
 import net.alexweinert.coolc.representations.jbc.JbcClass;
 

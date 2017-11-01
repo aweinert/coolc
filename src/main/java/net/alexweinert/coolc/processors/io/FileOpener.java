@@ -4,8 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 
-import net.alexweinert.coolc.infrastructure.Frontend;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Frontend;
+import net.alexweinert.pipelines.ProcessorException;
 
 public class FileOpener extends Frontend<Reader> {
 

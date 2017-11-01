@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.cool.ast.Addition;
 import net.alexweinert.coolc.representations.cool.ast.ArithmeticNegation;
 import net.alexweinert.coolc.representations.cool.ast.Assign;

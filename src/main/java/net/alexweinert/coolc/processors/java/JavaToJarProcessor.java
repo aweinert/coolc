@@ -9,8 +9,8 @@ import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.alexweinert.coolc.infrastructure.Processor;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Processor;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.processors.jar.Jar;
 import net.alexweinert.coolc.representations.java.JavaClass;
 import net.alexweinert.coolc.representations.java.JavaProgram;

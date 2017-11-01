@@ -1,7 +1,7 @@
 package net.alexweinert.coolc;
 
-import net.alexweinert.coolc.infrastructure.Compiler;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Compiler;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.processors.ProcessorBuilder;
 import net.alexweinert.coolc.processors.ProcessorBuilder.CoolProgramCompilerBuilder;
 

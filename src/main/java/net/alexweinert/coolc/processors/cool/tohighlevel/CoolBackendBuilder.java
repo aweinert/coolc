@@ -3,7 +3,7 @@ package net.alexweinert.coolc.processors.cool.tohighlevel;
 import java.util.Collection;
 import java.util.List;
 
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.cool.ast.Formals;
 import net.alexweinert.coolc.representations.cool.symboltables.BoolSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;

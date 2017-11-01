@@ -3,7 +3,7 @@ package net.alexweinert.coolc.processors.cool.selftyperemoval;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.alexweinert.coolc.infrastructure.Processor;
+import net.alexweinert.pipelines.Processor;
 import net.alexweinert.coolc.representations.cool.ast.Attribute;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Classes;

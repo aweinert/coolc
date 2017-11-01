@@ -11,8 +11,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.alexweinert.coolc.infrastructure.Backend;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Backend;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.java.JavaClass;
 
 public class JarCompiler implements Backend<Collection<JavaClass>> {

@@ -1,6 +1,6 @@
 package net.alexweinert.coolc.processors.io;
 
-import net.alexweinert.coolc.infrastructure.Backend;
+import net.alexweinert.pipelines.Backend;
 
 public class StringDumper implements Backend<String> {
 

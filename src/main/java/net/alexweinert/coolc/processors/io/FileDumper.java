@@ -10,8 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 
-import net.alexweinert.coolc.infrastructure.Backend;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Backend;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.io.File;
 
 public class FileDumper implements Backend<Collection<File>> {

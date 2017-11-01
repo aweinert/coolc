@@ -3,8 +3,8 @@ package net.alexweinert.coolc.processors.cool.frontend;
 import java.io.Reader;
 
 import java_cup.runtime.Symbol;
-import net.alexweinert.coolc.infrastructure.Processor;
-import net.alexweinert.coolc.infrastructure.ProcessorException;
+import net.alexweinert.pipelines.Processor;
+import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.processors.cool.frontend.lexer.Lexer;
 import net.alexweinert.coolc.processors.cool.frontend.parser.Parser;
 import net.alexweinert.coolc.processors.cool.frontend.parser.ParserFactory;
