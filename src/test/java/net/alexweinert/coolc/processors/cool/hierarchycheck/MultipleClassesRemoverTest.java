@@ -24,7 +24,7 @@ public class MultipleClassesRemoverTest {
 
         final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
 
-        final Program receivedProgram = MultipleClassesRemover.removeMultipleClassDefinitions(testProgram, err);
+        final Program receivedProgram = new MultipleClassesRemover(err).removeMultipleClassDefinitions(testProgram);
 
         Assert.assertEquals(receivedProgram, testProgram);
         Mockito.verifyZeroInteractions(err);
@@ -45,7 +45,7 @@ public class MultipleClassesRemoverTest {
         final SemanticErrorReporter err = Mockito.mock(SemanticErrorReporter.class);
 
         final Program expectedProgram = factory.program(definitionOne);
-        final Program receivedProgram = MultipleClassesRemover.removeMultipleClassDefinitions(testProgram, err);
+        final Program receivedProgram = new MultipleClassesRemover(err).removeMultipleClassDefinitions(testProgram);
 
         Assert.assertEquals(expectedProgram, receivedProgram);
         Mockito.verify(err).reportClassRedefinition(definitionOne, definitionTwo);

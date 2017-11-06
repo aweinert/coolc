@@ -11,12 +11,18 @@ import net.alexweinert.coolc.representations.cool.information.DeclaredClassSigna
 import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 
 class SemanticChecker {
     public static Program checkSemantics(Program program) throws ProcessorException {
         final SemanticErrorReporter error = new SemanticErrorReporter();
 
-        program = MultipleClassesRemover.removeMultipleClassDefinitions(program, error);
+        final ApplicationContext context = new AnnotationConfigApplicationContext(MultipleClassesRemover.class);
+
+        program = context.getBean(MultipleClassesRemover.class).removeMultipleClassDefinitions(program);
         program = BuiltinRedefinitionRemover.removeBuiltinRedefinition(program, error);
         program = BuiltinInheritanceChecker.checkBuiltinInheritance(program, error);
         program = ParentDefinednessChecker.checkParentDefinedness(program, error);

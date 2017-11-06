@@ -9,7 +9,9 @@ import net.alexweinert.coolc.representations.cool.ast.Attribute;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Method;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import org.springframework.stereotype.Component;
 
+@Component
 class SemanticErrorReporter {
     final List<String> errorMessages = new LinkedList<>();
 
