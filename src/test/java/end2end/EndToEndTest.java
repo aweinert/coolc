@@ -92,7 +92,7 @@ public class EndToEndTest {
             proc.getOutputStream().write(currentLine.getBytes());
             proc.getOutputStream().flush();
             // Sleep in order to avoid timing issue causing Issue #4
-            Thread.sleep(200);
+            Thread.sleep(500);
             currentLine = inputReader.readLine();
         }
         inputReader.close();
