@@ -9,7 +9,9 @@ import net.alexweinert.coolc.representations.cool.ast.Classes;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
+import org.springframework.stereotype.Component;
 
+@Component
 class CircularInheritanceRemover {
 
     /**

@@ -14,7 +14,10 @@ import net.alexweinert.coolc.representations.cool.ast.Features;
 import net.alexweinert.coolc.representations.cool.ast.Method;
 import net.alexweinert.coolc.representations.cool.ast.Program;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 class InterfaceChecker extends Visitor {
     private List<ClassNode> classes = new LinkedList<>();
     private Map<IdSymbol, List<Attribute>> attributes = new HashMap<>();
@@ -23,6 +26,7 @@ class InterfaceChecker extends Visitor {
 
     private final SemanticErrorReporter error;
 
+    @Autowired
     InterfaceChecker(SemanticErrorReporter error) {
         this.error = error;
     }

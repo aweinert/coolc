@@ -15,7 +15,9 @@ import net.alexweinert.coolc.representations.cool.information.DeclaredClassSigna
 import net.alexweinert.coolc.representations.cool.information.MethodSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
+import org.springframework.stereotype.Component;
 
+@Component
 class OverridingChecker extends Visitor {
     /**
      * Checks that no class overrides its parent's attributes and that each class only overrides its parent's methods in

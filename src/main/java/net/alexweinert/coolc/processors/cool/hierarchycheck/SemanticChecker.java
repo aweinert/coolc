@@ -11,24 +11,49 @@ import net.alexweinert.coolc.representations.cool.information.DeclaredClassSigna
 import net.alexweinert.coolc.representations.cool.information.DefinedClassSignature;
 import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
+@Component
+@ComponentScan("net.alexweinert.coolc.processors.cool.hierarchycheck")
 class SemanticChecker {
-    public static Program checkSemantics(Program program) throws ProcessorException {
+    private final MultipleClassesRemover classRemover;
+    private final BuiltinRedefinitionRemover redefinitionRemover;
+    private final BuiltinInheritanceChecker inheritanceChecker;
+    private final ParentDefinednessChecker definednessChecker;
+    private final CircularInheritanceRemover inheritanceRemover;
+    private final InterfaceChecker interfaceChecker;
+    private final OverridingChecker overridingChecker;
+
+    @Autowired
+    SemanticChecker(
+            final MultipleClassesRemover classRemover,
+            final BuiltinRedefinitionRemover redefinitionRemover,
+            final BuiltinInheritanceChecker inheritanceChecker,
+            final ParentDefinednessChecker definednessChecker,
+            final CircularInheritanceRemover inheritanceRemover,
+            final InterfaceChecker interfaceChecker,
+            final OverridingChecker overridingChecker) {
+        this.classRemover = classRemover;
+        this.redefinitionRemover = redefinitionRemover;
+        this.inheritanceChecker = inheritanceChecker;
+        this.definednessChecker = definednessChecker;
+        this.inheritanceRemover = inheritanceRemover;
+        this.interfaceChecker = interfaceChecker;
+        this.overridingChecker = overridingChecker;
+    }
+
+    public Program checkSemantics(Program program) throws ProcessorException {
         final SemanticErrorReporter error = new SemanticErrorReporter();
 
-        final ApplicationContext context = new AnnotationConfigApplicationContext(MultipleClassesRemover.class);
-
-        program = context.getBean(MultipleClassesRemover.class).removeMultipleClassDefinitions(program);
-        program = BuiltinRedefinitionRemover.removeBuiltinRedefinition(program, error);
-        program = BuiltinInheritanceChecker.checkBuiltinInheritance(program, error);
-        program = ParentDefinednessChecker.checkParentDefinedness(program, error);
-        program = CircularInheritanceRemover.removeCircularInheritance(program, error);
-        program = InterfaceChecker.checkInterfaces(program, error);
-        program = OverridingChecker.checkOverriding(program, error);
+        program = classRemover.removeMultipleClassDefinitions(program);
+        program = redefinitionRemover.removeBuiltinRedefinition(program, error);
+        program = inheritanceChecker.checkBuiltinInheritance(program, error);
+        program = definednessChecker.checkParentDefinedness(program, error);
+        program = inheritanceRemover.removeCircularInheritance(program, error);
+        program = interfaceChecker.checkInterfaces(program, error);
+        program = overridingChecker.checkOverriding(program, error);
 
         if (error.hasErrors()) {
             for (String errorMessage : error.getErrors()) {
