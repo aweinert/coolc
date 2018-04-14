@@ -1,9 +1,6 @@
 package net.alexweinert.coolc.processors.cool.frontend;
 
-import net.alexweinert.coolc.representations.cool.ast.ClassNode;
-import net.alexweinert.coolc.representations.cool.ast.Classes;
-import net.alexweinert.coolc.representations.cool.ast.Features;
-import net.alexweinert.coolc.representations.cool.ast.Program;
+import net.alexweinert.coolc.representations.cool.ast.*;
 import net.alexweinert.coolc.representations.cool.symboltables.IdTable;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,9 +10,33 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.io.FileReader;
 import java.net.URI;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class ParserTest {
+
+    private class ProgramBuilder {
+        private String path;
+
+        private ProgramBuilder(final String path) {
+            this.path = path;
+        }
+
+        private Program Program(final int lineno, final ClassNode... classes) {
+            return new Program(this.path, lineno, new Classes(path, lineno, Arrays.asList(classes)));
+        }
+
+        private ClassNode Class(final int lineno, final String name, final String type, final Feature... features) {
+            final IdTable idTable = IdTable.getInstance();
+            return new ClassNode(
+                    this.path,
+                    lineno,
+                    idTable.addString(name),
+                    idTable.addString(type),
+                    new Features(this.path, lineno, Arrays.asList(features))
+            );
+        }
+    }
 
     @Test
     public void testClassParse() throws Exception {
@@ -27,10 +48,11 @@ public class ParserTest {
         final CoolParser parser = context.getBean(CoolParser.class);
         parser.setFilename("class-a.cl");
 
+        final ProgramBuilder b = new ProgramBuilder(path);
+
         final Program actualProgram = parser.process(new FileReader(path));
-        final Program expectedProgram = new Program(path, 1, new Classes(path, 1,
-                Collections.singletonList(new ClassNode(path, 1, IdTable.getInstance().addString("A"), IdTable
-                        .getInstance().addString("Object"), new Features(path, 1, Collections.EMPTY_LIST)))));
+        final Program expectedProgram = b.Program(1,
+                b.Class(1, "A","Object"));
         Assert.assertEquals(expectedProgram, actualProgram);
     }
 }
