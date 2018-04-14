@@ -55,4 +55,62 @@ public class ParserTest {
         final Program actualProgram = parser.process(new StringReader(program));
         Assert.assertEquals(expectedProgram, actualProgram);
     }
+
+    @Test
+    public void testTwoClassParse() throws Exception {
+        final String path = "class-b.cl";
+        final String program =
+                "class A { };" +
+                "" +
+                "class B {};";
+
+        final ProgramBuilder b = new ProgramBuilder(path);
+        final Program expectedProgram = b.Program(1,
+                b.Class(1, "A","Object"),
+                b.Class(3, "B","Object"));
+
+        final ApplicationContext context = new AnnotationConfigApplicationContext(CoolParser.class);
+        final CoolParser parser = context.getBean(CoolParser.class);
+
+        parser.setFilename(path);
+        final Program actualProgram = parser.process(new StringReader(program));
+        Assert.assertEquals(expectedProgram, actualProgram);
+    }
+
+    @Test
+    public void testEmptyLineStart() throws Exception {
+        final String path = "empty-line-start.cl";
+        final String program =
+                "" +
+                "" +
+                "class A {};";
+
+        final ProgramBuilder b = new ProgramBuilder(path);
+        final Program expectedProgram = b.Program(1,
+                b.Class(3, "A","Object"));
+
+        final ApplicationContext context = new AnnotationConfigApplicationContext(CoolParser.class);
+        final CoolParser parser = context.getBean(CoolParser.class);
+
+        parser.setFilename(path);
+        final Program actualProgram = parser.process(new StringReader(program));
+        Assert.assertEquals(expectedProgram, actualProgram);
+    }
+
+    @Test
+    public void testInheritance() throws Exception {
+        final String path = "inheritance.cl";
+        final String program = "class B inherits A {};";
+
+        final ProgramBuilder b = new ProgramBuilder(path);
+        final Program expectedProgram = b.Program(1,
+                b.Class(3, "B","A"));
+
+        final ApplicationContext context = new AnnotationConfigApplicationContext(CoolParser.class);
+        final CoolParser parser = context.getBean(CoolParser.class);
+
+        parser.setFilename(path);
+        final Program actualProgram = parser.process(new StringReader(program));
+        Assert.assertEquals(expectedProgram, actualProgram);
+    }
 }
