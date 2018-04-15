@@ -78,6 +78,9 @@ public class Program extends TreeNode {
             return false;
         }
         Program other = (Program) obj;
+        if(this.getLineNumber() != other.getLineNumber()) {
+            return false;
+        }
         if (classes == null) {
             if (other.classes != null) {
                 return false;
