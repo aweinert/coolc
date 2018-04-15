@@ -7,12 +7,8 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.io.FileReader;
 import java.io.StringReader;
-import java.net.URI;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class ParserTest {
 
@@ -37,7 +33,39 @@ public class ParserTest {
                     new Features(this.path, lineno, Arrays.asList(features))
             );
         }
+
+        private Attribute Attribute(final int lineno, String name, String type, Expression init) {
+            final IdTable idTable = IdTable.getInstance();
+            return new Attribute(
+                    this.path,
+                    lineno,
+                    idTable.addString(name),
+                    idTable.addString(type),
+                    init
+            );
+        }
+
+        private NoExpression NoExpression(final int lineno) {
+            return new NoExpression(this.path, lineno);
+        }
     }
+
+    @Test
+    public void testEmpty() throws Exception {
+        final String path = "empty.cl";
+        final String program = "";
+
+        final ProgramBuilder b = new ProgramBuilder(path);
+        final Program expectedProgram = b.Program(1);
+
+        final ApplicationContext context = new AnnotationConfigApplicationContext(CoolParser.class);
+        final CoolParser parser = context.getBean(CoolParser.class);
+
+        parser.setFilename(path);
+        final Program actualProgram = parser.process(new StringReader(program));
+        Assert.assertEquals(expectedProgram, actualProgram);
+    }
+
 
     @Test
     public void testClassParse() throws Exception {
@@ -105,6 +133,30 @@ public class ParserTest {
         final ProgramBuilder b = new ProgramBuilder(path);
         final Program expectedProgram = b.Program(1,
                 b.Class(3, "B","A"));
+
+        final ApplicationContext context = new AnnotationConfigApplicationContext(CoolParser.class);
+        final CoolParser parser = context.getBean(CoolParser.class);
+
+        parser.setFilename(path);
+        final Program actualProgram = parser.process(new StringReader(program));
+        Assert.assertEquals(expectedProgram, actualProgram);
+    }
+
+
+    @Test
+    public void testAttribute() throws Exception {
+        final String path = "attribute.cl";
+        final String program = "class A {" +
+                "attr : Int;" +
+                "};";
+
+        final ProgramBuilder b = new ProgramBuilder(path);
+        final Program expectedProgram =
+                b.Program(1,
+                    b.Class(2, "A","Object",
+                            b.Attribute(2, "attr", "Int", b.NoExpression(2))
+                    )
+                );
 
         final ApplicationContext context = new AnnotationConfigApplicationContext(CoolParser.class);
         final CoolParser parser = context.getBean(CoolParser.class);
