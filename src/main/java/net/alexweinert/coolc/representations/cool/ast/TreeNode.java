@@ -33,7 +33,7 @@ public abstract class TreeNode {
     }
 
     /**
-     * Retrieves the line number from which this node came.
+     * Returns the line number at which the syntactic construct represented by this node ends.
      *
      * @return the line number
      * */
