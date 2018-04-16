@@ -70,7 +70,7 @@ public class ParserTest {
     @Test
     public void testClassParse() throws Exception {
         final String path = "class-a.cl";
-        final String program = "class A { };";
+        final String program = "class A { };\n";
 
         final ProgramBuilder b = new ProgramBuilder(path);
         final Program expectedProgram = b.Program(1,
@@ -88,12 +88,12 @@ public class ParserTest {
     public void testTwoClassParse() throws Exception {
         final String path = "class-b.cl";
         final String program =
-                "class A { };" +
-                "" +
-                "class B {};";
+                "class A { };\n" +
+                "\n" +
+                "class B {};\n";
 
         final ProgramBuilder b = new ProgramBuilder(path);
-        final Program expectedProgram = b.Program(1,
+        final Program expectedProgram = b.Program(3,
                 b.Class(1, "A","Object"),
                 b.Class(3, "B","Object"));
 
@@ -109,12 +109,12 @@ public class ParserTest {
     public void testEmptyLineStart() throws Exception {
         final String path = "empty-line-start.cl";
         final String program =
-                "" +
-                "" +
-                "class A {};";
+                "\n" +
+                "\n" +
+                "class A {};\n";
 
         final ProgramBuilder b = new ProgramBuilder(path);
-        final Program expectedProgram = b.Program(1,
+        final Program expectedProgram = b.Program(3,
                 b.Class(3, "A","Object"));
 
         final ApplicationContext context = new AnnotationConfigApplicationContext(CoolParser.class);
@@ -128,11 +128,11 @@ public class ParserTest {
     @Test
     public void testInheritance() throws Exception {
         final String path = "inheritance.cl";
-        final String program = "class B inherits A {};";
+        final String program = "class B inherits A {};\n";
 
         final ProgramBuilder b = new ProgramBuilder(path);
         final Program expectedProgram = b.Program(1,
-                b.Class(3, "B","A"));
+                b.Class(1, "B","A"));
 
         final ApplicationContext context = new AnnotationConfigApplicationContext(CoolParser.class);
         final CoolParser parser = context.getBean(CoolParser.class);
@@ -146,14 +146,14 @@ public class ParserTest {
     @Test
     public void testAttribute() throws Exception {
         final String path = "attribute.cl";
-        final String program = "class A {" +
-                "attr : Int;" +
-                "};";
+        final String program = "class A {\n" +
+                "attr : Int;\n" +
+                "};\n";
 
         final ProgramBuilder b = new ProgramBuilder(path);
         final Program expectedProgram =
-                b.Program(1,
-                    b.Class(2, "A","Object",
+                b.Program(3,
+                    b.Class(3, "A","Object",
                             b.Attribute(2, "attr", "Int", b.NoExpression(2))
                     )
                 );
