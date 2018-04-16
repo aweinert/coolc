@@ -73,6 +73,9 @@ public class Attribute extends Feature {
             return false;
         }
         Attribute other = (Attribute) obj;
+        if(other.getLineNumber() != this.getLineNumber()) {
+            return false;
+        }
         if (init == null) {
             if (other.init != null) {
                 return false;

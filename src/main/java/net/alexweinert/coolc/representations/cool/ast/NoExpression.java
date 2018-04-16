@@ -22,4 +22,8 @@ public class NoExpression extends Expression {
         visitor.visitNoExpression(this);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
 }

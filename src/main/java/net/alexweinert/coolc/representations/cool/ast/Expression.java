@@ -38,6 +38,9 @@ public abstract class Expression extends TreeNode {
             return false;
         }
         Expression other = (Expression) obj;
+        if(other.getLineNumber() != this.getLineNumber()) {
+            return false;
+        }
         if (type == null) {
             if (other.type != null) {
                 return false;

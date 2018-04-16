@@ -1,10 +1,10 @@
 package net.alexweinert.coolc.representations.cool.ast;
 
+import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import net.alexweinert.coolc.representations.cool.symboltables.IdSymbol;
 
 /**
  * Defines AST constructor 'class_c'.
@@ -95,6 +95,9 @@ public class ClassNode extends TreeNode {
             return false;
         }
         ClassNode other = (ClassNode) obj;
+        if(other.getLineNumber() != this.getLineNumber()) {
+            return false;
+        }
         if (features == null) {
             if (other.features != null) {
                 return false;

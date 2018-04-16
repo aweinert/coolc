@@ -15,11 +15,7 @@ package net.alexweinert.coolc.representations.cool.ast;
  * BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
  * MODIFICATIONS. */
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 abstract class ListNode<T extends TreeNode> extends TreeNode implements Iterable<T> {
     /**
@@ -97,6 +93,9 @@ abstract class ListNode<T extends TreeNode> extends TreeNode implements Iterable
             return false;
         }
         ListNode other = (ListNode) obj;
+        if(other.getLineNumber() != this.getLineNumber()) {
+            return false;
+        }
         if (elements == null) {
             if (other.elements != null) {
                 return false;
