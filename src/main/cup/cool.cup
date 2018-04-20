@@ -71,7 +71,7 @@ terminal IdSymbol TYPEID, OBJECTID;
  */
 nonterminal Program program;
 nonterminal Classes class_list;
-nonterminal ClassNode class;
+nonterminal ClassNode class_node;
 nonterminal Features feature_list;
 nonterminal Feature feature;
 nonterminal Expression expr, opt_init, nested_let, let_expression;
@@ -120,7 +120,7 @@ class_list
 	::=
 	    {: RESULT = (new Classes(curr_filename(), curr_lineno())); :}
 	/* Append a class to the current list of classes */
-	| class_list:cl class:c SEMI 
+	| class_list:cl class_node:c SEMI
 	    {: RESULT = cl.add(c); :}
 	/* Error in a class definition, jump over it */
 	| class_list:cl error SEMI
@@ -129,7 +129,7 @@ class_list
 
 
 /* Class declarations */
-class
+class_node
 	::= CLASS TYPEID:n opt_inherits:inherits LBRACE feature_list:def RBRACE
 	    {: RESULT = new ClassNode(curr_filename(), curr_lineno(), n, inherits, def); :}
 	;

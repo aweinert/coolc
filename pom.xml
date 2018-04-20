@@ -96,9 +96,9 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>edu.tum.cs</groupId>
+				<groupId>com.github.vbmacher</groupId>
 				<artifactId>cup-maven-plugin</artifactId>
-				<version>1.0.0</version>
+				<version>11b-20160615</version>
 				<executions>
 					<execution>
 						<phase>generate-sources</phase>
@@ -151,9 +151,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.squirrel-sql.thirdparty-non-maven</groupId>
-			<artifactId>java-cup</artifactId>
-			<version>0.11a</version>
+			<groupId>com.github.vbmacher</groupId>
+			<artifactId>java-cup-runtime</artifactId>
+			<version>11b-20160615</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
