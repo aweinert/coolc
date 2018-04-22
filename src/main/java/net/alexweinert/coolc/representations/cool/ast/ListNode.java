@@ -38,7 +38,7 @@ abstract class ListNode<T extends TreeNode> extends TreeNode implements Iterable
         return ListNode.this.elements.iterator();
     }
 
-    protected List<T> copyElements() {
+    public List<T> copyElements() {
         return new LinkedList<T>(this.elements);
     }
 

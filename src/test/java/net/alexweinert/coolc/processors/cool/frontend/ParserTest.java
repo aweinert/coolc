@@ -93,7 +93,7 @@ public class ParserTest {
                 "class B {};\n";
 
         final ProgramBuilder b = new ProgramBuilder(path);
-        final Program expectedProgram = b.Program(3,
+        final Program expectedProgram = b.Program(1,
                 b.Class(1, "A","Object"),
                 b.Class(3, "B","Object"));
 
@@ -152,8 +152,8 @@ public class ParserTest {
 
         final ProgramBuilder b = new ProgramBuilder(path);
         final Program expectedProgram =
-                b.Program(3,
-                    b.Class(3, "A","Object",
+                b.Program(1,
+                    b.Class(1, "A","Object",
                             b.Attribute(2, "attr", "Int", b.NoExpression(2))
                     )
                 );

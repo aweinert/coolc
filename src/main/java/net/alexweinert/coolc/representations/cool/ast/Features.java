@@ -18,6 +18,8 @@ public class Features extends ListNode<Feature> {
         super(filename, lineNumber);
     }
 
+
+
     @Override
     public Features add(Feature node) {
         final Collection<Feature> newElements = this.copyElements();

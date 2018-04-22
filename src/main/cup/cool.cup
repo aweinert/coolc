@@ -131,7 +131,10 @@ class_list
 /* Class declarations */
 class_node
 	::= CLASS:c TYPEID:n opt_inherits:inherits LBRACE feature_list:def RBRACE
-	    {: RESULT = new ClassNode(curr_filename(), cleft, n, inherits, def); :}
+	    {:
+	        Features features = new Features(curr_filename(), cleft, def.copyElements());
+	        RESULT = new ClassNode(curr_filename(), cleft, n, inherits, features);
+	     :}
 	;
 
 /* Optional inherits-declaration */
@@ -146,7 +149,8 @@ opt_inherits
 /* The list of features that make up the class */
 feature_list
 	/* Base case, start with empty list */
-	::= 
+	/* TODO: Figure out how to get actual line number into features */
+	::=
 		{: RESULT = (new Features(curr_filename(), curr_lineno())); :}
 	/* Add a new feature to the list */
 	| feature_list:fl feature:f SEMI
@@ -159,11 +163,11 @@ feature_list
 /* The actual feature, may be an attribute or a method */
 feature
 	/* Parse a method */
-	::= OBJECTID:name formals:args COLON TYPEID:return_type LBRACE expr:body RBRACE
-		{: RESULT = new Method(curr_filename(), curr_lineno(), name, args, return_type, body); :}
+	::= OBJECTID:name formals:args COLON:c TYPEID:return_type LBRACE expr:body RBRACE
+		{: RESULT = new Method(curr_filename(), cleft, name, args, return_type, body); :}
 	/* Parse an attribute, with optional initialization */
-	| OBJECTID:name COLON TYPEID:type opt_init:init
-		{: RESULT = new Attribute(curr_filename(), curr_lineno(), name, type, init); :};
+	| OBJECTID:name COLON:c TYPEID:type opt_init:init
+		{: RESULT = new Attribute(curr_filename(), cleft, name, type, init); :};
 
 /* Optional initialization */
 opt_init
@@ -178,11 +182,11 @@ opt_init
 /* The set of all formal parameters of a method */
 formals
 	/* No arguments */
-	::= LPAREN RPAREN
-	    {: RESULT = new Formals(curr_filename(), curr_lineno()); :}
+	::= LPAREN:l RPAREN
+	    {: RESULT = new Formals(curr_filename(), lleft); :}
 	/* List of names */
-	| LPAREN formal:f
-		{: RESULT = (new Formals(curr_filename(), curr_lineno())).add(f); :}
+	| LPAREN:l formal:f
+		{: RESULT = (new Formals(curr_filename(), lleft)).add(f); :}
 	/* Add a new formal to the list */
 	| formals:fl COMMA formal:f
 		{: RESULT = fl.add(f); :}
@@ -193,75 +197,76 @@ formals
 
 /* A single formal parameter of a method */
 formal
-	::= OBJECTID:name COLON TYPEID:type
-		{: RESULT = new Formal(curr_filename(), curr_lineno(), name, type); :};
+	::= OBJECTID:name COLON:c TYPEID:type
+		{: RESULT = new Formal(curr_filename(), cleft, name, type); :};
 
 /* Expressions */
 expr
 	/* Arithmetic expressions */
-	::= expr:e1 PLUS expr:e2
-	    {: RESULT = new Addition(curr_filename(), curr_lineno(), e1, e2); :}
-	| expr:e1 MINUS expr:e2
-	    {: RESULT = new Subtraction(curr_filename(), curr_lineno(), e1, e2); :}
-	| expr:e1 MULT expr:e2
-	    {: RESULT = new Multiplication(curr_filename(), curr_lineno(), e1, e2); :}
-	| expr:e1 DIV expr:e2
-	    {: RESULT = new Division(curr_filename(), curr_lineno(), e1, e2); :}
-	| NEG expr:e
-	    {: RESULT = new ArithmeticNegation(curr_filename(), curr_lineno(), e); :}
-	| expr:e1 LT expr:e2
-	    {: RESULT = new LessThan(curr_filename(), curr_lineno(), e1, e2); :}
-	| expr:e1 EQ expr:e2
-	    {: RESULT = new Equality(curr_filename(), curr_lineno(), e1, e2); :}
-	| expr:e1 LE expr:e2
-	    {: RESULT = new LessThanOrEquals(curr_filename(), curr_lineno(), e1, e2); :}
-	| NOT expr:e
-	    {: RESULT = new BooleanNegation(curr_filename(), curr_lineno(), e); :}
+	::= expr:e1 PLUS:p expr:e2
+	    {: RESULT = new Addition(curr_filename(), pleft, e1, e2); :}
+	| expr:e1 MINUS:m expr:e2
+	    {: RESULT = new Subtraction(curr_filename(), mleft, e1, e2); :}
+	| expr:e1 MULT:m expr:e2
+	    {: RESULT = new Multiplication(curr_filename(), mleft, e1, e2); :}
+	| expr:e1 DIV:d expr:e2
+	    {: RESULT = new Division(curr_filename(), dleft, e1, e2); :}
+	| NEG:n expr:e
+	    {: RESULT = new ArithmeticNegation(curr_filename(), nleft, e); :}
+	| expr:e1 LT:l expr:e2
+	    {: RESULT = new LessThan(curr_filename(), lleft, e1, e2); :}
+	| expr:e1 EQ:e expr:e2
+	    {: RESULT = new Equality(curr_filename(), eleft, e1, e2); :}
+	| expr:e1 LE:l expr:e2
+	    {: RESULT = new LessThanOrEquals(curr_filename(), lleft, e1, e2); :}
+	| NOT:n expr:e
+	    {: RESULT = new BooleanNegation(curr_filename(), nleft, e); :}
 	| LPAREN expr:e RPAREN
 	    {: RESULT = e; :}
 
 	/* Statements */
-	| OBJECTID:lhs ASSIGN expr:rhs
-		{: RESULT = new Assign(curr_filename(), curr_lineno(), lhs, rhs); :}
-	| NEW TYPEID:type
-		{: RESULT = new New(curr_filename(), curr_lineno(), type); :}
-	| ISVOID expr:expr
-		{: RESULT = new IsVoid(curr_filename(), curr_lineno(), expr); :}
+	| OBJECTID:lhs ASSIGN:a expr:rhs
+		{: RESULT = new Assign(curr_filename(), aleft, lhs, rhs); :}
+	| NEW:n TYPEID:type
+		{: RESULT = new New(curr_filename(), nleft, type); :}
+	| ISVOID:i expr:expr
+		{: RESULT = new IsVoid(curr_filename(), ileft, expr); :}
 
 	/* Control structures */
-	| CASE expr:expr OF cases:cases ESAC
-		{: RESULT = new Typecase(curr_filename(), curr_lineno(), expr, cases); :}
-	| IF expr:cond_expr THEN expr:then_expr ELSE expr:else_expr FI
-		{: RESULT = new If(curr_filename(), curr_lineno(), cond_expr, then_expr, else_expr); :}
-	| WHILE expr:cond LOOP expr:body POOL
-		{: RESULT = new Loop(curr_filename(), curr_lineno(), cond, body); :}
+	| CASE:c expr:expr OF cases:cases ESAC
+		{: RESULT = new Typecase(curr_filename(), cleft, expr, cases); :}
+	| IF:i expr:cond_expr THEN expr:then_expr ELSE expr:else_expr FI
+		{: RESULT = new If(curr_filename(), ileft, cond_expr, then_expr, else_expr); :}
+	| WHILE:w expr:cond LOOP expr:body POOL
+		{: RESULT = new Loop(curr_filename(), wleft, cond, body); :}
 	| let_expression:let /* Factor out let expression to give lowest precedence to let-expression */
 		{: RESULT = let; :}
-	| LBRACE block_body:body RBRACE
-		{: RESULT = new Block(curr_filename(), curr_lineno(), body); :}
+	| LBRACE:l block_body:body RBRACE
+		{: RESULT = new Block(curr_filename(), lleft, body); :}
 
 	/* Method calls */
 	| OBJECTID:n actuals:a /* Call on self */
-	    {: RESULT = new FunctionCall(curr_filename(), curr_lineno(), new ObjectReference(curr_filename(), curr_lineno(), IdTable.getInstance().addString("self")), n, a); :}
-	| expr:expr DOT OBJECTID:objid actuals:actuals /* Call on variable */
-		{: RESULT = new FunctionCall(curr_filename(), curr_lineno(), expr, objid, actuals); :}
-	| expr:expr AT TYPEID:type DOT OBJECTID:objid actuals:actuals /* Call on casted variable */
-		{: RESULT = new StaticFunctionCall(curr_filename(), curr_lineno(), expr, type, objid, actuals); :}
+	    {: RESULT = new FunctionCall(curr_filename(), nleft, new ObjectReference(curr_filename(), curr_lineno(), IdTable.getInstance().addString("self")), n, a); :}
+	| expr:expr DOT:d OBJECTID:objid actuals:actuals /* Call on variable */
+		{: RESULT = new FunctionCall(curr_filename(), dleft, expr, objid, actuals); :}
+	| expr:expr AT:a TYPEID:type DOT OBJECTID:objid actuals:actuals /* Call on casted variable */
+		{: RESULT = new StaticFunctionCall(curr_filename(), aleft, expr, type, objid, actuals); :}
 
 	/* Constants */
 	| INT_CONST:i
-	    {: RESULT = new IntConst(curr_filename(), curr_lineno(), i); :}
+	    {: RESULT = new IntConst(curr_filename(), ileft, i); :}
 	| STR_CONST:s
-	    {: RESULT = new StringConst(curr_filename(), curr_lineno(), s); :}
+	    {: RESULT = new StringConst(curr_filename(), sleft, s); :}
 	| BOOL_CONST:b
-	    {: RESULT = new BoolConst(curr_filename(), curr_lineno(), b); :}
+	    {: RESULT = new BoolConst(curr_filename(), bleft, b); :}
 	| OBJECTID:o
-	    {: RESULT = new ObjectReference(curr_filename(), curr_lineno(), o); :}
+	    {: RESULT = new ObjectReference(curr_filename(), oleft, o); :}
 	;
 
 /* Body of a block of expressions */
 block_body
 	::= /* Base case, create new, empty list */
+	/* TODO: Fix line numbering */
 		{: RESULT = new BlockExpressions(curr_filename(), curr_lineno()); :}
 	| block_body:el expr:e1 SEMI /* Add a new expression to the block */
 		{: RESULT = el.add(e1); :}
@@ -277,11 +282,11 @@ let_expression
 
 nested_let
 	/* Base case, last let-statement in front of the actual body */
-	::= OBJECTID:new_var COLON TYPEID:type opt_init:init IN expr:body
-		{: RESULT = new Let(curr_filename(), curr_lineno(), new_var, type, init, body); :}
+	::= OBJECTID:new_var COLON:c TYPEID:type opt_init:init IN expr:body
+		{: RESULT = new Let(curr_filename(), cleft, new_var, type, init, body); :}
 	/* Add another let-statement to the nested statements */
-	| OBJECTID:new_var COLON TYPEID:type opt_init:init COMMA nested_let:inner
-		{: RESULT = new Let(curr_filename(), curr_lineno(), new_var, type, init, inner); :}
+	| OBJECTID:new_var COLON:c TYPEID:type opt_init:init COMMA nested_let:inner
+		{: RESULT = new Let(curr_filename(), cleft, new_var, type, init, inner); :}
 	| error IN expr:body /* Error in base case, skip it */
 		{: RESULT = body; :}
 	| error COMMA nested_let:inner /* Error in nested case, skip it */
@@ -291,6 +296,7 @@ nested_let
 /* The whole set of case-branches */
 cases
 	::= case:new_case /* Base case, create new empty list of branches */
+	/* TODO: Fix linenumbering */
 		{: 	Cases new_cases = new Cases(curr_filename(), curr_lineno());
 			RESULT = new_cases.add(new_case); :}
 	| cases:old_cases case:new_case /* Add a new branch to the list */
@@ -299,16 +305,16 @@ cases
 
 /* A single branch of a case-statement */
 case
-	::= OBJECTID:objectid COLON TYPEID:type DARROW expr:expr SEMI
-		{: RESULT = new Case(curr_filename(), curr_lineno(), objectid, type, expr); :}
+	::= OBJECTID:objectid COLON:c TYPEID:type DARROW expr:expr SEMI
+		{: RESULT = new Case(curr_filename(), cleft, objectid, type, expr); :}
 	;
 
 
 /* Method arguments */
 actuals
 	/* No arguments */
-	::= LPAREN RPAREN
-	    {: RESULT = new ArgumentExpressions(curr_filename(), curr_lineno()); :}
+	::= LPAREN:l RPAREN
+	    {: RESULT = new ArgumentExpressions(curr_filename(), lleft); :}
 	/* List of arguments */
 	| LPAREN exp_list:el RPAREN
 	    {: RESULT = el; :}
@@ -318,7 +324,7 @@ actuals
 exp_list
 	/* One expression */
 	::= expr:e
-	    {: RESULT = (new ArgumentExpressions(curr_filename(), curr_lineno())).add(e); :} 
+	    {: RESULT = (new ArgumentExpressions(curr_filename(), eleft)).add(e); :}
 	/* Several expressions */
 	| exp_list:el COMMA expr:e
 	    {: RESULT = el.add(e); :}
