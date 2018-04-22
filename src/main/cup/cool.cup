@@ -111,14 +111,14 @@ program
 	/* A program is nothing but a list of classes. Errors are handled in the 
 	 * class_list nonterminal */
 	::= class_list:cl
-	    {: RESULT = new Program(curr_filename(), curr_lineno(), cl); :}
+	    {: RESULT = new Program(curr_filename(), 1, cl); :}
 	;
 
 
 class_list
 	/* Base case, start with empty class list */
 	::=
-	    {: RESULT = (new Classes(curr_filename(), curr_lineno())); :}
+	    {: RESULT = (new Classes(curr_filename(), 1)); :}
 	/* Append a class to the current list of classes */
 	| class_list:cl class_node:c SEMI
 	    {: RESULT = cl.add(c); :}
@@ -130,8 +130,8 @@ class_list
 
 /* Class declarations */
 class_node
-	::= CLASS TYPEID:n opt_inherits:inherits LBRACE feature_list:def RBRACE
-	    {: RESULT = new ClassNode(curr_filename(), curr_lineno(), n, inherits, def); :}
+	::= CLASS:c TYPEID:n opt_inherits:inherits LBRACE feature_list:def RBRACE
+	    {: RESULT = new ClassNode(curr_filename(), cleft, n, inherits, def); :}
 	;
 
 /* Optional inherits-declaration */

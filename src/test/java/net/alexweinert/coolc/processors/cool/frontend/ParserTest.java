@@ -114,7 +114,7 @@ public class ParserTest {
                 "class A {};\n";
 
         final ProgramBuilder b = new ProgramBuilder(path);
-        final Program expectedProgram = b.Program(3,
+        final Program expectedProgram = b.Program(1,
                 b.Class(3, "A","Object"));
 
         final ApplicationContext context = new AnnotationConfigApplicationContext(CoolParser.class);

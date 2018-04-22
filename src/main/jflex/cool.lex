@@ -8,7 +8,7 @@
 
 package net.alexweinert.coolc.processors.cool.frontend.lexer;
 
-import net.alexweinert.coolc.processors.cool.frontend.LineSymbol;
+import java_cup.runtime.Symbol;
 import net.alexweinert.coolc.processors.cool.frontend.parser.Tokens;
 import net.alexweinert.coolc.representations.cool.symboltables.*;
 
@@ -64,14 +64,14 @@ import net.alexweinert.coolc.representations.cool.symboltables.*;
 	// The nesting depth of the current comment. 0 denotes the top-level comment.
 	private int commentDepth = 0;
 
-	private LineSymbol createStringToken(int type, int lineno, String value) {
+	private Symbol createStringToken(int type, int lineno, String value) {
 		StringSymbol symbol = this.stringTable.addString(value);
-		return new LineSymbol(type, lineno, symbol);
+		return new Symbol(type, lineno, lineno, symbol);
 	}
 
-	private LineSymbol createIdToken(int type, int lineno, String value) {
+	private Symbol createIdToken(int type, int lineno, String value) {
 		IdSymbol symbol = this.idTable.addString(value);
-		return new LineSymbol(type, lineno, symbol);
+		return new Symbol(type, lineno, lineno, symbol);
 	}
 %}
 
@@ -111,7 +111,7 @@ import net.alexweinert.coolc.representations.cool.symboltables.*;
 		return createStringToken(Tokens.ERROR, this.get_curr_lineno(), "EOF in string constant");
 	}
 
-    return new LineSymbol(Tokens.EOF, this.get_curr_lineno());
+    return new Symbol(Tokens.EOF, this.get_curr_lineno(), this.get_curr_lineno());
 %eofval}
 
 /* Do not modify the following two jlex directives */
@@ -176,7 +176,7 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 <YYINITIAL> \*\) {
 	// Since we are in YYINITIAL, we know that we encountered an unmatched comment end
 	StringSymbol errorMessage = StringTable.getInstance().addString("Unmatched *)");
-	return new LineSymbol(Tokens.ERROR, this.get_curr_lineno(), errorMessage);
+	return new Symbol(Tokens.ERROR, this.get_curr_lineno(), this.get_curr_lineno(), errorMessage);
 }
 
 <YYINITIAL> \(\* { 
@@ -281,52 +281,52 @@ OBJECT_ID = [a-z][a-zA-Z0-9_]*
 
 
 <YYINITIAL>{INTEGER}  { /* Integers */
-                          return new LineSymbol(Tokens.INT_CONST, this.get_curr_lineno(), IntTable.getInstance().addInt(yytext())); }
+                          return new Symbol(Tokens.INT_CONST, this.get_curr_lineno(), this.get_curr_lineno(), IntTable.getInstance().addInt(yytext())); }
 
-<YYINITIAL>[Cc][Aa][Ss][Ee]	{ return new LineSymbol(Tokens.CASE, this.get_curr_lineno()); }
-<YYINITIAL>[Cc][Ll][Aa][Ss][Ss] { return new LineSymbol(Tokens.CLASS, this.get_curr_lineno()); }
-<YYINITIAL>[Ee][Ll][Ss][Ee]  	{ return new LineSymbol(Tokens.ELSE, this.get_curr_lineno()); }
-<YYINITIAL>[Ee][Ss][Aa][Cc]	{ return new LineSymbol(Tokens.ESAC, this.get_curr_lineno()); }
-<YYINITIAL>f[Aa][Ll][Ss][Ee]	{ return new LineSymbol(Tokens.BOOL_CONST, this.get_curr_lineno(), Boolean.FALSE); }
-<YYINITIAL>[Ff][Ii]             { return new LineSymbol(Tokens.FI, this.get_curr_lineno()); }
-<YYINITIAL>[Ii][Ff]  		{ return new LineSymbol(Tokens.IF, this.get_curr_lineno()); }
-<YYINITIAL>[Ii][Nn]             { return new LineSymbol(Tokens.IN, this.get_curr_lineno()); }
-<YYINITIAL>[Ii][Nn][Hh][Ee][Rr][Ii][Tt][Ss] { return new LineSymbol(Tokens.INHERITS, this.get_curr_lineno()); }
-<YYINITIAL>[Ii][Ss][Vv][Oo][Ii][Dd] { return new LineSymbol(Tokens.ISVOID, this.get_curr_lineno()); }
-<YYINITIAL>[Ll][Ee][Tt]         { return new LineSymbol(Tokens.LET, this.get_curr_lineno()); }
-<YYINITIAL>[Ll][Oo][Oo][Pp]  	{ return new LineSymbol(Tokens.LOOP, this.get_curr_lineno()); }
-<YYINITIAL>[Nn][Ee][Ww]		{ return new LineSymbol(Tokens.NEW, this.get_curr_lineno()); }
-<YYINITIAL>[Nn][Oo][Tt] 	{ return new LineSymbol(Tokens.NOT, this.get_curr_lineno()); }
-<YYINITIAL>[Oo][Ff]		{ return new LineSymbol(Tokens.OF, this.get_curr_lineno()); }
-<YYINITIAL>[Pp][Oo][Oo][Ll]  	{ return new LineSymbol(Tokens.POOL, this.get_curr_lineno()); }
-<YYINITIAL>[Tt][Hh][Ee][Nn]   	{ return new LineSymbol(Tokens.THEN, this.get_curr_lineno()); }
-<YYINITIAL>t[Rr][Uu][Ee]	{ return new LineSymbol(Tokens.BOOL_CONST, this.get_curr_lineno(), Boolean.TRUE); }
-<YYINITIAL>[Ww][Hh][Ii][Ll][Ee] { return new LineSymbol(Tokens.WHILE, this.get_curr_lineno()); }
+<YYINITIAL>[Cc][Aa][Ss][Ee]	{ return new Symbol(Tokens.CASE, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Cc][Ll][Aa][Ss][Ss] { return new Symbol(Tokens.CLASS, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Ee][Ll][Ss][Ee]  	{ return new Symbol(Tokens.ELSE, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Ee][Ss][Aa][Cc]	{ return new Symbol(Tokens.ESAC, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>f[Aa][Ll][Ss][Ee]	{ return new Symbol(Tokens.BOOL_CONST, this.get_curr_lineno(), this.get_curr_lineno(), Boolean.FALSE); }
+<YYINITIAL>[Ff][Ii]             { return new Symbol(Tokens.FI, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Ii][Ff]  		{ return new Symbol(Tokens.IF, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Ii][Nn]             { return new Symbol(Tokens.IN, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Ii][Nn][Hh][Ee][Rr][Ii][Tt][Ss] { return new Symbol(Tokens.INHERITS, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Ii][Ss][Vv][Oo][Ii][Dd] { return new Symbol(Tokens.ISVOID, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Ll][Ee][Tt]         { return new Symbol(Tokens.LET, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Ll][Oo][Oo][Pp]  	{ return new Symbol(Tokens.LOOP, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Nn][Ee][Ww]		{ return new Symbol(Tokens.NEW, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Nn][Oo][Tt] 	{ return new Symbol(Tokens.NOT, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Oo][Ff]		{ return new Symbol(Tokens.OF, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Pp][Oo][Oo][Ll]  	{ return new Symbol(Tokens.POOL, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>[Tt][Hh][Ee][Nn]   	{ return new Symbol(Tokens.THEN, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>t[Rr][Uu][Ee]	{ return new Symbol(Tokens.BOOL_CONST, this.get_curr_lineno(), this.get_curr_lineno(), Boolean.TRUE); }
+<YYINITIAL>[Ww][Hh][Ii][Ll][Ee] { return new Symbol(Tokens.WHILE, this.get_curr_lineno(), this.get_curr_lineno()); }
 
 <YYINITIAL>{OBJECT_ID} { return createIdToken(Tokens.OBJECTID, this.get_curr_lineno(), yytext()); }
 <YYINITIAL>{TYPE_ID} { return createIdToken(Tokens.TYPEID, this.get_curr_lineno(), yytext()); }
 <YYINITIAL> "*)" { return createStringToken(Tokens.ERROR, this.get_curr_lineno(), "Unmatched *)"); }
 
 
-<YYINITIAL>"=>"			{ return new LineSymbol(Tokens.DARROW, this.get_curr_lineno()); }
-<YYINITIAL>"<="			{ return new LineSymbol(Tokens.LE, this.get_curr_lineno()); }
-<YYINITIAL>"<-"			{ return new LineSymbol(Tokens.ASSIGN, this.get_curr_lineno()); }
-<YYINITIAL>"+"			{ return new LineSymbol(Tokens.PLUS, this.get_curr_lineno()); }
-<YYINITIAL>"/"			{ return new LineSymbol(Tokens.DIV, this.get_curr_lineno()); }
-<YYINITIAL>"-"			{ return new LineSymbol(Tokens.MINUS, this.get_curr_lineno()); }
-<YYINITIAL>"*"			{ return new LineSymbol(Tokens.MULT, this.get_curr_lineno()); }
-<YYINITIAL>"="			{ return new LineSymbol(Tokens.EQ, this.get_curr_lineno()); }
-<YYINITIAL>"<"			{ return new LineSymbol(Tokens.LT, this.get_curr_lineno()); }
-<YYINITIAL>"."			{ return new LineSymbol(Tokens.DOT, this.get_curr_lineno()); }
-<YYINITIAL>"~"			{ return new LineSymbol(Tokens.NEG, this.get_curr_lineno()); }
-<YYINITIAL>","			{ return new LineSymbol(Tokens.COMMA, this.get_curr_lineno()); }
-<YYINITIAL>";"			{ return new LineSymbol(Tokens.SEMI, this.get_curr_lineno()); }
-<YYINITIAL>":"			{ return new LineSymbol(Tokens.COLON, this.get_curr_lineno()); }
-<YYINITIAL>"("			{ return new LineSymbol(Tokens.LPAREN, this.get_curr_lineno()); }
-<YYINITIAL>")"			{ return new LineSymbol(Tokens.RPAREN, this.get_curr_lineno()); }
-<YYINITIAL>"@"			{ return new LineSymbol(Tokens.AT, this.get_curr_lineno()); }
-<YYINITIAL>"}"			{ return new LineSymbol(Tokens.RBRACE, this.get_curr_lineno()); }
-<YYINITIAL>"{"			{ return new LineSymbol(Tokens.LBRACE, this.get_curr_lineno()); }
+<YYINITIAL>"=>"			{ return new Symbol(Tokens.DARROW, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"<="			{ return new Symbol(Tokens.LE, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"<-"			{ return new Symbol(Tokens.ASSIGN, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"+"			{ return new Symbol(Tokens.PLUS, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"/"			{ return new Symbol(Tokens.DIV, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"-"			{ return new Symbol(Tokens.MINUS, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"*"			{ return new Symbol(Tokens.MULT, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"="			{ return new Symbol(Tokens.EQ, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"<"			{ return new Symbol(Tokens.LT, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"."			{ return new Symbol(Tokens.DOT, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"~"			{ return new Symbol(Tokens.NEG, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>","			{ return new Symbol(Tokens.COMMA, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>";"			{ return new Symbol(Tokens.SEMI, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>":"			{ return new Symbol(Tokens.COLON, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"("			{ return new Symbol(Tokens.LPAREN, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>")"			{ return new Symbol(Tokens.RPAREN, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"@"			{ return new Symbol(Tokens.AT, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"}"			{ return new Symbol(Tokens.RBRACE, this.get_curr_lineno(), this.get_curr_lineno()); }
+<YYINITIAL>"{"			{ return new Symbol(Tokens.LBRACE, this.get_curr_lineno(), this.get_curr_lineno()); }
 <YYINITIAL>{NEWLINE} { this.increment_lineno(); }
 .	{
 	// If no other rule hit, we apparently encountered an error. Return it to the parser
