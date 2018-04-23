@@ -9,6 +9,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.List;
 
 public class ParserTest {
 
@@ -25,12 +26,14 @@ public class ParserTest {
 
         private ClassNode Class(final int lineno, final String name, final String parent, final Feature... features) {
             final IdTable idTable = IdTable.getInstance();
+            final List<Feature> featureList = Arrays.asList(features);
+            final int featureLine = featureList.isEmpty() ? lineno : featureList.get(0).getLineNumber();
             return new ClassNode(
                     this.path,
                     lineno,
                     idTable.addString(name),
                     idTable.addString(parent),
-                    new Features(this.path, lineno, Arrays.asList(features))
+                    new Features(this.path, featureLine, Arrays.asList(features))
             );
         }
 
