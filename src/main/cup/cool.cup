@@ -72,7 +72,7 @@ terminal IdSymbol TYPEID, OBJECTID;
 nonterminal Program program;
 nonterminal Classes class_list;
 nonterminal ClassNode class_node;
-nonterminal Features feature_list;
+nonterminal FeaturesPrototype feature_list;
 nonterminal Feature feature;
 nonterminal Expression expr, opt_init, nested_let, let_expression;
 nonterminal ArgumentExpressions actuals, exp_list;
@@ -130,9 +130,9 @@ class_list
 
 /* Class declarations */
 class_node
-	::= CLASS:c TYPEID:n opt_inherits:inherits LBRACE feature_list:def RBRACE
+	::= CLASS:c TYPEID:n opt_inherits:inherits LBRACE:l feature_list:features_prototype RBRACE
 	    {:
-	        Features features = new Features(curr_filename(), cleft, def.copyElements());
+	        final Features features = features_prototype.build(lleft);
 	        RESULT = new ClassNode(curr_filename(), cleft, n, inherits, features);
 	     :}
 	;
@@ -151,7 +151,7 @@ feature_list
 	/* Base case, start with empty list */
 	/* TODO: Figure out how to get actual line number into features */
 	::=
-		{: RESULT = (new Features(curr_filename(), curr_lineno())); :}
+		{: RESULT = new FeaturesPrototype(curr_filename()); :}
 	/* Add a new feature to the list */
 	| feature_list:fl feature:f SEMI
 		{: RESULT = fl.add(f); :}
