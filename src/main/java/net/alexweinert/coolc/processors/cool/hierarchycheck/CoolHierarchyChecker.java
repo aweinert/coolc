@@ -1,6 +1,5 @@
 package net.alexweinert.coolc.processors.cool.hierarchycheck;
 
-import javafx.application.Application;
 import net.alexweinert.pipelines.Processor;
 import net.alexweinert.pipelines.ProcessorException;
 import net.alexweinert.coolc.representations.cool.ast.Program;
