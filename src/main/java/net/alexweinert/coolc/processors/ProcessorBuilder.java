@@ -1,5 +1,7 @@
 package net.alexweinert.coolc.processors;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -57,6 +59,16 @@ public abstract class ProcessorBuilder<T> {
         public ReaderCompilerBuilder openFile(String path) {
             return new ReaderCompilerBuilder(new FileOpener(path));
         }
+
+        public ReaderCompilerBuilder inputStreamToReader(final InputStream inputStream) {
+            return new ReaderCompilerBuilder(new Frontend<Reader>() {
+                @Override
+                public Reader process() throws ProcessorException {
+                    return new InputStreamReader(inputStream);
+                }
+            });
+        }
+
     }
 
     public static class StringCompilerBuilder extends ProcessorBuilder<String> {
