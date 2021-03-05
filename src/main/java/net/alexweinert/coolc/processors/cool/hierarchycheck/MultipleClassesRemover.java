@@ -3,7 +3,6 @@ package net.alexweinert.coolc.processors.cool.hierarchycheck;
 import java.util.Collection;
 import java.util.LinkedList;
 
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import net.alexweinert.coolc.representations.cool.ast.ClassNode;
 import net.alexweinert.coolc.representations.cool.ast.Classes;
 import net.alexweinert.coolc.representations.cool.ast.Program;
