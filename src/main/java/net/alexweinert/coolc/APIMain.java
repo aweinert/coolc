@@ -2,19 +2,26 @@ package net.alexweinert.coolc;
 
 import net.alexweinert.coolc.processors.ProcessorBuilder;
 import net.alexweinert.pipelines.ProcessorException;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 @RestController
@@ -23,18 +30,27 @@ public class APIMain {
         SpringApplication.run(APIMain.class, args);
     }
 
+    @ControllerAdvice
+    public static class CustomExceptionHandler extends ResponseEntityExceptionHandler {
+
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
+            return new ResponseEntity(ex, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @Autowired
     private ResourceLoader loader;
 
     @PostMapping(value = "/compile", produces = "application/java-archive")
     @ResponseBody
     public ResponseEntity<Resource> compileFile(@RequestParam(name = "file") MultipartFile file) throws IOException, ProcessorException {
-        final File outputFile = compileFileInternal(file);
+            final File outputFile = compileFileInternal(file);
 
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = \"compiled.jar\"")
-                .body(loader.getResource("file:" + outputFile.getAbsolutePath()));
+            return ResponseEntity
+                    .ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename = \"compiled.jar\"")
+                    .body(loader.getResource("file:" + outputFile.getAbsolutePath()));
     }
 
     private File compileFileInternal(MultipartFile file) throws IOException, ProcessorException {
