@@ -35,6 +35,7 @@ public class APIMain {
 
         @ExceptionHandler(Exception.class)
         public ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
+            ex.printStackTrace();
             return new ResponseEntity(ex, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
