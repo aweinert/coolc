@@ -1,13 +1,16 @@
 package net.alexweinert.coolc.processors.jbc;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import net.alexweinert.pipelines.Processor;
 import net.alexweinert.pipelines.ProcessorException;
@@ -35,10 +38,13 @@ public class JbcToFileProcessor extends Processor<Collection<JbcClass>, Collecti
         final Path targetPath = Paths.get(resourceName);
 
         try {
-            final URI resourceURI = this.getClass().getClassLoader().getResource(resourceName).toURI();
-            final Path pathToResource = Paths.get(resourceURI);
-            return (new File.Builder(targetPath)).appendContent(Files.readAllBytes(pathToResource)).build();
-        } catch (IOException | URISyntaxException e) {
+            final InputStream is = this.getClass().getResourceAsStream(resourceName);
+            final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            for(int currentByte; (currentByte = is.read()) != -1; ) {
+                outputStream.write(currentByte);
+            }
+            return (new File.Builder(targetPath)).appendContent(outputStream.toByteArray()).build();
+        } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;
