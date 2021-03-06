@@ -15,6 +15,16 @@
 	</parent>
 
 	<repositories>
+		<!-- We explicitly include central here to have it take precedence over emustudio -->
+		<repository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 		<repository>
 			<id>jitpack.io</id>
 			<url>https://jitpack.io</url>
@@ -22,6 +32,19 @@
 	</repositories>
 
 	<pluginRepositories>
+		<pluginRepository>
+			<!-- We explicitly include central here to have it take precedence over emustudio -->
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>https://repo.maven.apache.org/maven2</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+		</pluginRepository>
 		<pluginRepository>
 			<id>emustudio-repository</id>
 			<name>emuStudio Repository</name>
