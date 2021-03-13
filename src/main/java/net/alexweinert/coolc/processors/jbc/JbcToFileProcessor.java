@@ -38,7 +38,7 @@ public class JbcToFileProcessor extends Processor<Collection<JbcClass>, Collecti
         final Path targetPath = Paths.get(resourceName);
 
         try {
-            final InputStream is = this.getClass().getResourceAsStream(resourceName);
+            final InputStream is = this.getClass().getClassLoader().getResourceAsStream(resourceName);
             final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             for(int currentByte; (currentByte = is.read()) != -1; ) {
                 outputStream.write(currentByte);

@@ -67,6 +67,12 @@
 					<exclude>*.java</exclude>
 				</excludes>
 			</resource>
+            <resource>
+				<directory>static</directory>
+				<includes>
+					<include>*.html</include>
+				</includes>
+			</resource>
 		</resources>
 		<plugins>
 			<plugin>
